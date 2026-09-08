@@ -9,7 +9,7 @@ categories: ["AI课程", "计算机视觉"]
 math: false
 ---
 
-「数清楚视频里有几个人、各自在做什么动作」——健身 APP 要数深蹲、工厂要抓违规操作、商场要算客流动线。这类需求拆开是两个技术的组合：**姿态估计**（一帧里人的关节在哪）和**多目标跟踪**（跨帧的同一个人是同一个人）。这篇把这对组合拳一次讲透。
+视频里有人经过，不等于系统已经知道他做了什么。姿态估计提供关节位置，跟踪维持跨帧身份，动作判断还需要时间规则或模型。这里先分清三个环节，再讨论健身计数和客流分析；否则某个人换了跟踪编号，就可能被重复计数。
 
 **前置阅读**：建议先读 [目标检测 YOLO](/posts/object-detection-yolo/)、[视频理解入门](/posts/video-understanding-basics/)、[OpenCV 基础](/posts/opencv-image-interpolation-mask-roi-watermark-grayscale-tutorial/)。
 

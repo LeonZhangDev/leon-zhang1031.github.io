@@ -9,7 +9,7 @@ categories: ["AI课程", "编程基础"]
 math: false
 ---
 
-「Python 慢」是数据圈最大的借口。真相是：**90% 的 Python 性能问题不是 Python 的问题，是写法的问题**——在 Python 层逐元素循环一千万次数组，相当于让翻译软件逐字翻译《战争与和平》。这篇讲三层加速术：向量化（NumPy 思维）、即时编译（Numba）、并发（多进程/asyncio），以及这一切的前提——先 profiling，不猜。
+一段 Python 代码慢，原因可能是逐元素循环，也可能是磁盘读取、网络等待或反复复制数组。优化前要先测量。下面分别讨论 NumPy 向量化、Numba 和并发适用的情况，并说明它们为什么不能互相替代。
 
 **前置阅读**：建议先读 [Linux + Python 环境基础](/posts/linux-python-environment-basics/)、[Pandas 数据分析](/posts/pandas-data-analysis-visualization/)。
 

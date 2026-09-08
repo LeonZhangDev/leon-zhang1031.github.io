@@ -9,7 +9,7 @@ categories: ["AI课程", "计算机视觉"]
 math: false
 ---
 
-数据只有 2000 张，模型却想过拟合——除了 [正则化](/posts/overfitting-regularization/)，你手里还有一张更便宜的牌：**数据增强**。它不收集新数据，而是告诉模型「这些变换不改变语义」——翻转的猫还是猫、暗一点的猫还是猫。小数据图像任务里，增强配方的差异经常值 5~10 个点的准确率，比换模型划算得多。
+训练图片少时，可以通过变换增加输入的变化，但“看起来像新图片”不等于“标签仍然正确”。翻转猫的照片通常不改变类别，翻转文字、交通标志或医学图像却可能改变任务含义。选增强策略之前，先写清哪些变化应该被模型忽略。
 
 **前置阅读**：建议先读 [CNN 详解](/posts/deep-learning-04-cnn-image-classification/)、[过拟合与正则化](/posts/overfitting-regularization/)、[OpenCV 基础](/posts/opencv-image-interpolation-mask-roi-watermark-grayscale-tutorial/)。
 

@@ -9,7 +9,7 @@ categories: ["AI课程", "大模型应用"]
 math: false
 ---
 
-[RAG 项目复盘](/posts/rag-project-retrospective/)讲了从零搭起一个能跑的 RAG，这篇讲的是下一个阶段：上线后发现「能答但不准」——召回的文档似是而非、答案漏掉关键信息、用户换个问法就搜不到。**RAG 的效果 80% 卡在检索质量**，这篇就是检索侧的系统调优手册。
+[RAG 项目复盘](/posts/rag-project-retrospective/)介绍了基础链路。接下来要处理更具体的问题：检索结果是否包含答案，文档切片是否丢了上下文，重排是否把有用片段推到了前面？这篇沿着这些检查点讨论优化，并把检索错误与生成错误分开评估。
 
 **前置阅读**：建议先读 [Milvus + Neo4j 搭建 RAG](/posts/milvus-neo4j-rag/)、[RAG 项目复盘](/posts/rag-project-retrospective/)、[Embedding 与向量数据库](/posts/embedding-vector-database/)。
 
@@ -54,7 +54,7 @@ scores = reranker.predict(pairs)
 top5 = [doc for _, doc in sorted(zip(scores, candidates), reverse=True)[:5]]
 ```
 
-我的实测：召回 top-50 + bge-reranker 精排，比纯向量 top-5 的命中率提升 15~25 个百分点——**这是 RAG 调优里投入产出比最高的一步，没有之一**。代价：每查询多 50 次前向（可用小尺寸 reranker 或批处理摊平）。
+可以把“向量召回 top-5”作为基线，再比较“召回 top-50 后重排取前 5”。在同一份查询集上记录命中率、排序指标和延迟，才能判断重排是否值得。后者需要为 50 个查询—文档对计算分数，可以批处理；成本取决于模型、文本长度和硬件，不等于固定增加 50 次串行请求。
 
 ## 查询侧魔法：改写、扩展与 HyDE
 

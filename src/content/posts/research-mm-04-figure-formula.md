@@ -21,7 +21,9 @@ PDF 里抽图有两条路线：
 
 ```python
 import fitz
+from pathlib import Path
 
+Path("figures").mkdir(parents=True, exist_ok=True)
 doc = fitz.open("paper.pdf")
 for page_num, page in enumerate(doc):
     for img_index, img in enumerate(page.get_images(full=True)):
@@ -32,9 +34,9 @@ for page_num, page in enumerate(doc):
         pix.save(f"figures/p{page_num}_{img_index}.png")
 ```
 
-这条路线的坑：矢量图（科研论文里的曲线图大多是矢量绘制的）**不是嵌入位图**，提取不出来；表格本质是文字排版，更不是图片。
+这里有个容易误解的地方：`get_images` 列出的是图片对象，不是读者看到的所有图表。矢量曲线、文字排成的表格可能根本不在这个列表中。同一张图也可能被拆成多个对象。要保留页面上完整的视觉区域，需要先确定边界，再渲染和裁剪页面，而不能把“抽到了图片”当作“抽全了图表”。
 
-**路线 2：版面检测模型。** 用目标检测的思路把页面当图片分析，检测"图/表/公式/正文"区域。LayoutParser + PubLayNet 预训练模型是这个方向的标准工具：
+**路线 2：版面检测模型。** 把页面渲染成图片，再检测正文、标题、列表、表格和插图。下面的 LayoutParser + PubLayNet 示例只包含这五类，不能直接检测公式；公式需要另选支持该类别的模型，或增加独立识别步骤。检测框坐标属于渲染图片，映射回 PDF 时还要换算缩放比例。
 
 ```python
 import layoutparser as lp

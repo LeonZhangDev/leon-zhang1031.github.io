@@ -9,7 +9,7 @@ categories: ["AI课程", "深度学习"]
 math: true
 ---
 
-同一个 ResNet，同一批数据，把优化器从 Adam 换成 SGD+Momentum，验证集准确率能差出 3 个百分点；同样用 Adam，加不加 warmup，Transformer 可能从「不收敛」变成「完美收敛」。我刚学深度学习时以为优化器是个无关紧要的默认值，直到一个项目里我换了学习率调度策略，模型直接从「训练失败」变成「达到论文精度」——优化器和学习率是深度训练里**性价比最高的调参杠杆**，没有之一。
+loss 不下降时，优化器和学习率值得检查，但不能跳过数据与梯度。这里先说明 SGD、Momentum 和 Adam 怎样更新参数，再讨论 warmup 和学习率衰减。比较方案时固定数据、模型和评估流程，才能分清变化来自哪里。
 
 **前置阅读**：建议先读 [训练循环与自动求导](/posts/deep-learning-01-training-loop/)、[训练稳定性实战](/posts/deep-learning-03-training-stability/)。
 

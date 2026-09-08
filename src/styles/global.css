@@ -728,6 +728,10 @@ main { position: relative; z-index: 1; }
 }
 .waline-wrap { position: relative; z-index: 1; }
 
+/* Long equations scroll locally without widening a mobile article. */
+.prose .katex-display { overflow-x: auto; overflow-y: hidden; padding: 0.5rem 0; }
+.prose .katex { font-size: 1.08em; }
+
 /* ==========================================================================
    Games Page
    ========================================================================== */

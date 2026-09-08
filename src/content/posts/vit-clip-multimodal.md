@@ -9,9 +9,9 @@ categories: ["AI课程", "深度学习"]
 math: false
 ---
 
-2020 年之前，计算机视觉是 CNN 的天下——[之前写的 CNN 文章](/posts/deep-learning-04-cnn-image-classification/)里讲的卷积、池化那套。然后 Google 把 NLP 里的 Transformer 原封不动搬到图像上，ViT 诞生了；再然后 OpenAI 用 4 亿对图文数据训练出 CLIP，「零样本图像分类」这个词开始刷屏。这两篇论文是今天所有多模态大模型（GPT-4V、Qwen-VL、LLaVA）的地基。
+ViT 将图像切成 patch 后交给 Transformer 处理，CLIP 则通过图文配对学习跨模态表示。两者回答不同问题：怎样表示图像，怎样让图像与文字可比较。把这两条线分开，就更容易理解后续视觉语言模型为何还需要连接模块、训练目标和任务数据。
 
-我自己的感受是：理解 ViT 和 CLIP 之后，再看任何多模态模型都不会慌——它们全是这两套思想的排列组合。这篇把两块基石讲透，代码用 HuggingFace 一行调用 + PyTorch 手动实现对比着写。
+下面先追踪图像如何变成 token，再追踪图文相似度怎样进入损失函数。调用预训练模型时，也要把候选文本、图像预处理与评估口径保留下来；只看一个返回分数，很难解释模型真正做了什么。
 
 **前置阅读**：建议先读 [神经网络基础](/posts/deep-learning-02-backprop/)、[Transformer 详解](/posts/deep-learning-07-transformer-attention/)、[CNN 详解](/posts/deep-learning-04-cnn-image-classification/)、[OpenCV 入门](/posts/opencv-image-interpolation-mask-roi-watermark-grayscale-tutorial/)。
 
@@ -135,10 +135,10 @@ with torch.no_grad():
     probs = (100.0 * image_feat @ text_feat.T).softmax(dim=-1)
 
 print(dict(zip(labels, probs[0].tolist())))
-# 我的输出: {'a photo of a cat': 0.02, 'a photo of a dog': 0.97, 'a photo of a car': 0.01}
+# 输出取决于图片与候选文本；候选集合改变，softmax 分数也会改变
 ```
 
-我实测过几个有意思的边界：给它一张「狗穿超人披风」的图，`a photo of a dog` 和 `a photo of superman` 的概率会拉扯——这正说明 CLIP 学的是语义而不是像素模式。
+可以用同时包含多个概念的图片检查边界，例如穿披风的狗，再改变候选文本。注意这些 softmax 分数只是候选集合内的相对分数，不等于经过校准的真实类别概率，也不能用一次输出证明模型已经理解某种语义。
 
 ### 提示词模板不是玄学
 
@@ -152,18 +152,13 @@ CLIP 论文里有个容易忽略的工程点：直接填类别名（`dog`）效�
 2. **生成式对齐线（VLM 主流）**：LLaVA、Qwen-VL——冻结或微调一个 ViT，把图像 token 投影后塞进 LLM 的词表空间，让 LLM 直接「看图说话」。训练分两阶段：先对齐（只训投影层），再指令微调。
 3. **统一建模线**：GPT-4o、Gemini 这类原生多模态，文本图像音频在底层就是同一套 token 化流程。
 
-我上篇写 [vLLM 部署 Qwen](/posts/vllm-qwen-performance-tuning/) 时用的就是第二条线的模型——视觉塔是 ViT，语言塔是 Qwen，中间一个 MLP 投影。看懂 ViT + CLIP，这类模型的架构图一眼就能读懂。
+不要把普通 Qwen 文本模型与带视觉编码器的 Qwen-VL 混为一谈。[vLLM 部署调优](/posts/vllm-qwen-performance-tuning/)中的服务性能问题可以作为工程参考，但是否接收图像以及怎样连接视觉模块，要以具体模型配置为准。
 
-## 我的实验记录
+## 从调用示例到评测
 
-在 RTX 4090 上做的几个小实验，数据贴出来参考：
+零样本分类需要先冻结类别列表与文本模板，图文检索需要定义每条查询的相关图片集合。模板选择在验证集完成，再在独立测试集报告结果；不能不断看测试图改描述后，仍称为未调优的零样本评测。
 
-| 实验 | 设置 | 结果 |
-|------|------|------|
-| 零样本分类 | CLIP ViT-B/32，自采 200 张电商图分 10 类 | Top-1 准确率 91.5%，零训练成本 |
-| 模板消融 | 单词类别 vs 「a photo of {}」 | 后者 +6.8 个点，复现论文结论 |
-| 图文检索 | 1000 张图 + 50 条查询句 | Recall@10 94%，延迟 12ms/query |
-| ViT 微调 | ViT-B/16 在 5000 张自有数据上微调 3 epoch | 93.2%，比 ResNet50 从头训高 4 个点 |
+比较 ViT 微调与 CNN 时，还要说明预训练数据和训练预算是否一致。若一个模型使用了大量预训练数据，另一个从头训练，差异不能全部归因于网络结构。这里不列没有对应配置与日志的个人实测数字。
 
 ## 踩坑排查
 

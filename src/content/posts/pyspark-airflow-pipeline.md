@@ -9,7 +9,7 @@ categories: ["AI课程", "数据工程"]
 math: false
 ---
 
-[大数据管理篇](/posts/big-data-management/)讲了 Hadoop/Spark 的概念版图，这篇往下一层：**每天凌晨把上亿条日志加工成特征表**的真实管道怎么搭。PySpark 负责「算」，Airflow 负责「什么时候算、失败了怎么办」——两者是离线数据管道的经典夫妻档。
+一条每天运行的数据管道有两类问题：数据怎样计算，任务失败后怎样恢复。PySpark 负责分布式计算，Airflow 组织任务依赖与调度。两者接起来之前，要先定义每批输入的范围、输出分区，以及重复执行是否会产生重复结果。
 
 **前置阅读**：建议先读 [大数据管理](/posts/big-data-management/)、[SQL 与数据库实战](/posts/sql-database-practice/)、[Kafka 流式处理](/posts/streaming-kafka-basics/)（批流对照）。
 

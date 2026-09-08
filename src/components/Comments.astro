@@ -29,7 +29,10 @@ const { prompt } = Astro.props;
     let waline: ReturnType<typeof init> | undefined;
 
     const showUnavailable = (message: string) => {
-      if (status) status.textContent = message;
+      if (status) {
+        status.hidden = false;
+        status.textContent = message;
+      }
       if (retry) retry.hidden = false;
       if (container) container.hidden = true;
     };
@@ -46,6 +49,10 @@ const { prompt } = Astro.props;
         url.searchParams.set('pageSize', '1');
         const response = await fetch(url, { signal: controller.signal });
         if (!response.ok) throw new Error(`HTTP ${response.status}`);
+        const payload = await response.json();
+        if (payload.errno !== 0 || !payload.data || !Array.isArray(payload.data.data)) {
+          throw new Error('Invalid comment response');
+        }
 
         if (status) status.hidden = true;
         if (container) container.hidden = false;

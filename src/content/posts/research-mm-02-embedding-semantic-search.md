@@ -9,7 +9,7 @@ categories: ["AI课程", "多模态理解"]
 math: true
 ---
 
-TF-IDF 时代的检索有个硬伤：搜"language model"找不到通篇只写"LLM"的论文——关键词匹配只看字面，不懂意思。这一课用语义向量（Embedding）解决它，给平台装上"按意思检索"的能力。这也是系列五 RAG 服务的直接前奏。
+用户搜“language model”，相关论文可能主要使用“LLM”这个缩写。语义向量提供了字面匹配之外的一种召回方式，但也可能把主题相近、具体条件不同的论文放在前面。本课给平台增加向量检索，同时保留关键词基线，用查询样本检查两者各自漏掉什么。
 
 > 前置阅读：[NLP 综合篇](/posts/nlp-comprehensive-guide/)（词向量到上下文向量的演进）、[Milvus + Neo4j RAG 实战](/posts/milvus-neo4j-rag/)（向量库选型的完整对比）。
 

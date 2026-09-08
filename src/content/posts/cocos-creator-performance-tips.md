@@ -375,6 +375,8 @@ export default class CoinSpawner extends cc.Component {
 
 ## 五、Profiler 与调试
 
+优化前后需要使用同一设备、场景和操作路径，并区分首次加载与缓存命中。DrawCall 下降只说明提交次数减少；若瓶颈在像素填充、脚本或资源解码，帧率未必提高。先用测量定位瓶颈，再决定要改哪一层。
+
 ### 5.1 Cocos Creator Profiler 面板
 
 运行游戏时点击工具栏的 Profiler 按钮，会显示实时性能面板：

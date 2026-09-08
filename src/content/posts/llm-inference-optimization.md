@@ -9,7 +9,7 @@ categories: ["AI课程", "大模型应用"]
 math: false
 ---
 
-部署第一个 7B 模型时我满怀期待地发了个请求，然后盯着屏幕看了 8 秒——第一个字才蹦出来。LLM 推理优化就是回答三个问题：**首 token 为什么这么慢、生成为什么这么慢、显存为什么总不够**。这三个问题的答案构成了一张完整的优化地图。
+模型请求很慢，先分清是在等待第一个 token，还是后续生成速度慢。这两种现象可能对应不同瓶颈，还要结合并发量和显存占用一起看。下面按测量、定位、调整的顺序梳理推理优化，避免只凭一次请求就判断某种部署方案更快。
 
 **前置阅读**：建议先读 [LLM 架构专题](/posts/llm-architecture-moe-longcontext/)、[模型压缩与部署](/posts/model-compression-deployment/)、[vLLM 调优实录](/posts/vllm-qwen-performance-tuning/)。
 

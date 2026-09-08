@@ -9,7 +9,7 @@ categories: ["AI课程", "数据分析"]
 math: false
 ---
 
-每个数据分析师都会遇到那个时刻：`pd.read_csv` 读一个 8GB 的文件，进度条走到一半，`MemoryError`。Pandas 的天花板是结构性的——**单线程执行 + 全部数据进内存 + 每步操作都产生中间副本**。我统计过自己的崩溃记录：Pandas 的「舒适区」大概是内存的 1/5，16GB 内存的机器，3GB 以上的 CSV 就开始玄学。这篇文章讲两条突围路线：Dask（把 Pandas 并行化）和 Polars（用 Rust 重写一遍），外加一个选型框架。
+CSV 文件能放进磁盘，不代表读成 DataFrame 后也能放进内存。字符串表示、数据类型和连接操作的中间结果都会影响占用，因此很难用一个固定的文件大小界定 Pandas 的上限。先看读取方式和内存分析，再决定是否换用 Dask 或 Polars；下面围绕这条排查顺序展开。
 
 **前置阅读**：建议先读 [Pandas 数据分析与可视化](/posts/pandas-data-analysis-visualization/)、[NumPy 与 Python 性能优化](/posts/numpy-python-performance/)。
 

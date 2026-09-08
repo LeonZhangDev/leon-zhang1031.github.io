@@ -15,4 +15,6 @@ Waline is loaded only after a successful API health check. Unavailable service i
 
 ## Implementation notes
 
+The September 8, 2026 client check validates both HTTP status and the Waline JSON envelope. Failure messages are explicitly unhidden before retry. The configured remote API currently returns HTTP 404; see [blog-reading-quality](blog-reading-quality.md) for the deployment blocker and validation scope.
+
 The client config uses `login: 'enable'` so visitors can remain anonymous while administrators can sign in, optional metadata, and a two-to-one-thousand character limit. Each detail-page comment section exposes the `#comments` anchor for direct links. The global layout provides a site-styled account modal that embeds Waline's canonical login and registration routes, plus an accessible scroll-to-top control on long pages. The server sets `COMMENT_AUDIT=true`, `IPQPS=60`, and `SECURE_DOMAINS`. Waline's default Akismet integration remains enabled. The first site administrator registers through the Waline management UI and reviews queued comments there.

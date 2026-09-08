@@ -9,7 +9,7 @@ categories: ["AI课程", "计算机视觉"]
 math: false
 ---
 
-老照片模糊、监控截图看不清车牌、电商主图被客户嫌弃分辨率低——**超分辨率（Super-Resolution, SR）就是从低清图重建高清图**。这个领域有个反直觉的核心矛盾：**让 PSNR 分数最高的方法，出来的图看起来糊；看起来锐利的图，PSNR 反而差**。理解这个矛盾，就理解了 SR 的全部技术路线。
+放大图片容易，恢复原本没有记录清楚的细节却没有唯一答案。超分辨率模型可以生成更清晰的纹理，但锐利不等于真实，尤其不能据此确认模糊车牌或人脸身份。下面区分像素保真与感知质量，讨论它们为什么可能给出不同的评价。
 
 **前置阅读**：建议先读 [GAN 与 Diffusion](/posts/image-generation-gan-diffusion/)、[CNN 详解](/posts/deep-learning-04-cnn-image-classification/)。
 

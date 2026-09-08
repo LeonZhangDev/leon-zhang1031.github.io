@@ -225,19 +225,31 @@ optimizer.step()
 
 ## 11. 数学补充：矩阵形状
 
-设批次省略，输入 $X\in\mathbb{R}^{L\times d}$：
+调试这一步时，我建议先把矩阵的行和列写清楚。省略批次维，令输入 $X\in\mathbb{R}^{L\times d}$：$L$ 是序列长度，$d$ 是每个 token 的表示维度。下面先看一个注意力头。
+
+投影矩阵分别为 $W_Q,W_K\in\mathbb{R}^{d\times d_k}$ 和 $W_V\in\mathbb{R}^{d\times d_v}$。三次矩阵乘法使用同一个输入，但学习不同的映射：
 
 $$
 Q=XW_Q,\quad K=XW_K,\quad V=XW_V
 $$
 
-若 $Q,K\in\mathbb{R}^{L\times d_k}$，则：
+因此 $Q,K\in\mathbb{R}^{L\times d_k}$，而 $V\in\mathbb{R}^{L\times d_v}$。转置后的 $K^T$ 是 $d_k\times L$，内侧维度相同，乘积保留外侧两个维度：
 
 $$
 QK^T\in\mathbb{R}^{L\times L}
 $$
 
-softmax 沿最后一维进行，使每个 Query 对所有 Key 的权重和为 1。再乘 $V\in\mathbb{R}^{L\times d_v}$，输出回到 $L\times d_v$。调试注意力时，先写出这四个形状，通常比盯着报错更快。
+这里的第 $(i,j)$ 个元素表示位置 $i$ 的 Query 与位置 $j$ 的 Key 的匹配分数，还不是概率。完整的缩放点积注意力是：
+
+$$
+A=\operatorname{softmax}\left(\frac{QK^T}{\sqrt{d_k}}+M\right),\qquad O=AV
+$$
+
+$M$ 是掩码：允许访问的位置加 0，需要屏蔽的位置加负无穷。softmax 沿最后一维进行，所以每一行表示一个 Query 对所有 Key 的权重分配；在至少有一个有效 Key、且尚未做 attention dropout 时，行和为 1。如果一整行都被屏蔽，计算可能产生 NaN，需要在数据或 mask 构造阶段避免。
+
+最后的乘法为 $(L\times L)(L\times d_v)$，输出 $O$ 的形状是 $L\times d_v$。例如 $L=4$、$d_k=d_v=8$，分数矩阵是 $4\times4$，每个位置最终得到一个 8 维向量。序列长度没有改变，改变的是每个位置的信息来源。
+
+回到多头实现时，加上批次维和头数：$Q,K$ 常写成 $B\times H\times L\times d_k$，分数是 $B\times H\times L\times L$。代码里的 `transpose(-2, -1)` 只交换最后两个维度，不交换批次或头数。先核对这些形状，再查 mask 的广播范围，就能把大多数维度错误定位到具体一步。
 
 ## 12. 练习与面试表达
 

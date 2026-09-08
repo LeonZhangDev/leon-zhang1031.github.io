@@ -9,7 +9,7 @@ categories: ["AI课程", "自然语言处理"]
 math: true
 ---
 
-预训练大模型什么都会一点，但不懂你的领域语气、格式和私有知识。微调（SFT）把它教成你想要的样子。全参数微调一个 7B 模型要上百 GB 显存，普通人玩不起；LoRA/QLoRA 把门槛降到一张 24GB 甚至 12GB 的消费卡。这篇是完整实战：原理、数据、训练、评估。
+模型总是输出不合要求的格式，和模型缺少某份最新文档，是两类问题。前者可以考虑监督微调，后者还需要检索或数据更新机制。LoRA 降低的是可训练参数与相关状态的开销，实际显存仍取决于模型、序列长度和训练配置。这篇先确定微调目标，再进入数据、训练和评估。
 
 > 前置阅读：[深度学习课程 07：Transformer](/posts/deep-learning-07-transformer-attention/)（模型结构）、[NLP 综合篇](/posts/nlp-comprehensive-guide/)（微调在 NLP 版图中的位置）。推理侧见 [vLLM 部署调优](/posts/vllm-qwen-performance-tuning/)。
 

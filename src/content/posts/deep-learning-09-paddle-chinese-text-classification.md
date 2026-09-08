@@ -297,6 +297,8 @@ class TransformerTextClassifier(nn.Layer):
 
 ## 13. 推理制品与接口
 
+权重文件必须与字符词表、类别顺序和截断规则绑定发布。若训练时类别 0 表示正面，服务端却把它解释成负面，概率看起来正常而语义完全相反。接口测试应包含已知类别、小于最短长度和全未知字符三种输入。
+
 ```python
 def load_for_inference(model, checkpoint_path):
     state_dict = paddle.load(checkpoint_path)

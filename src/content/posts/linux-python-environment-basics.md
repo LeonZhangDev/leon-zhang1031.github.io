@@ -9,7 +9,7 @@ categories: ["Python", "编程基础"]
 math: false
 ---
 
-学 AI 工程，第一道坎往往不是模型，而是环境。我自己的体会是：模型代码写错了，报错信息会告诉你哪一行；环境配错了，报错信息经常是误导性的——`ModuleNotFoundError` 背后可能是装错了 Python 版本，`Permission denied` 背后可能是根本不存在的 sudo 习惯。
+遇到 `ModuleNotFoundError`，先别急着重复安装：当前终端、编辑器和 Notebook 可能用着不同解释器。环境排查要先确认正在运行哪个 Python，再检查包安装到了哪里。这篇以 Linux 命令行和项目虚拟环境为主线，把“在哪里运行”这件事说清楚。
 
 这篇把 Linux 和 Python 环境管理合在一起讲，因为在真实的 AI 开发里它们从来分不开：训练在 Linux 服务器上跑，代码用 Git 拉，依赖用 pip 装，数据用命令行搬。Windows 本地写代码、Linux 远程跑任务，是我目前最顺手的组合。
 

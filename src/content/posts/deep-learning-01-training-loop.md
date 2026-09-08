@@ -147,6 +147,8 @@ PyTorch 默认会累加梯度，所以每个 batch 开始前要清掉旧梯度�
 
 ## 5. 验证阶段为什么不一样
 
+验证有两个独立开关：`eval()` 改变 Dropout、BatchNorm 等层的行为，关闭梯度记录则避免建立不需要的计算图。二者不是替代关系。验证结束后再次训练，也要恢复训练模式；否则程序可以继续运行，但训练行为已悄悄改变。
+
 ```python
 @torch.inference_mode()
 def evaluate(

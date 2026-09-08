@@ -9,7 +9,7 @@ categories: ["AI课程", "多模态理解"]
 math: false
 ---
 
-系列三用 TF-IDF + 逻辑回归立了领域分类的基线（宏 F1 ≈ 0.81）。这一课用深度学习路线挑战它。但先把丑话说前面：**深度学习不是默认答案**——这一课的核心产出除了更高的分数，还有一个基于证据的决策框架：什么时候深度学习值得上。
+系列三已经给出 TF-IDF 与线性分类器的基线流程。这一课考虑是否值得改用深度文本模型：评估集保持一致，比较分类质量、推理成本和维护要求。如果结果没有带来明确收益，保留简单基线也是合理选择。
 
 > 前置阅读：[深度学习课程 01](/posts/deep-learning-01-training-loop/)（训练循环）、[07：Transformer](/posts/deep-learning-07-transformer-attention/)（注意力机制）、[M2 基线报告](/posts/research-ml-05-evaluation-tuning-milestone/)（要挑战的对象）。
 

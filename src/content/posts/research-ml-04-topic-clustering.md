@@ -17,9 +17,9 @@ math: false
 
 输入：cs.CL 领域论文的 TF-IDF 向量。输出：若干主题簇 + 每个簇的主题词解读 + 二维可视化地图。无监督任务的定义要额外写清楚"怎么算好"——没有标签就没有准确率，评估靠**轮廓系数（数学质量）+ 人工解读（语义质量）**两条腿，缺一不可。
 
-## 先降维：两万维不能直接聚类
+## 先比较表示：直接聚类还是降维后聚类
 
-TF-IDF 特征两万维且稀疏，直接 K-Means 有两个问题：高维空间里欧氏距离失效（维度灾难——所有点对之间的距离趋于相等），计算也慢。先降维：
+K-Means 可以处理稀疏 TF-IDF。降维可能减少计算和噪声，也可能丢失稀有主题的信号；需要与不降维的基线比较，而不是预设高维距离失效。下面演示 SVD 路线：
 
 ```python
 from sklearn.decomposition import TruncatedSVD
@@ -30,15 +30,16 @@ X_dense = svd.fit_transform(X_tfidf)
 print(f"保留方差比: {svd.explained_variance_ratio_.sum():.3f}")
 ```
 
-`TruncatedSVD` 是稀疏矩阵专用的降维（不做中心化，保持稀疏结构），文本领域的这个用法就是经典的 LSA（潜在语义分析）。100 维通常能保留 40-60% 方差——听起来不高，但对聚类而言已经足够：我们需要的不是重建原文，而是保留"哪些文档相似"的结构。
+`TruncatedSVD` 不先做中心化，因此可以接收稀疏输入，但输出是稠密数组。文本中的这种用法称为 LSA。100 维只是示例配置，不保证保留某个比例的信息，也要确认输入特征数量足够。
 
-降维后务必标准化（各维度方差不同），然后才是熟悉的 K-Means：
+下面演示逐列标准化的路线。它会改变 SVD 各方向的权重，也可能放大小方差方向；可以另与按文档 L2 归一化比较。保留变换器，解释质心时还要撤销标准化：
 
 ```python
 from sklearn.preprocessing import StandardScaler
 from sklearn.cluster import KMeans
 
-X_scaled = StandardScaler().fit_transform(X_dense)
+scaler = StandardScaler()
+X_scaled = scaler.fit_transform(X_dense)
 km = KMeans(n_clusters=12, n_init=10, random_state=42)
 labels = km.fit_predict(X_scaled)
 ```
@@ -50,10 +51,11 @@ labels = km.fit_predict(X_scaled)
 ```python
 import numpy as np
 
-def top_terms_per_cluster(km_model, svd_model, vectorizer, topn=8):
-    # 簇中心 × SVD 逆变换回词空间，取权重最高的词
+def top_terms_per_cluster(km_model, scaler_model, svd_model, vectorizer, topn=8):
+    # 先撤销标准化，再近似映射回词空间
     terms = np.array(vectorizer.get_feature_names_out())
-    centers_in_word_space = km_model.cluster_centers_ @ svd_model.components_
+    centers = scaler_model.inverse_transform(km_model.cluster_centers_)
+    centers_in_word_space = svd_model.inverse_transform(centers)
     for i, center in enumerate(centers_in_word_space):
         top = terms[np.argsort(center)[-topn:][::-1]]
         print(f"主题 {i}: {', '.join(top)}")
@@ -68,14 +70,18 @@ SVD 的 100 维人眼还是看不了。再降到 2 维做可视化——这一�
 ```python
 import umap
 import plotly.express as px
+import pandas as pd
+from pathlib import Path
 
 reducer = umap.UMAP(n_neighbors=15, min_dist=0.1, random_state=42)
 xy = reducer.fit_transform(X_scaled)
 
 viz = pd.DataFrame({"x": xy[:, 0], "y": xy[:, 1],
                     "topic": labels, "title": titles})
-fig = px.scatter(viz.sample(20000), x="x", y="y", color="topic",
+viz["topic"] = viz["topic"].astype(str)
+fig = px.scatter(viz.sample(n=min(20000, len(viz)), random_state=42), x="x", y="y", color="topic",
                  hover_data=["title"], title="cs.CL 主题地图")
+Path("runs/m2").mkdir(parents=True, exist_ok=True)
 fig.write_html("runs/m2/topic_map.html")
 ```
 
@@ -85,7 +91,7 @@ UMAP 和 SVD 的分工：SVD 保全局方差结构（给聚类用），UMAP 保�
 
 ## 与官方标签对照：发现的结构靠谱吗
 
-把聚类结果和官方领域标签交叉看，是无监督任务最好的外部验证：
+若输入只有 cs.CL 主领域，主标签交叉表只有一行，无法验证跨领域结构。应改用次级标签，或在多领域语料上重新拟合；标签只用于分析，不提前加入聚类特征。外部对照是线索，不是正确性的证明：
 
 ```python
 ct = pd.crosstab(df["field"], labels, normalize="index")
@@ -102,7 +108,7 @@ ct = pd.crosstab(df["field"], labels, normalize="index")
 | 症状 | 原因 | 处理 |
 |---|---|---|
 | 高维直接聚类结果乱 | 维度灾难 | 先 TruncatedSVD 到百维 |
-| 簇中心解读不出主题 | 没逆变换回词空间 | centers @ svd.components_ |
+| 簇中心解读不出主题 | 逆变换漏了标准化 | 先 scaler.inverse_transform，再 SVD 逆变换 |
 | UMAP 图是一团糊 | n_neighbors 不当 | 小数据调小，大数据 15-50 扫参 |
 | 用 UMAP 2D 结果聚类簇很怪 | 投影扭曲了距离 | 聚类在 SVD 空间做，UMAP 只展示 |
 | 同样的 K 两次结果不同 | 初始化敏感 | n_init=10 + random_state |

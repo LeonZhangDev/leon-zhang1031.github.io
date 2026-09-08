@@ -9,7 +9,7 @@ categories: ["AI课程", "计算机视觉"]
 math: true
 ---
 
-判别式模型学"图里是什么"，生成式模型学"图该怎么画"。图像生成是过去十年视觉领域最波澜壮阔的线：2014 年 GAN 横空出世，2020 年 Diffusion 后来居上，如今 Stable Diffusion 系已是事实标准。这篇按三代范式的思想演进讲，理解"为什么新一代替代旧一代"比记住每个模型结构更重要。
+图像生成面对的是一个不同于分类的问题：如何产生符合训练分布或文字条件的新图像？VAE、GAN 和扩散模型给出不同的训练目标与采样方式，不能简单理解成新模型彻底替代旧模型。这里先比较它们各自在学什么，再讨论生成速度、可控性和训练稳定性的取舍。
 
 > 前置阅读：[深度学习课程 04：CNN](/posts/deep-learning-04-cnn-image-classification/)、[07：Transformer 与注意力](/posts/deep-learning-07-transformer-attention/)（现代文生图的文本条件靠它）。
 

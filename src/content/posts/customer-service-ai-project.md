@@ -9,7 +9,7 @@ categories: ["AI课程", "大模型应用"]
 math: false
 ---
 
-「做个智能客服」是 AI 综合实战的最佳命题——它麻雀虽小五脏俱全：检索（RAG）、分类（意图）、生成（LLM）、工程（会话管理、转人工）、评估（解决率）。这篇不堆概念，讲一个真能上线的最小架构：**三层路由 + RAG 问答 + 置信度兜底**。
+智能客服可以把检索、意图分类、回答生成和会话管理放到同一个案例里练习。要把范围收住，先选一类可核验的问题，明确什么时候回答、什么时候拒答或转人工。下面按这个边界设计路由和评估流程，再解释如何逐步扩展。
 
 **前置阅读**：建议先读 [RAG 项目复盘](/posts/rag-project-retrospective/)、[RAG 进阶](/posts/rag-advanced-chunking-rerank/)、[Prompt 工程实战](/posts/prompt-engineering-practice/)。
 

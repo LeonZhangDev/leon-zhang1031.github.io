@@ -29,6 +29,8 @@ GET  /api/v1/health                     # 健康检查
 
 ## 输入校验：Pydantic 是免费的质量门
 
+类型正确只是第一关。输入文本长度、分页上限、调用权限和计算预算仍需业务层约束。数据库故障可以返回明确的服务错误，但不要把连接串、原始 SQL 或内部路径直接放进响应。
+
 ```python
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel, Field

@@ -9,7 +9,7 @@ categories: ["AI课程", "自然语言处理"]
 math: false
 ---
 
-问大模型「strawberry 里有几个 r」它会数错；中文比英文「贵」；prompt 里多敲几个空格计费就变了——这些看似无关的现象，背后都是同一个东西：**tokenizer**。它是文本进入模型的唯一入口，也是所有 LLM「怪癖」的头号嫌疑人。理解它，很多玄学问题立刻变成明学。
+同一句话换一种拼写或空格形式，切出来的 token 可能不同。这会影响输入长度、成本和模型接触到的文本片段，但并不能单独解释模型的所有错误。下面从字符和词的取舍出发，手工走一遍 BPE，再看分词器与模型训练怎样配合。
 
 **前置阅读**：建议先读 [Transformer 详解](/posts/deep-learning-07-transformer-attention/)、[NLP 综合指南](/posts/nlp-comprehensive-guide/)。
 

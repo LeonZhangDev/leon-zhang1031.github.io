@@ -11,7 +11,7 @@ math: false
 
 「在我电脑上能跑」——环境地狱的临床症状：A 项目要 Python 3.9 + torch 2.0，B 项目要 Python 3.11 + torch 2.3，全局安装互相覆盖；三个月后重装系统，requirements.txt 里的 `pandas` 没写版本，装上最新版 API 全变。
 
-这篇把 2026 年的 Python 环境方案讲成一页决策：**venv 是底线、conda 管非 Python 依赖、uv 是新王、Docker 是终局**。
+这篇按项目需求比较 venv、conda、uv 和 Docker：要隔离 Python 包、管理原生依赖、锁定安装结果，还是打包服务运行环境？它们有交集，也可以组合使用，不存在一个替代其他所有工具的终局方案。
 
 **前置阅读**：建议先读 [Linux + Python 环境基础](/posts/linux-python-environment-basics/)。
 
@@ -105,6 +105,8 @@ CMD ["python", "main.py"]
 镜像 = 代码 + Python + 全部依赖的快照，任何机器跑出同样的结果。GPU 场景用 `nvidia/cuda` 基础镜像。[Docker 化的详细内容](/posts/research-data-mgmt-04-docker-cicd/)在工程系列里有专篇。
 
 ## 决策树：我该用哪个
+
+这些工具并不处在同一层：虚拟环境隔离包，锁文件描述依赖解析结果，容器封装用户空间运行环境。它们可以配合使用。容器也不会自动消除宿主驱动或硬件差异；选型应从项目要复现到哪一层开始。
 
 ```
 项目要 CUDA/系统级二进制依赖？

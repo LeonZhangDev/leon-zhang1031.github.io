@@ -9,7 +9,7 @@ categories: ["AI课程", "机器学习"]
 math: true
 ---
 
-分类之后攻回归：预测一篇刚发表的论文一年后的引用量。这是平台"潜力论文发现"功能的核心。这个任务把回归建模的典型难点全占了：**目标长尾、特征类型混杂、可解释性要求高**。正好一站式练完。
+预测论文发表后一年内的引用量，难点先在时间口径，而不在回归算法。训练样本必须已走完一年观察期，输入也只能使用预测当时已知的信息。当前累计引用量不能直接充当历史一年引用量；把这个边界定下来后，再处理长尾目标与模型选择。
 
 > 前置阅读：[线性回归](/posts/ml-linear-regression/)（回归评估与正则化）、[决策树](/posts/ml-decision-tree/)（树模型原理）、[第 1 课特征工程](/posts/research-ml-01-feature-engineering/)（特征与泄漏审查）。
 
@@ -25,7 +25,7 @@ df["y"] = np.log1p(df["citations_1y"])     # 训练目标
 # citations_pred = np.expm1(model.predict(X))
 ```
 
-变换后目标接近正态，模型的误差分配才均匀。评估时两个口径都要看：变换后空间的 RMSE（模型优化的目标），和变回原始空间的 MAE（业务可理解的"平均差几次引用"）。**注意 RMSE 不能在原始空间比**——对数空间优化的模型，原始空间 RMSE 天然吃亏，跨模型比较要在同一口径下进行。
+`log1p` 压缩大值，却不保证分布变成正态。可以同时报告对数空间 RMSE、原始空间 MAE 和 RMSE，比较时统一数据与尺度即可。直接 `expm1` 回变换也不等于原始尺度的条件均值，需要检查高引区间的回变换偏差。
 
 ## 三个模型排排坐
 
@@ -50,29 +50,36 @@ for name, model in candidates.items():
     print(f"{name}: RMSE(log空间) = {-score:.4f}")
 ```
 
-典型结论（也是这类"结构化特征 + 长尾目标"任务的普遍规律）：
+下面比较候选模型的特点，并非已经执行过的实验结果：
 
 **Ridge 是地板**。快、系数可解释，但拟合不了非线性——"作者数的影响力边际递减""venue 和领域的交互"这类模式它抓不到。
 
 **随机森林是稳健的中坚**。不用调太多参数就能拿到不错的分数，天然给出特征重要性，对离群特征值不敏感。
 
-**梯度提升（HGB）通常最强**。逐棵拟合残差的机制让它对复杂交互的捕捉最好，`early_stopping=True` 自动防过拟合。代价是训练更慢、超参更敏感。XGBoost/LightGBM 是同族的更强实现，需要额外安装但接口一致。
+HGB 可以学习非线性与交互，早停有助于控制复杂度，但不保证胜过其他模型或自动消除过拟合。XGBoost 和 LightGBM 属于同类路线，参数与输入支持需要分别核对，不能直接替换类名。
 
 ## 特征重要性：模型教我们做产品
 
-树模型的特征重要性直接回答业务问题"什么样的论文更可能高引"：
+HGB 没有 `feature_importances_` 属性，可用验证集上的置换重要性检查模型依赖哪些输入。下面假定 `X_valid`、`y_valid` 已按时间留出，目标经过 `log1p`，特征名与列顺序一致；测试集仍然保留到最终评估。
 
 ```python
 import pandas as pd
 
+from sklearn.inspection import permutation_importance
+
+hgb = candidates["hgb"]
 hgb.fit(X_train, y_train)
-imp = pd.Series(hgb.feature_importances_, index=FEATURE_NAMES)
+result = permutation_importance(
+    hgb, X_valid, y_valid, n_repeats=5, random_state=42,
+    scoring="neg_root_mean_squared_error",
+)
+imp = pd.Series(result.importances_mean, index=FEATURE_NAMES)
 print(imp.sort_values(ascending=False).head(10))
 ```
 
 这类任务里重要性靠前的一般是：venue 声誉、作者历史产出、领域热度、标题特征。重要性结果有两个正经用途：**砍掉零重要性特征**简化模型（特征越少，[特征层](/posts/research-ml-01-feature-engineering/)维护成本越低）；以及**反哺产品设计**——比如"作者历史产出"权重高，说明平台值得做一个作者画像页。
 
-记住[决策树课](/posts/ml-decision-tree/)的警告：重要性偏爱高基数特征、相关特征互相稀释。它是参考信号，不是因果结论。
+置换重要性不等于基于训练节点不纯度的重要性。相关特征仍可能互相替代，低重要性不代表字段完全无用，也不能从归因推出因果。参见 [Scikit-learn 置换重要性文档](https://scikit-learn.org/stable/modules/permutation_importance.html)。
 
 ## 评估：分桶看误差，别看总分
 

@@ -6,7 +6,8 @@
 - Added 8 measured teaching figures, CSV/JSON evidence, and an offline runner with synthetic inputs. Extracted the actual article classifier and passed six match/reject/invalid-input cases.
 - Verified 196 unit tests and 103 Chrome Playwright tests; scoped verification metadata distinguishes executed examples from camera, GUI, real photographs and Whisper workflows that were not run.
 - Comment API read returned 200/errno=0 with the Worker Origin; no comment was submitted. Browser-origin read check is included in the production smoke.
-- Pending this batch: production release verification. Corpus-wide technical review and original project evidence remain outstanding; see [editorial delivery](editorial/delivery.md).
+- Published implementation `1c450c5` to main. Worker production smoke passed at 2026-09-20 08:35:38 UTC: five pages HTTP 200, new images/JSON available, mobile width valid, browser-origin comment read HTTP 200/errno=0. No comment submission tested. Ten generated artifacts reproduced byte-for-byte in the same environment.
+- Corpus-wide technical review and original project evidence remain outstanding; see [editorial delivery](editorial/delivery.md).
 
 ## 2026-09-20 — Blog depth and reading tools
 

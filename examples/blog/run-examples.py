@@ -134,6 +134,9 @@ def main() -> None:
                  "matplotlib":matplotlib.__version__, "device":"cpu"},
                "gradient":gradient_check(), "copy":copy_check(), "training":training_check(),
                "attention":attention_check(), "threshold":threshold_check()}
+    for name in ("training-loss.svg", "causal-attention.svg"):
+        plot = OUTPUT / name
+        plot.write_text("\n".join(line.rstrip() for line in plot.read_text(encoding="utf-8").splitlines())+"\n", encoding="utf-8")
     (OUTPUT / "results.json").write_text(json.dumps(results,ensure_ascii=False,indent=2)+"\n", encoding="utf-8")
     print(json.dumps(results,ensure_ascii=False,indent=2))
 

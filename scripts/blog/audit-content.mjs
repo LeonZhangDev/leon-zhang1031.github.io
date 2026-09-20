@@ -70,13 +70,14 @@ const json=JSON.stringify(report,null,2)+'\n';
 const table=rows.map(row=>`| [${row.slug}](../../src/content/posts/${row.slug}.md) | ${row.priority} | ${row.kind} | ${row.codeBlocks} | ${row.images.length} | ${row.explanatoryFigureAdded?'已补图解；全篇待审':'全篇待审'} |`).join('\n');
 const cards=rows.map(row=>`### ${row.title}\n\n- 文件：\`${row.slug}\`\n- 本文目标（取自摘要，待编辑复核）：${row.description}\n- 前几节：${row.headings.slice(0,5).join(' → ')}\n- 下一步：${row.nextChecks.join('；')}。\n- 候选证据核验点：\n${row.candidateClaims.length?row.candidateClaims.slice(0,4).map(line=>`  - ${line.replace(/\|/g,' / ').slice(0,350)}`).join('\n'):'  - 自动扫描未命中；不等于已完成事实核验。'}\n`).join('\n');
 const markdown=`# 全站博客编辑台账\n\n由 \`node scripts/blog/audit-content.mjs\` 生成。覆盖 ${rows.length} 篇文章。\n\n自动盘点仅用于安排人工审读，不能证明代码已运行、断言已核验或文章已完整重写。逐篇实验状态以有范围说明的验证记录为准。\n\n| 文章 | 优先级 | 类型初分 | 代码块 | 图引用 | 状态 |\n| --- | --- | --- | ---: | ---: | --- |\n${table}\n\n## 逐篇编辑卡\n\n${cards}`;
+const cleanMarkdown = markdown.replace(/[ \t]+$/gm, '');
 if(process.argv.includes('--check')) {
-  for(const [name,data] of [['content-ledger.json',json],['content-ledger.md',markdown]]) {
+  for(const [name,data] of [['content-ledger.json',json],['content-ledger.md',cleanMarkdown]]) {
     if(!existsSync(resolve(outputDir,name)) || readFileSync(resolve(outputDir,name),'utf8')!==data) failures.push(`Stale ${name}: run audit-content.mjs`);
   }
 } else {
   writeFileSync(resolve(outputDir,'content-ledger.json'),json);
-  writeFileSync(resolve(outputDir,'content-ledger.md'),markdown);
+  writeFileSync(resolve(outputDir,'content-ledger.md'),cleanMarkdown);
 }
 console.log(JSON.stringify({posts:report.posts,postsWithImages:report.postsWithImages,imageReferences:report.imageReferences,failures},null,2));
 if(failures.length) process.exitCode=1;

@@ -2,8 +2,8 @@
   "schemaVersion": 1,
   "scope": "Source inventory, not independent experiment reproduction",
   "posts": 163,
-  "postsWithImages": 28,
-  "imageReferences": 36,
+  "postsWithImages": 32,
+  "imageReferences": 40,
   "failures": [],
   "articles": [
     {
@@ -3894,16 +3894,22 @@
         "评估：别只看准确率",
         "特征工程：把输入处理接进模型",
         "调参：先网格搜索，别上来就 AutoML",
+        "最后才评估与保存",
         "踩坑排查清单",
         "练习",
         "放进贯穿项目：论文分类基线",
         "面试常问"
       ],
-      "codeBlocks": 5,
+      "codeBlocks": 7,
       "codeLanguages": [
         "python"
       ],
-      "images": [],
+      "images": [
+        {
+          "alt": "Iris 训练集内部五折搜索与选定模型的最终测试混淆矩阵",
+          "path": "/examples/blog-review-04/iris-selection.svg"
+        }
+      ],
       "localLinks": [
         "/posts/ml-linear-regression/",
         "/posts/ml-decision-tree/",
@@ -3913,18 +3919,19 @@
       "candidateClaims": [
         "- **准确率 Accuracy**：整体对的比例。类别均衡时直观，不均衡时是陷阱——99% 负例的数据集，全猜负也有 99% 准确率。",
         "这里仅在训练部分做 5 折交叉验证，保留测试集供方案确定后评估。折间均值用于比较候选方案，标准差提示划分敏感性，不是置信区间，也不能直接预测上线波动。同一用户有多条记录时，应按用户分组切分；有时间先后关系时，应使用时间切分。",
-        "`handle_unknown=\"ignore\"` 是个保命参数：训练时没见过的新类别，预测时编码全零而不是报错。线上数据永远会有训练时没见过的取值。",
+        "这里用 `np.nan` 表示缺失，填充值也只从训练折学习。`handle_unknown=\"ignore\"` 将某列的未知类别编码为该列对应的一组全零，而不是拒绝输入；这不意味着预测可靠。上线仍要检查未知类别比例、字段类型和整列缺失情况。",
         "| 训练集 99%，测试集 70% | 过拟合 | 加正则、减特征、加数据；用学习曲线确认 |",
         "| 评估分数高得反常（99.9%） | 大概率数据泄漏 | 审查特征是否含\"答案近亲\"，检查预处理顺序 |",
-        "| 新数据预测全是一类 | 训练/线上特征分布不一致 | 对比两边特征分布，检查预处理是否对齐 |",
-        "把整个流程变成单一对象：一次 `fit`/`predict` 调完全部步骤；GridSearchCV 可以同时搜索预处理参数和模型参数；`joblib.dump` 一个文件保存完整链路，部署时不会出现\"线上预处理代码和训练时不一致\"的经典事故。"
+        "| 新数据预测全是一类 | 训练/线上特征分布不一致 | 对比两边特征分布，检查预处理是否对齐 |"
       ],
       "priority": "P1",
-      "scopedVerification": null,
+      "scopedVerification": {
+        "status": "example-tested",
+        "scope": "执行正文指定代码块：Iris 训练内搜索、最终评估、混合列缺失/未知类别与本地持久化往返；未验证真实业务部署。"
+      },
       "reviewStatus": "structural-inventory-complete; full-technical-review-pending",
       "explanatoryFigureAdded": false,
       "nextChecks": [
-        "判断是否需要结构图或真实结果图；不按数量强制插图",
         "逐块标注完整示例/增量片段/伪代码，核对依赖与运行入口",
         "人工核验下列候选断言；关键词命中不代表结论错误"
       ]
@@ -3941,17 +3948,23 @@
         "特征重要性：解释模型用了什么，不是证明因果",
         "树不擅长的三件事",
         "回归树：预测数值也行",
+        "实测：选深度不看测试集，外推单独检验",
         "踩坑排查清单",
         "练习",
         "放进贯穿项目：解释哪些论文需要人工复核",
         "面试常问"
       ],
-      "codeBlocks": 5,
+      "codeBlocks": 6,
       "codeLanguages": [
         "python",
         "unspecified"
       ],
-      "images": [],
+      "images": [
+        {
+          "alt": "Wine 训练内部深度验证曲线与合成数据上的树和直线外推对比",
+          "path": "/examples/blog-review-04/tree-boundaries.svg"
+        }
+      ],
       "localLinks": [
         "/posts/ml-basics-scikit-learn/",
         "/posts/ml-linear-regression/",
@@ -3961,11 +3974,13 @@
         "| 训练 100% 测试大跌 | 没限制树规模 | max_depth + min_samples_leaf |"
       ],
       "priority": "P2",
-      "scopedVerification": null,
+      "scopedVerification": {
+        "status": "example-tested",
+        "scope": "执行正文 wine 树与剪枝配置、diabetes 回归，另跑训练内深度选择和合成外推实验；未验证真实审批或医疗应用。"
+      },
       "reviewStatus": "structural-inventory-complete; full-technical-review-pending",
       "explanatoryFigureAdded": false,
       "nextChecks": [
-        "判断是否需要结构图或真实结果图；不按数量强制插图",
         "逐块标注完整示例/增量片段/伪代码，核对依赖与运行入口",
         "人工核验下列候选断言；关键词命中不代表结论错误"
       ]
@@ -4042,11 +4057,16 @@
         "放进贯穿项目：给论文库建立待审核主题组",
         "面试常问"
       ],
-      "codeBlocks": 3,
+      "codeBlocks": 4,
       "codeLanguages": [
         "python"
       ],
-      "images": [],
+      "images": [
+        {
+          "alt": "同一组合成双月数据的生成标签、KMeans 与 DBSCAN 分组",
+          "path": "/examples/blog-review-04/clustering-shapes.svg"
+        }
+      ],
       "localLinks": [
         "/posts/ml-basics-scikit-learn/",
         "/posts/ml-linear-regression/",
@@ -4057,11 +4077,13 @@
         "1. 用 `make_blobs` 生成 4 团数据，故意让三个特征量纲差 100 倍，对比标准化前后的聚类效果和轮廓系数。"
       ],
       "priority": "P2",
-      "scopedVerification": null,
+      "scopedVerification": {
+        "status": "example-tested",
+        "scope": "执行正文八样本聚类、候选 K 与新样本预测，运行合成双月 KMeans/DBSCAN 对比；未验证真实用户分群。"
+      },
       "reviewStatus": "structural-inventory-complete; full-technical-review-pending",
       "explanatoryFigureAdded": false,
       "nextChecks": [
-        "判断是否需要结构图或真实结果图；不按数量强制插图",
         "逐块标注完整示例/增量片段/伪代码，核对依赖与运行入口",
         "人工核验下列候选断言；关键词命中不代表结论错误"
       ]
@@ -4088,22 +4110,28 @@
       "codeLanguages": [
         "python"
       ],
-      "images": [],
+      "images": [
+        {
+          "alt": "合成回归的测试预测与残差，以及 RMSE 和 MAE 的对比",
+          "path": "/examples/blog-review-04/regression-diagnostics.svg"
+        }
+      ],
       "localLinks": [
         "/posts/ml-basics-scikit-learn/",
         "/posts/ml-decision-tree/"
       ],
       "candidateClaims": [
-        "RMSE 和 R² 要配合看：RMSE 告诉你误差绝对值是多少（\"平均差 8 万\"），R² 告诉你这个水平算好算坏（\"解释了 85% 的方差\"）。只说 RMSE 不说 R²，业务方无法判断 8 万误差是大是小。",
         "平方误差的代价前面说了：一个 100 倍偏离的点，对损失的影响是普通点的一万倍。一套汤里的老鼠屎。处理顺序：",
         "## 模型诊断：残差是最好的老师"
       ],
       "priority": "P2",
-      "scopedVerification": null,
+      "scopedVerification": {
+        "status": "example-tested",
+        "scope": "执行正文合成回归、含截距 VIF、标准化正则、对数与多项式片段；绘制残差；未复现实房价预测或因果效应。"
+      },
       "reviewStatus": "structural-inventory-complete; full-technical-review-pending",
       "explanatoryFigureAdded": false,
       "nextChecks": [
-        "判断是否需要结构图或真实结果图；不按数量强制插图",
         "逐块标注完整示例/增量片段/伪代码，核对依赖与运行入口",
         "人工核验下列候选断言；关键词命中不代表结论错误"
       ]

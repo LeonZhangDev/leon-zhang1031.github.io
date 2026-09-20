@@ -41,6 +41,10 @@ try {
     ['time-series-analysis', '03', 'forecast-protocols.svg'],
     ['anomaly-detection-practice', '03', 'causal-anomaly.svg'],
     ['automl-optuna-tuning', '03', 'search-budget.svg'],
+    ['ml-basics-scikit-learn', '04', 'iris-selection.svg'],
+    ['ml-linear-regression', '04', 'regression-diagnostics.svg'],
+    ['ml-decision-tree', '04', 'tree-boundaries.svg'],
+    ['ml-kmeans-clustering', '04', 'clustering-shapes.svg'],
   ]) {
     const response = await page.goto(`${origin}/posts/${slug}/`, { waitUntil:'domcontentloaded', timeout:60000 });
     assert.equal(response?.status(), 200);
@@ -67,6 +71,7 @@ try {
   assert.equal(validation.anomalies.centered_window_failed_invariance, true);
   assert.equal(validation.search.test_evaluations, 1);
   const comments = await page.evaluate(async () => {
+    // Fetching comments is deliberately read-only.
     try {
       const url = new URL('https://lz1031-waline.vercel.app/api/comment');
       url.searchParams.set('path', location.pathname);
@@ -78,6 +83,12 @@ try {
       return { error:String(error), scope:'Read request failed; no comment submitted' };
     }
   });
+  const foundationsResponse = await page.request.get(`${origin}/examples/blog-review-04/results.json`);
+  assert.equal(foundationsResponse.status(), 200);
+  const foundations = await foundationsResponse.json();
+  assert.equal(foundations.executed_snippets.length, 18);
+  assert.equal(foundations.iris.test_prediction_calls, 1);
+  assert.equal(foundations.clustering.original_model_K, 2);
   console.log(JSON.stringify({ verifiedAt:new Date().toISOString(), results, artifacts:'available', comments },null,2));
 } finally {
   await browser.close();

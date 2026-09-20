@@ -83,11 +83,11 @@
 | [mindtrip-rag-model-and-streaming](../../src/content/posts/mindtrip-rag-model-and-streaming.md) | P2 | tutorial | 9 | 0 | 全篇待审 |
 | [mindtrip-rag-prompt-and-architecture](../../src/content/posts/mindtrip-rag-prompt-and-architecture.md) | P2 | tutorial | 5 | 0 | 全篇待审 |
 | [mixed-precision-memory](../../src/content/posts/mixed-precision-memory.md) | P1 | tutorial | 3 | 0 | 全篇待审 |
-| [ml-basics-scikit-learn](../../src/content/posts/ml-basics-scikit-learn.md) | P1 | tutorial | 5 | 0 | 全篇待审 |
-| [ml-decision-tree](../../src/content/posts/ml-decision-tree.md) | P2 | tutorial | 5 | 0 | 全篇待审 |
+| [ml-basics-scikit-learn](../../src/content/posts/ml-basics-scikit-learn.md) | P1 | tutorial | 7 | 1 | 全篇待审 |
+| [ml-decision-tree](../../src/content/posts/ml-decision-tree.md) | P2 | tutorial | 6 | 1 | 全篇待审 |
 | [ml-experiment-tracking-monitoring](../../src/content/posts/ml-experiment-tracking-monitoring.md) | P1 | tutorial | 5 | 0 | 全篇待审 |
-| [ml-kmeans-clustering](../../src/content/posts/ml-kmeans-clustering.md) | P2 | tutorial | 3 | 0 | 全篇待审 |
-| [ml-linear-regression](../../src/content/posts/ml-linear-regression.md) | P2 | tutorial | 6 | 0 | 全篇待审 |
+| [ml-kmeans-clustering](../../src/content/posts/ml-kmeans-clustering.md) | P2 | tutorial | 4 | 1 | 全篇待审 |
+| [ml-linear-regression](../../src/content/posts/ml-linear-regression.md) | P2 | tutorial | 6 | 1 | 全篇待审 |
 | [ml-math-foundations](../../src/content/posts/ml-math-foundations.md) | P2 | tutorial | 0 | 0 | 全篇待审 |
 | [ml-system-design-interview](../../src/content/posts/ml-system-design-interview.md) | P1 | tutorial | 2 | 0 | 全篇待审 |
 | [model-compression-deployment](../../src/content/posts/model-compression-deployment.md) | P1 | tutorial | 7 | 0 | 全篇待审 |
@@ -996,11 +996,11 @@
 - 文件：`ml-basics-scikit-learn`
 - 本文目标（取自摘要，待编辑复核）：机器学习入门小系列第 1 篇：用 Scikit-learn 跑通 数据切分 → 特征工程 → 训练 → 评估 的完整闭环，重点讲数据泄漏、交叉验证和 Pipeline 这些新手最容易栽的环节。
 - 前几节：机器学习到底在干什么 → 完整流程：六步走 → 数据泄漏：机器学习的第一大隐形杀手 → 评估：别只看准确率 → 特征工程：把输入处理接进模型
-- 下一步：判断是否需要结构图或真实结果图；不按数量强制插图；逐块标注完整示例/增量片段/伪代码，核对依赖与运行入口；人工核验下列候选断言；关键词命中不代表结论错误。
+- 下一步：逐块标注完整示例/增量片段/伪代码，核对依赖与运行入口；人工核验下列候选断言；关键词命中不代表结论错误。
 - 候选证据核验点：
   - - **准确率 Accuracy**：整体对的比例。类别均衡时直观，不均衡时是陷阱——99% 负例的数据集，全猜负也有 99% 准确率。
   - 这里仅在训练部分做 5 折交叉验证，保留测试集供方案确定后评估。折间均值用于比较候选方案，标准差提示划分敏感性，不是置信区间，也不能直接预测上线波动。同一用户有多条记录时，应按用户分组切分；有时间先后关系时，应使用时间切分。
-  - `handle_unknown="ignore"` 是个保命参数：训练时没见过的新类别，预测时编码全零而不是报错。线上数据永远会有训练时没见过的取值。
+  - 这里用 `np.nan` 表示缺失，填充值也只从训练折学习。`handle_unknown="ignore"` 将某列的未知类别编码为该列对应的一组全零，而不是拒绝输入；这不意味着预测可靠。上线仍要检查未知类别比例、字段类型和整列缺失情况。
   -  /  训练集 99%，测试集 70%  /  过拟合  /  加正则、减特征、加数据；用学习曲线确认  /
 
 ### 决策树：从分裂规则到过拟合控制
@@ -1008,7 +1008,7 @@
 - 文件：`ml-decision-tree`
 - 本文目标（取自摘要，待编辑复核）：机器学习入门小系列第 3 篇：从信息增益的直觉讲解决策树怎么「学提问」，用 Scikit-learn 训练并可视化一棵树，吃透过拟合控制、特征重要性和剪枝。
 - 前几节：树怎么决定"先问哪个问题" → 上手：训练一棵树并把它画出来 → 树长得更深，为什么未必更好 → 特征重要性：解释模型用了什么，不是证明因果 → 树不擅长的三件事
-- 下一步：判断是否需要结构图或真实结果图；不按数量强制插图；逐块标注完整示例/增量片段/伪代码，核对依赖与运行入口；人工核验下列候选断言；关键词命中不代表结论错误。
+- 下一步：逐块标注完整示例/增量片段/伪代码，核对依赖与运行入口；人工核验下列候选断言；关键词命中不代表结论错误。
 - 候选证据核验点：
   -  /  训练 100% 测试大跌  /  没限制树规模  /  max_depth + min_samples_leaf  /
 
@@ -1029,7 +1029,7 @@
 - 文件：`ml-kmeans-clustering`
 - 本文目标（取自摘要，待编辑复核）：机器学习入门小系列第 4 篇：讲透 K-Means 的迭代逻辑、K 值怎么选、标准化的关键作用、K-Means++ 初始化，以及它搞不定的数据形状。
 - 前几节：算法逻辑：两步轮流做，做到不动为止 → 关键动作一：先决定距离应该表示什么 → 关键动作二：K 值怎么选 → 关键动作三：理解 n_init 和 K-Means++ → K-Means 搞不定的形状
-- 下一步：判断是否需要结构图或真实结果图；不按数量强制插图；逐块标注完整示例/增量片段/伪代码，核对依赖与运行入口；人工核验下列候选断言；关键词命中不代表结论错误。
+- 下一步：逐块标注完整示例/增量片段/伪代码，核对依赖与运行入口；人工核验下列候选断言；关键词命中不代表结论错误。
 - 候选证据核验点：
   - 1. 用 `make_blobs` 生成 4 团数据，故意让三个特征量纲差 100 倍，对比标准化前后的聚类效果和轮廓系数。
 
@@ -1038,9 +1038,8 @@
 - 文件：`ml-linear-regression`
 - 本文目标（取自摘要，待编辑复核）：机器学习入门小系列第 2 篇：从最小二乘的直觉讲起，用 Scikit-learn 实现线性回归，吃透 R²、系数解读、多重共线性、正则化和多项式特征。
 - 前几节：模型的直觉：找一条"总误差最小"的线 → 上手：10 行代码跑起来 → R² 到底在说什么 → 坑一：多重共线性——系数还能信吗 → 坑二：过拟合与正则化
-- 下一步：判断是否需要结构图或真实结果图；不按数量强制插图；逐块标注完整示例/增量片段/伪代码，核对依赖与运行入口；人工核验下列候选断言；关键词命中不代表结论错误。
+- 下一步：逐块标注完整示例/增量片段/伪代码，核对依赖与运行入口；人工核验下列候选断言；关键词命中不代表结论错误。
 - 候选证据核验点：
-  - RMSE 和 R² 要配合看：RMSE 告诉你误差绝对值是多少（"平均差 8 万"），R² 告诉你这个水平算好算坏（"解释了 85% 的方差"）。只说 RMSE 不说 R²，业务方无法判断 8 万误差是大是小。
   - 平方误差的代价前面说了：一个 100 倍偏离的点，对损失的影响是普通点的一万倍。一套汤里的老鼠屎。处理顺序：
   - ## 模型诊断：残差是最好的老师
 

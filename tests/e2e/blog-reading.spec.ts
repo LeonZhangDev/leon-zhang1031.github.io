@@ -9,6 +9,7 @@ const reviewedPosts = [
   'opencv-contour-feature-extraction', 'opencv-hough-transform-brightness',
   'opencv-practical-projects', 'speech-recognition-basics',
   'time-series-analysis', 'anomaly-detection-practice', 'automl-optuna-tuning',
+  'ml-basics-scikit-learn', 'ml-linear-regression', 'ml-decision-tree', 'ml-kmeans-clustering',
 ];
 
 for (const slug of reviewedPosts) {
@@ -23,9 +24,28 @@ for (const slug of reviewedPosts) {
     await expect(page.locator('h1')).not.toBeEmpty();
     expect((await page.locator('.prose').innerText()).length).toBeGreaterThan(300);
     await expect(page.locator('astro-error-overlay, .katex-error')).toHaveCount(0);
+    if (slug.startsWith('ml-')) {
+      await expect(page.locator('.prose img[src^="/examples/blog-review-04/"]')).toHaveCount(1);
+      await expect(page).toHaveTitle((await page.locator('h1').innerText()).trim());
+    }
     for (const image of await page.locator('.prose img[src^="/examples/blog-review-"]').all()) {
       await image.scrollIntoViewIfNeeded();
       await expect.poll(() => image.evaluate((node: HTMLImageElement) => node.complete && node.naturalWidth > 0)).toBe(true);
+    }
+    if (slug === 'ml-kmeans-clustering') {
+      const button = page.locator('.article-image-open').first();
+      await button.evaluate(node => node.scrollIntoView({ block:'center', behavior:'instant' }));
+      await page.screenshot({ path:resolve(tmpdir(), 'blog-review-ml-mobile.png') });
+      await button.click();
+      await expect(page.getByRole('dialog')).toBeVisible();
+      await expect(page.getByRole('dialog').locator('img')).toHaveAttribute('src', /clustering-shapes.svg/);
+      await page.keyboard.press('Escape');
+      await expect(page.getByRole('dialog')).not.toBeVisible();
+      await expect(button).toBeFocused();
+      expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+      await page.setViewportSize({ width:1440, height:1000 });
+      await button.evaluate(node => node.scrollIntoView({ block:'center', behavior:'instant' }));
+      await page.screenshot({ path:resolve(tmpdir(), 'blog-review-ml-desktop.png') });
     }
     if (slug === 'anomaly-detection-practice') {
       await expect(page.locator('.prose img[src^="/examples/blog-review-03/"]')).toHaveCount(2);
@@ -82,6 +102,22 @@ test('third review batch preserves temporal and final-test boundaries', async ({
   expect(data.anomalies.zero_variance_is_unscored).toBe(true);
   expect(data.search.test_evaluations).toBe(1);
   expect(data.search.candidates_per_strategy).toBe(12);
+});
+
+test('fourth review batch runs article code and preserves final-test boundaries', async ({ request }) => {
+  const response = await request.get('/examples/blog-review-04/results.json');
+  expect(response.ok()).toBe(true);
+  const data = await response.json();
+  expect(data.executed_snippets).toHaveLength(18);
+  expect(data.iris.test_prediction_calls).toBe(1);
+  expect(data.iris.mixed_missing_and_unknown_passed).toBe(true);
+  expect(data.iris.trusted_persistence_roundtrip).toBe(true);
+  expect(data.regression.rmse).toBeGreaterThanOrEqual(data.regression.mae);
+  expect(data.regression.log_array_shape).toEqual([500, 4]);
+  expect(data.trees.wine_test_prediction_calls).toBe(1);
+  expect(data.trees.constant_predictions_outside_training_x).toBe(true);
+  expect(data.clustering.original_model_K).toBe(2);
+  expect(data.clustering.candidate_count).toBe(6);
 });
 
 test('every published post has a built page, valid article links and no math errors', () => {

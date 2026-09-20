@@ -8,6 +8,7 @@ const reviewedPosts = [
   'opencv-image-interpolation-mask-roi-watermark-grayscale-tutorial',
   'opencv-contour-feature-extraction', 'opencv-hough-transform-brightness',
   'opencv-practical-projects', 'speech-recognition-basics',
+  'time-series-analysis', 'anomaly-detection-practice', 'automl-optuna-tuning',
 ];
 
 for (const slug of reviewedPosts) {
@@ -22,9 +23,22 @@ for (const slug of reviewedPosts) {
     await expect(page.locator('h1')).not.toBeEmpty();
     expect((await page.locator('.prose').innerText()).length).toBeGreaterThan(300);
     await expect(page.locator('astro-error-overlay, .katex-error')).toHaveCount(0);
-    for (const image of await page.locator('.prose img[src^="/examples/blog-review-02/"]').all()) {
+    for (const image of await page.locator('.prose img[src^="/examples/blog-review-"]').all()) {
       await image.scrollIntoViewIfNeeded();
       await expect.poll(() => image.evaluate((node: HTMLImageElement) => node.complete && node.naturalWidth > 0)).toBe(true);
+    }
+    if (slug === 'anomaly-detection-practice') {
+      await expect(page.locator('.prose img[src^="/examples/blog-review-03/"]')).toHaveCount(2);
+      const button = page.locator('.article-image-open').first();
+      await button.scrollIntoViewIfNeeded();
+      await page.screenshot({ path:resolve(tmpdir(), 'blog-review-anomaly-mobile.png') });
+      await button.click();
+      await expect(page.getByRole('dialog')).toBeVisible();
+      await page.keyboard.press('Escape');
+      await expect(button).toBeFocused();
+      await page.setViewportSize({ width:1440, height:1000 });
+      await button.evaluate(node => node.scrollIntoView({ block:'center', behavior:'instant' }));
+      await page.screenshot({ path:resolve(tmpdir(), 'blog-review-anomaly-desktop.png') });
     }
     if (slug === 'ab-testing-statistics') {
       await expect(page.locator('.prose')).toContainText('0.066748');
@@ -54,6 +68,20 @@ test('second review batch exposes numeric evidence, not full-reproduction claims
   expect(data.vision.synthetic_disk_count).toBe(3);
   expect(data.text_metrics.cer).toBeCloseTo(1/12, 10);
   expect(data.article_classifier.cases_passed).toBe(6);
+});
+
+test('third review batch preserves temporal and final-test boundaries', async ({ request }) => {
+  const response = await request.get('/examples/blog-review-03/results.json');
+  expect(response.ok()).toBe(true);
+  const data = await response.json();
+  expect(data.forecasting.future_invariance).toBe(true);
+  expect(data.forecasting.folds).toHaveLength(3);
+  for (const fold of data.forecasting.folds) expect(fold.train_end < fold.test_start).toBe(true);
+  expect(data.anomalies.future_invariance).toBe(true);
+  expect(data.anomalies.centered_window_failed_invariance).toBe(true);
+  expect(data.anomalies.zero_variance_is_unscored).toBe(true);
+  expect(data.search.test_evaluations).toBe(1);
+  expect(data.search.candidates_per_strategy).toBe(12);
 });
 
 test('every published post has a built page, valid article links and no math errors', () => {

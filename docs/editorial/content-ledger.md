@@ -19,11 +19,11 @@
 | [ai-research-eng-03-jupyter-reproducible](../../src/content/posts/ai-research-eng-03-jupyter-reproducible.md) | P2 | course | 6 | 0 | 全篇待审 |
 | [ai-research-eng-04-python-project-engineering](../../src/content/posts/ai-research-eng-04-python-project-engineering.md) | P2 | course | 7 | 0 | 全篇待审 |
 | [ai-resume-portfolio](../../src/content/posts/ai-resume-portfolio.md) | P1 | tutorial | 0 | 0 | 全篇待审 |
-| [anomaly-detection-practice](../../src/content/posts/anomaly-detection-practice.md) | P1 | tutorial | 5 | 0 | 全篇待审 |
+| [anomaly-detection-practice](../../src/content/posts/anomaly-detection-practice.md) | P1 | tutorial | 5 | 2 | 全篇待审 |
 | [atlassplit-ast-audit-sandbox](../../src/content/posts/atlassplit-ast-audit-sandbox.md) | P0 | tutorial | 71 | 1 | 已补图解；全篇待审 |
 | [atlassplit-dev-notes](../../src/content/posts/atlassplit-dev-notes.md) | P2 | retrospective | 14 | 0 | 全篇待审 |
 | [atlassplit-llm-code-error-analysis](../../src/content/posts/atlassplit-llm-code-error-analysis.md) | P1 | tutorial | 40 | 0 | 全篇待审 |
-| [automl-optuna-tuning](../../src/content/posts/automl-optuna-tuning.md) | P2 | tutorial | 2 | 0 | 全篇待审 |
+| [automl-optuna-tuning](../../src/content/posts/automl-optuna-tuning.md) | P1 | tutorial | 2 | 1 | 全篇待审 |
 | [big-data-management](../../src/content/posts/big-data-management.md) | P1 | tutorial | 4 | 0 | 全篇待审 |
 | [causal-inference-basics](../../src/content/posts/causal-inference-basics.md) | P2 | tutorial | 2 | 0 | 全篇待审 |
 | [cocos-creator-performance-tips](../../src/content/posts/cocos-creator-performance-tips.md) | P1 | tutorial | 9 | 0 | 全篇待审 |
@@ -158,7 +158,7 @@
 | [sql-database-practice](../../src/content/posts/sql-database-practice.md) | P2 | tutorial | 8 | 0 | 全篇待审 |
 | [streaming-kafka-basics](../../src/content/posts/streaming-kafka-basics.md) | P2 | tutorial | 6 | 0 | 全篇待审 |
 | [super-resolution-esrgan](../../src/content/posts/super-resolution-esrgan.md) | P2 | tutorial | 2 | 0 | 全篇待审 |
-| [time-series-analysis](../../src/content/posts/time-series-analysis.md) | P2 | tutorial | 4 | 0 | 全篇待审 |
+| [time-series-analysis](../../src/content/posts/time-series-analysis.md) | P2 | tutorial | 4 | 1 | 全篇待审 |
 | [tokenizer-bpe](../../src/content/posts/tokenizer-bpe.md) | P2 | tutorial | 3 | 0 | 全篇待审 |
 | [tts-speech-synthesis](../../src/content/posts/tts-speech-synthesis.md) | P2 | tutorial | 1 | 0 | 全篇待审 |
 | [video-understanding-basics](../../src/content/posts/video-understanding-basics.md) | P1 | tutorial | 4 | 0 | 全篇待审 |
@@ -314,13 +314,13 @@
 
 - 文件：`anomaly-detection-practice`
 - 本文目标（取自摘要，待编辑复核）：异常检测与分类的边界、孤立森林原理、One-Class SVM、AutoEncoder 重构误差、时间序列异常检测，以及无标签下的评估难题与应对。
-- 前几节：先划边界：什么时候用异常检测而不是分类 → 孤立森林：最快最好用的首选 → 原理：异常点更容易被「孤立」 → One-Class SVM：学一个包住正常的边界 → AutoEncoder：用重构误差检测异常
-- 下一步：判断是否需要结构图或真实结果图；不按数量强制插图；逐块标注完整示例/增量片段/伪代码，核对依赖与运行入口；人工核验下列候选断言；关键词命中不代表结论错误。
+- 前几节：先划边界：什么时候用异常检测而不是分类 → 孤立森林：一个便于检查的基线 → 原理：异常点更容易被「孤立」 → One-Class SVM：学一个包住正常的边界 → AutoEncoder：用重构误差检测异常
+- 下一步：逐块标注完整示例/增量片段/伪代码，核对依赖与运行入口；人工核验下列候选断言；关键词命中不代表结论错误。
 - 候选证据核验点：
-  - ## 孤立森林：最快最好用的首选
   - 3. **稳定性检验**：不同时间窗的异常率是否稳定——某天异常率突然 10 倍，先查数据管道再查模型。
   - 有可靠标注的测试集时，可以定量评估召回、精确率和误报率；未知异常覆盖不足时，再辅以抽样审核与上线监控。问题不在于异常检测不能量化，而在于测试集覆盖了哪些异常。
-  - 要点：**异常检测上线第一天就要设计好「标签回流」**——每条人工审核结论都存下来，它是你从「无监督」走向「半监督」的唯一桥梁。
+  -  /  contamination 设 1% 新数据报出 15%  /  可能是分布变化、数据处理差异或训练覆盖不足  /  对比分数分布和管道；不能直接断定训练被污染  /
+  -  /  上线后异常率逐月漂移  /  正常模式本身在演化  /  定期用新数据重训（滚动窗口）  /
 
 ### AtlasSplit Agent 的 AST 审计与沙箱设计：当我真的让 LLM 在机器上执行 Python 代码
 
@@ -358,13 +358,14 @@
 ### 超参数搜索与 AutoML：用 Optuna 把调参变成工程——从网格搜索到 TPE
 
 - 文件：`automl-optuna-tuning`
-- 本文目标（取自摘要，待编辑复核）：超参数优化实战：网格搜索与随机搜索的局限、贝叶斯优化 TPE 直觉、Optuna 完整工作流与剪枝、搜索空间设计原则，附 XGBoost 调参对照实验。
-- 前几节：调参为什么是个真问题 → 基线方法：网格与随机 → 贝叶斯优化：让历史指导下一步 → Optuna 实战 → 对照实验：三种策略的差距
-- 下一步：判断是否需要结构图或真实结果图；不按数量强制插图；逐块标注完整示例/增量片段/伪代码，核对依赖与运行入口；人工核验下列候选断言；关键词命中不代表结论错误。
+- 本文目标（取自摘要，待编辑复核）：超参数搜索的验证集隔离、Optuna 目标函数与真正生效的剪枝调用、搜索预算设计，附可复跑的网格与随机搜索教学对照。
+- 前几节：调参为什么是个真问题 → 基线方法：网格与随机 → 贝叶斯优化：让历史指导下一步 → Optuna 实战 → 对照实验：先把预算和证据说清楚
+- 下一步：逐块标注完整示例/增量片段/伪代码，核对依赖与运行入口；人工核验下列候选断言；关键词命中不代表结论错误。
 - 候选证据核验点：
-  - **搜索空间设计**：`log=True` 用于跨数量级的参数（learning_rate、正则系数）——0.001 和 0.01 的差异比 0.1 和 0.11 大得多，对数尺度采样才合理。范围别贪大，先用默认参数跑基线，把搜索空间设在「基线的 0.1 倍到 10 倍」。
-  -  /  策略  /  试验次数  /  最佳 AUC  /  备注  /
-  - 1. 用 Optuna 调一个随机森林（至少 4 个超参数），和 GridSearchCV 对比相同时间预算下的最佳分数。
+  - **搜索空间设计**：`log=True` 让相同比例区间获得相同采样权重，适合正数、跨数量级的候选；它不证明某次绝对变化对分数影响更大。边界须符合参数定义，例如 subsample 不能用默认值的 10 倍；还要记录边界是否在看过验证结果后修改。
+  - **剪枝不是配置一个 pruner 就自动发生。** 上面的 cross_val_score 一次返回最终均值，没有 `trial.report` / `trial.should_prune`，所以不声称它中途剪枝。真正需要剪枝时，在训练循环中上报可比较进度的验证指标，并显式抛出 `TrialPruned`。MedianPruner 比较当前 trial 到目前的最佳中间值与此前完成 trial 在相同步的中位数，还受启动、预热与最小样本条件约束。[官方说明](https://optuna.readthedocs.io/en/stable/reference/generated/optuna.pruners.MedianPruner.html)
+  - ![同一合成分类任务的网格与随机搜索累计最佳CV分数](/examples/blog-review-03/search-budget.svg)
+  - 复跑入口为 [`review-model-validation.py`](https://github.com/LeonZhangDev/leon-zhang1031.github.io/blob/main/examples/blog/review-model-validation.py)。本次开发集 CV 最佳 AUC 为网格 0.974702、随机 0.974281；据此选择网格候选，最终测试 AUC 为 0.976177。这个差距很小，不构成方法优越性的统计证据。
 
 ### 大数据管理：从单机 DuckDB 到分布式思维
 
@@ -1745,8 +1746,8 @@
 
 - 文件：`time-series-analysis`
 - 本文目标（取自摘要，待编辑复核）：时间序列的三大成分、平稳性与差分、ARIMA 参数逻辑、Prophet 的快速实战、LSTM 路线，以及时序任务最容易犯的时间泄漏错误。
-- 前几节：先分解：趋势、季节、残差 → 平稳性与 ARIMA：统计派的基本功 → Prophet：业务预测的速食面 → 机器学习与深度学习路线 → 踩坑排查
-- 下一步：判断是否需要结构图或真实结果图；不按数量强制插图；逐块标注完整示例/增量片段/伪代码，核对依赖与运行入口。
+- 前几节：先分解：趋势、季节、残差 → 平稳性与 ARIMA：统计派的基本功 → Prophet：业务预测的速食面 → 机器学习与深度学习路线 → 实跑：同一截止日，两种预测协议
+- 下一步：逐块标注完整示例/增量片段/伪代码，核对依赖与运行入口。
 - 候选证据核验点：
   - 自动扫描未命中；不等于已完成事实核验。
 

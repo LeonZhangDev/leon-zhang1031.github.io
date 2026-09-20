@@ -34,14 +34,17 @@ try {
   const data = await artifacts.json();
   assert.equal(data.environment.device, 'cpu');
   assert.equal(data.threshold.validation_threshold, .65);
-  for (const [slug, figure] of [
-    ['ab-testing-statistics', 'ab-confidence.svg'],
-    ['opencv-image-interpolation-mask-roi-watermark-grayscale-tutorial', 'watermark.png'],
-    ['opencv-practical-projects', 'counting.png'],
+  for (const [slug, batch, figure] of [
+    ['ab-testing-statistics', '02', 'ab-confidence.svg'],
+    ['opencv-image-interpolation-mask-roi-watermark-grayscale-tutorial', '02', 'watermark.png'],
+    ['opencv-practical-projects', '02', 'counting.png'],
+    ['time-series-analysis', '03', 'forecast-protocols.svg'],
+    ['anomaly-detection-practice', '03', 'causal-anomaly.svg'],
+    ['automl-optuna-tuning', '03', 'search-budget.svg'],
   ]) {
     const response = await page.goto(`${origin}/posts/${slug}/`, { waitUntil:'domcontentloaded', timeout:60000 });
     assert.equal(response?.status(), 200);
-    const source = `/examples/blog-review-02/${figure}`;
+    const source = `/examples/blog-review-${batch}/${figure}`;
     const plot = page.locator(`img[src="${source}"]`).first();
     await plot.scrollIntoViewIfNeeded();
     await page.waitForFunction(src => {
@@ -57,6 +60,12 @@ try {
   assert.equal(review.vision.synthetic_disk_count, 3);
   assert.equal(review.article_classifier.cases_passed, 6);
   assert(Math.abs(review.statistics.two_sided_p - .06674827835535253) < 1e-10);
+  const validationArtifacts = await page.request.get(`${origin}/examples/blog-review-03/results.json`);
+  assert.equal(validationArtifacts.status(), 200);
+  const validation = await validationArtifacts.json();
+  assert.equal(validation.forecasting.future_invariance, true);
+  assert.equal(validation.anomalies.centered_window_failed_invariance, true);
+  assert.equal(validation.search.test_evaluations, 1);
   const comments = await page.evaluate(async () => {
     try {
       const url = new URL('https://lz1031-waline.vercel.app/api/comment');

@@ -1,9 +1,14 @@
 ---
 title: "超参数搜索与 AutoML：用 Optuna 把调参变成工程——从网格搜索到 TPE"
 date: 2026-08-30T21:00:00+08:00
+updated: 2026-09-20
+verification:
+  status: example-tested
+  scope: "固定候选预算的 sklearn 网格/随机搜索已运行；Optuna 剪枝仅核对官方接口，未安装执行，也未复现旧成绩表。"
+  checkedAt: 2026-09-20
 draft: false
 author: "Zack-Zhang1031"
-description: "超参数优化实战：网格搜索与随机搜索的局限、贝叶斯优化 TPE 直觉、Optuna 完整工作流与剪枝、搜索空间设计原则，附 XGBoost 调参对照实验。"
+description: "超参数搜索的验证集隔离、Optuna 目标函数与真正生效的剪枝调用、搜索预算设计，附可复跑的网格与随机搜索教学对照。"
 tags: ["AutoML", "Optuna", "超参数", "贝叶斯优化", "调参"]
 categories: ["AI课程", "机器学习"]
 math: true
@@ -15,17 +20,17 @@ math: true
 
 ## 调参为什么是个真问题
 
-模型的超参数（learning_rate、max_depth、n_estimators、正则系数……）不能从数据中学习，只能靠搜索。麻烦在三点：
+模型的超参数通常不由这次常规拟合直接求出，可以靠搜索、经验或专门的优化方法选择。实际困难在于：
 
 - **搜索空间组合爆炸**：6 个参数各取 5 个候选值就是 15625 种组合。
 - **评估昂贵**：每组参数要完整训练一次，深度学习里一次就是几小时。
 - **参数间有交互**：learning_rate 和 n_estimators 互相耦合，不能独立调。
 
-这三个特点决定了：暴力枚举不可行，必须有「策略」地搜。
+候选很少时，枚举仍是可解释的基线；维度和单次成本增大后，再考虑随机或自适应策略。
 
 ## 基线方法：网格与随机
 
-**网格搜索（Grid Search）**：每个参数取若干候选值，遍历所有组合。问题是维度灾难——参数从 3 个涨到 6 个，组合数从几百涨到几十万，大部分组合是浪费（比如 learning_rate=0.5 的整列全是垃圾）。
+**网格搜索（Grid Search）**：遍历笛卡尔积。每个参数各取 5 个值时，3 个参数是 125 次、6 个是 15625 次；不能脱离取值数量估算预算，也不能预先断言某个学习率在所有任务中无效。
 
 **随机搜索（Random Search）**：在空间中随机采样 N 个点。Bergstra & Bengio 的经典结论是：**当只有少数参数真正重要时，随机搜索比网格高效得多**——网格在不重要的参数上浪费了大量试验，随机的每个点都在探索新的重要参数组合。
 
@@ -37,7 +42,7 @@ math: true
 
 每轮迭代做两件事：
 
-1. 用已有 (参数, 分数) 数据更新代理模型（Optuna 默认用 TPE——树状 Parzen 估计器）。
+1. 用已有 (参数, 分数) 更新采样策略，本文显式指定 TPE，避免依赖任务类型或版本的默认设置。
 2. 用采集函数（EI：期望改进）平衡「利用」（在已知好区域附近挖潜）和「探索」（去不确定的新区域碰运气），选出下一组参数。
 
 直觉类比：老手调参就是这么干的——「上次 lr=0.01 比 0.1 好，那往 0.005 附近再试试，同时 max_depth 还没怎么探索过，也带上一组」。贝叶斯优化是把老手的直觉数学化了。
@@ -49,7 +54,11 @@ Optuna 的 API 设计是我见过最干净的，核心就三个概念：objectiv
 ```python
 import optuna
 from xgboost import XGBClassifier
-from sklearn.model_selection import cross_val_score
+from sklearn.model_selection import StratifiedKFold, cross_val_score
+
+# 假设 X_train/y_train 是已隔离最终测试集后的开发数据，且标签为二分类。
+# 同一用户多行或时间序列不能直接使用此随机分层折法。
+cv = StratifiedKFold(n_splits=5, shuffle=True, random_state=42)
 
 def objective(trial):
     params = {
@@ -61,27 +70,28 @@ def objective(trial):
         "colsample_bytree": trial.suggest_float("colsample_bytree", 0.5, 1.0),
         "reg_lambda": trial.suggest_float("reg_lambda", 1e-3, 10.0, log=True),
     }
-    model = XGBClassifier(**params, eval_metric="logloss", n_jobs=-1)
-    score = cross_val_score(model, X_train, y_train, cv=5, scoring="roc_auc").mean()
+    model = XGBClassifier(**params, eval_metric="logloss", n_jobs=1, random_state=42)
+    score = cross_val_score(model, X_train, y_train, cv=cv, scoring="roc_auc", error_score="raise").mean()
     return score
 
 study = optuna.create_study(
     direction="maximize",
-    pruner=optuna.pruners.MedianPruner(n_warmup_steps=5),  # 中途剪枝
+    sampler=optuna.samplers.TPESampler(seed=42),
 )
-study.optimize(objective, n_trials=100)
+study.optimize(objective, n_trials=100, n_jobs=1)
 
 print(study.best_params, study.best_value)
 ```
 
 两个细节决定成败：
 
-**搜索空间设计**：`log=True` 用于跨数量级的参数（learning_rate、正则系数）——0.001 和 0.01 的差异比 0.1 和 0.11 大得多，对数尺度采样才合理。范围别贪大，先用默认参数跑基线，把搜索空间设在「基线的 0.1 倍到 10 倍」。
+**搜索空间设计**：`log=True` 让相同比例区间获得相同采样权重，适合正数、跨数量级的候选；它不证明某次绝对变化对分数影响更大。边界须符合参数定义，例如 subsample 不能用默认值的 10 倍；还要记录边界是否在看过验证结果后修改。
 
-**剪枝（Pruning）**：深度学习的试验动辄几小时，烂试验必须中途杀掉。MedianPruner 的逻辑：每个 epoch 上报中间分数，如果当前 trial 比历史上同进度的中位数明显差，立即终止。我用它把一次 LLM 微调的搜索从 3 天压到 1.5 天，最终分数反而略升——省下的算力多跑了试验。
+**剪枝不是配置一个 pruner 就自动发生。** 上面的 cross_val_score 一次返回最终均值，没有 `trial.report` / `trial.should_prune`，所以不声称它中途剪枝。真正需要剪枝时，在训练循环中上报可比较进度的验证指标，并显式抛出 `TrialPruned`。MedianPruner 比较当前 trial 到目前的最佳中间值与此前完成 trial 在相同步的中位数，还受启动、预热与最小样本条件约束。[官方说明](https://optuna.readthedocs.io/en/stable/reference/generated/optuna.pruners.MedianPruner.html)
 
 ```python
-# 深度学习场景：在训练循环里上报中间值并检查剪枝
+# 结构示意：必须放在 objective(trial) 内，并提供真实训练/验证实现
+# study 需显式配置 pruner=optuna.pruners.MedianPruner(n_warmup_steps=5)
 for epoch in range(epochs):
     val_score = train_one_epoch(...)
     trial.report(val_score, epoch)
@@ -89,22 +99,27 @@ for epoch in range(epochs):
         raise optuna.TrialPruned()
 ```
 
-## 对照实验：三种策略的差距
+## 对照实验：先把预算和证据说清楚
 
-同一个二分类任务（5 万样本，XGBoost），固定 2 小时预算：
+旧版的“微调从 3 天缩到 1.5 天”与下列 AUC 排名没有对应数据、trial 日志或设备记录，不能继续当作实测。原表还混合“固定两小时”和“两周业余时间”，预算不可比。下面改为验收模板：
 
-| 策略 | 试验次数 | 最佳 AUC | 备注 |
-| --- | --- | --- | --- |
-| 手动经验调参 | ~15 | 0.851 | 两周业余时间 |
-| GridSearchCV | 64 | 0.863 | 大部分组合明显无效 |
-| 随机搜索 | 96 | 0.869 | 性价比已经不错 |
-| Optuna (TPE) | 187 | 0.878 | 剪枝多跑了近一倍试验 |
+| 策略 | 必须记录 | 当前证据 |
+| --- | --- | --- |
+| 网格搜索 | 完整候选、CV 折、每候选分数 | 新增小型合成实验 |
+| 随机搜索 | 分布、种子、候选数、相同 CV 折 | 新增小型合成实验 |
+| TPE + 剪枝 | 完成/剪枝/失败 trial、报告步、累计资源 | 未运行，不填成绩 |
 
-TPE 的优势在 30 次试验后开始显现：它把采样集中到了 max_depth 6~8、learning_rate 0.03~0.08 的「黄金区域」，而随机搜索还在全空间均匀撒点。
+![同一合成分类任务的网格与随机搜索累计最佳CV分数](/examples/blog-review-03/search-budget.svg)
+
+新图比较固定种子下各 12 个候选、相同三折 CV 的随机森林搜索。数据在搜索前分出最终测试集；按开发集 CV 选择策略和参数，最终只评估胜出模型一次。曲线来自真实执行，但候选数相同不等于耗时相同，单种子也不能证明某种搜索普遍更好。[候选记录 CSV](/examples/blog-review-03/search-trials.csv) · [结果 JSON](/examples/blog-review-03/results.json)
+
+本机没有 Optuna，本轮没有安装它或运行上述 XGBoost/剪枝示例；不能把 sklearn 实验标成 TPE 实测。要补齐比较，需在独立环境固定 Optuna 版本、同一数据切分、墙钟/资源预算并重复多个种子。
+
+复跑入口为 [`review-model-validation.py`](https://github.com/LeonZhangDev/leon-zhang1031.github.io/blob/main/examples/blog/review-model-validation.py)。本次开发集 CV 最佳 AUC 为网格 0.974702、随机 0.974281；据此选择网格候选，最终测试 AUC 为 0.976177。这个差距很小，不构成方法优越性的统计证据。
 
 ## AutoML：再往上抽象一层
 
-Optuna 还需要你写 objective。AutoML 框架（AutoGluon、FLAML、auto-sklearn）连建模本身都自动化：扔进去一个 DataFrame，它自己做特征预处理、模型选择、集成、调参，几分钟给出一个往往不输人工一周工作的模型。我的用法很务实：**任何新任务先跑 AutoGluon 十分钟拿到强基线**，人工优化的目标变成「打过 AutoML 基线」——很多时候打不过这个基线，那说明问题不在调参，在数据和特征。
+AutoML 可以进一步管理预处理、模型与集成，但仍需要你定义标签、数据可用时点、验证切分和资源约束。可把 AutoML 作为候选基线，不承诺“十分钟胜过人工一周”；未超过某条基线也不能单独证明数据是唯一瓶颈。
 
 ## 踩坑与排查
 
@@ -132,7 +147,7 @@ Optuna 还需要你写 objective。AutoML 框架（AutoGluon、FLAML、auto-skle
 GP 直接建模目标函数 p(y|x)，在连续低维空间表现好，但 O(n³) 复杂度和对类别/条件参数支持差；TPE 反过来建模 p(x|y好) 和 p(x|y差) 两个密度，用比值引导采样，天然支持树状条件搜索空间（比如「用 Adam 才有 beta1」），试验数多时也更快。Optuna 默认 TPE 就是因为它更适合真实 ML 搜索空间。
 
 **Q：调参会过拟合验证集吗？怎么防？**
-会。搜索轮数够多时，相当于在验证集上做了上百次「人为选择」，验证集分数会虚高。防线：独立测试集只在最后用一次；搜索时用交叉验证而非单一验证集；控制搜索轮数（经验法则：试验数别超过验证集能支撑的「有效假设数」）；关键项目用嵌套交叉验证评估搜索流程本身。
+会。CV 也用于选择候选，不能自动消除选择偏差。独立测试集只在冻结方案后使用；需要评估搜索流程本身时使用嵌套 CV。提前约定预算、指标和候选范围，记录试过的所有方案，不给出无法操作的“有效假设数”通用上限。
 
 调参的终极目标不是找到「最优参数」，而是建立一个**可复现、有预算、不骗人的搜索流程**。工具只是这个流程的加速器。
 

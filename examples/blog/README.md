@@ -20,3 +20,14 @@
 - 从本地 `opencv-practical-projects.md` 提取实际 `classify_coin` 函数，验证匹配、未知、歧义与无效输入共六项；标定值是虚构测试夹具，不是真实币种尺寸。
 
 OpenCV 数据全部在脚本中生成；中文 CER 使用标准库编辑距离。统计模拟、轮廓计数不代表线上业务、真实照片准确率或语音模型已经复现。运行前检查脚本与本地文章代码；脚本会执行该文章中的指定函数定义。
+
+## 第三批：预测协议、异常校准与搜索预算
+
+入口：`python examples/blog/review-model-validation.py`。依赖 NumPy、Pandas、scikit-learn、Matplotlib，使用现有环境，不下载数据、不需要 GPU 或 Optuna。固定种子和实际版本记录在 `public/examples/blog-review-03/results.json`。
+
+- 从正文提取 `make_features`、`causal_zscore` 函数执行，断言未来扰动隔离、非正 lag 拒绝、预热与零方差窗口不评分。
+- 三折合成日序列，比较一步逐日观测与固定起点递归协议；标准化仅拟合各折训练段。
+- 独立拟合/校准/测试的孤立森林，比较 contamination 改变阈值而非固定种子下的原始分数。
+- 各 12 候选、相同三折 CV 的网格与随机搜索；只按开发集选择策略，最终测试调用一次。相同候选数不等于相同时间，未执行 TPE。
+
+输出四张 SVG、三份 CSV 和一份 JSON（重跑覆盖）。全部是合成教学结果，不是销量、真实故障或大模型调参基准。脚本执行可信本地文章中指定的函数定义；正文代码变更后应重跑。

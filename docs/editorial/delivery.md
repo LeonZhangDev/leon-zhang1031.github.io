@@ -57,6 +57,25 @@
 
 复跑全部 10 个生成文件，与上次结果 SHA-256 逐一一致；此结论仅针对同一环境，不承诺跨平台逐字节一致。
 
+## 第三批：预测与验证协议（2026-09-20）
+
+逐篇审读并修订 time-series-analysis、anomaly-detection-practice、automl-optuna-tuning，保留 slug。用 humanize-writing 收敛无来源排名与夸张结论，没有用新编的经验替代旧成绩。
+
+| 修改类别 | 修正 | 示例 |
+| --- | --- | --- |
+| 技术边界 | 预测时点与阈值校准分开 | 居中窗口改为过去窗口；训练误差分位改为独立校准 |
+| 证据 | 无日志成绩改成待测项 | 撤下 3 天→1.5 天及旧 XGBoost AUC 排名 |
+| 表述 | 删除无条件性能承诺 | 不再声称 Prophet 几乎不用调参、孤立森林全面胜过 OCSVM |
+
+复跑脚本 `examples/blog/review-model-validation.py` 提取正文函数执行，产物在 `public/examples/blog-review-03/`：4 SVG、3 CSV、1 JSON。Python 3.13.7、NumPy 2.2.6、Pandas 2.3.1、sklearn 1.7.1、Matplotlib 3.10.5；使用现有环境，未安装新依赖。
+
+- 三折时间回测验证未来扰动隔离、非正 lag 拒绝；同时演示一步逐日观测与固定起点递归，未跑 ARIMA/Prophet/LSTM。
+- 因果告警验证预热、零方差与未来不变性；居中窗口反例确实受未来影响。独立正常校准的孤立森林在合成测试得到 TP=38、FP=3、FN=2、TN=397，不外推为业务成绩。
+- 网格与随机搜索各 12 候选、相同三折 CV，按开发集选定网格候选，最终测试 AUC=0.976177，仅调用测试一次。没有 Optuna，未将 sklearn 实验冒充 TPE 或剪枝实测。
+- 官方来源核对：ADF 原假设、TimeSeriesSplit gap/等间隔约束、OCSVM nu、IsolationForest offset、Prophet 绘图接口及 Optuna MedianPruner 显式报告机制；链接附在对应正文。
+
+本地验证：196 个单元测试、107 个 Chrome Playwright 测试通过；Astro check 0 errors、5 个既有 hints。结构检查覆盖 163 篇、28 篇有 Markdown 图片、36 处图片引用，无失败。浏览器覆盖三篇新增内容、图片加载、手机宽度与放大/Esc/焦点返回，截图保存在系统临时目录 `blog-review-anomaly-mobile.png`、`blog-review-anomaly-desktop.png`。8 个产物同环境复跑 SHA-256 一致；不是跨平台确定性保证。发布验收待线上检查。
+
 ## 尚需证据的工作（持续）
 
 - 全部 163 篇的逐段技术审读与所有外部 API 版本复查，不得用自动台账替代。

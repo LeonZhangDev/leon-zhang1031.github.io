@@ -33,7 +33,7 @@
 - 全部 163 篇的逐段技术审读与所有外部 API 版本复查，不得用自动台账替代。
 - 历史 MindTrip、AtlasSplit、游戏平台发布与性能数据的原始日志、版本和截图。
 - 涉及 GPU、外部账户、模型权重和数据许可的实验分别建立实际运行记录。
-- 生产发布需要验证当前仓库权限、部署目标和部署结果。
+- 本批已发布并通过 Worker 冒烟测试；后续批次仍需重复生产验收。
 
 ## 发布安全
 
@@ -47,10 +47,19 @@
 - `npm run check`：0 errors、5 个既有 hints。
 - `PLAYWRIGHT_CHANNEL=chrome npm run test:e2e -- --workers=4`：94 个测试全部通过。
 - 阅读用例覆盖页面身份、非空内容、无框架错误覆盖层、JS 运行错误、目录跳转、真实剪贴板读写、剪贴板拒绝、图片对话框、Esc/焦点恢复与手机无横向溢出。
-- 所有已发布文章的生成页面、内部文章链接、当地图片文件和数学解析标记均已检查。
+- 所有已发布文章的生成页面、内部文章链接、本地图片文件和数学解析标记均已检查。
 - 实际截图在系统临时目录 `blog-reading-mobile.png` 与 `blog-reading-desktop.png`，不提交到源码仓库。
 - 初次浏览器运行缺少对应 Playwright Chromium 版本；改为本机已安装 Chrome 后通过，没有额外安装浏览器。复制测试初版定位器跟随按钮文案改变而误选下一按钮，改为稳定选择器后验证真实剪贴板内容。
 - 评论恢复测试使用模拟 API；没有验证真实服务可提交评论，不据此宣布评论服务恢复。
+
+## 生产验证记录
+
+- 仓库：`LeonZhangDev/leon-zhang1031.github.io`，分支 `main`；实现提交 `b75e491`，生成文件规范化提交 `afb55e0`。
+- 最终构建生成 183 个页面。`git push` 明确成功，未强推。
+- 2026-09-20 07:15 UTC，执行 `node scripts/blog/verify-production.mjs` 成功。
+- `https://zk.lz1031.workers.dev/posts/learning-paths/` 与 `/posts/deep-learning-01-training-loop/` 返回 HTTP 200，标题和新内容符合预期。
+- 生产手机视口 390×844：图片对话框打开/Esc 关闭、无全页横向溢出；实测曲线成功加载，结果 JSON 中 CPU 环境和阈值 0.65 得到核对。
+- 未修改 Cloudflare 路由、Vercel 项目名称或评论后端。没有把生产页面可访问当作全站所有业务路径已验证。
 
 ## 审校规则
 

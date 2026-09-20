@@ -74,7 +74,9 @@
 - 网格与随机搜索各 12 候选、相同三折 CV，按开发集选定网格候选，最终测试 AUC=0.976177，仅调用测试一次。没有 Optuna，未将 sklearn 实验冒充 TPE 或剪枝实测。
 - 官方来源核对：ADF 原假设、TimeSeriesSplit gap/等间隔约束、OCSVM nu、IsolationForest offset、Prophet 绘图接口及 Optuna MedianPruner 显式报告机制；链接附在对应正文。
 
-本地验证：196 个单元测试、107 个 Chrome Playwright 测试通过；Astro check 0 errors、5 个既有 hints。结构检查覆盖 163 篇、28 篇有 Markdown 图片、36 处图片引用，无失败。浏览器覆盖三篇新增内容、图片加载、手机宽度与放大/Esc/焦点返回，截图保存在系统临时目录 `blog-review-anomaly-mobile.png`、`blog-review-anomaly-desktop.png`。8 个产物同环境复跑 SHA-256 一致；不是跨平台确定性保证。发布验收待线上检查。
+本地验证：196 个单元测试、107 个 Chrome Playwright 测试通过；Astro check 0 errors、5 个既有 hints。结构检查覆盖 163 篇、28 篇有 Markdown 图片、36 处图片引用，无失败。浏览器覆盖三篇新增内容、图片加载、手机宽度与放大/Esc/焦点返回，截图保存在系统临时目录 `blog-review-anomaly-mobile.png`、`blog-review-anomaly-desktop.png`。8 个产物同环境复跑 SHA-256 一致；不是跨平台确定性保证。
+
+发布实现提交 `0a0da9e`，main 正常推送，使用 `[skip actions]` 避免旧 Gitee 强推流程。首次生产检查在新部署可见前等待新图超时；2026-09-20 10:18:08 UTC 重试通过。八个页面 HTTP 200，新三篇图片和结果 JSON 可读，手机宽度正常；真实浏览器评论读取 HTTP 200、errno=0，未提交评论。未变更域名、路由或评论后端。
 
 ## 尚需证据的工作（持续）
 

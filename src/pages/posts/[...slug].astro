@@ -2,6 +2,8 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import 'katex/dist/katex.min.css';
 import Comments from '../../components/Comments.astro';
+import ArticleTools from '../../components/ArticleTools.astro';
+import { learningPaths, readingMinutes } from '../../data/learning-paths';
 import { getCollection } from 'astro:content';
 
 export async function getStaticPaths() {
@@ -13,13 +15,24 @@ export async function getStaticPaths() {
 }
 
 const { post } = Astro.props;
-const { Content } = await post.render();
+const { Content, headings } = await post.render();
+const toc = headings.filter(heading => heading.depth <= 3);
 
 const allPosts = (await getCollection('posts', ({ data }) => !data.draft))
   .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
 const currentIndex = allPosts.findIndex((p) => p.slug === post.slug);
 const prevPost = currentIndex > 0 ? allPosts[currentIndex - 1] : null;
 const nextPost = currentIndex < allPosts.length - 1 ? allPosts[currentIndex + 1] : null;
+const series = learningPaths.find(path => path.slugs.includes(post.slug));
+const lessons = series?.slugs.map(slug => allPosts.find(item => item.slug === slug)).filter(Boolean) || [];
+const lessonIndex = lessons.findIndex(item => item?.slug === post.slug);
+const previousLesson = lessons[lessonIndex - 1];
+const nextLesson = lessons[lessonIndex + 1];
+const prerequisitePosts = post.data.prerequisites.map(slug => allPosts.find(item => item.slug === slug)).filter(Boolean);
+const related = allPosts.filter(item => item.slug !== post.slug && !series?.slugs.includes(item.slug))
+  .map(item => ({ item, score: item.data.tags.filter(tag => post.data.tags.includes(tag)).length }))
+  .filter(item => item.score > 0).sort((a,b) => b.score-a.score).slice(0,3);
+const verificationLabels = { 'not-run':'示例未复跑', 'example-tested':'指定示例已运行', 'reproduced':'指定结果已复现', 'source-checked':'指定技术来源已核验' };
 ---
 
 <BaseLayout title={post.data.title} description={post.data.description}>
@@ -29,7 +42,8 @@ const nextPost = currentIndex < allPosts.length - 1 ? allPosts[currentIndex + 1]
       <div class="post-detail-meta">
         <time>{post.data.date.toLocaleDateString('zh-CN', { year: 'numeric', month: 'long', day: 'numeric', weekday: 'long' })}</time>
         <span>·</span>
-        <span>{Math.max(1, Math.ceil(post.body.split(/\s+/).filter(Boolean).length / 300))} min read</span>
+        <span>约 {readingMinutes(post.body)} 分钟</span>
+        {post.data.updated && <span>更新于 {post.data.updated.toISOString().slice(0,10)}</span>}
         {post.data.tags.length > 0 && (
           <span>·
             {post.data.tags.map((tag) => <span class="post-tag-inline">#{tag}</span>)}
@@ -38,21 +52,40 @@ const nextPost = currentIndex < allPosts.length - 1 ? allPosts[currentIndex + 1]
       </div>
     </header>
 
+    {(series || prerequisitePosts.length > 0 || post.data.verification) && <aside class="article-learning" aria-label="阅读指南">
+      {series && <p><a href={`/posts/learning-paths/#${series.id}`}>{series.title}</a> · 第 {lessonIndex + 1} / {lessons.length} 篇</p>}
+      {series?.id.startsWith('research-') && <p>科研平台是贯穿课程的教学案例；请按各课验收产物，不将案例描述视作已上线证明。</p>}
+      {prerequisitePosts.length > 0 && <p>前置阅读：{prerequisitePosts.map(item => item && <a href={`/posts/${item.slug}/`}>{item.data.title} </a>)}</p>}
+      {post.data.verification && <p>{verificationLabels[post.data.verification.status]}：{post.data.verification.scope}</p>}
+    </aside>}
+    {toc.length > 2 && <details class="article-toc">
+      <summary>本文目录（{toc.length} 节）</summary>
+      <nav aria-label="本文目录"><ul>{toc.map(heading => <li data-depth={heading.depth}><a href={`#${heading.slug}`}>{heading.text}</a></li>)}</ul></nav>
+    </details>}
+
     <div class="prose" itemprop="articleBody">
       <Content />
     </div>
 
+    {series && <nav class="article-learning" aria-label="系列前后篇">
+      {previousLesson && <p>上一课：<a href={`/posts/${previousLesson.slug}/`}>{previousLesson.data.title}</a></p>}
+      {nextLesson && <p>下一课：<a href={`/posts/${nextLesson.slug}/`}>{nextLesson.data.title}</a></p>}
+      <a href={`/posts/learning-paths/#${series.id}`}>查看完整路线</a>
+    </nav>}
+    {related.length > 0 && <aside class="article-learning" aria-label="延伸阅读"><h2>延伸阅读</h2><ul>{related.map(({ item }) => <li><a href={`/posts/${item.slug}/`}>{item.data.title}</a></li>)}</ul></aside>}
+    <ArticleTools />
+
     {(prevPost || nextPost) && (
-      <nav class="post-nav">
+      <nav class="post-nav" aria-label="按发布日期浏览">
         {prevPost && (
           <a href={`/posts/${prevPost.slug}/`} class="post-nav-link post-nav-prev">
-            <span class="post-nav-label">← Prev</span>
+            <span class="post-nav-label">← 较新文章</span>
             <span class="post-nav-title">{prevPost.data.title}</span>
           </a>
         )}
         {nextPost && (
           <a href={`/posts/${nextPost.slug}/`} class="post-nav-link post-nav-next">
-            <span class="post-nav-label">Next →</span>
+            <span class="post-nav-label">较早文章 →</span>
             <span class="post-nav-title">{nextPost.data.title}</span>
           </a>
         )}

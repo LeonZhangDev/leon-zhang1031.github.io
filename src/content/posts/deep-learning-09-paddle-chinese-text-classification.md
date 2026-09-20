@@ -2,6 +2,7 @@
 title: "深度学习课程 09：PaddlePaddle 中文文本分类项目"
 date: 2026-08-25T09:00:00+08:00
 draft: false
+updated: 2026-09-20
 author: "Zack-Zhang1031"
 description: "从数据契约、字符词表和双向 LSTM 基线出发，用 PaddlePaddle 完成中文文本分类项目，并加入 Transformer 对照、错误分析与推理接口。"
 tags: ["深度学习", "PaddlePaddle", "中文文本分类", "NLP项目"]
@@ -75,6 +76,16 @@ def build_vocab(texts: list[str], min_frequency: int = 2) -> dict[str, int]:
 ```
 
 词表只能读取训练文本。测试集字符即使提前可见，也不应参与词表筛选，否则预处理已经利用了测试分布。类别映射同样应固定并保存，推理不能依赖字典偶然的遍历顺序。
+
+<!-- figure:deep-learning-09-paddle-chinese-text-classification -->
+
+![中文文本到模型输入](/images/blog/deep-learning-09-paddle-chinese-text-classification.svg)
+
+*图解：词表只用训练集建立；标签映射与截断规则应随模型保存。*
+
+截断可能删掉决定类别的尾部信息。不要只记录最大长度，还要统计截断比例，抽查被截断样本的错误率。未知字符不能静默丢弃，否则实际长度和位置含义会改变。训练、验证、推理需要使用同一套词表与标签映射。
+
+**动手核对：** 加入空字符串、全部未知字符、超过最大长度三类样本，检查返回形状、有效长度和错误处理；不要把所有空输入默认判为某个业务类别。
 
 ## 5. 编码、截断与长度记录
 

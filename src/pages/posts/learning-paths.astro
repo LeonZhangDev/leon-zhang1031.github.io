@@ -1,0 +1,43 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+import { learningPaths } from '../../data/learning-paths';
+const posts = await getCollection('posts', ({ data }) => !data.draft);
+const bySlug = new Map(posts.map(post => [post.slug, post]));
+---
+<BaseLayout title="学习路线 · 张坤个人主页" description="编程基础、AI 工程与游戏开发的阅读顺序和课程入口。">
+  <div class="container-narrow learning-paths">
+    <h1>从一个问题开始，沿一条路线学下去</h1>
+    <p>基础路线帮助补齐前置知识；项目路线展示实现与取舍。科研六个系列围绕同一教学案例推进，不代表平台已经完整上线。</p>
+    <p><a href="/posts/">返回全部文章与搜索</a></p>
+    <section aria-labelledby="milestone-heading">
+      <h2 id="milestone-heading">科研课程：每一阶段交付什么</h2>
+      <p>工程基础 → M1 数据集 → M2 模型与 M3 理解流水线 → M4 服务 → M5 演示。M2 与 M3 都依赖 M1；M4 集成它们的产物。下面是验收契约，不是已完成声明。</p>
+      <div class="table-scroll"><table>
+        <thead><tr><th>阶段</th><th>输入 → 输出</th><th>进入下一阶段之前</th></tr></thead>
+        <tbody>
+          <tr><th><a href="#research-data">M1 数据集</a></th><td>来源快照 → 清洗后的版本化 Parquet</td><td>主键、来源、缺失值、质量报告与数据字典齐全；下游钉住版本。</td></tr>
+          <tr><th><a href="#research-ml">M2 模型</a></th><td>M1 + 切分清单 → 模型与选择报告</td><td>特征拟合只用训练数据；阈值在验证集确定；封存测试集最终评估。</td></tr>
+          <tr><th><a href="#research-multimodal">M3 理解</a></th><td>许可允许的 PDF + M1 ID → 解析记录与向量</td><td>ID 对齐、版本与失败状态可追溯；重跑不重复入库，依赖改变会失效重算。</td></tr>
+          <tr><th><a href="#research-service">M4 服务</a></th><td>M1–M3 产物 → API 与增量管线</td><td>输入验证、超时、失败恢复、迁移回滚和数据/模型版本均经过测试。</td></tr>
+          <tr><th><a href="#research-capstone">M5 演示</a></th><td>M4 API → 演示与作品集</td><td>冷启动、空数据、断网路径可用；所有数字能链接到真实证据。</td></tr>
+        </tbody>
+      </table></div>
+    </section>
+    <nav aria-label="学习路线索引"><ul>{learningPaths.map(path => <li><a href={`#${path.id}`}>{path.title}</a></li>)}</ul></nav>
+    {learningPaths.map(path => <section id={path.id}>
+      <h2>{path.title}</h2><p>{path.description}</p>
+      <ol>{path.slugs.map(slug => bySlug.get(slug)).filter(Boolean).map(post => post && <li><a href={`/posts/${post.slug}/`}>{post.data.title}</a></li>)}</ol>
+    </section>)}
+  </div>
+</BaseLayout>
+<style>
+  .learning-paths { padding-block:3rem; line-height:1.9; }
+  h1 { font-size:clamp(1.6rem,4vw,2.4rem); line-height:1.4; }
+  h2 { font-size:1.4rem; margin-block:2rem .6rem; }
+  ol,ul { padding-left:1.6rem; } li { margin-block:.5rem; }
+  a { color:var(--accent); text-underline-offset:.25em; } a:hover { text-decoration:underline; }
+  section { scroll-margin-top:6rem; }
+  .table-scroll { overflow-x:auto; } table { width:100%; border-collapse:collapse; min-width:580px; font-size:.9rem; }
+  th,td { text-align:left; vertical-align:top; border-bottom:1px solid var(--border); padding:.7rem; }
+</style>

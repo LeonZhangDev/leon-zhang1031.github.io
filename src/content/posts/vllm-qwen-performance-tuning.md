@@ -2,6 +2,7 @@
 title: "vLLM 部署 Qwen2.5 的性能调优实录：8GB 显存下，我是怎么和 KV Cache 打架的"
 date: 2025-08-25T00:00:00+08:00
 draft: false
+updated: 2026-09-20
 author: "Zack-Zhang1031"
 description: "记录在 8GB 显存环境下使用 vLLM 部署 Qwen2.5 模型的性能调优过程，重点分析 KV Cache 管理和显存优化策略。"
 tags: ["vLLM", "Qwen2.5", "性能优化", "显存管理", "大模型部署"]
@@ -104,6 +105,16 @@ Tensor Parallel = 2
 > 你是在做 Chat Demo，还是做真正的 Serving。
 
 ---
+
+<!-- figure:vllm-qwen-performance-tuning -->
+
+![一次请求的延迟拆分](/images/blog/vllm-qwen-performance-tuning.svg)
+
+*图解：这是一张测量边界图，不是性能曲线。客户端与服务端计时边界不同，比较前必须统一。*
+
+记录请求的到达、首 token 和完成时间，同时保存实际生成 token 数。不要把字符数当 token 数。TPOT 的定义和单 token 输出的处理方式要写清。失败、超时和取消请求也进入报告，避免只统计成功且较短的请求造成虚假的加速。
+
+**动手核对：** 固定输入长度分布和最大输出限制，比较两组并发。报告成功率、TTFT、端到端分位数和实际输出长度；若质量或输出长度改变，先解释差异，再谈性能。
 
 # 二、最初我为什么换到 vLLM
 

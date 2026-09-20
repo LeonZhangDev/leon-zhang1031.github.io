@@ -2,6 +2,7 @@
 title: "MindTrip RAG 架构演进（二）：从语义检索到约束感知"
 date: 2025-08-12T00:00:00+08:00
 draft: false
+updated: 2026-09-20
 author: "Zack-Zhang1031"
 description: "MindTrip RAG 系列第二篇，分析 TopK 调参的坑、从 Semantic Search 到 Constraint-aware Retrieval 的演进，以及 Context Builder 的设计。"
 tags: ["RAG", "AI", "检索优化", "约束过滤", "Context Builder"]
@@ -15,6 +16,16 @@ categories: ["AI应用", "系统架构"]
 这一篇重点讲检索链路的演进。
 
 ---
+
+<!-- figure:mindtrip-rag-constraint-retrieval -->
+
+![把硬约束带到上下文之前](/images/blog/mindtrip-rag-constraint-retrieval.svg)
+
+*图解：约束过滤改变候选集合；增加 TopK 不能保证修复缺失的结构化条件。*
+
+用一条请求做追踪：用户问“万宁、预算有限、适合带小孩”，其中城市可成为硬过滤条件，“预算有限”需要金额或区间，“适合带小孩”通常需要可追溯的属性证据。不要把推断直接写成事实。记录过滤前后候选数，才能区分未召回、误过滤与排序错误。
+
+**动手核对：** 构造城市缺失、城市冲突、没有符合条件结果三条用例。检查系统是否解释限制，而不是默默放宽用户条件。
 
 ## 五、第一个大坑：TopK 并不是越大越好
 

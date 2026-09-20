@@ -2,6 +2,7 @@
 title: "多模态科研内容理解 03：深度学习文本模型——从 Embedding 特征到微调分类器"
 date: 2026-08-28T23:40:00+08:00
 draft: false
+updated: 2026-09-20
 author: "Zack-Zhang1031"
 description: "AI 科研内容课程系列四第 3 课：挑战 M2 的分类基线——Embedding + 逻辑回归、PyTorch 微调 Transformer 两条路线对比，以及什么时候深度学习值得上。"
 tags: ["深度学习", "Transformer", "文本分类", "微调"]
@@ -27,15 +28,16 @@ clf = LogisticRegression(max_iter=2000, C=10, class_weight="balanced", n_jobs=-1
 clf.fit(X_train_emb, y_train)
 ```
 
-这条路线的意义常被低估：Embedding 模型在预训练时已经"读过"海量文本，语义结构自带——**冻结它当特征提取器，用线性头分类，往往已经比 TF-IDF 强**，成本只是跑一次推理加几分钟的逻辑回归训练。典型的提升幅度在这类任务上是宏 F1 涨 2-5 个点。
+这条路线复用冻结模型的表示，避免全量微调，但不保证优于 TF-IDF。领域术语、语言、文本长度和预训练覆盖都会影响结果。应分别记录特征提取成本和分类头训练成本，不预先承诺提升点数。
 
 ## 路线 B：微调 Transformer
 
-把预训练模型本身在领域分类数据上继续训练。用 HuggingFace 生态，核心代码结构：
+把预训练模型本身在领域分类数据上继续训练。以下是依赖前置数据的结构示例，不是独立脚本：`dataset` 应为含 `train`/`validation` 的 DatasetDict，两部分均有 `text_all` 和整数 `labels`，`FIELDS` 固定标签顺序。需要先准备并检查这些对象、安装兼容的 transformers/datasets/accelerate/torch 版本；本轮未下载权重或运行微调。
 
 ```python
 from transformers import (AutoTokenizer, AutoModelForSequenceClassification,
-                          TrainingArguments, Trainer)
+                          TrainingArguments, Trainer, DataCollatorWithPadding)
+from sklearn.metrics import f1_score
 
 model_name = "bert-base-uncased"   # 学术英文文本可换 scibert
 tokenizer = AutoTokenizer.from_pretrained(model_name)
@@ -44,6 +46,13 @@ def tokenize(batch):
     return tokenizer(batch["text_all"], truncation=True, max_length=512)
 
 dataset = dataset.map(tokenize, batched=True)
+ds_train, ds_val = dataset["train"], dataset["validation"]
+
+def compute_metrics(result):
+    return {"f1_macro": f1_score(result.label_ids,
+                               result.predictions.argmax(axis=-1),
+                               labels=list(range(len(FIELDS))),
+                               average="macro", zero_division=0)}
 
 model = AutoModelForSequenceClassification.from_pretrained(
     model_name, num_labels=len(FIELDS))
@@ -54,19 +63,22 @@ args = TrainingArguments(
     num_train_epochs=3,
     per_device_train_batch_size=16,
     eval_strategy="epoch",
+    save_strategy="epoch",         # 最优模型回载要求保存与评估策略对应
     load_best_model_at_end=True,
     metric_for_best_model="f1_macro",
     seed=42,
 )
 
 trainer = Trainer(model=model, args=args, train_dataset=ds_train,
-                  eval_dataset=ds_val)
+                  eval_dataset=ds_val,
+                  data_collator=DataCollatorWithPadding(tokenizer),
+                  compute_metrics=compute_metrics)
 trainer.train()
 ```
 
 微调的几个关键认知：
 
-**学习率小而稳。** 2e-5 是 BERT 类微调的甜蜜点。预训练权重已经很好，大学习率会把它们"冲坏"（灾难性遗忘）。这和[深度学习课程 03](/posts/deep-learning-03-training-stability/)讲的训练稳定性是同一个原理的微调版。
+**学习率需要验证。** 2e-5 只是示例起点，不是普遍最优值。与批大小、训练步数和预训练权重共同设定，并检查验证曲线。`metric_for_best_model` 对应的指标必须由 `compute_metrics` 返回，不能只写一个指标名字；参见 [Trainer 官方文档](https://huggingface.co/docs/transformers/main_classes/trainer)。
 
 **truncation 策略要想清楚。** 标题+摘要超 512 token 时截断——截哪头有讲究：标题信息密度最高，把标题放最前面保证它永远不被截掉。
 
@@ -76,17 +88,17 @@ trainer.train()
 
 | 路线 | 宏 F1 | 训练成本 | 推理成本/篇 | 备注 |
 |---|---|---|---|---|
-| TF-IDF + LR（M2 基线） | 0.812 | 3 min CPU | <1ms | 系数可解释 |
-| Embedding + LR | 0.84-0.86 | 一次推理 + 分钟级 | ~5ms（CPU） | 性价比之王 |
-| BERT 微调 | 0.86-0.89 | 小时级 GPU | ~20ms（GPU） | 上限最高 |
+| TF-IDF + LR（M2 基线） | 待测 | 待测 | 待测 | 可查看系数 |
+| Embedding + LR | 待测 | 特征提取与训练分开记录 | 待测 | 固定模型版本 |
+| BERT 微调 | 待测 | 记录显存和训练设备 | 待测 | 记录截断与批大小 |
 
 三条路线各有赢的场景：数据量小、要解释性、CPU 部署——基线仍然能打；要性价比——Embedding+LR；追求极限、有 GPU、能接受运维复杂度——微调。
 
-这个表就是本课要的决策框架：**"深度学习是否值得"取决于 3-7 个点的 F1 提升在你的业务里值多少算力和运维**。平台把 Embedding+LR 作为线上方案，微调模型作为精度天花板存档——这是需求匹配而非分数匹配的选择，和 [M2 模型选择报告](/posts/research-ml-05-evaluation-tuning-milestone/)的原则一脉相承。
+上表是待实测模板，不是已完成的性能对比，也不预先指定线上模型。是否采用更复杂方案，要由收益区间、成本与维护条件共同决定；模型变大并不保证指标上限更高。
 
 ## 错误分析：深度学习修好了哪些错
 
-对比微调模型和基线在相同测试样本上的预测差异，典型发现：
+下面是错误分析的候选假设，不是已观察结果；应在同一批预测上逐条核对：
 
 - **修复**：语义理解类错误。"用 RL 优化 dialogue policy"这种没有领域关键词的论文，TF-IDF 猜错，Transformer 靠语义猜对。
 - **未修复**：相邻领域混淆（cs.CL vs cs.LG）依旧存在——语义上也确实难分，印证 [M2 错误分析](/posts/research-ml-02-field-classification/)的结论：这类错要靠类目体系调整，不是换模型能解决的。

@@ -1,0 +1,91 @@
+{
+  "environment": {
+    "python": "3.13.7",
+    "torch": "2.7.1+cpu",
+    "numpy": "2.2.6",
+    "scikit_learn": "1.7.1",
+    "matplotlib": "3.10.5",
+    "device": "cpu"
+  },
+  "gradient": {
+    "autograd": -4.228,
+    "central_difference": -4.2279999997063555,
+    "epsilon": 1e-05
+  },
+  "copy": {
+    "original": [
+      [
+        1,
+        3
+      ],
+      [
+        2
+      ]
+    ],
+    "shallow": [
+      [
+        1,
+        3
+      ],
+      [
+        2
+      ]
+    ],
+    "deep": [
+      [
+        1
+      ],
+      [
+        2
+      ]
+    ]
+  },
+  "training": {
+    "seed": 42,
+    "train_samples": 1500,
+    "test_samples": 500,
+    "epochs": 150,
+    "initial_loss": 0.7176628708839417,
+    "final_loss": 0.05066274106502533,
+    "held_out_accuracy": 0.98,
+    "scope": "Artificial target only; no hyperparameter search or real-world performance claim."
+  },
+  "attention": {
+    "seed": 42,
+    "weights": [
+      [
+        1.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      [
+        0.1939907491065194,
+        0.8060092508934805,
+        0.0,
+        0.0
+      ],
+      [
+        0.2930483941018885,
+        0.3187363765960069,
+        0.38821522930210456,
+        0.0
+      ],
+      [
+        0.334739513593093,
+        0.18932110764554205,
+        0.09207530544595699,
+        0.3838640733154079
+      ]
+    ],
+    "scope": "Synthetic Q/K, one head, four tokens, d_k=3."
+  },
+  "threshold": {
+    "validation_threshold": 0.65,
+    "validation_f1": 0.8571428571428571,
+    "true_positive": 3,
+    "false_positive": 1,
+    "false_negative": 0,
+    "scope": "Array-alignment and selection unit example; not a held-out model assessment."
+  }
+}

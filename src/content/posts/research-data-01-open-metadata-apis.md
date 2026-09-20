@@ -7,38 +7,56 @@ description: "AI 科研内容课程系列二第 1 课：用三大公开科研元
 tags: ["arXiv", "OpenAlex", "Crossref", "API", "数据采集"]
 categories: ["AI课程", "数据采集"]
 math: false
+updated: 2026-09-20
+verification:
+  status: source-checked
+  scope: "核验 OpenAlex 鉴权与分页限制；未执行批量联网采集。"
+  checkedAt: 2026-09-20
 ---
 
 系列二开工，目标是一个里程碑：**M1——科研元数据数据集**。这一课解决数据的第一个来源：官方 API。arXiv、OpenAlex、Crossref 三个来源各有分工——arXiv 有预印本全文链接和分类，OpenAlex 有丰富的引用与机构关系，Crossref 是出版商 DOI 元数据的权威。平台的策略是以 OpenAlex 为主干，其余两家做补充和交叉校验。
 
 > 前置阅读：[数据采集与爬虫](/posts/web-scraping-data-collection/)（限速、重试、增量抓取的原理本篇直接复用）、[系列一第 4 课：配置与测试](/posts/ai-research-eng-04-python-project-engineering/)（采集代码落在 src 布局里）。
 
+<!-- figure:research-data-01-open-metadata-apis -->
+
+![科研元数据的来源链](/images/blog/research-data-01-open-metadata-apis.svg)
+
+*图解：同一论文的多个来源可能冲突。统一字段不意味着抹掉来源差异。*
+
+每页抓取先保留原始响应，再更新检查点。若先写游标、后写数据，进程中断可能跳过未落盘的记录。DOI 归一化后可以用于合并，但无 DOI 的记录需明确降级匹配规则，不能只凭相似标题就覆盖。引用数必须伴随采集日期，因为它是随时间变化的观测值。
+
+**动手核对：** 用小型人工构造数据验证重复 DOI、缺失日期、同标题不同 DOI 和中断恢复。教学样本不作为真实论文统计；联网采集另行遵循当前鉴权与额度要求。
+
 ## OpenAlex：主力数据源
 
-OpenAlex 是免费开放的知识图谱 API，覆盖 2 亿+ 论文实体，无需密钥，在请求里带上邮箱即可进入"礼貌池"（更稳定的限速待遇）。
+OpenAlex 提供科研元数据 API。按本次核验的官方说明，基础查询可以不带密钥，规模化请求应使用 API key 并检查当前额度；不能再用“邮箱进入礼貌池”来说明鉴权和预算。密钥通过环境变量提供，不写入代码或日志。当前规则见 [OpenAlex Authentication](https://help.openalex.org/api/authentication/)，接口约束可能继续变化。
 
 核心接口是 `/works`，支持过滤、搜索和游标分页：
 
 ```python
 import requests
 import time
+import os
 from research_hub.config import settings
 
 BASE = settings.openalex_base
-PARAMS_BASE = {"mailto": settings.openalex_email}
+api_key = os.environ.get("OPENALEX_API_KEY")
+HEADERS = {"Authorization": f"Bearer {api_key}"} if api_key else {}
 
-def fetch_works(field_id: str, start: str, end: str, per_page: int = 200):
+def fetch_works(field_id: str, start: str, end: str, per_page: int = 100):
     """按领域和日期范围拉取论文元数据，游标分页直到取完。"""
+    if not 1 <= per_page <= 100:
+        raise ValueError("per_page 必须在 1 到 100 之间；实际运行前核对官方限制")
     cursor = "*"
     while True:
         params = {
-            **PARAMS_BASE,
             "filter": f"primary_topic.field.id:{field_id},"
                       f"from_publication_date:{start},to_publication_date:{end}",
             "per-page": per_page,
             "cursor": cursor,
         }
-        resp = requests.get(f"{BASE}/works", params=params,
+        resp = requests.get(f"{BASE}/works", params=params, headers=HEADERS,
                             timeout=settings.request_timeout)
         resp.raise_for_status()
         payload = resp.json()
@@ -49,8 +67,10 @@ def fetch_works(field_id: str, start: str, end: str, per_page: int = 200):
         cursor = payload["meta"].get("next_cursor")
         if not cursor or not payload["results"]:
             break
-        time.sleep(0.2)   # 礼貌池允许 10 req/s，我们留足余量
+        time.sleep(0.2)   # 教学示例固定间隔；生产按额度、429 与退避策略控制请求
 ```
+
+此段是依赖课程配置模块的分页片段，尚不包含重试和持久化。调用失败应保留上一页检查点；429 按服务提示退避并限制重试次数，401/403 则先检查凭据与权限，不无限重试。只在完整响应已落盘后推进游标。不要把请求异常直接输出为包含密钥的日志。
 
 两个工程细节：
 

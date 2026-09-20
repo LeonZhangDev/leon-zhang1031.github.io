@@ -13,6 +13,19 @@ Improve article clarity, render mathematical notation, and make comment failures
 
 ## Implementation notes
 
+### September 20, 2026 — Deepening and reproducibility
+
+- Added 12 curated learning routes and M1–M5 delivery contracts; series sequence is distinct from publication-date navigation.
+- Added article heading navigation, keyboard-accessible image dialog with Escape/focus restoration, clipboard feedback including denied-permission state, and Chinese/English reading-time estimation.
+- Added optional updated date, prerequisites and narrowly scoped verification fields. These fields do not certify the entire article.
+- Deepened 26 articles, with 18 original conceptual SVGs and two actual CPU-result plots. Reproducible teaching experiment sources and raw results are included; synthetic data are labeled.
+- Fixed validation/test threshold separation, PR-threshold array alignment and several course code prerequisites; removed unsupported course score tables and completion claims.
+- Inventory covers all 163 posts and checks local resources. Rebuild with `npm run blog:audit`; verify freshness with `npm run blog:check`.
+- QA: 196 unit tests and all 94 browser tests passed using Chrome at desktop/mobile sizes. Browser plugin was unavailable; the frontend testing skill's regular Playwright path was used. No real comment was submitted; comment tests use controlled mocked responses.
+- Full technical reproduction of historical/GPU/external-service experiments remains outside the achieved validation level. Current status is tracked in [editorial delivery](../editorial/delivery.md).
+
+### Earlier implementation history
+
 - Astro now uses remark-math and rehype-katex, with KaTeX CSS loaded on article pages.
 - The initial editorial batch concentrated on 51 openings and selected technical explanations. Subsequent batches addressed all previously untouched articles, including course handoffs, input/output contracts, evaluation boundaries, and historical project context.
 - Waline maintenance messages become visible even after an earlier successful initialization. Retry behavior is covered without submitting a real comment.

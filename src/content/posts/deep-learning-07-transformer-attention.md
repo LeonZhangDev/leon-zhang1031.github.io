@@ -2,6 +2,12 @@
 title: "深度学习课程 07：Transformer 与注意力机制"
 date: 2026-08-23T09:00:00+08:00
 draft: false
+updated: 2026-09-20
+prerequisites: ["deep-learning-02-backprop", "deep-learning-06-rnn-lstm-gru"]
+verification:
+  status: example-tested
+  scope: "新增随机 Q/K 的因果掩码示例已检查行和与未来位置归零；不代表编码器训练已复现。"
+  checkedAt: 2026-09-20
 author: "Zack-Zhang1031"
 description: "从 Q、K、V 和缩放点积注意力理解 Transformer，使用 PyTorch 组装带位置编码与填充掩码的编码器分类模型。"
 tags: ["深度学习", "Transformer", "注意力机制", "PyTorch"]
@@ -58,6 +64,26 @@ def scaled_dot_product_attention(q, k, v, mask=None):
 ```
 
 掩码中的 `True` 表示不可关注位置。实际项目要确认具体 API 的布尔语义，不能凭经验把 0 和 1 互换。
+
+<!-- figure:deep-learning-07-transformer-attention -->
+
+![单个注意力头的维度变化](/images/blog/deep-learning-07-transformer-attention.svg)
+
+*图解：每个 query 对 key 位置分配权重，再对 value 求加权和。padding mask 与因果 mask 约束不同的位置。*
+
+注意力矩阵的一行对应一个 query。softmax 应沿 key 维计算，否则就不是“这个 query 从哪些位置读取信息”。若一整行 key 全被屏蔽，需要显式处理空上下文，避免产生无效数值。可视化时同时标注 token，颜色深浅才有解释对象；注意力权重也不能直接当作完整的因果解释。
+
+**动手核对：** 构造 3 个 token 的 Q、K、V，手算第一行分数并核对权重和为 1。加入因果 mask 后，验证第一个 token 不读取后两个位置。
+
+### 实测图：逐行检查因果掩码
+
+![随机 Q 和 K 计算的四个位置因果注意力权重，未来位置均为零](/examples/blog/causal-attention.svg)
+
+*图：固定随机种子的单头教学实验，4 个 token、`d_k=3`。横轴是被查询位置，纵轴是发起查询位置。它不是训练后模型的解释图。*
+
+第一行只能关注自己，因此权重为 `[1,0,0,0]`。第二行可访问前两个位置；未来位置在 softmax 前设为负无穷，归一化后为零。每一行的权重和都应接近 1。仓库的 [`attention_check()`](https://github.com/LeonZhangDev/leon-zhang1031.github.io/blob/main/examples/blog/run-examples.py)同时断言这两个条件，[数值矩阵](/examples/blog/results.json)与图使用同一次计算结果。
+
+注意：下文讨论的是整句分类编码器，它通常允许双向注意力；这里的因果图用于理解自回归约束，不能不加区分地套进分类模型。若一整行都被屏蔽，普通 softmax 可能产生 NaN，因此真实实现还应处理空序列和全 PAD 输入。
 
 ## 3. 多头注意力为什么不是简单重复
 

@@ -2,6 +2,7 @@
 title: "深度学习课程 04：CNN 从卷积、池化到图像分类"
 date: 2026-08-20T09:00:00+08:00
 draft: false
+updated: 2026-09-20
 author: "Zack-Zhang1031"
 description: "从局部感受野和权重共享理解 CNN，使用 PyTorch 构建 CIFAR-10 图像分类基线，并排查通道、尺寸、归一化和增强问题。"
 tags: ["深度学习", "CNN", "图像分类", "PyTorch"]
@@ -67,6 +68,16 @@ out = floor((input + 2*padding - dilation*(kernel-1) - 1) / stride + 1)
 ```
 
 普通 `3×3` 卷积、`padding=1`、`stride=1` 时，高宽不变；`stride=2` 时大致减半。写模型前最好在纸上或 Notebook 中打印每层 shape。分类头报矩阵乘法错误，十有八九是前面尺寸算错了。
+
+<!-- figure:deep-learning-04-cnn-image-classification -->
+
+![卷积层的尺寸账本](/images/blog/deep-learning-04-cnn-image-classification.svg)
+
+*图解：此图使用明确的 stride 与 padding；改变它们后必须重新计算输出尺寸。C 是输出通道数。*
+
+单个空间维度的输出为 floor((输入+2p-d(k-1)-1)/s+1)。通道数由卷积核数量决定，不由图片大小决定。先为每层记录 NCHW，再连接分类头，可以提前发现展平维度错误。池化缩小特征图不意味着模型自动获得任意尺度不变性。
+
+**动手核对：** 将输入从 32×32 改成 48×48，对比固定 Flatten 分类头与自适应池化分类头；记录哪一个 shape 假设被破坏，并给出实际报错。
 
 ## 4. 池化与感受野
 

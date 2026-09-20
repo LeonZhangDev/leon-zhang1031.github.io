@@ -2,6 +2,7 @@
 title: "经典机器学习 05：模型评估、调优与 M2 里程碑验收"
 date: 2026-08-28T21:40:00+08:00
 draft: false
+updated: 2026-09-20
 author: "Zack-Zhang1031"
 description: "AI 科研内容课程系列三第 5 课（收官/里程碑 M2）：系统调参、偏差-方差诊断、模型选择报告与领域分类器的最终验收交付。"
 tags: ["模型评估", "超参调优", "学习曲线", "模型选择"]
@@ -52,10 +53,10 @@ sizes, train_scores, val_scores = learning_curve(
     train_sizes=np.linspace(0.1, 1.0, 8), cv=5, scoring="f1_macro")
 ```
 
-两条线的形态直接给出行动指令：
+两条线提供诊断线索，需要结合标签质量、特征覆盖与数据分布验证：
 
-- **训练分 ≈ 验证分，都低**（高偏差）：模型太简单或特征不够。动作：加特征、加 ngram、换更强模型。加数据没用。
-- **训练分 ≫ 验证分**（高方差）：过拟合。动作：加正则、减特征，或者——**加数据确实有用**，验证分随数据量的斜率还往上走，收集更多数据是正确投资。
+- **训练分 ≈ 验证分，都低**：可能是欠拟合，也可能是标签噪声或训练失败。先检查数据和优化，再试特征或模型复杂度；不能仅凭这张图断言加数据无效。
+- **训练分 ≫ 验证分**：可能过拟合，也可能切分分布不同。正则化和更多有代表性的数据是候选方案，是否有效还需新一轮验证。
 - **两条线收敛到同一水平且平缓**：当前模型+特征的天花板到了，继续投入的边际收益递减，该去改进数据质量或重新定义任务。
 
 学习曲线是"下一步往哪使劲"的决策工具。没有它，调参就是玄学。
@@ -65,34 +66,38 @@ sizes, train_scores, val_scores = learning_curve(
 系列三所有模型迭代都在训练集交叉验证上进行，现在到了验收时刻：拿出从[第 2 课](/posts/research-ml-02-field-classification/)就封存、整个调参过程从未碰过的测试集，跑一次最终评估：
 
 ```python
+import numpy as np
+from sklearn.metrics import classification_report, f1_score
+
 final_model = search.best_estimator_
 pred = final_model.predict(test["text_all"])
 
 report = classification_report(test["field"], pred, output_dict=True)
 # 同时输出置信度区间的自助法估计
-from sklearn.utils import resample
+rng = np.random.default_rng(42)
+labels = sorted(train["field"].unique())
 f1s = []
 for _ in range(1000):
-    idx = resample(range(len(test)))
+    idx = rng.integers(0, len(test), size=len(test))
     f1s.append(f1_score(test["field"].iloc[idx], pred[idx],
-                        average="macro"))
+                        labels=labels, average="macro", zero_division=0))
 print(f"宏 F1: {report['macro avg']['f1-score']:.3f}, "
-      f"95% CI: [{np.percentile(f1s, 2.5):.3f}, {np.percentile(f1s, 3+94.5):.3f}]")
+      f"95% CI: [{np.percentile(f1s, 2.5):.3f}, {np.percentile(f1s, 97.5):.3f}]")
 ```
 
-带置信区间的报告是[研究方法](/posts/research-methods-ai/)一课"结果要可检验"的落地：0.812 ± 0.006 比干巴巴的 0.812 多回答了"这个数稳不稳"。
+这段代码依赖前文训练好的 `search`、`train` 和封存的 `test`，不是独立脚本。百分位区间一般不对称，报告时保留上下界；它估计的是固定模型在当前测试分布下的采样波动，不包括重新训练的随机性。若同一论文有多个版本或存在作者/时间相关性，应按组或时间设计重采样，不能直接假定每一行独立。小类别在 bootstrap 中可能缺失，必须固定标签集合并说明处理规则。
 
 ## 模型选择报告：M2 的核心交付物
 
-把系列三所有候选模型放进同一张对比表，写正式的模型选择报告：
+下面是待填写的模型选择报告模板，不含实测成绩。用同一切分评估候选模型，保存每次运行的配置与原始输出，再填入表格：
 
 | 模型 | 宏 F1 (CV) | 训练耗时 | 推理延迟 | 可解释性 | 结论 |
 |---|---|---|---|---|---|
-| TF-IDF + 逻辑回归 | 0.812 ± 0.006 | 3 min | <1ms/篇 | 系数可读 | **入选** |
-| TF-IDF + LinearSVC | 0.818 ± 0.005 | 2 min | <1ms/篇 | 无概率 | 备选 |
-| 元数据 + HGB | 0.61 | 15 min | 2ms/篇 | 特征重要性 | 文本信息不可替代 |
+| TF-IDF + 逻辑回归 | 待测 | 待测 | 待测 | 可查看系数 | 待评估 |
+| TF-IDF + LinearSVC | 待测 | 待测 | 待测 | 决策分数不是概率 | 待评估 |
+| 元数据 + HGB | 待测 | 待测 | 待测 | 可另做特征分析 | 待评估 |
 
-选择逻辑要写清楚：LinearSVC 分数略高但无概率输出，平台需要置信度做"低置信降级人工"（[第 2 课](/posts/research-ml-02-field-classification/)定的需求），所以逻辑回归入选。**模型选择的第一标准是需求匹配，不是分数最高**——这份报告就是这句话的证据。
+选择逻辑要写清楚：若平台需要概率做低置信降级，就比较概率校准、覆盖率与错误率，不能只比较 F1。LinearSVC 可以增加校准器，但会增加验证与计算成本；逻辑回归也不自动保证概率已校准。没有实际结果时，不预先宣布某个模型入选。
 
 ## M2 验收清单
 
@@ -141,4 +146,4 @@ M2 是求职作品集里"经典机器学习"的完整证据链：特征工程（
 
 ---
 
-**里程碑 M2 达成。** 下一课进入系列四，给平台装上语义理解能力：[多模态科研内容理解 01：PDF 全文解析与结构化抽取](/posts/research-mm-01-pdf-parsing/)。
+**完成上述验收后，才能将你的 M2 标记为达成。** 下一课进入系列四：[多模态科研内容理解 01：PDF 全文解析与结构化抽取](/posts/research-mm-01-pdf-parsing/)。

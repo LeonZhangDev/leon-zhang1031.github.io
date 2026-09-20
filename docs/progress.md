@@ -1,5 +1,15 @@
 # Project Progress
 
+## 2026-09-20 — Blog depth and reading tools
+
+- Inventoried all 163 posts with per-article editorial cards; automatic inventory is not a full technical review.
+- Deepened 26 existing articles: 18 original explanatory diagrams, two measured CPU plots, exercises, evidence boundaries and targeted technical corrections.
+- Added 12 learning paths, research milestone contracts, article TOC, series navigation, related posts, optional prerequisites, scoped verification metadata, image zoom and code copy/failure handling.
+- Five CPU teaching experiments ran successfully; source, environment versions, CSV, SVG and JSON artifacts are included. No GPU, live model serving or historic project benchmark reproduction is claimed.
+- Verification: 196 unit tests, 94 Playwright tests using installed Chrome, Astro check with zero errors and five existing hints; all 163 published article pages, internal article links and local images checked.
+- Publication pending at this checkpoint. Commit will skip GitHub Actions to avoid the existing force-push Gitee mirror workflow; Worker production smoke verification is a separate gate.
+- Remaining: full per-paragraph technical review of the corpus; historical benchmark logs/screenshots; GPU/external-service experiments. See [editorial delivery](editorial/delivery.md).
+
 ## 2026-09-01
 
 - Applied the professional-study visual pass to Bazi, I Ching, and Qimen without changing their existing local calculation boundaries.

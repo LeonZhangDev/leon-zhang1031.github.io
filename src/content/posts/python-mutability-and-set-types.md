@@ -2,6 +2,11 @@
 title: "深入理解 Python 核心机制：集合类型与可变对象详解"
 date: 2025-05-25T00:00:00+08:00
 draft: false
+updated: 2026-09-20
+verification:
+  status: example-tested
+  scope: "嵌套列表的别名、浅拷贝与深拷贝断言已运行。"
+  checkedAt: 2026-09-20
 author: "Zack-Zhang1031"
 description: "对比 set/frozenset 的可变性与哈希性，剖析可变/不可变对象的内存行为差异，附函数参数副作用与默认参数陷阱的避坑建议。"
 tags: ["Python", "集合", "可变性", "哈希"]
@@ -139,6 +144,16 @@ print(a)  # [0, 1] → 原列表变了
 
 ---
 
+<!-- figure:python-mutability-and-set-types -->
+
+![浅拷贝只复制外层容器](/images/blog/python-mutability-and-set-types.svg)
+
+*图解：本图针对嵌套列表例子。赋值绑定、浅拷贝和深拷贝是不同操作。*
+
+判断是否共享不能只比较两个列表的值。先检查 a is b，再检查 a[0] is b[0]。浅拷贝后的外层身份不同，但内层仍可能相同。tuple 不允许替换自身元素，却可以引用一个可变列表；“tuple 不可变”并不等于整个引用图不可变。
+
+**动手核对：** 分别执行追加内层元素和替换 b[0]，预测 a 的变化，再用断言验证。把 tuple 中放入列表后尝试 hash，解释失败与内部可变引用的关系。
+
 ## 三、实用建议与踩坑提醒
 
 * ✅ 优先使用不可变对象作为字典键或集合元素；
@@ -161,6 +176,12 @@ assert copied is not original
 ```
 
 ---
+
+### 可复跑断言与输出
+
+仓库 [`examples/blog/run-examples.py`](https://github.com/LeonZhangDev/leon-zhang1031.github.io/blob/main/examples/blog/run-examples.py) 中的 `copy_check()` 同时核对容器身份、内层列表身份和最终内容，而不是仅比较 `print` 输出。本次结果：原对象和浅拷贝均为 `[[1,3],[2]]`，深拷贝仍为 `[[1],[2]]`，见[运行记录](/examples/blog/results.json)。
+
+检查身份回答“共享的是哪一层”，检查内容回答“这次修改影响了谁”。若只看最终值，两份独立但内容相同的列表也会相等，无法证明没有共享引用。深拷贝适合此例，但遇到文件句柄、网络连接或自定义 `__deepcopy__` 时，应重新定义复制语义。
 
 ## 结语：理解这些，Python 才算“入门”完成
 

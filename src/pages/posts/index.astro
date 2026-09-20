@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { getCollection } from 'astro:content';
+import { readingMinutes } from '../../data/learning-paths';
 
 const posts = (await getCollection('posts', ({ data }) => !data.draft))
   .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
@@ -21,6 +22,7 @@ const description = 'Zack-Zhang1031 的技术随笔与开发日志';
     <div class="page-header">
       <h1 class="page-title">日志</h1>
       <p class="page-subtitle">// {posts.length} Posts</p>
+      <p><a href="/posts/learning-paths/">按学习路线阅读：编程基础、AI 工程与独立游戏 →</a></p>
     </div>
 
     <div class="post-search-wrap">
@@ -65,7 +67,7 @@ const description = 'Zack-Zhang1031 的技术随笔与开发日志';
               <div class="post-card-tags">
                 {post.data.tags.slice(0, 3).map((tag) => <span class="post-card-tag">#{tag}</span>)}
               </div>
-              <span class="post-card-read">{Math.ceil(post.body.split('').length / 500)}min</span>
+              <span class="post-card-read">约 {readingMinutes(post.body)} 分钟</span>
             </div>
           </a>
         </article>

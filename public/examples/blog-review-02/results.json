@@ -1,0 +1,57 @@
+{
+  "environment": {
+    "python": "3.13.7",
+    "numpy": "2.2.6",
+    "opencv": "4.12.0",
+    "scipy": "1.16.1",
+    "statsmodels": "0.14.5",
+    "matplotlib": "3.10.5"
+  },
+  "statistics": {
+    "scope": "Teaching counts and synthetic random variables, not a business experiment",
+    "seed": 42,
+    "difference": 0.002509652509652509,
+    "newcombe_95_ci": [
+      -0.0001735492558747405,
+      0.005193950377434869
+    ],
+    "two_sided_z": 1.8333652057496015,
+    "two_sided_p": 0.06674827835535253,
+    "planned_n_per_group": 31218,
+    "aa_repetitions": 10000,
+    "fixed_false_positive_rate": 0.0494,
+    "peeking_false_positive_rate": 0.2487,
+    "cuped_theta": 0.5981225547181104,
+    "cuped_variance_ratio": 0.6512461896740539
+  },
+  "vision": {
+    "scope": "Original synthetic fixtures only; no camera/GUI/photo accuracy benchmark",
+    "nearest_labels": [
+      0,
+      255
+    ],
+    "linear_unique_values": 40,
+    "watermark_assertions": "passed",
+    "wrapped_250_plus_50": 44,
+    "clipped_250_plus_50": 255,
+    "contour_area": 21520.5,
+    "hull_area": 24575.5,
+    "rotated_point": [
+      100.0,
+      0.0
+    ],
+    "synthetic_disk_count": 3
+  },
+  "text_metrics": {
+    "scope": "Standard-library edit-distance check, not jiwer or Whisper execution",
+    "reference": "今天会议讨论模型训练进度",
+    "hypothesis": "今天会议讨论模型训练进展",
+    "reference_characters": 12,
+    "cer": 0.08333333333333333,
+    "whitespace_wer": 1.0
+  },
+  "article_classifier": {
+    "scope": "Actual article function with fictional references; no real denomination validation",
+    "cases_passed": 6
+  }
+}

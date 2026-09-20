@@ -2,8 +2,8 @@
   "schemaVersion": 1,
   "scope": "Source inventory, not independent experiment reproduction",
   "posts": 163,
-  "postsWithImages": 20,
-  "imageReferences": 24,
+  "postsWithImages": 25,
+  "imageReferences": 32,
   "failures": [],
   "articles": [
     {
@@ -72,7 +72,16 @@
       "codeLanguages": [
         "python"
       ],
-      "images": [],
+      "images": [
+        {
+          "alt": "教学计数的转化率差值与跨过零点的95%置信区间",
+          "path": "/examples/blog-review-02/ab-confidence.svg"
+        },
+        {
+          "alt": "固定终点与20次未经校正查看的合成A/A假阳性率",
+          "path": "/examples/blog-review-02/peeking.svg"
+        }
+      ],
       "localLinks": [
         "/posts/pandas-data-analysis-visualization/",
         "/posts/ml-math-foundations/",
@@ -82,22 +91,24 @@
       ],
       "candidateClaims": [
         "新模型的点击率略有提升，能不能上线？单看差值还不够：需要知道样本量、实验持续时间、分流方式，以及两组用户是否可比。下面按一次实验评审的顺序，把这些问题拆开。读完之后，目标是能解释一个结论有多可靠，而不只是会算 p 值。",
-        "- p 值：**如果 H₀ 为真**，出现当前或更极端数据的概率。p = 0.03 意味着「纯属运气造成这么大差异的概率只有 3%」——够小（< 显著性水平 α，常取 0.05），我们拒绝 H₀，认为效果显著。",
+        "- p 值：在 H₀ 和检验模型成立时，获得当前或更极端检验统计量的概率。p=0.03 不是“差异由运气造成的概率为 3%”。是否拒绝 H₀ 要依据预设的显著性水平和停止规则，不能看到数据后再改方向。",
         "最常见的误读必须钉死：**p = 0.03 不是「新策略有效的概率是 97%」**，也不是「效应有 3% 概率是巧合」这种贝叶斯解读。频率学派的 p 值只陈述「在 H₀ 下数据的极端程度」。这个误读在业务方那里极其普遍，解释清楚是数据科学家的日常。",
-        "| 拒绝 H₀（上线） | **一类错误 α（假阳性）**：白上线 | 正确 |",
-        "| 不拒绝（不上线） | 正确 | **二类错误 β（假阴性）**：错过优化 |",
-        "- **基线越低、MDE 越小，样本量爆炸式增长**。检测 5%→5.1% 需要几十万样本每组；检测 5%→6% 只要几千。所以「小效应大流量」才配做实验，小流量产品别硬测微小优化。",
-        "3. **业务显著性**：CI 下界是 +0.03pp——「真实提升可能只有万分之三」。即使统计显著，值不值得上线看业务成本。**统计显著 ≠ 业务显著**，这是新手最容易掉的坑。",
-        "**1. 边跑边看（peeking problem）**。每天看一眼 p 值，哪天显著了哪天停——假阳性率会从 5% 膨胀到 30%+。数学本质：多次重复检验。正确姿势：事先定好样本量，跑满一次性分析；或者上序贯检验（mSPRT、always-valid p-value）。",
-        "**2. 多重比较**。一次实验看 20 个指标，总有一个「显著」——20 个指标各 5% 假阳性，至少一个假阳性的概率 = 1−0.95²⁰ ≈ 64%。对策：事先声明主指标（只有一个！），次要指标用 Bonferroni 或 FDR 校正，或者干脆只当探索性参考。",
-        "- 方差缩减：CUPED（用实验前数据做协变量校正，等效样本量 +30~50%）"
+        "α 是指定程序在 H₀ 下的长期误拒概率；功效 1−β 需要指定非零效应、样本量和变异程度。低功效不等于实验没有信息，但不显著时不能据此证明无效。是否上线还要考虑业务价值和护栏风险。",
+        "![教学计数的转化率差值与跨过零点的95%置信区间](/examples/blog-review-02/ab-confidence.svg)",
+        "本次运行：差值 +0.2510 个百分点，95% Newcombe 区间约为 [−0.0174,+0.5194] 个百分点，双侧 p≈0.066748。按预设双侧 5% 检验，不能拒绝 H₀，也不能宣称确定提升。",
+        "该区间接口只返回两个端点，差值自行计算。[Statsmodels 接口定义](https://www.statsmodels.org/stable/generated/statsmodels.stats.proportion.confint_proportions_2indep.html)。检验与同一种方法反演得到的区间有对应关系；本例 pooled z 检验和 Newcombe 区间不是同一种反演方法，边界附近不保证逐点等价。频率学派 95% 区间描述程序的长期覆盖性质，不是给本次固定参数赋 95% 概率。",
+        "下面是需要排查的设计风险，不是本次已经发生的线上事故：",
+        "本次 seed=42 的 10,000 次合成 A/A 模拟，两组均为标准正态、已知方差为 1，每组每次增加 100 个样本，共看 20 次。终点只检验一次的误拒比例为 4.94%；任一次 p<0.05 就停止的比例为 24.87%。这个数依赖查看次数和设计，不能当作所有实验的固定膨胀率。[原始曲线 CSV](/examples/blog-review-02/peeking.csv)",
+        "**2. 多重比较**。若 20 个检验相互独立、H₀ 都成立、每个 α=0.05，则至少一次误拒概率为 `1−0.95²⁰≈64.15%`；相关指标不能直接套这个精确数值。预先声明主指标与成功标准，区分家族错误率和 FDR 控制。共同主指标不必只有一个，但必须设计多重检验策略。"
       ],
       "priority": "P1",
-      "scopedVerification": null,
+      "scopedVerification": {
+        "status": "example-tested",
+        "scope": "教学计数的比例检验/区间、10000 次合成 A/A 与合成 CUPED 已运行；不是线上业务实验。"
+      },
       "reviewStatus": "structural-inventory-complete; full-technical-review-pending",
       "explanatoryFigureAdded": false,
       "nextChecks": [
-        "判断是否需要结构图或真实结果图；不按数量强制插图",
         "逐块标注完整示例/增量片段/伪代码，核对依赖与运行入口",
         "人工核验下列候选断言；关键词命中不代表结论错误"
       ]
@@ -4656,7 +4667,6 @@
       "description": "本专题详细梳理OpenCV中关于图像梯度、边缘检测、轮廓提取、凸包、外接矩形/圆等几何特征的原理与实战技巧，适合视觉AI开发、图像分析与数字识别等任务。",
       "headings": [
         "📑 内容简介",
-        "📂 目录",
         "13 图像梯度处理",
         "13.1 图像梯度定义",
         "13.2\\~13.4 Sobel & Laplacian 算子",
@@ -4699,6 +4709,10 @@
         {
           "alt": "License: CC BY-NC-SA 4.0",
           "path": "https://img.shields.io/badge/License-CC%20BY--NC--SA%204.0-lightgrey.svg"
+        },
+        {
+          "alt": "同一凹多边形的凸包、最小外接旋转矩形与最小外接圆",
+          "path": "/examples/blog-review-02/contours.png"
         }
       ],
       "localLinks": [],
@@ -4706,7 +4720,10 @@
         "[![Python](https://img.shields.io/badge/Python-3.7%2B-blue.svg)](https://www.python.org/)"
       ],
       "priority": "P2",
-      "scopedVerification": null,
+      "scopedVerification": {
+        "status": "example-tested",
+        "scope": "合成凹多边形的凸包、外接矩形/圆与面积已运行；真实对象识别未测试。"
+      },
       "reviewStatus": "structural-inventory-complete; full-technical-review-pending",
       "explanatoryFigureAdded": false,
       "nextChecks": [
@@ -4720,7 +4737,6 @@
       "kind": "tutorial",
       "description": "本文系统讲解了霍夫变换（直线与圆）、OpenCV圆检测实践要点、图像亮度对比度调节技巧、滑动条联动实操，并着重分析了uint8类型溢出导致的异常色问题及解决方法。",
       "headings": [
-        "目录",
         "1. 霍夫变换原理与实践",
         "1.1 霍夫直线变换原理",
         "2. 霍夫圆变换详细讲解",
@@ -4750,17 +4766,24 @@
       "codeLanguages": [
         "python"
       ],
-      "images": [],
+      "images": [
+        {
+          "alt": "灰度渐变加 50：uint8 回绕与先升类型后裁剪的区别",
+          "path": "/examples/blog-review-02/brightness.png"
+        }
+      ],
       "localLinks": [],
       "candidateClaims": [
         "| `minDist`   | 圆心最小距离   | 通常设为半径的1\\~2倍，防重叠  |"
       ],
       "priority": "P2",
-      "scopedVerification": null,
+      "scopedVerification": {
+        "status": "example-tested",
+        "scope": "uint8 回绕与升类型裁剪已运行；霍夫检测和 GUI 滑块未运行。"
+      },
       "reviewStatus": "structural-inventory-complete; full-technical-review-pending",
       "explanatoryFigureAdded": false,
       "nextChecks": [
-        "判断是否需要结构图或真实结果图；不按数量强制插图",
         "逐块标注完整示例/增量片段/伪代码，核对依赖与运行入口",
         "人工核验下列候选断言；关键词命中不代表结论错误"
       ]
@@ -4797,24 +4820,36 @@
         "8.1 掌握 `borderMode`（边界填充方式）",
         "8.2 批量多图处理建议：循环+函数封装",
         "8.3 深入理解HSV色彩空间",
+        "本轮验证范围",
         "8.4 NumPy切片与高级索引的威力"
       ],
       "codeBlocks": 13,
       "codeLanguages": [
         "python"
       ],
-      "images": [],
+      "images": [
+        {
+          "alt": "二值标签放大：原图、最近邻与双线性对比",
+          "path": "/examples/blog-review-02/interpolation.png"
+        },
+        {
+          "alt": "黑底白字水印的前景掩膜、背景保留和合成结果",
+          "path": "/examples/blog-review-02/watermark.png"
+        }
+      ],
       "localLinks": [],
       "candidateClaims": [
         "* 最近邻（INTER\\_NEAREST）：速度最快，锯齿重，适合掩膜/标签图。",
-        "* 区域插值（INTER\\_AREA）：缩小时最佳，相当于局部平均。"
+        "* 区域插值（INTER\\_AREA）：常用于 resize 缩小，按像素面积关系重采样；并非所有任务都最佳。"
       ],
       "priority": "P2",
-      "scopedVerification": null,
+      "scopedVerification": {
+        "status": "example-tested",
+        "scope": "合成标签插值与黑底白字水印掩膜已运行；透明 PNG、外部照片和 GUI 未执行。"
+      },
       "reviewStatus": "structural-inventory-complete; full-technical-review-pending",
       "explanatoryFigureAdded": false,
       "nextChecks": [
-        "判断是否需要结构图或真实结果图；不按数量强制插图",
         "逐块标注完整示例/增量片段/伪代码，核对依赖与运行入口",
         "人工核验下列候选断言；关键词命中不代表结论错误"
       ]
@@ -4836,7 +4871,7 @@
         "四、效果评估与优化",
         "测试集",
         "准确率",
-        "典型失败案例",
+        "需要采集的失败案例（不是已归档实测）",
         "性能优化",
         "五、部署与封装",
         "CLI 工具",
@@ -4852,7 +4887,12 @@
         "bash",
         "unspecified"
       ],
-      "images": [],
+      "images": [
+        {
+          "alt": "合成的三个独立圆盘与提取出的候选轮廓",
+          "path": "/examples/blog-review-02/counting.png"
+        }
+      ],
       "localLinks": [
         "/posts/python-opencv-geometry-transform/",
         "/posts/opencv-contour-feature-extraction/",
@@ -4860,22 +4900,19 @@
       ],
       "candidateClaims": [
         "- 准确率 ≥ 90%（光照正常条件下）",
-        "为什么定 90% 而不是 99%？因为硬币场景里反光、粘连、背景干扰太多了，追求 99% 会让工程成本爆炸。先把 90% 跑通，剩下的靠异常处理兜底。",
-        "| 面积下限 | 0.01% / 0.05% / 0.1% | 0.05% 兼顾小硬币和噪点过滤 |",
-        "整体准确率 **93.2%**（按硬币计数误差 ≤ 1 视为正确）。分场景：",
-        "| 正面光照 | 98% | 极少失败 |",
-        "| 侧光 | 92% | 阴影区域轮廓断裂 |",
-        "| 反光强烈 | 78% | 高光导致硬币边缘断裂成多段 |",
-        "| 复杂背景 | 80% | 杂物被误识别为硬币 |",
-        "1. **异常处理 > 算法精度**：教程里所有图片都是干净的，但实际拍摄的照片有反光、阴影、杂物。把 80% 精度做到 90% 靠算法，把 90% 做到 93% 靠异常处理",
-        "3. **降分辨率是免费的性能优化**：检测精度损失 1-2%，速度提升 4 倍以上，几乎所有视觉项目都该默认考虑"
+        "90% 是早期项目目标，不是实测成绩。必须先定义“准确率”：逐图计数完全正确率、计数 MAE 与逐枚分类准确率应分别报告。误差不超过 1 的宽松指标可另列，但不能冒充完全正确率。",
+        "| 面积下限 | 0.01% / 0.05% / 0.1% | 不同拍摄距离的召回 |",
+        "本仓库没有对应照片、逐图预测与计时日志，因此撤下旧版的“93.2%”和分场景成绩。若按 50 张图片逐图二值计分，正确率只能以 2 个百分点变化，93.2% 本身就与该口径不一致。正式报告应包含：",
+        "本轮实际执行的最小检查，是从合成二值图中筛出 3 个圆盘。它只覆盖轮廓与圆形度链路，不覆盖手机照片预处理、币种分类或金额计算，不能作为 90% 目标达成证据。[复跑结果](/examples/blog-review-02/results.json)"
       ],
       "priority": "P1",
-      "scopedVerification": null,
+      "scopedVerification": {
+        "status": "example-tested",
+        "scope": "合成圆盘计数与正文分类函数六项拒识/校验案例通过；真实照片、金额和 CLI 未验收。"
+      },
       "reviewStatus": "structural-inventory-complete; full-technical-review-pending",
       "explanatoryFigureAdded": false,
       "nextChecks": [
-        "判断是否需要结构图或真实结果图；不按数量强制插图",
         "逐块标注完整示例/增量片段/伪代码，核对依赖与运行入口",
         "人工核验下列候选断言；关键词命中不代表结论错误"
       ]
@@ -5497,15 +5534,22 @@
       "codeLanguages": [
         "python"
       ],
-      "images": [],
+      "images": [
+        {
+          "alt": "合成多边形原图、向右下平移和逆时针旋转的对比",
+          "path": "/examples/blog-review-02/geometry.png"
+        }
+      ],
       "localLinks": [],
       "candidateClaims": [],
       "priority": "P2",
-      "scopedVerification": null,
+      "scopedVerification": {
+        "status": "example-tested",
+        "scope": "合成数组平移和已知点旋转已断言；外部照片、GUI 与剪切示例未执行。"
+      },
       "reviewStatus": "structural-inventory-complete; full-technical-review-pending",
       "explanatoryFigureAdded": false,
       "nextChecks": [
-        "判断是否需要结构图或真实结果图；不按数量强制插图",
         "逐块标注完整示例/增量片段/伪代码，核对依赖与运行入口"
       ]
     },
@@ -5542,7 +5586,10 @@
       "localLinks": [],
       "candidateClaims": [],
       "priority": "P2",
-      "scopedVerification": null,
+      "scopedVerification": {
+        "status": "not-run",
+        "scope": "修正读图保护、摄像头循环、reshape 与按键说明；未执行摄像头、HDR 或 GUI。"
+      },
       "reviewStatus": "structural-inventory-complete; full-technical-review-pending",
       "explanatoryFigureAdded": false,
       "nextChecks": [
@@ -7092,7 +7139,7 @@
         "模型演进：从拼接系统到端到端",
         "Whisper 实战：中文语音转文字",
         "工程化：长音频和脏音频",
-        "评估：WER 怎么算",
+        "评估：中文优先看 CER，别把整句当作一个词",
         "踩坑排查清单",
         "练习",
         "面试常问"
@@ -7109,11 +7156,15 @@
         "/posts/nlp-comprehensive-guide/"
       ],
       "candidateClaims": [
-        "1. **分帧**：把音频切成 25ms 的小段，帧间重叠 10ms（语音在这么短的窗口内近似平稳）。",
-        "**模型尺寸怎么选。** tiny/base 速度快但中文错误率高；small 是速度和质量的甜点，会议纪要场景够用；large 质量最好但显存要吃 10GB 且慢。CPU 上用 small，有 GPU 上 medium 起步。"
+        "1. **分帧**：这里采用 25ms 窗长、10ms 帧移，相邻帧重叠 15ms。窗长、帧移、重叠不是同一个量。",
+        "**模型尺寸怎么选。** 先在相同音频上记录 CER、实时率（推理秒数/音频秒数）、峰值内存与硬件，再决定尺寸。官方显存和速度表是特定环境下的近似参考，不能据此保证某个型号在你的中文会议、口音和设备上最好。安装还需要可用的 ffmpeg，首次加载可能下载模型。[Whisper 官方说明](https://github.com/openai/whisper)",
+        "S 是替换数，D 是删除数，I 是插入数，N 是参考词数；CER 则以字符计数。默认按空格分词的 WER 会把没有空格的中文句子视作一个词。中文若要报告 WER，必须说明分词器；否则优先报告 CER。插入很多时错误率可以超过 100%。"
       ],
       "priority": "P2",
-      "scopedVerification": null,
+      "scopedVerification": {
+        "status": "example-tested",
+        "scope": "标准库编辑距离复算中文 CER 与空格 WER；未运行 jiwer、librosa 或 Whisper。"
+      },
       "reviewStatus": "structural-inventory-complete; full-technical-review-pending",
       "explanatoryFigureAdded": false,
       "nextChecks": [

@@ -1,6 +1,11 @@
 ---
 title: "Python + OpenCV 图像几何变换原理推导、实战技巧与常见问题整理"
 date: 2025-07-19T00:00:00+08:00
+updated: 2026-09-20T00:00:00+08:00
+verification:
+  status: example-tested
+  scope: "合成数组平移和已知点旋转已断言；外部照片、GUI 与剪切示例未执行。"
+  checkedAt: 2026-09-20
 draft: false
 author: "Zack-Zhang1031"
 description: "Python + OpenCV 几何变换（仿射、旋转、剪切、平移、缩放）公式推导、代码实战与常见误区总结"
@@ -19,15 +24,15 @@ series: ["OpenCV 实战笔记"]
 
 在图像处理时，经常会遇到**NumPy 加法**和**OpenCV 加法**的区别：
 
-* **NumPy 加法**是“模 256”加法，超出255会循环回0。例如 `np.uint8([250]) + np.uint8([10]) = array([4], dtype=uint8)`。
-* **OpenCV 加法（cv2.add）** 是饱和加法，超出255会固定为255。例如 `cv2.add(np.uint8([250]), np.uint8([10])) = array([255], dtype=uint8)`。
+* **两个 uint8 NumPy 数组相加**会模 256 回绕。不能把这一点推广到浮点数或所有混合类型运算。
+* **uint8 输出的 `cv2.add`** 是饱和加法，超出 255 固定为 255；输出类型不同，范围与行为也不同。
 
 ```python
 import numpy as np
 import cv2
 
-x = np.uint8([250])
-y = np.uint8([10])
+x = np.array([[250]], dtype=np.uint8)
+y = np.array([[10]], dtype=np.uint8)
 
 print('NumPy加法:', x + y)        # [4]
 print('OpenCV加法:', cv2.add(x, y))  # [255]
@@ -46,6 +51,8 @@ import cv2
 import numpy as np
 
 img = cv2.imread('test.jpg')
+if img is None:
+    raise FileNotFoundError('test.jpg')
 gray = np.max(img, axis=2).astype(np.uint8)
 cv2.imshow('Max Gray', gray)
 cv2.waitKey(0)
@@ -58,7 +65,7 @@ cv2.destroyAllWindows()
 
 ## 3. 常见二维变换矩阵推导与公式
 
-几何变换本质是矩阵对坐标的线性变换，主流有：
+这里讨论的仿射变换由线性部分和平移组成；平移在二维坐标中不是线性变换，采用齐次坐标后才能统一写成矩阵乘法。
 
 ### 3.1 平移（Translation）
 
@@ -109,7 +116,7 @@ $$
 
 ### 3.3 旋转（Rotation）
 
-围绕原点旋转角度 $\theta$：
+在 x 向右、y 向上的数学坐标中，围绕原点逆时针旋转角度 $\theta$：
 
 $$
 \begin{bmatrix}
@@ -219,9 +226,11 @@ $$
   * `flags`: 插值方法（如 `cv2.INTER_LINEAR`）
   * `borderMode`: 边界填充方式
 
+默认将 M 理解为源点到目标点的映射，内部逆映射采样；设置 `WARP_INVERSE_MAP` 时，传入的 M 才直接表示目标到源的映射。点变换方向与像素采样方向不要混淆。[OpenCV 几何变换文档](https://docs.opencv.org/4.x/da/d54/group__imgproc__transform.html)
+
 ### 5.2 如何定义仿射矩阵 \$M\$？
 
-* **仿射变换矩阵** 可以通过指定输入输出三点获得：
+* **仿射变换矩阵** 可以通过三组对应点求解；源点必须不共线，若要得到可逆变换，目标点也不能共线：
 
   ```python
   src_pts = np.float32([[50,50], [200,50], [50,200]])
@@ -232,13 +241,15 @@ $$
 
 ### 5.3 综合仿射变换实例
 
-以旋转+平移为例：
+以绕图像中心旋转为例（矩阵中的平移项用于保持旋转中心不动）：
 
 ```python
 import cv2
 import numpy as np
 
 img = cv2.imread('test.jpg')
+if img is None:
+    raise FileNotFoundError('test.jpg')
 rows, cols = img.shape[:2]
 
 M = cv2.getRotationMatrix2D((cols/2, rows/2), 30, 1)  # 以中心点旋转30度，不缩放
@@ -254,7 +265,12 @@ cv2.destroyAllWindows()
 ## 6. 旋转与角度正负方向
 
 * OpenCV 中，**正角度代表逆时针旋转**，负角度为顺时针旋转。这与数学中的单位圆、三角函数一致。
-* 注意有些框架（如 PIL）默认顺时针为正，注意区分。
+* Pillow 的 `Image.rotate` 同样以逆时针为正，不能作为相反约定的例子。[Pillow rotate 文档](https://pillow.readthedocs.io/en/stable/reference/Image.html#PIL.Image.Image.rotate)
+* 图像坐标 y 向下。上面的数学矩阵不能原样套入图像后仍声称视觉方向相同；`getRotationMatrix2D` 已采用图像约定。
+
+![合成多边形原图、向右下平移和逆时针旋转的对比](/examples/blog-review-02/geometry.png)
+
+本轮脚本断言平移 (12, 8) 后的重叠区域与原数组一致，并验证点 (150, 50) 绕 (100, 50) 正向旋转 90° 得到 (100, 0)。图中另外展示 30° 旋转；黑色区域来自默认边界填充，不是像素丢失异常。[运行记录](/examples/blog-review-02/results.json)
 
 ---
 
@@ -264,10 +280,10 @@ cv2.destroyAllWindows()
 
 * **最近邻插值（cv2.INTER\_NEAREST）**：速度快，马赛克感重
 * **双线性插值（cv2.INTER\_LINEAR）**：平滑常用，默认选项
-* **双三次插值（cv2.INTER\_CUBIC）**：效果更好，计算量大
+* **双三次插值（cv2.INTER\_CUBIC）**：通常更平滑，但可能振铃，不保证每种输入都更好
 * **Lanczos 插值（cv2.INTER\_LANCZOS4）**：高精度场景
 
-> 插值本质是根据周围像素推断新像素的值，提升图像质量。
+> 插值估算新采样位置的像素值，不会凭空恢复缺失的真实细节。类别掩膜应避免插入新类别值。
 
 ---
 
@@ -305,10 +321,14 @@ import cv2
 import numpy as np
 
 img = cv2.imread('test.jpg')
+if img is None:
+    raise FileNotFoundError('test.jpg')
 rows, cols = img.shape[:2]
 k = 0.3  # 剪切系数
-M = np.float32([[1, k, 0], [0, 1, 0]])
-sheared = cv2.warpAffine(img, M, (int(cols + rows * abs(k)), rows))
+shift_x = max(0.0, -k * (rows - 1))  # k 为负时把左侧内容移回画布
+M = np.float32([[1, k, shift_x], [0, 1, 0]])
+out_width = int(np.ceil(cols + abs(k) * (rows - 1)))
+sheared = cv2.warpAffine(img, M, (out_width, rows))
 cv2.imshow('sheared', sheared)
 cv2.waitKey(0)
 cv2.destroyAllWindows()

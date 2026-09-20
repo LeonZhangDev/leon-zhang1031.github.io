@@ -1,6 +1,11 @@
 ---
 title: "Python + OpenCV 日常小技巧与常见坑整理"
 date: 2025-07-05T00:00:00+08:00
+updated: 2026-09-20T00:00:00+08:00
+verification:
+  status: not-run
+  scope: "修正读图保护、摄像头循环、reshape 与按键说明；未执行摄像头、HDR 或 GUI。"
+  checkedAt: 2026-09-20
 draft: false
 author: "Zack-Zhang1031"
 description: "整理 OpenCV 读取/显示图片、HDR 处理、视频流读取与按键检测（0xFF 原理）的常见坑点，并附 Python 字符串校验与 any() 手写实现。"
@@ -54,6 +59,8 @@ else:
 img = cv.imread('./images/1.jpg', cv.IMREAD_GRAYSCALE)
 # 或者
 img = cv.imread('./images/1.jpg')
+if img is None:
+    raise FileNotFoundError('./images/1.jpg')
 gray = cv.cvtColor(img, cv.COLOR_BGR2GRAY)
 ```
 
@@ -65,7 +72,12 @@ gray = cv.cvtColor(img, cv.COLOR_BGR2GRAY)
 * 若需可视化或保存，需做 Tonemap 或归一化。
 
 ```python
+import numpy as np
 img_hdr = cv.imread('./images/1.hdr', cv.IMREAD_UNCHANGED)
+if img_hdr is None:
+    raise FileNotFoundError('./images/1.hdr')
+if img_hdr.dtype != np.float32 or img_hdr.ndim != 3 or img_hdr.shape[2] != 3:
+    raise ValueError('此 Tonemap 示例要求 float32 三通道 HDR 输入')
 tonemap = cv.createTonemap(gamma=2.2)
 ldr = tonemap.process(img_hdr)
 ldr_8bit = (ldr * 255).clip(0, 255).astype('uint8')
@@ -91,7 +103,7 @@ cv.destroyAllWindows()
 
 ### reshape 与 resize 的区别
 
-* `reshape` 只改变数据排列，不改变图像内容，不可用于缩放或显示变化。
+* `reshape` 保留元素数量，但重新解释空间与通道布局，显示内容可能明显改变；它不做缩放插值，也不保证总是零拷贝。
 * `resize` 用于实际缩放图片（等比例缩放、指定尺寸）。
 
 ```python
@@ -108,14 +120,19 @@ img_resize = cv.resize(img, (100, 100))
 ```python
 import cv2 as cv
 cap = cv.VideoCapture(0)
-ret, frame = cap.read()
-if ret:
-    cv.imshow('ad', frame)
-    cv2.waitKey(0)
-    cv2.destroyAllWindows()
-else:
-    print("无法获取摄像头画面！")
-cap.release()
+try:
+    if not cap.isOpened():
+        raise RuntimeError('无法打开摄像头，请检查权限和设备编号')
+    while True:
+        ret, frame = cap.read()
+        if not ret:
+            break
+        cv.imshow('ad', frame)
+        if cv.waitKey(1) & 0xFF == ord('q'):
+            break
+finally:
+    cap.release()
+    cv.destroyAllWindows()
 ```
 
 ### 按键检测与 0xFF 的作用
@@ -125,13 +142,13 @@ if cv.waitKey(40) & 0xFF == ord('q'):
     break
 ```
 
-* `0xFF` 代表255，掩码，保证跨平台拿到按键的低8位ASCII码。
+* `0xFF` 保留低 8 位，常用于比较普通字符键；它不保证所有平台、键盘布局都返回相同编码。
 * `ord('q')` 为ASCII码值。
 * 这样写能避免高字节导致按键判断失效的兼容性问题。
 
 ### 按键原理说明
 
-* OpenCV 的 `waitKey` 底层返回的是操作系统的消息编码，可能高位带有特殊信息，所以要 &0xFF。
+* 未按键时 `waitKey` 返回 -1；需要完整特殊键码时使用 `waitKeyEx`，并检查当前 GUI 后端的行为。
 * 标准按键（a-z, 0-9）一般没问题，特殊键（方向键、功能键）编码更高。
 
 ---
@@ -178,7 +195,7 @@ def my_any(iterable):
 ## 总结
 
 今天主要复习了 OpenCV 读图/写图/视频流的各种易错点与底层原理，练习了字符串判断相关的 Python 小技巧，并对按键检测、十六进制、位运算等知识点做了拓展。
-代码和原理清晰，建议日常写代码时多做“容错判断”，多看文档和官方规范。
+图像处理脚本与窗口、摄像头测试要分开验收：本轮检查了代码中的输入保护、模块别名和资源释放，但未连接摄像头，也未运行 HDR 与 GUI 示例。无桌面的服务器应保存结果文件，不应把窗口无法打开误判成算法失败。
 
 ---
 

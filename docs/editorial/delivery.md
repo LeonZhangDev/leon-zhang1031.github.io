@@ -28,7 +28,34 @@
 - 五项 CPU 最小实验：合成二维分类、有限差分、因果注意力、拷贝边界、验证集阈值；环境与输出在 `public/examples/blog/`，入口在 `examples/blog/`。训练和注意力图来自真实执行，非真实业务基准。
 - 修订科研课程 M1–M5 契约与教学/实测边界；将未提供原始记录的成绩表改成待测模板。修复 Trainer 缺少 F1 计算与保存策略、Streamlit 小样本抽样、bootstrap 标签集与随机种子等问题；这些课程代码未声称完整运行。
 
-## 尚需证据的工作
+## 第二批：统计、OpenCV 与语音评估（2026-09-20）
+
+对以下 8 篇逐篇阅读后定向修订，不代表完成整站技术审读。用 humanize-writing 清理聊天残留与无证据成绩，保留原有教程结构；没有批量重写其余文章。
+
+| 文章 slug | 修正内容 | 实际执行与剩余边界 |
+| --- | --- | --- |
+| ab-testing-statistics | 区间返回值、样本量方向与向上取整、p 值解释、CUPED 系数、停止规则 | 教学计数、10000 次 A/A 和合成 CUPED；非业务实验 |
+| python-opencv-tips | 模块别名、读图检查、摄像头释放、reshape/按键边界 | 静态修订；未接摄像头或执行 HDR/GUI |
+| python-opencv-geometry-transform | 数学/图像坐标、Pillow 方向、逆映射、负剪切画布 | 合成平移与旋转断言；剪切与外部图片示例未跑 |
+| opencv-image-interpolation-mask-roi-watermark-grayscale-tutorial | 单位变换无对照意义、mask 参数位置、水印极性、连续 alpha、边界默认值 | 插值、水印合成与保留背景断言；未测透明 PNG 与 GUI |
+| opencv-contour-feature-extraction | Canny 输入与滞后、空轮廓、绘制线宽、占位图 | 凹多边形凸包/矩形/圆与面积；非真实目标识别 |
+| opencv-hough-transform-brightness | 法向参数、None 返回、有符号坐标、uint8/NumPy 2 边界 | 亮度数组实验；霍夫检测与滑块未执行 |
+| opencv-practical-projects | 撤下无日志成绩与固定加速倍数、拒识/校验、CLI 只输出候选计数 | 合成三圆盘；提取正文分类函数测六个案例；无实拍准确率与金额验收 |
+| speech-recognition-basics | 帧移/重叠、MFCC 压缩比、Whisper 特征与长音频、CER 与 WER | 标准库编辑距离复算；未运行 jiwer/librosa/Whisper |
+
+运行入口 `examples/blog/review-examples.py`；产物 `public/examples/blog-review-02/` 包含 8 张图、误报曲线 CSV、带版本的结果 JSON。图均为脚本生成的教学数据，不替代历史照片。轮廓图检查时发现圆边缘被画布裁切，已扩大展示画布并重跑。
+
+结果摘要：双侧 p=0.066748、95% Newcombe 区间跨零、样本量 31218/组；A/A 固定终点误报 4.94%，20 次未经校正查看为 24.87%；中文一字替换 CER=1/12，默认空格 WER=1。后两项不是语音模型成绩。
+
+本批本地验证：Python 脚本运行成功；结构检查 163 篇、25 篇有 Markdown 插图、32 处图片引用，失败为 0；196 个单元测试通过；Playwright 使用已安装 Chrome，103 个测试通过（新增 8 篇页面检查与 1 项结果文件检查）。Astro check 为 0 errors、5 个既有 hints。新增检查覆盖实际图片加载、手机宽度、数学渲染、JS 异常与 A/B 配图放大/Esc/焦点恢复。桌面 1440×1000、手机 390×844 截图存系统临时目录，未提交仓库。
+
+首次增量同步输出已修改文章的 duplicate-id 提示；没有新增同名文件。最终独立 `npm run build` 不再出现该提示，成功生成 183 页。
+
+评论只读诊断：没有 Origin 的服务端请求返回 403；加入 Worker Origin/Referer 后返回 HTTP 200、errno=0。403 不能单独证明服务故障，浏览器 CORS 与实际提交仍须区分。本轮不写入测试评论、不改后端设置。
+
+发布记录待生产检查后补充；保留原始批次记录，不覆盖为本批结果。
+
+## 尚需证据的工作（持续）
 
 - 全部 163 篇的逐段技术审读与所有外部 API 版本复查，不得用自动台账替代。
 - 历史 MindTrip、AtlasSplit、游戏平台发布与性能数据的原始日志、版本和截图。

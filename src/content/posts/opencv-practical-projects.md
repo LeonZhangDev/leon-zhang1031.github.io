@@ -1,6 +1,11 @@
 ---
 title: "OpenCV 实战项目：从教程笔记到能跑的视觉应用"
 date: 2026-03-10T00:00:00+08:00
+updated: 2026-09-20T00:00:00+08:00
+verification:
+  status: example-tested
+  scope: "合成圆盘计数与正文分类函数六项拒识/校验案例通过；真实照片、金额和 CLI 未验收。"
+  checkedAt: 2026-09-20
 draft: false
 author: "Zack-Zhang1031"
 description: "把 OpenCV 系列笔记里的零散技巧整合成一个完整的视觉应用项目，涵盖需求分析、方案设计、核心代码实现与部署。"
@@ -20,15 +25,16 @@ series: ["OpenCV 实战笔记"]
 **输入输出定义**：
 
 - 输入：手机拍摄的桌面硬币照片（JPG/PNG，常见 4000x3000 分辨率）
-- 输出：硬币数量 + 总金额 + 标注后的结果图
+- 基线输出：圆形候选数量 + 标注后的结果图；未经真实照片评估，不把每个候选自动称为硬币。
+- 后续目标：有面值与尺寸标定数据后，再输出已识别金额和未知对象数量。
 
-**验收标准**：
+**拟定验收目标，尚未证明达到**：
 
 - 准确率 ≥ 90%（光照正常条件下）
 - 单张处理 < 1 秒（消费级笔记本 CPU）
 - 支持人民币 1 元、5 角、1 角三种面值
 
-为什么定 90% 而不是 99%？因为硬币场景里反光、粘连、背景干扰太多了，追求 99% 会让工程成本爆炸。先把 90% 跑通，剩下的靠异常处理兜底。
+90% 是早期项目目标，不是实测成绩。必须先定义“准确率”：逐图计数完全正确率、计数 MAE 与逐枚分类准确率应分别报告。误差不超过 1 的宽松指标可另列，但不能冒充完全正确率。
 
 ---
 
@@ -39,7 +45,7 @@ series: ["OpenCV 实战笔记"]
 1. **预处理**：灰度化 → 高斯模糊（降噪）→ 自适应阈值二值化
 2. **形态学操作**：开运算（去噪点）→ 闭运算（填空洞）
 3. **轮廓检测**：`findContours` → 按面积过滤 → 按圆形度过滤
-4. **硬币分类**：按半径大小分面值（1元最大、5角居中、1角最小）
+4. **可选分类**：只对已标定的币种、版本和拍摄平面比较半径；尺寸相近、版本未知或不满足容差时拒识。
 5. **结果绘制**：画轮廓 + 标注面值 + 显示总额
 
 各层用到的 OpenCV 模块和我之前的笔记对应：
@@ -48,7 +54,7 @@ series: ["OpenCV 实战笔记"]
 - 轮廓检测和特征过滤——细节看 [OpenCV 轮廓与特征提取](/posts/opencv-contour-feature-extraction/)
 - 备选方案的霍夫圆变换——原理在 [OpenCV 霍夫变换与亮度调整](/posts/opencv-hough-transform-brightness/)
 
-实际项目里我主用 `findContours` 路线，霍夫变换作为对照（在反光严重时霍夫反而更稳）。
+这里以 `findContours` 为基线、霍夫变换为对照。反光条件下哪种更稳，需要同一测试集的漏检与误检记录，不能预设赢家。
 
 ---
 
@@ -63,13 +69,13 @@ import numpy as np
 def preprocess(img_bgr: np.ndarray) -> np.ndarray:
     # 1. 灰度化
     gray = cv2.cvtColor(img_bgr, cv2.COLOR_BGR2GRAY)
-    # 2. 高斯模糊降噪（核大小 7x7 实测最稳）
+    # 2. 高斯模糊降噪（7x7 是待验证的起点，不是已证明的最优值）
     blurred = cv2.GaussianBlur(gray, (7, 7), 0)
-    # 3. 自适应阈值二值化（应对光照不均）
+    # 3. 自适应阈值；先检查输出是否真的形成完整前景
     binary = cv2.adaptiveThreshold(
         blurred, 255,
         cv2.ADAPTIVE_THRESH_GAUSSIAN_C,
-        cv2.THRESH_BINARY_INV,  # 反转：硬币为白，背景为黑
+        cv2.THRESH_BINARY_INV,  # 仅在目标比局部背景暗的样本上考虑此方向
         blockSize=21, C=5,
     )
     # 4. 形态学：开运算去噪点
@@ -116,34 +122,34 @@ def find_coins(binary: np.ndarray, img_bgr: np.ndarray):
 
 三个关键过滤条件：
 
-- **面积范围**：太小的是噪点，太大的是多个硬币粘连
-- **圆形度 ≥ 0.8**：硬币是圆形的，方形/不规则形状直接排除
+- **面积范围**：过小可能是噪点，也可能是真实小目标；过大可能粘连，也可能只是拍得近。
+- **圆形度 ≥ 0.8**：只是候选筛选条件。倾斜的硬币可能被漏掉，其他圆物体仍可能通过。
 - `RETR_EXTERNAL`：只取最外层轮廓，避免硬币内部纹理被误识别
 
 ### 硬币分类
 
 ```python
-def classify_coin(radius_px: float, scale: float) -> int:
-    """根据半径分类面值。scale 是像素到毫米的换算系数。"""
+def classify_coin(radius_px: float, scale: float,
+                  references: dict[int, float], tolerance_mm: float) -> int | None:
+    """references 为实测的 面值(分):半径(mm)；歧义或不匹配返回 None。"""
+    values = [radius_px, scale, tolerance_mm, *references.values()]
+    if not references or not all(np.isfinite(v) and v > 0 for v in values):
+        raise ValueError('半径、比例、容差与标定参考必须为有限正数')
     radius_mm = radius_px * scale
-    # 1元：≈12.5mm半径, 5角：≈10mm, 1角：≈9mm
-    if radius_mm >= 11.5:
-        return 100  # 1元（单位：分）
-    elif radius_mm >= 10.0:
-        return 50   # 5角
-    else:
-        return 10   # 1角
+    matches = [value for value, radius in references.items()
+               if abs(radius_mm - radius) <= tolerance_mm]
+    return matches[0] if len(matches) == 1 else None
 ```
 
-`scale` 通过拍摄时在画面里放一个已知尺寸的参照物（如硬币样本或卡片）来标定。这是工程化最容易被忽略的一步——没有 scale，半径毫无意义。
+`scale` 的单位是毫米/像素，用同一平面的已知尺寸参照物标定；倾斜透视、不同高度和检测前缩放都会影响它。参考半径还要标注币种与版本。这个函数只是受限分类规则，不验证材质或图案；圆形杂物也可能匹配，不能用于可靠金额结算。当前 CLI 因没有真实标定文件而只输出候选计数。
 
 ### 参数调优
 
-| 参数 | 候选值 | 效果 |
+| 参数 | 候选值 | 要记录的结果 |
 |------|--------|------|
-| 高斯核大小 | 5x5 / 7x7 / 9x9 | 7x7 最稳，5x5 残留噪点多，9x9 边缘模糊 |
-| 面积下限 | 0.01% / 0.05% / 0.1% | 0.05% 兼顾小硬币和噪点过滤 |
-| 圆形度阈值 | 0.7 / 0.8 / 0.9 | 0.8 最优；0.7 误纳椭圆噪声，0.9 漏检磨损硬币 |
+| 高斯核大小 | 5x5 / 7x7 / 9x9 | 噪声误检与小目标漏检 |
+| 面积下限 | 0.01% / 0.05% / 0.1% | 不同拍摄距离的召回 |
+| 圆形度阈值 | 0.7 / 0.8 / 0.9 | 倾斜硬币漏检与圆形杂物误检 |
 
 ### 异常处理
 
@@ -151,7 +157,7 @@ def classify_coin(radius_px: float, scale: float) -> int:
 
 ```python
 def watershed_split(binary: np.ndarray):
-    # 距离变换 + peak 找种子点 + 分水岭
+    # 距离变换 + 固定阈值候选种子；不保证粘连物体能分出独立种子
     dist = cv2.distanceTransform(binary, cv2.DIST_L2, 5)
     _, sure_fg = cv2.threshold(dist, 0.5 * dist.max(), 255, 0)
     sure_fg = np.uint8(sure_fg)
@@ -165,7 +171,9 @@ def watershed_split(binary: np.ndarray):
     return markers
 ```
 
-**光照不均**：直接二值化会让阴影区域硬币丢失。用 CLAHE 自适应直方图均衡化预处理：
+这段分水岭代码是起点，不包含局部峰值分离；如果两个目标共享一个种子，仍无法拆开。需要展示种子图和失败例再判断是否有效。
+
+**光照不均**：可把 CLAHE 作为预处理候选，与不使用它的结果对比；它也可能放大纹理噪声：
 
 ```python
 clahe = cv2.createCLAHE(clipLimit=2.0, tileGridSize=(8, 8))
@@ -183,7 +191,7 @@ cv2.grabCut(img, mask, rect, bgd_model, fgd_model, 5, cv2.GC_INIT_WITH_RECT)
 foreground = np.where((mask == 1) | (mask == 3), 255, 0).astype(np.uint8)
 ```
 
-GrabCut 速度慢（单张 1-2 秒），仅作为复杂背景的兜底方案。
+GrabCut 的耗时取决于分辨率、迭代次数与设备。上述矩形还要求图像宽高大于 100，且目标不触边；它不是通用的自动前景定位方案。
 
 ---
 
@@ -193,7 +201,7 @@ GrabCut 速度慢（单张 1-2 秒），仅作为复杂背景的兜底方案。
 
 ### 测试集
 
-收集了 50 张不同光照/背景/硬币数量的照片，覆盖：
+建议先建立 50 张人工标注的试验集，再根据失败分布扩充；以下是采集配额，不是已拥有的数据：
 
 - 正面光照（25 张）
 - 侧光（10 张）
@@ -202,28 +210,31 @@ GrabCut 速度慢（单张 1-2 秒），仅作为复杂背景的兜底方案。
 
 ### 准确率
 
-整体准确率 **93.2%**（按硬币计数误差 ≤ 1 视为正确）。分场景：
+本仓库没有对应照片、逐图预测与计时日志，因此撤下旧版的“93.2%”和分场景成绩。若按 50 张图片逐图二值计分，正确率只能以 2 个百分点变化，93.2% 本身就与该口径不一致。正式报告应包含：
 
-| 场景 | 准确率 | 主要失败原因 |
-|------|--------|--------------|
-| 正面光照 | 98% | 极少失败 |
-| 侧光 | 92% | 阴影区域轮廓断裂 |
-| 反光强烈 | 78% | 高光导致硬币边缘断裂成多段 |
-| 复杂背景 | 80% | 杂物被误识别为硬币 |
+| 指标 | 口径 | 当前状态 |
+|------|------|----------|
+| 计数完全正确率 | 预测数量等于标注数量的图片数 / 图片总数 | 待真实照片测试 |
+| 计数 MAE | 每图绝对计数误差的平均值 | 待真实照片测试 |
+| 逐枚分类准确率 | 正确分类枚数 / 已匹配标注枚数，另报检测召回与拒识率 | 待标定与标注 |
+| 延迟 p50/p95 | 固定设备与分辨率，明确是否包含读写图 | 待计时日志 |
 
-### 典型失败案例
+![合成的三个独立圆盘与提取出的候选轮廓](/examples/blog-review-02/counting.png)
+
+本轮实际执行的最小检查，是从合成二值图中筛出 3 个圆盘。它只覆盖轮廓与圆形度链路，不覆盖手机照片预处理、币种分类或金额计算，不能作为 90% 目标达成证据。[复跑结果](/examples/blog-review-02/results.json)
+
+### 需要采集的失败案例（不是已归档实测）
 
 1. **反光导致轮廓断裂**：1 元硬币表面高光让二值化后边缘断开，被识别成 3 个小硬币。修复思路是用霍夫圆变换作为后备——当圆形度低于阈值但区域内有强圆形霍夫响应时，合并碎片。
 2. **极小硬币被过滤**：远处拍的 1 角硬币半径只有 15 像素左右，被面积下限过滤掉。修复思路是动态调整面积阈值，根据图中最小硬币半径自适应。
 
 ### 性能优化
 
-- **降分辨率处理**：1920x1080 → 640x360 做检测，再把坐标映射回原图绘制。单张处理时间从 1.8s 降到 0.4s
+- **降分辨率处理**：可对比原图与缩小图，再把坐标映射回原图；同比例缩放时也必须同步更新毫米/像素比例。记录小目标召回和耗时，不承诺固定倍数的加速。
 - **多线程批处理**：
 
 ```python
 from concurrent.futures import ThreadPoolExecutor
-from PIL import Image
 
 def batch_process(image_paths: list[str], max_workers: int = 4):
     with ThreadPoolExecutor(max_workers=max_workers) as executor:
@@ -231,7 +242,7 @@ def batch_process(image_paths: list[str], max_workers: int = 4):
     return results
 ```
 
-50 张照片批量处理从 90 秒压到 25 秒，IO 密集型任务线程池够用了。
+上面依赖尚需实现的 `process_single`，只是批处理封装示意。线程池是否加速要测量，还要避免与 OpenCV 内部线程过度竞争；本轮没有批处理计时结果。
 
 ---
 
@@ -248,29 +259,23 @@ import cv2
 @click.command()
 @click.option("--input", "-i", required=True, help="输入图片路径")
 @click.option("--output", "-o", default="result.jpg", help="输出图片路径")
-@click.option("--scale", "-s", default=0.025, help="像素到毫米的换算系数")
-@click.option("--verbose", is_flag=True, help="显示详细日志")
-def main(input, output, scale, verbose):
+def main(input, output):
     img = cv2.imread(input)
     if img is None:
-        click.echo(f"Error: cannot read {input}", err=True)
-        return
+        raise click.ClickException(f"cannot read {input}")
 
     binary = preprocess(img)
     coins = find_coins(binary, img)
 
-    total = 0
-    for coin in coins:
-        value = classify_coin(coin["radius"], scale)
-        total += value
+    for index, coin in enumerate(coins, start=1):
         cv2.circle(img, coin["center"], int(coin["radius"]), (0, 255, 0), 3)
-        cv2.putText(img, f"{value/100:.1f}",
+        cv2.putText(img, f"candidate {index}",
                     coin["center"], cv2.FONT_HERSHEY_SIMPLEX,
                     0.8, (0, 0, 255), 2)
 
-    cv2.imwrite(output, img)
-    click.echo(f"硬币数量：{len(coins)}")
-    click.echo(f"总金额：{total/100:.2f} 元")
+    if not cv2.imwrite(output, img):
+        raise click.ClickException(f"cannot write {output}")
+    click.echo(f"圆形候选数量：{len(coins)}（未经真实照片验收）")
     click.echo(f"结果已保存至 {output}")
 
 if __name__ == "__main__":
@@ -280,7 +285,7 @@ if __name__ == "__main__":
 使用示例：
 
 ```bash
-python coin_counter.py --input photo.jpg --output result.jpg --scale 0.025
+python coin_counter.py --input photo.jpg --output result.jpg
 ```
 
 ### 依赖管理
@@ -293,7 +298,7 @@ Pillow==10.2.0
 click==8.1.7
 ```
 
-锁定 Python 3.10+，避免老版本 typing 兼容问题。
+上面是旧版依赖快照，不代表已在任意 Python 3.10+ 上验证。需要将前文的 `preprocess`、`find_coins` 和 CLI 放进同一文件，并在隔离环境中锁定兼容版本；Pillow 并非当前计数代码必需。此次合成例子的实际环境为 Python 3.13.7、OpenCV 4.12.0、NumPy 2.2.6，完整版本写在结果 JSON，未执行照片 CLI。
 
 ---
 
@@ -301,9 +306,9 @@ click==8.1.7
 
 ### 教程不会告诉你的工程细节
 
-1. **异常处理 > 算法精度**：教程里所有图片都是干净的，但实际拍摄的照片有反光、阴影、杂物。把 80% 精度做到 90% 靠算法，把 90% 做到 93% 靠异常处理
+1. **异常路径也是验收对象**：读取失败、没有候选、未知类别和保存失败应有明确返回，不能悄悄算成正确结果。
 2. **参数标定是核心工程问题**：scale 系数不标定，半径分类毫无意义；面积阈值要根据图像分辨率自适应
-3. **降分辨率是免费的性能优化**：检测精度损失 1-2%，速度提升 4 倍以上，几乎所有视觉项目都该默认考虑
+3. **降分辨率有代价**：小目标和细边缘可能消失；只有同一验证集的质量与耗时记录，才能决定是否采用。
 
 ### 把笔记转化为可复用代码的关键
 

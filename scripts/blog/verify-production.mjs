@@ -34,7 +34,42 @@ try {
   const data = await artifacts.json();
   assert.equal(data.environment.device, 'cpu');
   assert.equal(data.threshold.validation_threshold, .65);
-  console.log(JSON.stringify({ verifiedAt:new Date().toISOString(), results, artifacts:'available' },null,2));
+  for (const [slug, figure] of [
+    ['ab-testing-statistics', 'ab-confidence.svg'],
+    ['opencv-image-interpolation-mask-roi-watermark-grayscale-tutorial', 'watermark.png'],
+    ['opencv-practical-projects', 'counting.png'],
+  ]) {
+    const response = await page.goto(`${origin}/posts/${slug}/`, { waitUntil:'domcontentloaded', timeout:60000 });
+    assert.equal(response?.status(), 200);
+    const source = `/examples/blog-review-02/${figure}`;
+    const plot = page.locator(`img[src="${source}"]`).first();
+    await plot.scrollIntoViewIfNeeded();
+    await page.waitForFunction(src => {
+      const image = document.querySelector(`img[src="${src}"]`);
+      return image?.complete && image.naturalWidth > 0;
+    }, source);
+    assert(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), `${slug}: mobile overflow`);
+    results.push({ url:page.url(), title:await page.title(), status:response.status() });
+  }
+  const reviewArtifacts = await page.request.get(`${origin}/examples/blog-review-02/results.json`);
+  assert.equal(reviewArtifacts.status(), 200);
+  const review = await reviewArtifacts.json();
+  assert.equal(review.vision.synthetic_disk_count, 3);
+  assert.equal(review.article_classifier.cases_passed, 6);
+  assert(Math.abs(review.statistics.two_sided_p - .06674827835535253) < 1e-10);
+  const comments = await page.evaluate(async () => {
+    try {
+      const url = new URL('https://lz1031-waline.vercel.app/api/comment');
+      url.searchParams.set('path', location.pathname);
+      url.searchParams.set('pageSize', '1');
+      const response = await fetch(url, { signal:AbortSignal.timeout(15000) });
+      const body = await response.json();
+      return { status:response.status, errno:body.errno, scope:'Read only; no comment submitted' };
+    } catch (error) {
+      return { error:String(error), scope:'Read request failed; no comment submitted' };
+    }
+  });
+  console.log(JSON.stringify({ verifiedAt:new Date().toISOString(), results, artifacts:'available', comments },null,2));
 } finally {
   await browser.close();
 }

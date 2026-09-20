@@ -1,6 +1,11 @@
 ---
 title: "OpenCV 图像轮廓处理与几何特征提取详解"
 date: 2025-07-26T00:00:00+08:00
+updated: 2026-09-20T00:00:00+08:00
+verification:
+  status: example-tested
+  scope: "合成凹多边形的凸包、外接矩形/圆与面积已运行；真实对象识别未测试。"
+  checkedAt: 2026-09-20
 draft: false
 author: "Zack-Zhang1031"
 description: "本专题详细梳理OpenCV中关于图像梯度、边缘检测、轮廓提取、凸包、外接矩形/圆等几何特征的原理与实战技巧，适合视觉AI开发、图像分析与数字识别等任务。"
@@ -22,21 +27,6 @@ series: ["OpenCV 实战笔记"]
 ## 📑 内容简介
 
 本项目/博客详细梳理了 OpenCV 在图像轮廓检测和几何特征提取方面的实用方法。涵盖从基础的梯度与边缘检测、轮廓查找，到高级的凸包、外接矩形/圆、多边形逼近与形状匹配。适合进行目标检测、计数、自动分割、视觉理解等任务的工程师和学习者参考。
-
----
-
-## 📂 目录
-
-* [13 图像梯度处理](#13-图像梯度处理)
-* [14 图像边缘检测（Canny流程）](#14-图像边缘检测canny流程)
-* [15 绘制图像轮廓](#15-绘制图像轮廓)
-* [16 凸包特征检测](#16-凸包特征检测)
-* [17 图像轮廓几何特征查找](#17-图像轮廓几何特征查找)
-* [常见错误与调试经验](#常见错误与调试经验)
-* [一图流功能表](#一图流功能表)
-* [效果展示](#效果展示)
-* [进阶方向](#进阶方向)
-* [总结](#总结)
 
 ---
 
@@ -95,11 +85,11 @@ theta = np.arctan2(Gy, Gx)
 ### 14.4 双阈值筛选
 
 ```python
-edges = cv.Canny(gray, 50, 150)
+edges = cv.Canny(blurred, 50, 150)
 ```
 
-* 高阈值：明显边界
-* 低阈值：细节边缘
+* 高于高阈值的是强边缘；两个阈值之间的弱边缘还需要通过连通性滞后判断，不是所有弱响应都被保留。
+* 上面手算梯度用于理解流程；此处 Canny 直接接收 blurred，内部执行自己的梯度与筛选步骤。
 
 ### 14.5 API 小贴士
 
@@ -120,6 +110,9 @@ edges = cv.Canny(gray, 50, 150)
 
 ```python
 contours, hierarchy = cv.findContours(binary, cv.RETR_EXTERNAL, cv.CHAIN_APPROX_SIMPLE)
+if not contours:
+    raise ValueError('没有找到轮廓，请先检查二值输入和前景方向')
+contour = max(contours, key=cv.contourArea)  # 后续单轮廓示例选面积最大的一个
 ```
 
 * `RETR_EXTERNAL`: 只取外层轮廓（常用于单目标）
@@ -132,7 +125,7 @@ cv.drawContours(img, contours, -1, (0,255,0), 2)
 ```
 
 * `-1`: 绘制所有轮廓
-* `thickness`: 线宽（`0`为单点，负值填充）
+* `thickness`: 正值指定线宽，负值（如 `cv.FILLED`）填充；0 不是“只画单点”的模式。
 
 ---
 
@@ -152,7 +145,7 @@ hull = cv.convexHull(contour)
 cv.polylines(img, [hull], True, (0,255,0), 2)
 ```
 
-* 注意点集需为 `np.int32` 类型，形状为 `(N,1,2)`
+* 绘制整数点集通常用 `np.int32`、形状 `(N,1,2)`；几何计算中的 `convexHull` 也支持 float32 点，不要为了绘制而提前截断测量坐标。
 
 ---
 
@@ -162,7 +155,7 @@ cv.polylines(img, [hull], True, (0,255,0), 2)
 
 ```python
 x, y, w, h = cv.boundingRect(contour)
-cv.rectangle(img, (x, y), (x+w, y+h), (255,0,0), 2)
+cv.rectangle(img, (x, y), (x+w-1, y+h-1), (255,0,0), 2)
 ```
 
 * 常用于目标快速框选（不支持旋转）
@@ -217,9 +210,11 @@ cv.circle(img, (int(x), int(y)), int(r), (0,255,255), 2)
 
 * 绿色线条为凸包
 * 红色线条为最小外接旋转矩形
-* 黄色为最小外接圆，圆心以红点标出
+* 黄色为最小外接圆
 
-（此处插入对比图片，突出不同几何特征）
+![同一凹多边形的凸包、最小外接旋转矩形与最小外接圆](/examples/blog-review-02/contours.png)
+
+这不是实际目标识别照片，而是脚本生成的凹多边形：轮廓面积 21520.5，凸包面积 24575.5。凸包填平凹陷，外接矩形和圆提供不同的包围约束；它们都不等于精确的物体分割。`contourArea` 计算几何面积，也不等于数二值图的白色像素。[脚本运行记录](/examples/blog-review-02/results.json)
 
 ---
 

@@ -7,7 +7,7 @@
 | 文章 | 优先级 | 类型初分 | 代码块 | 图引用 | 状态 |
 | --- | --- | --- | ---: | ---: | --- |
 | [3d-vision-point-cloud](../../src/content/posts/3d-vision-point-cloud.md) | P2 | tutorial | 3 | 0 | 全篇待审 |
-| [ab-testing-statistics](../../src/content/posts/ab-testing-statistics.md) | P1 | tutorial | 4 | 0 | 全篇待审 |
+| [ab-testing-statistics](../../src/content/posts/ab-testing-statistics.md) | P1 | tutorial | 4 | 2 | 全篇待审 |
 | [acoustic-model-ctc-rnnt](../../src/content/posts/acoustic-model-ctc-rnnt.md) | P1 | tutorial | 4 | 0 | 全篇待审 |
 | [agent-frameworks-comparison](../../src/content/posts/agent-frameworks-comparison.md) | P2 | comparison | 3 | 0 | 全篇待审 |
 | [ai-agent-development](../../src/content/posts/ai-agent-development.md) | P1 | tutorial | 3 | 0 | 全篇待审 |
@@ -100,10 +100,10 @@
 | [numpy-python-performance](../../src/content/posts/numpy-python-performance.md) | P1 | tutorial | 7 | 0 | 全篇待审 |
 | [object-detection-yolo](../../src/content/posts/object-detection-yolo.md) | P2 | tutorial | 1 | 0 | 全篇待审 |
 | [ocr-text-recognition](../../src/content/posts/ocr-text-recognition.md) | P2 | tutorial | 2 | 0 | 全篇待审 |
-| [opencv-contour-feature-extraction](../../src/content/posts/opencv-contour-feature-extraction.md) | P2 | tutorial | 11 | 3 | 全篇待审 |
-| [opencv-hough-transform-brightness](../../src/content/posts/opencv-hough-transform-brightness.md) | P2 | tutorial | 5 | 0 | 全篇待审 |
-| [opencv-image-interpolation-mask-roi-watermark-grayscale-tutorial](../../src/content/posts/opencv-image-interpolation-mask-roi-watermark-grayscale-tutorial.md) | P2 | tutorial | 13 | 0 | 全篇待审 |
-| [opencv-practical-projects](../../src/content/posts/opencv-practical-projects.md) | P1 | tutorial | 10 | 0 | 全篇待审 |
+| [opencv-contour-feature-extraction](../../src/content/posts/opencv-contour-feature-extraction.md) | P2 | tutorial | 11 | 4 | 全篇待审 |
+| [opencv-hough-transform-brightness](../../src/content/posts/opencv-hough-transform-brightness.md) | P2 | tutorial | 5 | 1 | 全篇待审 |
+| [opencv-image-interpolation-mask-roi-watermark-grayscale-tutorial](../../src/content/posts/opencv-image-interpolation-mask-roi-watermark-grayscale-tutorial.md) | P2 | tutorial | 13 | 2 | 全篇待审 |
+| [opencv-practical-projects](../../src/content/posts/opencv-practical-projects.md) | P1 | tutorial | 10 | 1 | 全篇待审 |
 | [optimizer-lr-schedule](../../src/content/posts/optimizer-lr-schedule.md) | P1 | tutorial | 1 | 0 | 全篇待审 |
 | [overfitting-regularization](../../src/content/posts/overfitting-regularization.md) | P2 | tutorial | 4 | 0 | 全篇待审 |
 | [pandas-data-analysis-visualization](../../src/content/posts/pandas-data-analysis-visualization.md) | P2 | tutorial | 8 | 0 | 全篇待审 |
@@ -117,7 +117,7 @@
 | [python-guide-from-beginner-to-advanced](../../src/content/posts/python-guide-from-beginner-to-advanced.md) | P2 | tutorial | 26 | 0 | 全篇待审 |
 | [python-iterator-generator-guide](../../src/content/posts/python-iterator-generator-guide.md) | P2 | tutorial | 13 | 0 | 全篇待审 |
 | [python-mutability-and-set-types](../../src/content/posts/python-mutability-and-set-types.md) | P0 | tutorial | 9 | 1 | 已补图解；全篇待审 |
-| [python-opencv-geometry-transform](../../src/content/posts/python-opencv-geometry-transform.md) | P2 | tutorial | 6 | 0 | 全篇待审 |
+| [python-opencv-geometry-transform](../../src/content/posts/python-opencv-geometry-transform.md) | P2 | tutorial | 6 | 1 | 全篇待审 |
 | [python-opencv-tips](../../src/content/posts/python-opencv-tips.md) | P2 | tutorial | 10 | 0 | 全篇待审 |
 | [python-package-management](../../src/content/posts/python-package-management.md) | P2 | tutorial | 6 | 0 | 全篇待审 |
 | [rag-advanced-chunking-rerank](../../src/content/posts/rag-advanced-chunking-rerank.md) | P2 | tutorial | 3 | 0 | 全篇待审 |
@@ -188,12 +188,12 @@
 - 文件：`ab-testing-statistics`
 - 本文目标（取自摘要，待编辑复核）：假设检验本质、样本量计算、z 检验与 t 检验、多重比较陷阱、辛普森悖论、实验设计 checklist，用 Python 把 A/B 测试从玄学变成工程。
 - 前几节：假设检验：一个反直觉的框架 → 样本量：实验前必须算，不是跑完再说 → 实战：完整分析一次实验数据 → 六大翻车现场：实验设计的坑 → 实验平台的最小功能清单
-- 下一步：判断是否需要结构图或真实结果图；不按数量强制插图；逐块标注完整示例/增量片段/伪代码，核对依赖与运行入口；人工核验下列候选断言；关键词命中不代表结论错误。
+- 下一步：逐块标注完整示例/增量片段/伪代码，核对依赖与运行入口；人工核验下列候选断言；关键词命中不代表结论错误。
 - 候选证据核验点：
   - 新模型的点击率略有提升，能不能上线？单看差值还不够：需要知道样本量、实验持续时间、分流方式，以及两组用户是否可比。下面按一次实验评审的顺序，把这些问题拆开。读完之后，目标是能解释一个结论有多可靠，而不只是会算 p 值。
-  - - p 值：**如果 H₀ 为真**，出现当前或更极端数据的概率。p = 0.03 意味着「纯属运气造成这么大差异的概率只有 3%」——够小（< 显著性水平 α，常取 0.05），我们拒绝 H₀，认为效果显著。
+  - - p 值：在 H₀ 和检验模型成立时，获得当前或更极端检验统计量的概率。p=0.03 不是“差异由运气造成的概率为 3%”。是否拒绝 H₀ 要依据预设的显著性水平和停止规则，不能看到数据后再改方向。
   - 最常见的误读必须钉死：**p = 0.03 不是「新策略有效的概率是 97%」**，也不是「效应有 3% 概率是巧合」这种贝叶斯解读。频率学派的 p 值只陈述「在 H₀ 下数据的极端程度」。这个误读在业务方那里极其普遍，解释清楚是数据科学家的日常。
-  -  /  拒绝 H₀（上线）  /  **一类错误 α（假阳性）**：白上线  /  正确  /
+  - α 是指定程序在 H₀ 下的长期误拒概率；功效 1−β 需要指定非零效应、样本量和变异程度。低功效不等于实验没有信息，但不显著时不能据此证明无效。是否上线还要考虑业务价值和护栏风险。
 
 ### 声学模型深入：CTC 与 RNN-T——语音识别怎么对齐声音和文字
 
@@ -1171,7 +1171,7 @@
 
 - 文件：`opencv-contour-feature-extraction`
 - 本文目标（取自摘要，待编辑复核）：本专题详细梳理OpenCV中关于图像梯度、边缘检测、轮廓提取、凸包、外接矩形/圆等几何特征的原理与实战技巧，适合视觉AI开发、图像分析与数字识别等任务。
-- 前几节：📑 内容简介 → 📂 目录 → 13 图像梯度处理 → 13.1 图像梯度定义 → 13.2\~13.4 Sobel & Laplacian 算子
+- 前几节：📑 内容简介 → 13 图像梯度处理 → 13.1 图像梯度定义 → 13.2\~13.4 Sobel & Laplacian 算子 → 14 图像边缘检测（Canny流程）
 - 下一步：逐块标注完整示例/增量片段/伪代码，核对依赖与运行入口；人工核验下列候选断言；关键词命中不代表结论错误。
 - 候选证据核验点：
   - [![Python](https://img.shields.io/badge/Python-3.7%2B-blue.svg)](https://www.python.org/)
@@ -1180,8 +1180,8 @@
 
 - 文件：`opencv-hough-transform-brightness`
 - 本文目标（取自摘要，待编辑复核）：本文系统讲解了霍夫变换（直线与圆）、OpenCV圆检测实践要点、图像亮度对比度调节技巧、滑动条联动实操，并着重分析了uint8类型溢出导致的异常色问题及解决方法。
-- 前几节：目录 → 1. 霍夫变换原理与实践 → 1.1 霍夫直线变换原理 → 2. 霍夫圆变换详细讲解 → 2.1 原理回顾
-- 下一步：判断是否需要结构图或真实结果图；不按数量强制插图；逐块标注完整示例/增量片段/伪代码，核对依赖与运行入口；人工核验下列候选断言；关键词命中不代表结论错误。
+- 前几节：1. 霍夫变换原理与实践 → 1.1 霍夫直线变换原理 → 2. 霍夫圆变换详细讲解 → 2.1 原理回顾 → 2.2 OpenCV调用方法
+- 下一步：逐块标注完整示例/增量片段/伪代码，核对依赖与运行入口；人工核验下列候选断言；关键词命中不代表结论错误。
 - 候选证据核验点：
   -  /  `minDist`    /  圆心最小距离    /  通常设为半径的1\~2倍，防重叠   /
 
@@ -1190,22 +1190,22 @@
 - 文件：`opencv-image-interpolation-mask-roi-watermark-grayscale-tutorial`
 - 本文目标（取自摘要，待编辑复核）：超详细OpenCV实战：插值、掩膜、ROI切割、水印添加、灰度化转换原理讲解与经典代码实现，全流程常见误区总结！
 - 前几节：1. 图像插值方法原理与OpenCV代码 → 1.1 插值的本质和应用场景 → 1.2 典型代码对比 → 1.3 常见误区与小技巧 → 2. 图像掩膜详解
-- 下一步：判断是否需要结构图或真实结果图；不按数量强制插图；逐块标注完整示例/增量片段/伪代码，核对依赖与运行入口；人工核验下列候选断言；关键词命中不代表结论错误。
+- 下一步：逐块标注完整示例/增量片段/伪代码，核对依赖与运行入口；人工核验下列候选断言；关键词命中不代表结论错误。
 - 候选证据核验点：
   - * 最近邻（INTER\_NEAREST）：速度最快，锯齿重，适合掩膜/标签图。
-  - * 区域插值（INTER\_AREA）：缩小时最佳，相当于局部平均。
+  - * 区域插值（INTER\_AREA）：常用于 resize 缩小，按像素面积关系重采样；并非所有任务都最佳。
 
 ### OpenCV 实战项目：从教程笔记到能跑的视觉应用
 
 - 文件：`opencv-practical-projects`
 - 本文目标（取自摘要，待编辑复核）：把 OpenCV 系列笔记里的零散技巧整合成一个完整的视觉应用项目，涵盖需求分析、方案设计、核心代码实现与部署。
 - 前几节：一、项目选题与需求分析 → 二、方案设计 → 三、核心实现 → 预处理 pipeline → 轮廓过滤
-- 下一步：判断是否需要结构图或真实结果图；不按数量强制插图；逐块标注完整示例/增量片段/伪代码，核对依赖与运行入口；人工核验下列候选断言；关键词命中不代表结论错误。
+- 下一步：逐块标注完整示例/增量片段/伪代码，核对依赖与运行入口；人工核验下列候选断言；关键词命中不代表结论错误。
 - 候选证据核验点：
   - - 准确率 ≥ 90%（光照正常条件下）
-  - 为什么定 90% 而不是 99%？因为硬币场景里反光、粘连、背景干扰太多了，追求 99% 会让工程成本爆炸。先把 90% 跑通，剩下的靠异常处理兜底。
-  -  /  面积下限  /  0.01% / 0.05% / 0.1%  /  0.05% 兼顾小硬币和噪点过滤  /
-  - 整体准确率 **93.2%**（按硬币计数误差 ≤ 1 视为正确）。分场景：
+  - 90% 是早期项目目标，不是实测成绩。必须先定义“准确率”：逐图计数完全正确率、计数 MAE 与逐枚分类准确率应分别报告。误差不超过 1 的宽松指标可另列，但不能冒充完全正确率。
+  -  /  面积下限  /  0.01% / 0.05% / 0.1%  /  不同拍摄距离的召回  /
+  - 本仓库没有对应照片、逐图预测与计时日志，因此撤下旧版的“93.2%”和分场景成绩。若按 50 张图片逐图二值计分，正确率只能以 2 个百分点变化，93.2% 本身就与该口径不一致。正式报告应包含：
 
 ### 优化器与学习率调度：从 SGD 到 AdamW——训练成败的隐形开关
 
@@ -1343,7 +1343,7 @@
 - 文件：`python-opencv-geometry-transform`
 - 本文目标（取自摘要，待编辑复核）：Python + OpenCV 几何变换（仿射、旋转、剪切、平移、缩放）公式推导、代码实战与常见误区总结
 - 前几节：前言 → 1. NumPy 与 OpenCV 加法的区别 → 2. 图像灰度化最大值法案例 → 3. 常见二维变换矩阵推导与公式 → 3.1 平移（Translation）
-- 下一步：判断是否需要结构图或真实结果图；不按数量强制插图；逐块标注完整示例/增量片段/伪代码，核对依赖与运行入口。
+- 下一步：逐块标注完整示例/增量片段/伪代码，核对依赖与运行入口。
 - 候选证据核验点：
   - 自动扫描未命中；不等于已完成事实核验。
 
@@ -1707,8 +1707,9 @@
 - 前几节：声波是怎么变成数字的 → MFCC：把波形压成"语音的指纹" → 模型演进：从拼接系统到端到端 → Whisper 实战：中文语音转文字 → 工程化：长音频和脏音频
 - 下一步：判断是否需要结构图或真实结果图；不按数量强制插图；逐块标注完整示例/增量片段/伪代码，核对依赖与运行入口；人工核验下列候选断言；关键词命中不代表结论错误。
 - 候选证据核验点：
-  - 1. **分帧**：把音频切成 25ms 的小段，帧间重叠 10ms（语音在这么短的窗口内近似平稳）。
-  - **模型尺寸怎么选。** tiny/base 速度快但中文错误率高；small 是速度和质量的甜点，会议纪要场景够用；large 质量最好但显存要吃 10GB 且慢。CPU 上用 small，有 GPU 上 medium 起步。
+  - 1. **分帧**：这里采用 25ms 窗长、10ms 帧移，相邻帧重叠 15ms。窗长、帧移、重叠不是同一个量。
+  - **模型尺寸怎么选。** 先在相同音频上记录 CER、实时率（推理秒数/音频秒数）、峰值内存与硬件，再决定尺寸。官方显存和速度表是特定环境下的近似参考，不能据此保证某个型号在你的中文会议、口音和设备上最好。安装还需要可用的 ffmpeg，首次加载可能下载模型。[Whisper 官方说明](https://github.com/openai/whisper)
+  - S 是替换数，D 是删除数，I 是插入数，N 是参考词数；CER 则以字符计数。默认按空格分词的 WER 会把没有空格的中文句子视作一个词。中文若要报告 WER，必须说明分词器；否则优先报告 CER。插入很多时错误率可以超过 100%。
 
 ### AI 工程师的 SQL 与数据库实战：从查询到建模到慢查询排查
 

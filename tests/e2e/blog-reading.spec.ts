@@ -3,6 +3,59 @@ import { readdirSync, readFileSync, existsSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { tmpdir } from 'node:os';
 
+const reviewedPosts = [
+  'ab-testing-statistics', 'python-opencv-tips', 'python-opencv-geometry-transform',
+  'opencv-image-interpolation-mask-roi-watermark-grayscale-tutorial',
+  'opencv-contour-feature-extraction', 'opencv-hough-transform-brightness',
+  'opencv-practical-projects', 'speech-recognition-basics',
+];
+
+for (const slug of reviewedPosts) {
+  test(`reviewed article renders with scoped evidence: ${slug}`, async ({ page }) => {
+    const errors: string[] = [];
+    page.on('pageerror', error => errors.push(error.message));
+    await page.route('**/api/comment**', route => route.fulfill({ status:503, body:'{}' }));
+    await page.setViewportSize({ width:390, height:844 });
+    const response = await page.goto(`/posts/${slug}/`);
+    expect(response?.status()).toBe(200);
+    await expect(page).toHaveURL(new RegExp(`/posts/${slug}/`));
+    await expect(page.locator('h1')).not.toBeEmpty();
+    expect((await page.locator('.prose').innerText()).length).toBeGreaterThan(300);
+    await expect(page.locator('astro-error-overlay, .katex-error')).toHaveCount(0);
+    for (const image of await page.locator('.prose img[src^="/examples/blog-review-02/"]').all()) {
+      await image.scrollIntoViewIfNeeded();
+      await expect.poll(() => image.evaluate((node: HTMLImageElement) => node.complete && node.naturalWidth > 0)).toBe(true);
+    }
+    if (slug === 'ab-testing-statistics') {
+      await expect(page.locator('.prose')).toContainText('0.066748');
+      const button = page.locator('.article-image-open').first();
+      await button.scrollIntoViewIfNeeded();
+      await page.screenshot({ path:resolve(tmpdir(), 'blog-review-statistics-mobile.png') });
+      await button.click();
+      await expect(page.getByRole('dialog')).toBeVisible();
+      await page.keyboard.press('Escape');
+      await expect(page.getByRole('dialog')).not.toBeVisible();
+      await expect(button).toBeFocused();
+      await page.setViewportSize({ width:1440, height:1000 });
+      await button.evaluate(node => node.scrollIntoView({ block:'center' }));
+      await page.screenshot({ path:resolve(tmpdir(), 'blog-review-statistics-desktop.png') });
+    }
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+    expect(errors).toEqual([]);
+  });
+}
+
+test('second review batch exposes numeric evidence, not full-reproduction claims', async ({ request }) => {
+  const response = await request.get('/examples/blog-review-02/results.json');
+  expect(response.ok()).toBe(true);
+  const data = await response.json();
+  expect(data.statistics.two_sided_p).toBeCloseTo(0.066748278, 8);
+  expect(data.statistics.newcombe_95_ci[0]).toBeLessThan(0);
+  expect(data.vision.synthetic_disk_count).toBe(3);
+  expect(data.text_metrics.cer).toBeCloseTo(1/12, 10);
+  expect(data.article_classifier.cases_passed).toBe(6);
+});
+
 test('every published post has a built page, valid article links and no math errors', () => {
   const root = resolve('src/content/posts');
   const files = readdirSync(root).filter(name => name.endsWith('.md'));

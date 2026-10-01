@@ -9,6 +9,8 @@ export default defineConfig({
   retries: 0,
   use: {
     baseURL: 'http://localhost:4321',
+    // Optional installed browser for machines without the pinned Playwright binary.
+    channel: process.env.PLAYWRIGHT_CHANNEL || undefined,
   },
   webServer: {
     command: 'node node_modules/astro/astro.js build && node node_modules/astro/astro.js preview --port 4321',

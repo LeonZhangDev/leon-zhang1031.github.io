@@ -10,6 +10,9 @@
     "preview": "astro preview",
     "astro": "astro",
     "test": "vitest run",
+    "blog:audit": "node scripts/blog/audit-content.mjs",
+    "blog:check": "node scripts/blog/audit-content.mjs --check",
+    "blog:figures": "node scripts/blog/build-figures.mjs",
     "test:e2e": "playwright test"
   },
   "dependencies": {

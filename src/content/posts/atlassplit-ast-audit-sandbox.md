@@ -2,6 +2,7 @@
 title: "AtlasSplit Agent 的 AST 审计与沙箱设计：当我真的让 LLM 在机器上执行 Python 代码"
 date: 2025-09-10T00:00:00+08:00
 draft: false
+updated: 2026-09-20
 author: "Zack-Zhang1031"
 description: "探讨 AtlasSplit 智能体中如何通过 AST 静态分析和沙箱环境确保 LLM 生成的 Python 代码安全执行的设计与实现。"
 tags: ["AST", "代码审计", "沙箱", "LLM Agent", "安全"]
@@ -263,6 +264,16 @@ Output Validation
 ```
 
 ---
+
+<!-- figure:atlassplit-ast-audit-sandbox -->
+
+![生成代码的多层约束](/images/blog/atlassplit-ast-audit-sandbox.svg)
+
+*图解：AST 检查不构成完整安全边界；运行隔离和结果校验必须独立建立。*
+
+把“拒绝了一段危险代码”和“执行环境安全”分开验收。静态规则可以阻止已知结构，但 Python 的动态行为使单层审计难以覆盖所有执行路径。运行器还应限制时间、内存、网络和可访问文件，且不能挂载宿主凭据。输出看似合法，也仍需检查行数、金额守恒或不可修改列等任务条件。
+
+**动手核对：** 用无害测试覆盖死循环、超大输出、错误列名与不符合输出 schema 的结果。测试目标是拒绝或终止行为是否符合契约，不需要运行真实破坏操作。
 
 # 四、第一层：AST 静态审计
 

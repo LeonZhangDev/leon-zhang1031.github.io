@@ -2,6 +2,7 @@
 title: "深度学习课程 06：RNN、LSTM 与 GRU 的序列建模"
 date: 2026-08-22T09:00:00+08:00
 draft: false
+updated: 2026-09-20
 author: "Zack-Zhang1031"
 description: "从隐藏状态、时间展开和梯度传播理解 RNN、LSTM 与 GRU，并用 PyTorch 建立可处理变长序列的分类基线。"
 tags: ["深度学习", "RNN", "LSTM", "GRU", "PyTorch"]
@@ -118,6 +119,16 @@ GRU 把记忆与隐藏状态合并，主要使用更新门与重置门。参数�
 - 需要显式的细胞状态或已有成熟 LSTM 配方：使用 LSTM；
 - 依赖很短或只验证数据管线：普通 RNN 可作为教学基线；
 - 需要大规模并行和更长上下文：再比较 Transformer。
+
+<!-- figure:deep-learning-06-rnn-lstm-gru -->
+
+![变长序列的真实终点](/images/blog/deep-learning-06-rnn-lstm-gru.svg)
+
+*图解：统一张量尺寸不等于样本长度相同。有效长度必须随 batch 一起传递。*
+
+批处理中较短句子的最后一列可能只是 padding。若直接读取所有样本的 output[:, -1]，得到的并不总是有效文本的最终表示。使用 packed sequence 或正确的掩码与索引；双向模型还需说明前向与反向状态的拼接方法。
+
+**动手核对：** 把同一句子分别放在短句 batch 与长句 batch，关闭 dropout 后比较有效表示。若 padding 改变导致表示异常变化，检查长度处理及聚合逻辑。
 
 ## 6. 变长序列、填充与长度
 

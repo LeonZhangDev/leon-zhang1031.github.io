@@ -11,6 +11,14 @@ const posts = defineCollection({
     tags: z.array(z.string()).default([]),
     categories: z.array(z.string()).default([]),
     math: z.boolean().optional(),
+    updated: z.coerce.date().optional(),
+    level: z.enum(['beginner', 'intermediate', 'advanced']).optional(),
+    prerequisites: z.array(z.string()).default([]),
+    verification: z.object({
+      status: z.enum(['not-run', 'example-tested', 'reproduced', 'source-checked']),
+      scope: z.string(),
+      checkedAt: z.coerce.date().optional(),
+    }).optional(),
   }),
 });
 

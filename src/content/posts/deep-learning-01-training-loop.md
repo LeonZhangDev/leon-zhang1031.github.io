@@ -2,6 +2,12 @@
 title: "深度学习课程 01：从一次训练循环看懂模型是怎样学会的"
 date: 2026-08-17T09:00:00+08:00
 draft: false
+updated: 2026-09-20
+prerequisites: ["modular-numpy-notes"]
+verification:
+  status: example-tested
+  scope: "新增 CPU 合成二维分类实验已运行；不代表本文所有变体或真实数据实验已复现。"
+  checkedAt: 2026-09-20
 author: "Zack-Zhang1031"
 description: "用 PyTorch 串起数据、模型、损失函数、反向传播、优化器与验证集，建立一套可以迁移到后续 CNN、RNN 和 Transformer 的训练骨架。"
 tags: ["深度学习", "PyTorch", "训练循环", "神经网络"]
@@ -33,6 +39,26 @@ categories: ["AI课程", "深度学习"]
 5. 按学习率移动一点点。
 
 这里的“一点点”很重要。学习率过大，参数会跨过合适位置来回震荡；过小，训练又像挪椅子，每次只挪一毫米。
+
+<!-- figure:deep-learning-01-training-loop -->
+
+![一个 batch 怎样更新参数](/images/blog/deep-learning-01-training-loop.svg)
+
+*图解：训练阶段根据 loss 更新参数；验证阶段使用 eval 与禁用梯度，两者职责不同。流程为概念图，不是实验结果。*
+
+沿图检查一次 batch：先断言输入是浮点数、标签是 long，再核对输出第一维仍为 B。loss.backward() 只计算并累积梯度，真正改变权重的是 optimizer.step()。在下一次反向传播前清零梯度；若有意做梯度累积，则明确累积步数和 loss 的缩放。验证时记录整个集合的加权损失，不能把大小不同的 batch 均值直接平均。
+
+**动手核对：** 只取 16 个样本，检查模型能否把训练误差压低；再打乱这些样本的标签比较记忆能力。这个检查用于定位训练链路问题，不能证明泛化。保存 seed、样本索引和每轮 loss。
+
+### 实测补充：一次能独立复跑的训练
+
+![固定种子的合成二维分类训练损失曲线](/examples/blog/training-loss.svg)
+
+*图：CPU 实测训练交叉熵，不是验证曲线，也不是业务数据基准。原始数据可下载：[每轮 loss CSV](/examples/blog/training-loss.csv)、[环境与结果 JSON](/examples/blog/results.json)。*
+
+这份附加实验使用另一条非线性规则 `x1 * x2 > 0`，与下文用于讲解的线性标签规则不同。固定 seed=42，1,500 个训练样本、500 个留出测试样本，2→32→2 的 Tanh 网络，Adam 学习率 0.03，全批量训练 150 轮。本次训练损失从 0.717663 降到 0.050663，最后一次测试准确率为 0.980。没有搜索超参数，也没有用测试结果选择轮次。
+
+复跑入口是仓库的 [`examples/blog/run-examples.py`](https://github.com/LeonZhangDev/leon-zhang1031.github.io/blob/main/examples/blog/run-examples.py)。在仓库根目录执行 `python examples/blog/run-examples.py`，依赖和验证范围见同目录 README。图中的下降只能说明此合成任务的优化有效；换成有噪声、不平衡或分布变化的数据时，必须重新设置验证协议。
 
 ## 2. 一份最小但完整的数据集
 

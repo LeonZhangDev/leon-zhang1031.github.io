@@ -2,6 +2,7 @@
 title: "数据管理与 AI 自动化 04：Docker 与 GitHub Actions——打包、CI 与 M4 验收"
 date: 2026-08-29T04:20:00+08:00
 draft: false
+updated: 2026-09-20
 author: "Zack-Zhang1031"
 description: "AI 科研内容课程系列五第 4 课（收官/里程碑 M4）：用 Docker 打包 API 服务、GitHub Actions 做测试与构建 CI，完成「服务可部署」里程碑验收。"
 tags: ["Docker", "GitHub Actions", "CI/CD", "部署"]
@@ -162,4 +163,4 @@ compose 管单机上多容器的编排，适合开发、测试、小部署；多
 
 ---
 
-**里程碑 M4 达成。** 下一课进入收官系列：[综合项目与求职交付 01：Streamlit 集成应用——把五个里程碑拼成一个产品](/posts/research-capstone-01-streamlit-app/)。
+**完成上述验收后，才能将你的 M4 标记为达成；本文不声明服务已经上线。** 下一课进入收官系列：[综合项目与求职交付 01：Streamlit 集成应用——把 M1–M4 接入演示界面](/posts/research-capstone-01-streamlit-app/)。

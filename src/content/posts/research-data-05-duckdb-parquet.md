@@ -2,6 +2,7 @@
 title: "科研数据获取与分析 05：DuckDB + Parquet 数据集版本管理（里程碑 M1）"
 date: 2026-08-28T18:20:00+08:00
 draft: false
+updated: 2026-09-20
 author: "Zack-Zhang1031"
 description: "AI 科研内容课程系列二第 5 课（收官/里程碑 M1）：用 Parquet 分区 + DuckDB 构建可查询、可版本化的科研数据集，发布平台的第一个正式数据集版本。"
 tags: ["DuckDB", "Parquet", "数据版本", "里程碑"]
@@ -166,4 +167,4 @@ Git 不适合大二进制；数据集版本管理的核心诉求是可回溯（�
 
 ---
 
-**里程碑 M1 达成。** 下一课进入建模世界：[经典机器学习 01：从元数据到特征工程](/posts/research-ml-01-feature-engineering/)。
+**完成上述验收后，才能将你的 M1 标记为达成。本文列的是教学验收要求，不是已经运行的证明。** 下一课进入建模世界：[经典机器学习 01：从元数据到特征工程](/posts/research-ml-01-feature-engineering/)。

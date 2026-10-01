@@ -1,7 +1,8 @@
 ---
-title: "综合项目与求职交付 01：Streamlit 集成应用——把五个里程碑拼成一个产品"
+title: "综合项目与求职交付 01：Streamlit 集成应用——把 M1–M4 接入演示界面"
 date: 2026-08-29T05:00:00+08:00
 draft: false
+updated: 2026-09-20
 author: "Zack-Zhang1031"
 description: "AI 科研内容课程系列六第 1 课（项目课）：用 Streamlit 把检索、分类、趋势分析、主题地图集成成可演示的平台应用——页面设计、状态管理、缓存策略与演示叙事。"
 tags: ["Streamlit", "综合项目", "前端集成", "作品集"]
@@ -152,7 +153,10 @@ def load_topic_map():
 
 def render():
     df = load_topic_map()
-    fig = px.scatter(df.sample(20000), x="x", y="y", color="topic_name",
+    if df.empty:
+        st.info("主题地图尚无数据，请先完成数据管线。")
+        return
+    fig = px.scatter(df.sample(n=min(20000, len(df)), random_state=42), x="x", y="y", color="topic_name",
                      hover_data=["title"], title="研究主题地图")
     fig.update_traces(marker=dict(size=3, opacity=0.6))
     st.plotly_chart(fig, use_container_width=True)
@@ -182,7 +186,7 @@ def render():
 
 ## 作品集证据
 
-本课产出：一个可现场演示的四页应用。它是把 M1-M4 五个里程碑"翻译"给非技术观众的界面——作品集的最高形态不是代码仓库，是打开就能用的东西。
+本课目标是做出可演示的四页应用，把 M1–M4 四个里程碑接入界面；通过功能、异常路径和版本核对后，再将应用交付记为 M5。页面代码与课文不等同于已经部署的应用，演示地址、录屏和运行环境需要实际补齐。
 
 ## 练习
 

@@ -1,0 +1,87 @@
+{
+  "environment": {
+    "python": "3.13.7",
+    "numpy": "2.2.6",
+    "pandas": "2.3.1",
+    "sklearn": "1.7.1",
+    "matplotlib": "3.10.5"
+  },
+  "forecasting": {
+    "scope": "Synthetic daily data; fixed model, no Prophet/ARIMA/LSTM execution",
+    "future_invariance": true,
+    "invalid_lags_rejected": 2,
+    "folds": [
+      {
+        "fold": 1,
+        "train_end": "2025-04-30",
+        "test_start": "2025-05-01",
+        "test_end": "2025-05-30",
+        "one_step_ridge_mae": 0.5185622852100643,
+        "fixed_origin_ridge_mae": 0.4894462179714774,
+        "one_step_lag7_mae": 0.8896557969885085,
+        "fixed_origin_lag7_mae": 1.5493887753775992
+      },
+      {
+        "fold": 2,
+        "train_end": "2025-05-30",
+        "test_start": "2025-05-31",
+        "test_end": "2025-06-29",
+        "one_step_ridge_mae": 0.4607421365750644,
+        "fixed_origin_ridge_mae": 0.5343367435532891,
+        "one_step_lag7_mae": 0.7026600126377275,
+        "fixed_origin_lag7_mae": 1.5039269761266878
+      },
+      {
+        "fold": 3,
+        "train_end": "2025-06-29",
+        "test_start": "2025-06-30",
+        "test_end": "2025-07-29",
+        "one_step_ridge_mae": 0.5169777797084824,
+        "fixed_origin_ridge_mae": 0.488815315911282,
+        "one_step_lag7_mae": 0.7692797308745317,
+        "fixed_origin_lag7_mae": 1.602057987934547
+      }
+    ]
+  },
+  "anomalies": {
+    "scope": "Synthetic shifted points, not real incidents or guaranteed future false-positive control",
+    "future_invariance": true,
+    "centered_window_failed_invariance": true,
+    "zero_variance_is_unscored": true,
+    "contamination_preserves_raw_scores": true,
+    "calibration_threshold": 0.6389334358121188,
+    "true_positives": 38,
+    "false_positives": 3,
+    "false_negatives": 2,
+    "true_negatives": 397,
+    "precision_at_20": 1.0
+  },
+  "search": {
+    "scope": "One synthetic seed, equal candidate count not equal time; no Optuna execution",
+    "development_size": 675,
+    "test_size": 225,
+    "candidates_per_strategy": 12,
+    "cv_folds": 3,
+    "test_evaluations": 1,
+    "selected_strategy": "grid",
+    "selected_test_auc": 0.9761773072060682,
+    "best": {
+      "grid": {
+        "cv_auc": 0.9747023809523809,
+        "params": {
+          "max_depth": null,
+          "max_features": "sqrt",
+          "min_samples_leaf": 1
+        }
+      },
+      "random": {
+        "cv_auc": 0.9742809734513275,
+        "params": {
+          "min_samples_leaf": 4,
+          "max_features": 0.5,
+          "max_depth": 8
+        }
+      }
+    }
+  }
+}

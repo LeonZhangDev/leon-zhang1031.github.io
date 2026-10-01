@@ -1,6 +1,11 @@
 ---
 title: "OpenCV进阶实战：霍夫变换、圆检测与亮度调节技巧"
 date: 2025-08-02T00:00:00+08:00
+updated: 2026-09-20T00:00:00+08:00
+verification:
+  status: example-tested
+  scope: "uint8 回绕与升类型裁剪已运行；霍夫检测和 GUI 滑块未运行。"
+  checkedAt: 2026-09-20
 draft: false
 author: "Zack-Zhang1031"
 description: "本文系统讲解了霍夫变换（直线与圆）、OpenCV圆检测实践要点、图像亮度对比度调节技巧、滑动条联动实操，并着重分析了uint8类型溢出导致的异常色问题及解决方法。"
@@ -10,18 +15,6 @@ series: ["OpenCV 实战笔记"]
 ---
 
 霍夫变换和亮度调节是 OpenCV 实战里最容易"调不出来"的两个坑：圆检测输入用错图就返回 None，亮度加减不做类型转换就会出现诡异变色。这篇笔记把霍夫直线/圆变换、亮度对比度公式、滑动条联动，以及 `uint8` 溢出这个经典陷阱一次性讲透，配上调参 Checklist 便于自查。
-
-## 目录
-
-1. [霍夫变换原理与实践](#hough)
-2. [霍夫圆变换详细讲解](#hough-circle)
-3. [OpenCV亮度与对比度变换](#brightness)
-4. [滑动条联动亮度调整实战](#trackbar)
-5. [uint8溢出导致的异常色问题与解决](#overflow)
-6. [常见问题与调参技巧](#tips)
-7. [总结](#summary)
-
----
 
 ## 1. 霍夫变换原理与实践
 
@@ -38,8 +31,8 @@ $$
 
 其中：
 
-* $r$ 表示点到原点的距离（极径）
-* $\theta$ 表示极角（0\~π）
+* $r$ 表示原点到直线的有符号法向距离，不是某个边缘点到原点的距离。
+* $\theta$ 是直线法向与 x 轴的夹角，不是直线本身的倾角。
 
 #### 直线检测流程
 
@@ -55,7 +48,7 @@ import numpy as np
 
 edges = cv.Canny(gray, 50, 150)
 lines = cv.HoughLines(edges, 1, np.pi/180, threshold=120)
-for line in lines:
+for line in ([] if lines is None else lines):
     r, theta = line[0]
     a = np.cos(theta)
     b = np.sin(theta)
@@ -102,7 +95,7 @@ circles = cv.HoughCircles(
 )
 
 if circles is not None:
-    circles = np.uint16(np.around(circles))
+    circles = np.rint(circles).astype(np.int32)  # 保留有符号类型，避免后续坐标相减回绕
     for i in circles[0, :]:
         cv.circle(img, (i[0], i[1]), i[2], (0,255,0), 2)
         cv.circle(img, (i[0], i[1]), 2, (0,0,255), 3)
@@ -162,6 +155,8 @@ import numpy as np
 import cv2 as cv
 
 img = cv.imread('./images/cat.png')
+if img is None:
+    raise FileNotFoundError('./images/cat.png')
 cv.namedWindow('window')
 
 def change(p):
@@ -185,8 +180,8 @@ cv.destroyAllWindows()
 
 ### 4.1 问题描述
 
-* 直接用`img + x`（img为uint8，x为负数）会出现蓝色、红色等假色异常。
-* 本质：**uint8类型溢出**，负数会被当成大正数导致通道失真。
+* uint8 数组运算可能发生模 256 回绕；在 NumPy 2 中，混合超出范围的 Python 整数还可能直接报 `OverflowError`，不能笼统说负数都会回绕。
+* 先升类型再运算。本文滑块偏移在 -255 到 255 内，int16 足够；复杂乘加可用 float32，最后统一 clip。详见 [NumPy 2 类型提升说明](https://numpy.org/doc/stable/numpy_2_0_migration_guide.html)。
 
 ### 4.2 根本解决办法
 
@@ -200,11 +195,15 @@ dst = np.clip(img.astype(np.int16) + x, 0, 255).astype(np.uint8)
 
 ---
 
+![灰度渐变加 50：uint8 回绕与先升类型后裁剪的区别](/examples/blog-review-02/brightness.png)
+
+本轮实际复算：uint8 的 250 加 50 回绕为 44，先转 int16 后裁剪则得到 255。`convertScaleAbs` 包含绝对值步骤，不能直接替代一般的负偏移调暗。环境记录见 [结果 JSON](/examples/blog-review-02/results.json)；GUI 滑块和真实照片的霍夫检测没有在本轮执行。
+
 ## 5. 常见问题与调参技巧
 
 ### 5.1 霍夫圆检测不到圆？
 
-* 输入必须是平滑的灰度图（中值滤波更佳），不要用Canny、不要用二值图！
+* `HOUGH_GRADIENT` 使用 8 位单通道灰度输入；是否平滑、选何种滤波要检查噪声与边缘损失。没有检测到圆也可能是正确结果，并不一定是调用失败。
 * 参数 `param2` 可以逐步降低，`minDist` 调大防重复，半径区间要覆盖实际目标
 * 圆本身太模糊/断裂，也难以检测
 
@@ -224,7 +223,6 @@ dst = np.clip(img.astype(np.int16) + x, 0, 255).astype(np.uint8)
 * **异常色/溢出处理**：`uint8`加减溢出是根本问题，记得类型安全！
 
 **一句话：用对输入和数据类型，霍夫检测和亮度调节都很顺！**
-非常棒的补充需求！下面给你**按模块完善好补充内容**，可以直接加进你的博客相应章节。
 
 ---
 
@@ -242,7 +240,7 @@ dst = np.clip(img.astype(np.int16) + x, 0, 255).astype(np.uint8)
 ### 亮度变换的实际应用
 
 * **文档增强与OCR预处理**
-  对照相机拍摄的文档或扫描件，常用亮度、对比度自动调节，消除阴影、提升字体清晰度，便于后续文字识别。
+  对拍摄文档或扫描件可以测试亮度、对比度调节；全局线性变换不能消除空间不均匀的阴影，也不能恢复已经截断的细节。
 * **低照度场景下的视频增强**
   夜间监控、车载摄像头的画面自动亮度增益，提高细节可见性。
 

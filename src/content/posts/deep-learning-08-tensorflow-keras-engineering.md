@@ -2,6 +2,7 @@
 title: "深度学习课程 08：TensorFlow/Keras 工程化训练工作流"
 date: 2026-08-24T09:00:00+08:00
 draft: false
+updated: 2026-09-20
 author: "Zack-Zhang1031"
 description: "用 tf.data、Keras Functional API、回调、检查点和模型导出组织可恢复的 TensorFlow 训练与推理流程。"
 tags: ["深度学习", "TensorFlow", "Keras", "工程化"]
@@ -43,6 +44,16 @@ tf.keras.utils.set_random_seed(42)
 ```
 
 随机种子能减少部分波动，但不同硬件、并行内核和版本仍可能产生差异，因此还应记录依赖版本与数据版本。
+
+<!-- figure:deep-learning-08-tensorflow-keras-engineering -->
+
+![训练与服务共享的契约](/images/blog/deep-learning-08-tensorflow-keras-engineering.svg)
+
+*图解：导出成功只说明产生了文件，重新加载后的输出一致性才检查了交付链路。*
+
+增强是训练行为，归一化通常也是推理所需的输入契约。如果训练时使用 0 到 1 的像素，推理直接传 0 到 255，就算张量尺寸匹配也可能产生错误结果。保存版本、类别映射和一小组固定输入，作为加载与部署后的回归样本。
+
+**动手核对：** 关闭随机增强后，比较保存前与加载后的 logits，给出误差容限；另外构造错误尺寸与错误 dtype，确认入口能解释失败原因。
 
 ## 3. 用 tf.data 组织输入
 

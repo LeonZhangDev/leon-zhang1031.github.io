@@ -1,0 +1,80 @@
+<dialog class="article-image-dialog" aria-label="图片原尺寸预览">
+  <button type="button" class="image-close" autofocus>关闭图片</button>
+  <img alt="" />
+  <p></p>
+</dialog>
+<script>
+  const prose = document.querySelector<HTMLElement>('[itemprop="articleBody"]');
+  const dialog = document.querySelector<HTMLDialogElement>('.article-image-dialog');
+  if (prose && dialog) {
+    let opener: HTMLButtonElement | null = null;
+    const preview = dialog.querySelector('img')!;
+    prose.querySelectorAll<HTMLImageElement>('img').forEach(img => {
+      img.loading = 'lazy';
+      img.decoding = 'async';
+      if (img.closest('a, button')) return;
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.className = 'article-image-open';
+      button.setAttribute('aria-label', `放大图片：${img.alt || '正文插图'}`);
+      img.before(button);
+      button.append(img);
+      const hint = document.createElement('span');
+      hint.className = 'article-image-hint';
+      hint.textContent = '点击图片查看大图';
+      hint.setAttribute('aria-hidden', 'true');
+      button.append(hint);
+      button.addEventListener('click', () => {
+        opener = button;
+        preview.src = img.currentSrc || img.src;
+        preview.alt = img.alt;
+        dialog.querySelector('p')!.textContent = img.alt;
+        dialog.showModal();
+      });
+    });
+    dialog.querySelector('button')!.addEventListener('click', () => dialog.close());
+    dialog.addEventListener('click', event => { if (event.target === dialog) dialog.close(); });
+    dialog.addEventListener('close', () => { preview.removeAttribute('src'); opener?.focus(); });
+    prose.querySelectorAll('pre').forEach(pre => {
+      const code = pre.querySelector('code');
+      if (!code) return;
+      const wrap = document.createElement('div');
+      wrap.className = 'article-code-block';
+      pre.before(wrap);
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.className = 'article-code-copy';
+      button.textContent = '复制代码';
+      button.setAttribute('aria-live', 'polite');
+      wrap.append(button, pre);
+      button.addEventListener('click', async () => {
+        try {
+          await navigator.clipboard.writeText(code.textContent || '');
+          button.textContent = '已复制';
+        } catch { button.textContent = '复制失败，请选择代码复制'; }
+        window.setTimeout(() => { button.textContent = '复制代码'; }, 2500);
+      });
+    });
+  }
+</script>
+<style is:global>
+  .article-toc,.article-learning { border:1px solid var(--border); border-radius:12px; padding:1rem 1.3rem; margin-block:1.5rem; line-height:1.8; }
+  .article-toc summary { cursor:pointer; font-weight:600; }
+  .article-toc ul { list-style:none; padding:0; margin-top:.6rem; }
+  .article-toc li[data-depth="3"] { padding-left:1rem; }
+  .article-toc a,.article-learning a { color:var(--accent); }
+  .prose :is(h1,h2,h3,h4) { scroll-margin-top:6rem; }
+  .article-image-open { display:block; width:100%; border:0; padding:0; background:transparent; cursor:zoom-in; border-radius:8px; }
+  .article-image-open:focus-visible { outline:3px solid var(--accent); outline-offset:4px; }
+  .article-image-open img { width:100%; height:auto; margin:0; }
+  .article-image-hint { display:block; padding:.35rem; font-size:.8rem; color:var(--text-secondary); }
+  .article-image-dialog { margin:auto; width:min(96vw,1400px); max-height:92vh; padding:1rem; border:1px solid var(--border); border-radius:12px; background:var(--bg-surface); color:var(--text-primary); overflow:auto; }
+  .article-image-dialog::backdrop { background:rgb(0 0 0 / .8); }
+  .article-image-dialog img { display:block; max-width:none; width:max(100%,760px); height:auto; margin-top:1rem; }
+  .image-close { position:sticky; top:0; padding:.6rem 1rem; background:var(--bg-base); color:var(--text-primary); border:1px solid var(--border); border-radius:6px; }
+  .article-code-block { min-width:0; margin-block:1.5rem; }
+  .article-code-block pre { margin-top:.3rem; }
+  .article-code-copy { color:var(--text-secondary); border:1px solid var(--border); padding:.35rem .8rem; border-radius:6px; font:inherit; font-size:.85rem; }
+  .article-learning p { margin-block:.5rem; }
+  @media print { .article-toc,.article-code-copy,.article-image-dialog { display:none; } }
+</style>

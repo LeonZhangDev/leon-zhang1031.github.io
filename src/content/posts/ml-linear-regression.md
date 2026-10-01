@@ -7,6 +7,11 @@ description: "机器学习入门小系列第 2 篇：从最小二乘的直觉讲
 tags: ["机器学习", "线性回归", "正则化", "Scikit-learn"]
 categories: ["AI课程", "机器学习"]
 math: true
+updated: 2026-09-20
+verification:
+  status: example-tested
+  checkedAt: 2026-09-20
+  scope: "执行正文合成回归、含截距 VIF、标准化正则、对数与多项式片段；绘制残差；未复现实房价预测或因果效应。"
 ---
 
 线性回归容易写出第一版，但要解释系数、检查残差、判断预测是否可信，还需要走几步。下面用同一个问题串起模型假设、参数求解、诊断和正则化。复习时可以先回答：这个线性关系为什么合理，哪些数据现象会让它失效？
@@ -28,6 +33,7 @@ $$\min_{w, b} \sum_{i=1}^{n} \left( y_i - \hat{y}_i \right)^2$$
 ## 上手：10 行代码跑起来
 
 ```python
+# example: regression-setup
 import numpy as np
 from sklearn.linear_model import LinearRegression
 from sklearn.model_selection import train_test_split
@@ -54,7 +60,7 @@ print(f"RMSE: {mean_squared_error(y_test, y_pred) ** 0.5:.2f}")
 print(f"R²: {r2_score(y_test, y_pred):.3f}")
 ```
 
-拟合出来的系数会接近我们埋的真值 `[3.5, -1.2, 0.3]`——面积每多 1 平米价格 +3.5，房龄每多 1 年价格 -1.2。这正是线性回归的最大卖点：**系数可以直接解读**，每个特征对结果的贡献方向和幅度一目了然。需要向业务方解释"为什么"的场景，线性回归至今是首选。
+这是合成数据，系数应接近生成时设定的 `[3.5, -1.2, 0.3]`。在其他列不变时，面积每增加一单位，模型预测增加约 3.5 个目标单位。真实数据中的回归系数首先是条件关联，不是扩建一平米必然涨价的因果证据；单位、遗漏变量和共线性都影响解释。
 
 ## R² 到底在说什么
 
@@ -62,49 +68,55 @@ $R^2$（决定系数）的定义：
 
 $$R^2 = 1 - \frac{\sum (y_i - \hat{y}_i)^2}{\sum (y_i - \bar{y})^2}$$
 
-翻译成人话：**你的模型比"无脑预测均值"好多少**。R²=1 是完美预测；R²=0 说明模型和直接猜均值一样烂；R²<0 说明模型比猜均值还差（在测试集上出现负值，是模型严重失效的信号）。
+这里的均值是**本次评估集真实目标的均值**。目标非常数时，R²=1 表示完美预测；0 表示平方误差与这个常数参考相同；负数表示更差。评估集均值在部署时不可知，另应报告“只预测训练目标均值”的可部署基线。负 R² 需要排查切分、噪声和分布变化，不宜仅凭一个数判定原因。
 
-RMSE 和 R² 要配合看：RMSE 告诉你误差绝对值是多少（"平均差 8 万"），R² 告诉你这个水平算好算坏（"解释了 85% 的方差"）。只说 RMSE 不说 R²，业务方无法判断 8 万误差是大是小。
+RMSE 是误差平方均值的平方根，与目标同单位，**不是平均绝对误差 MAE**。例如误差为 0 和 10，MAE=5，RMSE≈7.07。R² 提供相对尺度，但也不能代替业务容忍度与基线。目标为常数时分母为零；sklearn 默认 `force_finite=True` 将完美/不完美预测分别映射为 1/0，关闭后分别为 NaN/负无穷，见 [R² 官方定义](https://scikit-learn.org/stable/modules/generated/sklearn.metrics.r2_score.html)。
 
 ## 坑一：多重共线性——系数还能信吗
 
-两个特征高度相关时（比如"面积"和"房间数"），模型会把权重在它们之间随机分配：这次训练面积系数 +5、房间数 +1，下次变成 +1 和 +5，**预测能力不受影响，但系数解读彻底失效**。
+两个特征高度相关时，多个系数组合可能产生接近的预测。固定数据和求解器并不会“随机分配”，但轻微数据扰动就可能让系数大变。同分布预测有时仍稳定；相关关系一旦改变，预测也可能变差，不能承诺预测能力不受影响。
 
 检测方法：
 
 ```python
+# example: regression-vif
 from statsmodels.stats.outliers_influence import variance_inflation_factor
+from statsmodels.tools.tools import add_constant
 import pandas as pd
 
 X_df = pd.DataFrame(X_train, columns=["面积", "房龄", "楼层"])
+design = add_constant(X_df, has_constant="add")
 vif = pd.DataFrame({
     "feature": X_df.columns,
-    "VIF": [variance_inflation_factor(X_df.values, i) for i in range(X_df.shape[1])],
+    "VIF": [variance_inflation_factor(design.values, i + 1) for i in range(X_df.shape[1])],
 })
 print(vif)
 ```
 
-VIF（方差膨胀因子）超过 10 就该警惕。处理思路：删掉冗余特征、把相关特征合成一个（比如 PCA），或者用下面要讲的岭回归——L2 正则会把相关特征的权重"均摊"得更稳定。
+VIF 衡量一列被其余所有列线性解释的程度，并非只检测某一对特征。上面辅助回归保留截距，但不报告截距的 VIF。10 是经验警戒线，不是自动删列标准；完全共线时可能无穷大。删冗余列、重定义特征或使用岭回归都需在训练内部验证。
 
 ## 坑二：过拟合与正则化
 
 特征多、数据少的时候，线性回归也会过拟合。两副解药：
 
 ```python
+# example: regression-regularization
 from sklearn.linear_model import Ridge, Lasso
+from sklearn.pipeline import make_pipeline
+from sklearn.preprocessing import StandardScaler
 
 # 岭回归（L2）：惩罚系数平方和，把系数压小但一般不压到 0
-ridge = Ridge(alpha=1.0)
+ridge = make_pipeline(StandardScaler(), Ridge(alpha=1.0))
 ridge.fit(X_train, y_train)
 
-# Lasso（L1）：惩罚系数绝对值之和，会把不重要特征的系数压成恰好 0
-lasso = Lasso(alpha=0.1)
+# Lasso（L1）：可能得到零系数，但零不等于业务上无作用
+lasso = make_pipeline(StandardScaler(), Lasso(alpha=0.1))
 lasso.fit(X_train, y_train)
 ```
 
-**岭回归 vs Lasso 的记忆法**：Ridge 让系数"均匀变小"，Lasso 让系数"有的变零"。所以 Lasso 自带特征选择效果——系数为 0 的特征等于被开除了。特征特别多、怀疑大部分没用时，先用 Lasso 筛一遍是常见套路。
+Ridge 按数据矩阵的不同方向收缩，并非每个原始系数同比例变小；Lasso 可以产生零系数，但相关特征之间的选择可能不稳定。现在系数对应标准化后的列，不能直接按原始单位解读。若做特征选择，也必须放在各训练折内部。
 
-`alpha` 控制惩罚力度：0 就是普通线性回归，越大约束越狠。用 `GridSearchCV` 在对数刻度上搜 `[0.01, 0.1, 1, 10, 100]`，方法见上一篇。
+`alpha` 控制惩罚力度，越大约束越强。无惩罚时直接用 `LinearRegression`，不建议把 Lasso 的 alpha 设为 0 求解。上述 Pipeline 可用 `ridge__alpha` / `lasso__alpha` 搜索；只看训练内部 CV。
 
 ## 坑三：世界不是线性的
 
@@ -113,37 +125,43 @@ lasso.fit(X_train, y_train)
 **特征变换**：对特征或标签取 log、开方，把非线性关系"掰直"：
 
 ```python
-X["log_area"] = np.log(X["面积"])
-y_log = np.log(y)   # 标签取对数，预测完记得 exp 回来
+# example: regression-log
+if np.any(X[:, 0] <= 0) or np.any(y <= 0):
+    raise ValueError("本例的 log 变换要求面积与目标严格为正")
+X_with_log = np.column_stack([X, np.log(X[:, 0])])  # X 是数组，不是 DataFrame
+y_log = np.log(y)
 ```
+
+这里只构造另一组候选表示，不覆盖前文模型。逐点取 log 不估计统计量，但变换选择仍只能依据训练/验证数据。对数目标预测取 exp 后不自动等于原尺度条件均值；若要做重变换偏差校正，校正参数也不能从测试集估计。
 
 **多项式特征**：给模型加上特征的平方项、交互项：
 
 ```python
-from sklearn.preprocessing import PolynomialFeatures
+# example: regression-polynomial
+from sklearn.preprocessing import PolynomialFeatures, StandardScaler
 from sklearn.pipeline import Pipeline
 
 pipe = Pipeline([
     ("poly", PolynomialFeatures(degree=2, include_bias=False)),
     ("scaler", StandardScaler()),
-    ("model", Ridge(alpha=1.0)),     # 多项式特征多，务必配正则
+    ("model", Ridge(alpha=1.0)),     # 本例选择正则；强度需在训练内部验证
 ])
 pipe.fit(X_train, y_train)
 ```
 
-注意两件事：多项式展开后特征数量爆炸（degree=2 时 3 个特征变 9 个），必须配正则；展开后各特征尺度差异巨大，标准化不可省。这也是为什么 Pipeline 里我把 scaler 放在 poly 后面。
+degree=2、无常数列时，3 个特征变成 9 个。展开可能放大尺度差异和过拟合风险，因此本例选择展开后标准化再加正则；这不是所有数据上的强制规则，阶数与 alpha 仍需验证。
 
 ## 坑四：离群值绑架模型
 
 平方误差的代价前面说了：一个 100 倍偏离的点，对损失的影响是普通点的一万倍。一套汤里的老鼠屎。处理顺序：
 
 1. **先画图**：`plt.scatter(X[:, 0], y)` 一眼看到离谱的点。
-2. **查原因**：是数据录入错误（面积 9999 平米）就删；是真实存在的极端样本（豪宅）就要考虑分开建模或变换。
-3. **用稳健回归**：`sklearn.linear_model.RANSACRegressor` 或 `HuberRegressor`，对离群值不敏感。
+2. **查原因**：先核对原始记录与单位，不能仅因数值大就删。确认错误后修正或按预先约定排除；合法极端样本可能需要保留、分层或变换。
+3. **比较稳健回归**：RANSAC 或 Huber 可减轻部分离群点的影响，但并非对所有高杠杆点都稳健，也需训练内部验证。
 
 ## 模型诊断：残差是最好的老师
 
-训练完别急着收工，画残差图（预测值 vs 残差）：
+固定方案后可画最终残差图。若看完图继续修改模型，这个测试集就已成为开发依据，不能再把重测分数当独立验收；开发期应看验证残差。
 
 ```python
 import matplotlib.pyplot as plt
@@ -162,6 +180,10 @@ plt.xlabel("预测值"); plt.ylabel("残差")
 
 ## 踩坑排查清单
 
+![合成回归的测试预测与残差，以及 RMSE 和 MAE 的对比](/examples/blog-review-04/regression-diagnostics.svg)
+
+图来自本文的 500 条合成记录与固定 80/20 划分。左图是 100 条预留样本的残差，右图比较同一组误差的两种聚合；不是房价业务结果，也不据此重新调参。复跑 `python examples/blog/review-ml-foundations.py`，脚本执行本文标记代码块，并输出[逐条残差 CSV](/examples/blog-review-04/regression-residuals.csv)和[版本及断言](/examples/blog-review-04/results.json)。
+
 | 症状 | 原因 | 处理 |
 |---|---|---|
 | 系数符号和业务直觉相反 | 多重共线性 | 查 VIF，删/合并相关特征或用岭回归 |
@@ -174,26 +196,26 @@ plt.xlabel("预测值"); plt.ylabel("残差")
 ## 练习
 
 1. 在加州房价数据集（`fetch_california_housing`）上训练线性回归，报告 RMSE 和 R²，并画出残差图诊断。
-2. 计算该数据集的 VIF，找出共线性最强的特征对，删掉其一后对比 R² 变化。
+2. 在训练部分计算含截距的 VIF，检查一列与其余列的线性依赖，再用训练内部 CV 比较保留与删列；不要按最终测试分数决定删谁。
 3. 对比 LinearRegression、Ridge、Lasso 在相同数据上的 5 折交叉验证分数，并用 GridSearchCV 找出两个正则模型的最优 alpha。
 4. 用 `PolynomialFeatures(degree=2)` + Ridge 重做一次，对比 R² 提升幅度和训练耗时。
 
 ## 面试常问
 
 **Q：线性回归的基本假设有哪些？**
-四条：线性关系（特征与标签线性相关）、误差独立同分布且近似正态、误差方差恒定（同方差性）、特征间无强共线性。假设被破坏时模型仍可能"能用"，但系数解读和统计推断会失效——残差图就是用来检查这些假设的。
+先区分拟合与推断：计算最小二乘不要求误差正态；设计矩阵满列秩使系数解唯一。解释无偏性通常要求条件均值设定正确且误差条件均值为零；经典方差公式还依赖同方差、误差不相关等条件。正态假设用于经典有限样本推断，而非“能否训练”。残差图能提示问题，不能证明这些假设成立。
 
 **Q：L1 和 L2 正则的区别，为什么 L1 能产生稀疏解？**
-L1 惩罚系数绝对值之和，其约束区域是菱形，顶点在坐标轴上，最优解容易落在顶点（某些系数恰好为 0）；L2 约束区域是圆形，没有顶点，系数趋于均匀缩小但不归零。所以 Lasso 可做特征选择，Ridge 适合处理共线性。
+二维直觉下，L1 约束是带尖角的菱形，最优解可能落在坐标轴上，得到零系数；L2 约束是圆形，通常不产生稀疏解。收缩并非各原始系数同比例变化，Lasso 选中哪一个相关特征也未必稳定。
 
 **Q：R² 高就代表模型好吗？**
-不一定。训练集 R² 高可能是过拟合；R² 对离群值敏感；加入任何特征（哪怕纯噪声）训练集 R² 都只会升不会降，所以要配合调整 R² 或交叉验证分数看。
+不一定。对同一批数据、相同截距设置、嵌套特征集合的无正则最小二乘，新增列不会增大最优训练平方误差；这不适用于一般正则模型，更不保证验证 R² 提高。应比较训练内部 CV 和最终独立评估。
 
 **Q：什么场景下你会放弃线性回归？**
 特征与标签明显非线性且变换无法掰直；特征数量远超样本量且需要强非线性交互；对预测精度要求极高且不需要解释性。这些场景换树模型（随机森林、梯度提升）或神经网络。
 
 **Q：为什么线性回归对特征尺度敏感？**
-模型本身对尺度不敏感（系数会自适应），但**正则化**对尺度敏感——惩罚项按系数绝对值算，尺度大的特征系数天然小、受的惩罚轻，等于被偏袒。所以用 Ridge/Lasso 之前必须标准化。
+可逆列缩放下，无正则最小二乘的预测理论上不变，数值精度除外。Ridge/Lasso 分别惩罚系数平方和/绝对值之和，缩放会改变惩罚的实际含义，通常应配合标准化；若特意按原始单位设定惩罚，需明确记录理由。
 
 ---
 

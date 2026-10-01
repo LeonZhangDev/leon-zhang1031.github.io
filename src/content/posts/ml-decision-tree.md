@@ -7,11 +7,16 @@ description: "机器学习入门小系列第 3 篇：从信息增益的直觉讲
 tags: ["机器学习", "决策树", "可解释性", "Scikit-learn"]
 categories: ["AI课程", "机器学习"]
 math: true
+updated: 2026-09-20
+verification:
+  status: example-tested
+  checkedAt: 2026-09-20
+  scope: "执行正文 wine 树与剪枝配置、diabetes 回归，另跑训练内深度选择和合成外推实验；未验证真实审批或医疗应用。"
 ---
 
 如果说线性回归是"算出来"的模型，决策树就是"问出来"的模型：它像玩二十个问题游戏一样，不断提问——"面积大于 90 平吗？""房龄小于 10 年吗？"——几个问题之后给出答案。每个问题对应树的一次分裂，答案走到叶子节点就是预测结果。
 
-这种结构带来两个独特优势：**完全不需要特征标准化**（上一篇说过，树只关心排序），以及**决策路径可以完全画出来给业务方看**。信贷审批、医疗辅助诊断这类"必须解释为什么"的场景，树模型至今是刚需。
+树通常无需标准化，并能展示单个预测经过的阈值路径。这说明模型如何得到输出，不证明规则具有因果意义，也不能替代业务适用性、偏差和可靠性审查。
 
 > 前置阅读：[机器学习基础与 Scikit-learn](/posts/ml-basics-scikit-learn/)。本篇是小系列第 3 篇，上一篇是[线性回归](/posts/ml-linear-regression/)。
 
@@ -19,7 +24,7 @@ math: true
 
 核心思想：每次分裂选那个**让数据"变纯净"最多**的问题。纯净度的度量有两种：
 
-**基尼不纯度（Gini）**，Scikit-learn 默认：一个节点里随机抽两个样本，类别不同的概率。纯节点（全是一类）Gini = 0，五五分时最大。
+**基尼不纯度（Gini）**：按节点类别比例独立、有放回地抽两次，类别不同的概率。纯节点为 0；二分类五五分时最大为 0.5，k 类均匀分布时最大为 1−1/k。
 
 $$\text{Gini} = 1 - \sum_{k} p_k^2$$
 
@@ -32,6 +37,7 @@ $$H = -\sum_k p_k \log_2 p_k$$
 ## 上手：训练一棵树并把它画出来
 
 ```python
+# example: tree-setup
 from sklearn.datasets import load_wine
 from sklearn.tree import DecisionTreeClassifier, export_text, plot_tree
 from sklearn.model_selection import train_test_split
@@ -47,7 +53,7 @@ tree = DecisionTreeClassifier(max_depth=3, random_state=42)
 tree.fit(X_train, y_train)
 
 print(f"训练集: {tree.score(X_train, y_train):.3f}")
-print(f"测试集: {tree.score(X_test, y_test):.3f}")
+# 暂不读取测试分数；下方用训练内部 CV 选定深度后再评估。
 
 # 文字版决策规则：可以直接贴给业务方看
 print(export_text(tree, feature_names=list(X.columns)))
@@ -71,6 +77,7 @@ print(export_text(tree, feature_names=list(X.columns)))
 控制规模时，可以从深度和叶子最小样本数开始，再比较剪枝参数。下面参数只是候选配置，不是 wine 数据集的最优结果：
 
 ```python
+# example: tree-pruning
 tree = DecisionTreeClassifier(
     max_depth=5,              # 最多问 5 层问题（最重要）
     min_samples_leaf=5,       # 叶子至少 5 个样本，防"一个样本一个叶子"
@@ -94,10 +101,10 @@ importance = pd.Series(tree.feature_importances_, index=X.columns)
 print(importance.sort_values(ascending=False).head(10))
 ```
 
-计算方式：每个特征在所有分裂中贡献的不纯度下降总量，归一化到和为 1。这个数有两个已知偏见，用的时候要心里有数：
+计算方式：各特征分裂贡献的加权不纯度下降，通常归一化到和为 1；若树完全不分裂，重要性全部为 0。这个数有两个已知偏见：
 
 1. **偏爱取值多的特征**：连续特征和高基数类别特征（比如"用户 ID"这种）可切的位置多，容易被高估。
-2. **相关特征互相稀释**：两个高度相关的特征会分摊重要性，各自都显得不重要，但合起来可能很关键。
+2. **相关特征可互相替代**：重要性可能被分摊，也可能大部分落在先被选中的一列，不能按低重要性断定某列没有信息。
 
 做特征筛选时，重要性只是个参考信号，别当成圣旨。
 
@@ -109,13 +116,14 @@ print(importance.sort_values(ascending=False).head(10))
 
 **外推。** 默认平方误差回归树输出叶子内目标值的均值，所以预测值落在训练目标的范围内。它可以输出某个训练样本从未出现过的均值，但不会沿趋势预测到训练目标范围之外。不要把“不能外推”误解为“只能返回某条旧记录”。
 
-**不稳定。** 数据稍微变一点，树的结构可能大变（第一次分裂选的特征换了，整棵树就面目全非）。这个弱点恰好是随机森林的动机：多棵树投票，把单树的不稳定平均掉。理解了决策树，随机森林就是"种很多棵树 + 每棵只看部分特征 + 投票"。
+**不稳定。** 数据轻微变化可能改变首次分裂乃至后续结构。随机森林通常结合样本自助抽样和**每个节点分裂时**抽取候选特征，再聚合多棵树，缓解单树方差；不是简单规定每棵树永远只能看某几列。
 
 ## 回归树：预测数值也行
 
 默认平方误差回归树按目标值的离散程度选择分裂，叶子输出均值。这里换成连续目标数据，不能沿用前面 wine 的类别编号来解释回归：
 
 ```python
+# example: tree-regression
 from sklearn.tree import DecisionTreeRegressor
 from sklearn.datasets import load_diabetes
 
@@ -130,6 +138,32 @@ print("测试集 R²:", reg.score(Xr_test, yr_test))
 
 前面讲的所有坑（过拟合、不能外推、不稳定）对回归树同样成立。
 
+## 实测：选深度不看测试集，外推单独检验
+
+下面接在 wine 示例之后。之前的两个手设配置仅演示 API，不按它们的测试表现决定参数；这里预先固定候选深度，在训练部分五折比较：
+
+```python
+# example: tree-selection
+from sklearn.model_selection import GridSearchCV, StratifiedKFold
+cv = StratifiedKFold(n_splits=5, shuffle=True, random_state=42)
+depth_search = GridSearchCV(
+    DecisionTreeClassifier(random_state=42),
+    {"max_depth": [1, 3, 5, 10, None]},
+    scoring="f1_macro", cv=cv, return_train_score=True,
+)
+depth_search.fit(X_train, y_train)
+selected_tree = depth_search.best_estimator_
+final_prediction = selected_tree.predict(X_test)  # 参数锁定后一次预测
+```
+
+![Wine 训练内部深度验证曲线与合成数据上的树和直线外推对比](/examples/blog-review-04/tree-boundaries.svg)
+
+左图不是“深度—测试分数”图：每个点只来自 142 条训练样本内部的五折，误差线是折间标准差。最深树不一定最差，不能强行寻找过拟合拐点。最终 36 条预留样本只评估选定配置。
+
+右图是独立的合成实验：仅用 x∈[0,1] 的含噪直线训练，画到 [-0.5,1.5]。回归树输出受训练目标值域限制，边界外成为平台；直线会继续延伸，但只有真实机制保持线性时这种外推才可能合理。不能把“能外推”当作“外推准确”。
+
+复跑 `python examples/blog/review-ml-foundations.py`；脚本执行本文标记代码块，并保存[五折搜索表](/examples/blog-review-04/tree-depths.csv)及[结果与环境](/examples/blog-review-04/results.json)。剪枝配置只做运行检查，未宣称其最优；机制边界另见 [官方树模型说明](https://scikit-learn.org/stable/modules/tree.html)。
+
 ## 踩坑排查清单
 
 | 症状 | 原因 | 处理 |
@@ -143,10 +177,10 @@ print("测试集 R²:", reg.score(Xr_test, yr_test))
 
 ## 练习
 
-1. 在 wine 数据集上对比 `max_depth` 取 1/3/5/10/不限制 时的训练集和测试集分数，画出"深度-分数"曲线，找到过拟合拐点。
+1. 用上面的训练内部 CV 曲线选择深度，再对最终配置评估一次测试集；解释为什么不能画多条测试分数后择优。
 2. 用训练数据生成 `ccp_alpha` 候选值，在训练部分做交叉验证选择 alpha，最后才使用测试集。说明为什么不能按测试分数挑参数。
 3. 构造一份含高基数 ID 类特征的数据，观察它对特征重要性的污染，再删掉重训对比。
-4. 在加州房价数据上分别用线性回归和回归树建模，重点观察树在极端高房价样本上的预测表现（验证"不能外推"）。
+4. 重跑合成外推实验，再把区间外真实机制改为弯曲关系，观察直线为何也会失败。区间内极端值预测差并不足以证明外推机制。
 
 ## 放进贯穿项目：解释哪些论文需要人工复核
 
@@ -157,7 +191,7 @@ print("测试集 R²:", reg.score(Xr_test, yr_test))
 ## 面试常问
 
 **Q：决策树为什么不需要特征标准化？**
-分裂规则只依赖特征取值的排序关系（"x ≤ 3.5 往左"），标准化是单调变换、不改变排序，分裂结果完全一致。这是树相对线性模型、SVM、KNN 的一个便利之处。
+单列阈值切分主要依赖排序，标准化这种线性缩放通常不会改变分区。但浮点精度和并列候选可能影响结果；非线性单调变换还可能改变训练点间的阈值位置，使新样本路由不同。因此无需常规标准化不等于任意变换下预测严格一致。
 
 **Q：信息增益和基尼不纯度有什么区别？**
 数学上都度量节点不纯度，实践中效果接近。Gini 无对数运算、更快，是 sklearn 默认；信息增益有信息论解释。知道有区别即可，实际选型不是关键决策。

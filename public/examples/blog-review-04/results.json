@@ -1,0 +1,100 @@
+{
+  "environment": {
+    "python": "3.13.7",
+    "numpy": "2.2.6",
+    "pandas": "2.3.1",
+    "sklearn": "1.7.1",
+    "statsmodels": "0.14.5",
+    "matplotlib": "3.10.5"
+  },
+  "seed": 42,
+  "scope": "Selected trusted article snippets, bundled datasets and synthetic examples; not full article reproduction",
+  "iris": {
+    "best_C": 10,
+    "test_macro_f1": 1.0,
+    "confusion_matrix": [
+      [
+        10,
+        0,
+        0
+      ],
+      [
+        0,
+        10,
+        0
+      ],
+      [
+        0,
+        0,
+        10
+      ]
+    ],
+    "test_prediction_calls": 1,
+    "training_only_statistics": true,
+    "mixed_missing_and_unknown_passed": true,
+    "trusted_persistence_roundtrip": true
+  },
+  "regression": {
+    "rmse": 11.844391225264046,
+    "mae": 9.741236264210128,
+    "r2": 0.9875679927050918,
+    "coefficients": [
+      3.5311806029841364,
+      -1.2657360064082095,
+      0.29920366419583344
+    ],
+    "vif_with_intercept": [
+      1.003018953064248,
+      1.0045332216374214,
+      1.0030308846812577
+    ],
+    "log_array_shape": [
+      500,
+      4
+    ],
+    "polynomial_features": 9,
+    "constant_target_defaults_checked": true
+  },
+  "trees": {
+    "selected_depth": 5,
+    "wine_test_macro_f1": 0.9457411645054665,
+    "wine_test_prediction_calls": 1,
+    "extrapolation_within_training_target_range": true,
+    "constant_predictions_outside_training_x": true,
+    "diabetes_example_executed": true
+  },
+  "clustering": {
+    "original_model_K": 2,
+    "candidate_count": 6,
+    "new_labels": [
+      0,
+      1
+    ],
+    "inverse_centers_match_raw_means": true,
+    "moons_kmeans_ari": 0.24811860052823909,
+    "moons_dbscan_ari": 1.0,
+    "dbscan_noise": 0,
+    "dbscan_clusters": 2,
+    "scope": "Synthetic geometry only; no business benchmark"
+  },
+  "executed_snippets": [
+    "ml-basics-scikit-learn#iris-setup",
+    "ml-basics-scikit-learn#iris-cv",
+    "ml-basics-scikit-learn#mixed-pipeline",
+    "ml-basics-scikit-learn#iris-search",
+    "ml-basics-scikit-learn#iris-final",
+    "ml-basics-scikit-learn#iris-persistence",
+    "ml-linear-regression#regression-setup",
+    "ml-linear-regression#regression-vif",
+    "ml-linear-regression#regression-regularization",
+    "ml-linear-regression#regression-log",
+    "ml-linear-regression#regression-polynomial",
+    "ml-decision-tree#tree-setup",
+    "ml-decision-tree#tree-pruning",
+    "ml-decision-tree#tree-regression",
+    "ml-decision-tree#tree-selection",
+    "ml-kmeans-clustering#clustering-setup",
+    "ml-kmeans-clustering#clustering-candidates",
+    "ml-kmeans-clustering#clustering-predict"
+  ]
+}

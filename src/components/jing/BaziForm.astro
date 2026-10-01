@@ -1,401 +1,662 @@
 ---
-/**
- * BaziForm — local four-pillars study tool.
- *
- * All calculation runs in the browser; nothing is stored or sent.
- * The result region is ordered 输入摘要 → 盘面 → 推演 → 简释 → 提醒,
- * each collapsible. A copy button produces a plain-text summary that
- * can be pasted into the encrypted notebook.
- */
+/** Bazi study room 2.0 — deterministic local calculation, no network persistence. */
 import { CITIES } from '../../data/jing/cities';
 ---
 
 <form id="bazi-form" class="jing-bazi" autocomplete="off" novalidate>
+  <header class="bazi-form-head">
+    <div><p class="jing-eyebrow">本地排盘 · 输入不会上传</p><h2>立一卷可复核的四柱</h2></div>
+    <label class="bazi-case-label">案卷名（可空）<input id="bazi-label" type="text" maxlength="24" placeholder="例如：旧案复核" /></label>
+  </header>
   <fieldset class="jing-fieldset">
-    <legend>出生时刻</legend>
-    <div class="jing-bazi-grid">
-      <label>年
-        <input id="bazi-year" name="year" type="number" min="1900" max="2100" step="1" placeholder="年" required />
-      </label>
-      <label>月
-        <input id="bazi-month" name="month" type="number" min="1" max="12" step="1" placeholder="月" required />
-      </label>
-      <label>日
-        <input id="bazi-day" name="day" type="number" min="1" max="31" step="1" placeholder="日" required />
-      </label>
-      <label>时
-        <input id="bazi-hour" name="hour" type="number" min="0" max="23" step="1" placeholder="时" required />
-      </label>
-      <label>分
-        <input id="bazi-minute" name="minute" type="number" min="0" max="59" step="1" placeholder="分" required />
-      </label>
+    <legend>一 · 选择输入方式</legend>
+    <div class="bazi-segments" role="radiogroup" aria-label="历法输入方式">
+      <label><input type="radio" name="inputMode" value="solar" checked /><span>公历</span></label>
+      <label><input type="radio" name="inputMode" value="lunar" /><span>农历</span></label>
+      <label><input type="radio" name="inputMode" value="pillars" /><span>已知四柱</span></label>
     </div>
-    <p class="jing-bazi-hint">公历（阳历）时刻，支持 1900—2100 年。示例：1986 年 5 月 29 日 00:00（示例不会自动填入）。</p>
-  </fieldset>
-
-  <fieldset class="jing-fieldset">
-    <legend>时间规则</legend>
-    <div class="jing-bazi-radios" role="radiogroup" aria-label="时刻制度">
-      <label><input type="radio" name="timeMode" value="legal" checked /> 法定时（北京时间）</label>
-      <label><input type="radio" name="timeMode" value="true-solar" /> 真太阳时（按经度修正）</label>
+    <div id="bazi-solar-fields" class="bazi-input-panel">
+      <div class="jing-bazi-grid">
+        <label>年<input id="bazi-year" type="number" min="1900" max="2100" step="1" placeholder="年" /></label>
+        <label>月<input id="bazi-month" type="number" min="1" max="12" step="1" placeholder="月" /></label>
+        <label>日<input id="bazi-day" type="number" min="1" max="31" step="1" placeholder="日" /></label>
+        <label>时<input id="bazi-hour" type="number" min="0" max="23" step="1" placeholder="时" /></label>
+        <label>分<input id="bazi-minute" type="number" min="0" max="59" step="1" placeholder="分" /></label>
+      </div><p class="jing-bazi-hint">支持 1900—2100 年；精确时刻未知时可勾选下方“分钟未知”。</p>
     </div>
-    <div class="jing-bazi-place" id="bazi-place" hidden>
-      <label>城市
-        <select id="bazi-city">
-          {CITIES.map((city) => (
-            <option value={city.longitude}>{city.name}（{city.longitude}°E）</option>
-          ))}
-          <option value="manual">手动输入经度</option>
-        </select>
-      </label>
-      <label>东经（度）
-        <input id="bazi-longitude" type="number" min="70" max="140" step="0.01" value={CITIES[0].longitude} />
-      </label>
+    <div id="bazi-lunar-fields" class="bazi-input-panel" hidden>
+      <div class="jing-bazi-grid">
+        <label>农历年<input id="bazi-lunar-year" type="number" min="1900" max="2100" step="1" /></label>
+        <label>月<input id="bazi-lunar-month" type="number" min="1" max="12" step="1" /></label>
+        <label>日<input id="bazi-lunar-day" type="number" min="1" max="30" step="1" /></label>
+        <label>时<input id="bazi-lunar-hour" type="number" min="0" max="23" step="1" /></label>
+        <label>分<input id="bazi-lunar-minute" type="number" min="0" max="59" step="1" /></label>
+      </div><label class="bazi-check"><input id="bazi-leap-month" type="checkbox" /> 此月为闰月（若该年无此闰月会明确报错）</label>
     </div>
-    <div class="jing-bazi-radios" role="radiogroup" aria-label="晚子时规则">
-      <span class="jing-bazi-radio-title">晚子时（23:00—24:00）：</span>
-      <label><input type="radio" name="lateZi" value="next-day" checked /> 归次日（23 点换日）</label>
-      <label><input type="radio" name="lateZi" value="same-day" /> 不换日（0 点换日）</label>
+    <div id="bazi-pillar-fields" class="bazi-input-panel" hidden>
+      <div class="jing-bazi-grid bazi-pillar-inputs">
+        <label>年柱<input id="bazi-year-pillar" maxlength="2" placeholder="如 丙寅" /></label>
+        <label>月柱<input id="bazi-month-pillar" maxlength="2" placeholder="如 癸巳" /></label>
+        <label>日柱<input id="bazi-day-pillar" maxlength="2" placeholder="如 癸酉" /></label>
+        <label>时柱<input id="bazi-hour-pillar" maxlength="2" placeholder="如 壬子" /></label>
+      </div><p class="jing-bazi-hint">只接受六十甲子中的有效组合。已知四柱没有出生时刻，故不生成起运、大运和流年。</p>
     </div>
   </fieldset>
-
-  <div class="jing-bazi-actions">
-    <button type="submit" id="bazi-submit" class="jing-btn jing-btn-primary">排盘</button>
-    <button type="button" id="bazi-now" class="jing-btn">填入此刻</button>
-    <button type="reset" class="jing-btn">清空</button>
-    <span id="bazi-status" class="jing-calc-status" role="status" aria-live="polite">填写公历时刻后排盘</span>
-  </div>
-
+  <fieldset id="bazi-profile-rules" class="jing-fieldset">
+    <legend>二 · 起运依据</legend>
+    <div class="jing-bazi-radios" role="radiogroup" aria-label="性别">
+      <span class="jing-bazi-radio-title">性别（用于顺逆排）：</span>
+      <label><input type="radio" name="gender" value="male" checked /> 男</label>
+      <label><input type="radio" name="gender" value="female" /> 女</label>
+      <label class="bazi-check"><input id="bazi-unknown-minute" type="checkbox" /> 分钟未知，以 00 分暂排</label>
+    </div>
+  </fieldset>
+  <details id="bazi-calibration" class="bazi-calibration">
+    <summary>三 · 校准设置 <small>法定时 / 真太阳时 / 晚子时 / 起运法</small></summary>
+    <div class="bazi-calibration-body">
+      <div class="jing-bazi-radios" role="radiogroup" aria-label="时刻制度">
+        <label><input type="radio" name="timeMode" value="legal" checked /> 法定时（北京时间）</label>
+        <label><input type="radio" name="timeMode" value="true-solar" /> 真太阳时（按经度修正）</label>
+      </div>
+      <div class="jing-bazi-place" id="bazi-place" hidden>
+        <label>城市<select id="bazi-city">{CITIES.map((city) => <option value={city.longitude}>{city.name}（{city.longitude}°E）</option>)}<option value="manual">手动输入经度</option></select></label>
+        <label>东经（度）<input id="bazi-longitude" type="number" min="70" max="140" step="0.01" value={CITIES[0].longitude} /></label>
+      </div>
+      <p id="bazi-time-preview" class="bazi-time-preview">法定时不作经度校正。</p>
+      <div class="jing-bazi-radios" role="radiogroup" aria-label="晚子时规则"><span class="jing-bazi-radio-title">晚子时：</span><label><input type="radio" name="lateZi" value="next-day" checked /> 23 点换日</label><label><input type="radio" name="lateZi" value="same-day" /> 0 点换日</label></div>
+      <div class="jing-bazi-radios" role="radiogroup" aria-label="起运算法"><span class="jing-bazi-radio-title">起运法：</span><label><input type="radio" name="luckSect" value="2" checked /> 分钟折算（推荐）</label><label><input type="radio" name="luckSect" value="1" /> 时辰折算（传统）</label></div>
+    </div>
+  </details>
+  <div class="jing-bazi-actions"><button type="submit" id="bazi-submit" class="jing-btn jing-btn-primary">排盘</button><button type="button" id="bazi-now" class="jing-btn">填入此刻</button><button type="reset" class="jing-btn">清空</button><span id="bazi-status" class="jing-calc-status" role="status" aria-live="polite">选择输入方式后排盘</span></div>
   <p id="bazi-error" class="jing-bazi-error" role="alert" hidden></p>
 </form>
 
 <section id="bazi-result" class="jing-bazi-result" hidden aria-live="polite" tabindex="-1">
-  <header class="jing-study-result-head">
-    <div><p class="jing-eyebrow">本地推演 · bazi-1.0.0</p><h2 class="jing-calc-result-title">八字排盘结果</h2></div>
-    <button type="button" id="bazi-edit" class="jing-btn">重新编辑</button>
-  </header>
-  <details id="bazi-sec-summary" open>
-    <summary>输入摘要</summary>
-    <p id="bazi-summary-text"></p>
-    <button type="button" id="bazi-copy" class="jing-btn">复制摘要（可粘贴到笔记）</button>
-    <span id="bazi-copy-state" class="jing-bazi-copy-state" role="status"></span>
+  <header class="jing-study-result-head"><div><p class="jing-eyebrow">本地推演 · bazi-2.0.0</p><h2 class="jing-calc-result-title">八字排盘结果</h2></div><div class="jing-study-result-tools"><button type="button" id="bazi-edit" class="jing-btn">修改输入</button></div></header>
+  <nav class="bazi-view-tabs" aria-label="盘面层级"><button type="button" data-bazi-view="basic" class="is-active" aria-pressed="true">基础盘</button><button type="button" data-bazi-view="pro" aria-pressed="false">专业盘</button></nav>
+  <details id="bazi-sec-summary" open><summary>输入摘要</summary><p id="bazi-summary-text"></p><p class="bazi-privacy-note">隐私分享会自动移除出生日期、地点与案卷名，只保留盘面结构。</p><div class="bazi-result-actions"><button type="button" id="bazi-copy" class="jing-btn">复制隐私摘要</button><button type="button" id="bazi-share-image" class="jing-btn">保存隐私分享图</button><button type="button" id="bazi-save-case" class="jing-btn">存入手札案卷</button><button type="button" class="jing-term-chip" data-jing-term="four-pillars">问典：四柱</button></div><span id="bazi-copy-state" class="jing-bazi-copy-state" role="status"></span></details>
+  <details id="bazi-sec-pillars" open><summary>盘面</summary><div id="bazi-pillars" class="jing-bazi-pillars"></div><p id="bazi-elements" class="jing-bazi-elements"></p><div id="bazi-element-bars" class="jing-bazi-element-bars" aria-label="五行分布比例"></div><section id="bazi-interpret" class="jing-bazi-interpret"></section><section class="bazi-pro-only" hidden><h3>专业层说明</h3><p>藏干、纳音与旬空按固定表逐柱列出；神煞因流派表差异较大，本版不作自动吉凶判定。</p></section></details>
+  <details id="bazi-sec-luck" class="bazi-pro-only" hidden open>
+    <summary>岁运与干支关系</summary>
+    <section id="bazi-luck-wrap">
+      <header class="bazi-section-head">
+        <div><h3>大运</h3><p id="bazi-luck-meta"></p></div>
+        <button id="bazi-luck-current" type="button" class="jing-btn">定位当下</button>
+      </header>
+      <div id="bazi-dayun-timeline" class="bazi-timeline" role="group" aria-label="大运时间轴"></div>
+      <h3>流年</h3>
+      <div id="bazi-liunian-timeline" class="bazi-timeline bazi-liunian" role="group" aria-label="流年时间轴"></div>
+      <details class="bazi-month-panel">
+        <summary>展开流月</summary>
+        <p class="jing-bazi-hint">按十二节换月；正月至十二月为节令月标记，与农历月初不重合。</p>
+        <div id="bazi-liuyue-timeline" class="bazi-timeline bazi-liunian" role="group" aria-label="流月时间轴"></div>
+      </details>
+    </section>
+    <p id="bazi-luck-empty" class="bazi-empty" hidden>已知四柱模式缺少出生日期，因此无法计算起运时点。可继续查看本命干支关系。</p>
+    <section class="bazi-relation-panel">
+      <header class="bazi-section-head">
+        <div><h3>干支关系图</h3><p>点击柱位或关系可高亮对应连线；绿为合会、赭为冲刑害破。</p></div>
+        <button id="bazi-ask-current" type="button" class="jing-btn">问典：当前结构</button>
+      </header>
+      <div id="bazi-relation-nodes" class="bazi-relation-nodes"></div>
+      <svg id="bazi-relation-svg" class="bazi-relation-svg" viewBox="0 0 650 290" role="img" aria-label="干支关系连线图"></svg>
+      <ul id="bazi-relations" class="bazi-relation-list"></ul>
+    </section>
   </details>
-
-  <details id="bazi-sec-pillars" open>
-    <summary>盘面</summary>
-    <div id="bazi-pillars" class="jing-bazi-pillars"></div>
-    <p id="bazi-elements" class="jing-bazi-elements"></p>
-    <div id="bazi-element-bars" class="jing-bazi-element-bars" aria-label="五行分布比例"></div>
-    <div class="jing-bazi-year-index">
-      <h3>近年流年索引</h3>
-      <p>按立春换年惯例列干支索引；此处不推算大运起运，以免在缺少性别与起运规则时给出伪精确结果。</p>
-      <div id="bazi-year-timeline" class="jing-bazi-year-timeline"></div>
-    </div>
-  </details>
-
-  <details id="bazi-sec-derivation">
-    <summary>推演</summary>
-    <ol id="bazi-derivation" class="jing-bazi-derivation"></ol>
-  </details>
-
-  <details id="bazi-sec-reading">
-    <summary>简释</summary>
-    <div id="bazi-interpret" class="jing-bazi-interpret"></div>
-  </details>
-
-  <details id="bazi-sec-reminders">
-    <summary>提醒</summary>
-    <ul id="bazi-reminders" class="jing-bazi-reminders"></ul>
-  </details>
+  <details id="bazi-sec-derivation" class="bazi-pro-only" hidden><summary>推演依据</summary><ol id="bazi-derivation" class="jing-bazi-derivation"></ol></details>
+  <details id="bazi-sec-reminders" open><summary>边界与提醒</summary><ul id="bazi-reminders" class="jing-bazi-reminders"></ul></details>
 </section>
 
 <script>
-  import { calculateBazi } from '../../lib/jing/bazi/calculate';
-  import { interpretBazi } from '../../lib/jing/bazi/interpret';
-
-  const form = document.getElementById('bazi-form') as HTMLFormElement | null;
-  if (form) {
-    const $ = <T extends HTMLElement>(id: string) => document.getElementById(id) as T;
-    const result = $('bazi-result');
-    const errorEl = $('bazi-error');
-    const statusEl = $('bazi-status');
-    const submitBtn = $('bazi-submit') as HTMLButtonElement;
-    const place = $('bazi-place');
-    const city = $('bazi-city') as HTMLSelectElement;
-    const longitude = $('bazi-longitude') as HTMLInputElement;
-    const timeFieldIds = ['bazi-year', 'bazi-month', 'bazi-day', 'bazi-hour', 'bazi-minute'] as const;
-
-    const showError = (message: string) => {
-      errorEl.textContent = message;
-      errorEl.hidden = false;
-      result.hidden = true;
-      statusEl.textContent = '排盘未完成，请检查输入。';
-      statusEl.classList.add('is-error');
-    };
-    const clearError = () => {
-      errorEl.textContent = '';
-      errorEl.hidden = true;
-      statusEl.classList.remove('is-error');
-    };
-
-    form.addEventListener('change', (event) => {
-      const target = event.target as HTMLInputElement;
-      if (target.name === 'timeMode') {
-        place.hidden = target.value !== 'true-solar';
-      }
-    });
-    city.addEventListener('change', () => {
-      if (city.value !== 'manual') longitude.value = city.value;
-    });
-    longitude.addEventListener('input', () => {
-      city.value = 'manual';
-    });
-
-    $('bazi-now').addEventListener('click', () => {
-      const now = new Date();
-      const values = [now.getFullYear(), now.getMonth() + 1, now.getDate(), now.getHours(), now.getMinutes()];
-      timeFieldIds.forEach((id, index) => { ($<HTMLInputElement>(id)).value = String(values[index]); });
-      clearError();
-      statusEl.textContent = '已填入本机此刻 · 可按需要调整后排盘';
-    });
-
-    const PILLAR_NAMES: Record<string, string> = { year: '年柱', month: '月柱', day: '日柱', hour: '时柱' };
-
-    form.addEventListener('submit', (event) => {
-      event.preventDefault();
-      clearError();
-      submitBtn.disabled = true;
-      submitBtn.textContent = '排盘中…';
-      statusEl.textContent = '正在按所选时间规则推演四柱…';
-      try {
-        const missing = timeFieldIds.find((id) => !$<HTMLInputElement>(id).value.trim());
-        if (missing) {
-          $<HTMLInputElement>(missing).focus();
-          throw new Error('请完整填写年、月、日、时、分后再排盘。');
-        }
-        const timeMode = (form.querySelector('input[name="timeMode"]:checked') as HTMLInputElement).value as 'legal' | 'true-solar';
-        const lateZi = (form.querySelector('input[name="lateZi"]:checked') as HTMLInputElement).value as 'same-day' | 'next-day';
-        const input = {
-          year: Number(($('bazi-year') as HTMLInputElement).value),
-          month: Number(($('bazi-month') as HTMLInputElement).value),
-          day: Number(($('bazi-day') as HTMLInputElement).value),
-          hour: Number(($('bazi-hour') as HTMLInputElement).value),
-          minute: Number(($('bazi-minute') as HTMLInputElement).value),
-          timeMode,
-          lateZi,
-          ...(timeMode === 'true-solar' ? { longitude: Number(longitude.value) } : {}),
-        };
-
-        const envelope = calculateBazi(input);
-        const reading = interpretBazi(envelope);
-        const { pillars } = envelope.output;
-
-        const p = (n: number) => String(n).padStart(2, '0');
-        const modeLabel = timeMode === 'legal' ? '法定时' : `真太阳时（${Number(longitude.value).toFixed(2)}°E）`;
-        const ziLabel = lateZi === 'next-day' ? '晚子时归次日' : '晚子时不换日';
-        $('bazi-summary-text').textContent =
-          `${input.year}-${p(input.month)}-${p(input.day)} ${p(input.hour)}:${p(input.minute)} · ${modeLabel} · ${ziLabel}`
-          + ` → ${pillars.year} / ${pillars.month} / ${pillars.day} / ${pillars.hour}`
-          + `（日主${envelope.output.dayMaster.stem}${envelope.output.dayMaster.element}）`;
-
-        $('bazi-pillars').innerHTML = (['year', 'month', 'day', 'hour'] as const).map((key, i) => {
-          const god = key === 'day' ? '日主' : envelope.output.tenGods[key];
-          const detail = envelope.output.pillarDetails[key];
-          const hidden = detail.hiddenStems.map((item) => `${item.stem}<small>${item.tenGod}</small>`).join('');
-          return `<article class="jing-bazi-pillar" style="animation-delay:${i * 90}ms">`
-            + `<header><span class="jing-bazi-pillar-name">${PILLAR_NAMES[key]}</span><span class="jing-bazi-pillar-god">${god}</span></header>`
-            + `<div class="jing-bazi-ganzhi"><strong>${detail.stem}</strong><strong>${detail.branch}</strong></div>`
-            + `<dl><div><dt>藏干</dt><dd>${hidden}</dd></div><div><dt>纳音</dt><dd>${detail.naYin}</dd></div></dl></article>`;
-        }).join('');
-        $('bazi-elements').textContent = '五行分布：'
-          + Object.entries(envelope.output.elements).map(([k, v]) => `${k}${v}`).join('　');
-        const maxElement = Math.max(...Object.values(envelope.output.elements), 1);
-        $('bazi-element-bars').innerHTML = Object.entries(envelope.output.elements)
-          .map(([name, value], index) => `<div class="jing-bazi-element-bar" style="--bar-delay:${index * 90}ms">`
-            + `<span>${name}</span><i><b style="--bar-size:${(value / maxElement) * 100}%"></b></i><em>${value}</em></div>`)
-          .join('');
-
-        const stems = ['甲', '乙', '丙', '丁', '戊', '己', '庚', '辛', '壬', '癸'];
-        const branches = ['子', '丑', '寅', '卯', '辰', '巳', '午', '未', '申', '酉', '戌', '亥'];
-        const currentYear = new Date().getFullYear();
-        const yearGanzhi = (year: number) => {
-          const offset = ((year - 1984) % 60 + 60) % 60;
-          return `${stems[offset % 10]}${branches[offset % 12]}`;
-        };
-        $('bazi-year-timeline').innerHTML = Array.from({ length: 9 }, (_, index) => currentYear - 4 + index)
-          .map((year) => `<span${year === currentYear ? ' class="is-current"' : ''}><b>${yearGanzhi(year)}</b><i>${year}</i></span>`)
-          .join('');
-
-        $('bazi-derivation').innerHTML = envelope.derivation
-          .map((step) => `<li><strong>${step.label}</strong><span>${step.rule}</span><em>${step.value}</em></li>`)
-          .join('');
-
-        $('bazi-interpret').innerHTML = [
-          `<p>${reading.dayMaster}</p>`,
-          ...reading.elementBalance.map((line) => `<p>${line}</p>`),
-          ...reading.tenGods.map((line) => `<p>${line}</p>`),
-        ].join('');
-
-        $('bazi-reminders').innerHTML = reading.reminders.map((line) => `<li>${line}</li>`).join('');
-
-        $('bazi-copy-state').textContent = '';
-        result.hidden = false;
-        statusEl.textContent = `排盘完成 · ${pillars.year}、${pillars.month}、${pillars.day}、${pillars.hour}`;
-        result.focus({ preventScroll: true });
-        result.scrollIntoView({
-          block: 'start',
-          behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth',
-        });
-      } catch (error) {
-        showError(error instanceof Error ? error.message : '输入无法解析，请检查后重试。');
-      } finally {
-        submitBtn.disabled = false;
-        submitBtn.textContent = '重新排盘';
-      }
-    });
-
-    form.addEventListener('reset', () => {
-      clearError();
-      result.hidden = true;
-      place.hidden = true;
-      city.selectedIndex = 0;
-      longitude.value = city.value;
-      submitBtn.textContent = '排盘';
-      statusEl.textContent = '填写公历时刻后排盘';
-      statusEl.classList.remove('is-error');
-    });
-
-    $('bazi-copy').addEventListener('click', async () => {
-      const text = $('bazi-summary-text').textContent ?? '';
-      const state = $('bazi-copy-state');
-      try {
-        await navigator.clipboard.writeText(text);
-        state.innerHTML = '已复制。<a class="jing-note-link" href="/jing/notes/">去笔记房粘贴 →</a>';
-      } catch {
-        state.textContent = '复制失败，请手动选择文本复制。';
-      }
-    });
-
-    // nothing persists: a fresh page load always starts empty
-    window.addEventListener('pageshow', () => {
-      form.reset();
-      clearError();
-      result.hidden = true;
-      submitBtn.textContent = '排盘';
-      statusEl.textContent = '填写公历时刻后排盘';
-    });
-
-    $('bazi-edit').addEventListener('click', () => {
-      form.scrollIntoView({ block: 'start', behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
-      ($('bazi-year') as HTMLInputElement).focus({ preventScroll: true });
-    });
-  }
+  import "../../lib/jing/bazi/controller";
 </script>
 
-<style>
-  .jing-bazi { display: flex; flex-direction: column; gap: 1.25rem; }
-
-  .jing-fieldset {
-    border: 1px solid var(--jing-border);
-    border-radius: var(--jing-radius);
-    padding: 1rem 1.1rem 1.2rem;
-    background: var(--jing-bg-raised);
+<style is:global>
+.jing-route-bazi .jing-bazi {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+.jing-route-bazi .bazi-form-head,
+.jing-route-bazi .jing-study-result-head,
+.jing-route-bazi .bazi-section-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+}
+.jing-route-bazi .bazi-form-head h2,
+.jing-route-bazi .bazi-section-head h3 {
+  margin: 0;
+  font-weight: 500;
+  color: var(--jing-accent);
+}
+.jing-route-bazi .bazi-case-label {
+  width: min(17rem, 40%);
+  font: 0.72rem var(--jing-font-ui);
+  color: var(--jing-text-dim);
+}
+.jing-route-bazi .jing-fieldset,
+.jing-route-bazi .bazi-calibration {
+  border: 1px solid var(--jing-border);
+  border-radius: var(--jing-radius);
+  padding: 1rem 1.1rem 1.2rem;
+  background: var(--jing-bg-raised);
+}
+.jing-route-bazi .jing-fieldset legend {
+  padding: 0 0.5em;
+  color: var(--jing-text-dim);
+  letter-spacing: 0.2em;
+  font-size: 0.82rem;
+}
+.jing-route-bazi .bazi-segments,
+.jing-route-bazi .bazi-view-tabs {
+  display: inline-flex;
+  gap: 0.25rem;
+  padding: 0.2rem;
+  border: 1px solid var(--jing-border);
+  background: #08060459;
+}
+.jing-route-bazi .bazi-segments input {
+  position: static;
+  opacity: 1;
+}
+.jing-route-bazi .bazi-segments span,
+.jing-route-bazi .bazi-view-tabs button {
+  display: block;
+  min-width: 5rem;
+  padding: 0.5rem 0.9rem;
+  border: 0;
+  color: var(--jing-text-dim);
+  background: transparent;
+  text-align: center;
+  cursor: pointer;
+}
+.jing-route-bazi .bazi-segments input:checked + span,
+.jing-route-bazi .bazi-segments input:focus-visible + span,
+.jing-route-bazi .bazi-view-tabs button.is-active {
+  color: #f0d59e;
+  background: linear-gradient(#97642473, #5b38124d);
+  outline: 1px solid #c4914180;
+}
+.jing-route-bazi .bazi-input-panel {
+  margin-top: 1rem;
+}
+.jing-route-bazi .bazi-input-panel[hidden],
+.jing-route-bazi .jing-bazi-place[hidden],
+.jing-route-bazi .jing-bazi-result[hidden],
+.jing-route-bazi .bazi-pro-only[hidden] {
+  display: none !important;
+}
+.jing-route-bazi .jing-bazi-grid {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 0.65rem;
+}
+.jing-route-bazi .bazi-pillar-inputs {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+.jing-route-bazi .jing-bazi label,
+.jing-route-bazi .bazi-case-label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+.jing-route-bazi .jing-bazi input,
+.jing-route-bazi .jing-bazi select {
+  width: 100%;
+  box-sizing: border-box;
+  border: 1px solid var(--jing-border);
+  border-radius: 5px;
+  padding: 0.52rem 0.55rem;
+  color: var(--jing-text);
+  background: var(--jing-bg-card);
+  font: 0.9rem var(--jing-font-ui);
+}
+.jing-route-bazi .jing-bazi input:focus-visible,
+.jing-route-bazi .jing-bazi select:focus-visible,
+.jing-route-bazi .bazi-view-tabs button:focus-visible {
+  outline: 2px solid var(--jing-accent);
+  outline-offset: 2px;
+}
+.jing-route-bazi .bazi-segments { flex-wrap: wrap; }
+.jing-route-bazi .bazi-segments label { flex-direction: row; align-items: center; gap: 0; }
+.jing-route-bazi .bazi-segments input { width: 14px; height: 14px; padding: 0; margin: 0 0 0 .4rem; accent-color: #b18a45; }
+.jing-route-bazi .bazi-segments span { min-width: 3.8rem; padding: .5rem .45rem; }
+.jing-route-bazi .jing-bazi-hint,
+.jing-route-bazi .bazi-time-preview,
+.jing-route-bazi .bazi-privacy-note,
+.jing-route-bazi .bazi-section-head p,
+.jing-route-bazi .bazi-empty {
+  margin: 0.65rem 0 0;
+  color: var(--jing-text-dim);
+  font: 0.72rem/1.7 var(--jing-font-ui);
+}
+.jing-route-bazi .bazi-check {
+  flex-direction: row !important;
+  align-items: center;
+  margin-top: 0.75rem;
+  font: 0.78rem var(--jing-font-ui);
+}
+.jing-route-bazi .bazi-check input {
+  width: auto;
+}
+.jing-route-bazi .jing-bazi-radios {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.65rem 1.2rem;
+  font: 0.8rem var(--jing-font-ui);
+}
+.jing-route-bazi .jing-bazi-radios label {
+  flex-direction: row;
+  align-items: center;
+}
+.jing-route-bazi .jing-bazi-radios input {
+  width: auto;
+}
+.jing-route-bazi .jing-bazi-radio-title {
+  color: var(--jing-text-dim);
+}
+.jing-route-bazi .bazi-calibration {
+  padding: 0;
+}
+.jing-route-bazi .bazi-calibration summary {
+  cursor: pointer;
+  padding: 0.9rem 1rem;
+  color: var(--jing-accent);
+  letter-spacing: 0.12em;
+}
+.jing-route-bazi .bazi-calibration summary small {
+  margin-left: 0.7rem;
+  color: var(--jing-text-dim);
+  letter-spacing: 0;
+}
+.jing-route-bazi .bazi-calibration-body {
+  display: grid;
+  gap: 0.9rem;
+  padding: 0 1rem 1rem;
+}
+.jing-route-bazi .jing-bazi-place {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.6rem;
+}
+.jing-route-bazi .jing-bazi-actions,
+.jing-route-bazi .bazi-result-actions,
+.jing-route-bazi .jing-study-result-tools {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.6rem;
+}
+.jing-route-bazi .jing-calc-status {
+  color: var(--jing-accent);
+  font: 0.72rem var(--jing-font-ui);
+}
+.jing-route-bazi .jing-calc-status.is-error,
+.jing-route-bazi .jing-bazi-error {
+  color: var(--jing-vermilion);
+}
+.jing-route-bazi .jing-bazi-error {
+  margin: 0;
+  padding: 0.7rem 0.9rem;
+  border: 1px solid var(--jing-vermilion);
+  border-radius: 6px;
+  font: 0.84rem var(--jing-font-ui);
+}
+.jing-route-bazi .jing-bazi-result {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-top: 1.5rem;
+}
+.jing-route-bazi .jing-calc-result-title {
+  margin: 0;
+  color: var(--jing-accent);
+  font-size: 1.1rem;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+}
+.jing-route-bazi .jing-bazi-result > details {
+  border: 1px solid var(--jing-border);
+  border-radius: var(--jing-radius);
+  padding: 0.6rem 1rem 0.9rem;
+  background: var(--jing-bg-raised);
+}
+.jing-route-bazi .jing-bazi-result > details > summary {
+  cursor: pointer;
+  padding: 0.4rem 0;
+  color: var(--jing-accent);
+  letter-spacing: 0.2em;
+}
+.jing-route-bazi .bazi-view-tabs {
+  align-self: flex-start;
+}
+.jing-route-bazi .jing-bazi-pillars {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.6rem;
+  margin: 0.7rem 0;
+}
+.jing-route-bazi .jing-bazi-pillar {
+  border: 1px solid var(--jing-border);
+  border-radius: 8px;
+  padding: 0.75rem 0.55rem;
+  background: var(--jing-bg-card);
+  animation: bazi-rise 0.5s ease both;
+}
+.jing-route-bazi .jing-bazi-pillar header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: var(--jing-text-dim);
+  font-size: 0.7rem;
+}
+.jing-route-bazi .jing-bazi-pillar header button {
+  border: 0;
+  border-bottom: 1px dotted var(--jing-accent);
+  color: var(--jing-accent);
+  background: transparent;
+  cursor: pointer;
+}
+.jing-route-bazi .jing-bazi-ganzhi {
+  display: grid;
+  place-items: center;
+  gap: 0.15rem;
+  padding: 0.55rem 0;
+}
+.jing-route-bazi .jing-bazi-ganzhi strong {
+  color: var(--jing-text);
+  font-size: 1.65rem;
+  letter-spacing: 0.12em;
+}
+.jing-route-bazi .jing-bazi-pillar dl {
+  display: grid;
+  gap: 0.35rem;
+  margin: 0;
+}
+.jing-route-bazi .jing-bazi-result[data-view="basic"] .jing-bazi-pillar dl {
+  display: none;
+}
+.jing-route-bazi .jing-bazi-pillar dl div {
+  display: grid;
+  grid-template-columns: 2.3rem 1fr;
+  gap: 0.3rem;
+}
+.jing-route-bazi .jing-bazi-pillar dt {
+  color: var(--jing-text-dim);
+  font: 0.62rem var(--jing-font-ui);
+}
+.jing-route-bazi .jing-bazi-pillar dd {
+  margin: 0;
+  font-size: 0.72rem;
+}
+.jing-route-bazi .jing-bazi-pillar dd span {
+  margin-right: 0.35rem;
+  white-space: nowrap;
+}
+.jing-route-bazi .jing-bazi-pillar dd small {
+  margin-left: 0.1rem;
+  color: var(--jing-text-dim);
+}
+.jing-route-bazi .jing-bazi-element-bars {
+  display: grid;
+  gap: 0.4rem;
+  max-width: 42rem;
+}
+.jing-route-bazi .jing-bazi-element-bar {
+  display: grid;
+  grid-template-columns: 1.5rem 1fr 1.2rem;
+  gap: 0.5rem;
+  align-items: center;
+  font-size: 0.75rem;
+}
+.jing-route-bazi .jing-bazi-element-bar i {
+  height: 5px;
+  overflow: hidden;
+  background: #fff1;
+}
+.jing-route-bazi .jing-bazi-element-bar b {
+  display: block;
+  width: var(--bar-size);
+  height: 100%;
+  background: linear-gradient(90deg, #82551e, #d0a04e);
+  animation: bazi-bar 0.7s ease var(--bar-delay) both;
+}
+.jing-route-bazi .jing-bazi-element-bar em {
+  color: var(--jing-text-dim);
+  font-style: normal;
+}
+.jing-route-bazi .jing-bazi-interpret {
+  margin-top: 1rem;
+  padding-top: 0.65rem;
+  border-top: 1px solid var(--jing-border);
+}
+.jing-route-bazi .jing-bazi-interpret p,
+.jing-route-bazi .jing-bazi-elements {
+  margin: 0.45rem 0;
+  line-height: 1.8;
+}
+.jing-route-bazi .bazi-section-head h3 {
+  font-size: 0.95rem;
+}
+.jing-route-bazi .bazi-timeline {
+  display: flex;
+  gap: 0.45rem;
+  overflow-x: auto;
+  padding: 0.6rem 0.1rem 1rem;
+  scroll-snap-type: x proximity;
+}
+.jing-route-bazi .bazi-timeline button {
+  flex: 0 0 7.2rem;
+  display: grid;
+  gap: 0.25rem;
+  scroll-snap-align: start;
+  border: 1px solid var(--jing-border);
+  padding: 0.65rem 0.45rem;
+  color: var(--jing-text);
+  background: var(--jing-bg-card);
+  cursor: pointer;
+}
+.jing-route-bazi .bazi-timeline button b {
+  color: var(--jing-accent);
+  font-size: 1.05rem;
+}
+.jing-route-bazi .bazi-timeline button span,
+.jing-route-bazi .bazi-timeline button small {
+  color: var(--jing-text-dim);
+  font: 0.65rem var(--jing-font-ui);
+}
+.jing-route-bazi .bazi-timeline button.is-selected {
+  border-color: var(--jing-accent);
+  box-shadow: inset 0 0 20px #ae742727;
+  transform: translateY(-2px);
+}
+.jing-route-bazi .bazi-timeline button.is-current small:after {
+  content: " · 当下";
+  color: var(--jing-vermilion);
+}
+.jing-route-bazi .bazi-liunian button {
+  flex-basis: 5.5rem;
+}
+.jing-route-bazi .bazi-relation-panel {
+  margin-top: 1rem;
+  border-top: 1px solid var(--jing-border);
+  padding-top: 1rem;
+}
+.jing-route-bazi .bazi-relation-nodes {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 0.45rem;
+  margin: 0.8rem 0;
+}
+.jing-route-bazi .bazi-relation-nodes button {
+  border: 1px solid var(--jing-border);
+  padding: 0.6rem 0.3rem;
+  color: var(--jing-text);
+  background: var(--jing-bg-card);
+}
+.jing-route-bazi .bazi-relation-nodes button.is-current {
+  border-color: #bf7e2bb3;
+  background: #d5b57880;
+}
+.jing-route-bazi .bazi-relation-nodes button.is-highlighted,
+.jing-route-bazi .bazi-relation-list li.is-highlighted {
+  outline: 1px solid var(--jing-accent);
+  background: rgba(150, 100, 36, 0.2);
+}
+.jing-route-bazi .bazi-relation-svg {
+  display: block;
+  width: 100%;
+  max-height: 290px;
+  margin: 0.5rem 0 1rem;
+  border-bottom: 1px solid var(--jing-border);
+  background: #211a12;
+  border-radius: 4px;
+}
+.jing-route-bazi .bazi-relation-svg path {
+  transition:
+    opacity 0.2s ease,
+    stroke-width 0.2s ease;
+}
+.jing-route-bazi .bazi-month-panel {
+  margin: 0.5rem 0;
+}
+.jing-route-bazi .bazi-month-panel > summary {
+  cursor: pointer;
+  color: var(--jing-accent);
+}
+.jing-route-bazi .bazi-relation-nodes small,
+.jing-route-bazi .bazi-relation-nodes b {
+  display: block;
+}
+.jing-route-bazi .bazi-relation-nodes small {
+  color: var(--jing-text-dim);
+  font: 0.58rem var(--jing-font-ui);
+}
+.jing-route-bazi .bazi-relation-nodes b {
+  margin-top: 0.3rem;
+  color: var(--jing-accent);
+  font-size: 1.05rem;
+}
+.jing-route-bazi .bazi-relation-list {
+  display: grid;
+  gap: 0.4rem;
+  padding: 0;
+  list-style: none;
+}
+.jing-route-bazi .bazi-relation-list li {
+  display: grid;
+  grid-template-columns: 5.5rem 1fr;
+  gap: 0.6rem;
+  border-left: 2px solid #8b6b3a;
+  padding: 0.45rem 0.65rem;
+  background: #fff1;
+}
+.jing-route-bazi .bazi-relation-list li.is-union {
+  border-color: #7a9c4a;
+}
+.jing-route-bazi .bazi-relation-list li.is-clash {
+  border-color: #a45138;
+}
+.jing-route-bazi .bazi-relation-list strong,
+.jing-route-bazi .bazi-relation-list button {
+  color: var(--jing-accent);
+  font-size: 0.78rem;
+}
+.jing-route-bazi .bazi-relation-list button {
+  border: 0;
+  padding: 0;
+  background: transparent;
+  text-align: left;
+  cursor: pointer;
+  text-decoration: underline dotted;
+}
+.jing-route-bazi .bazi-relation-list span {
+  color: var(--jing-text-dim);
+  font-size: 0.74rem;
+  line-height: 1.6;
+}
+.jing-route-bazi .jing-bazi-derivation {
+  display: grid;
+  gap: 0.5rem;
+  padding-left: 1.2rem;
+}
+.jing-route-bazi .jing-bazi-derivation strong,
+.jing-route-bazi .jing-bazi-derivation span,
+.jing-route-bazi .jing-bazi-derivation em {
+  display: block;
+}
+.jing-route-bazi .jing-bazi-derivation span,
+.jing-route-bazi .jing-bazi-derivation em {
+  color: var(--jing-text-dim);
+  font-size: 0.72rem;
+  font-style: normal;
+}
+.jing-route-bazi .jing-bazi-reminders {
+  line-height: 1.8;
+}
+@keyframes bazi-rise {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
   }
-  .jing-fieldset legend {
-    font-size: 0.85rem; letter-spacing: 0.25em; color: var(--jing-text-dim);
-    padding: 0 0.5em;
+  to {
+    opacity: 1;
+    transform: none;
   }
-
-  .jing-bazi-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 0.6rem; }
-  .jing-bazi-grid label, .jing-bazi-place label {
-    display: flex; flex-direction: column; gap: 0.3rem;
-    font-family: var(--jing-font-ui); font-size: 0.75rem; color: var(--jing-text-dim);
+}
+@keyframes bazi-bar {
+  from {
+    width: 0;
   }
-  .jing-bazi input, .jing-bazi select {
-    font-family: var(--jing-font-ui); font-size: 0.95rem;
-    color: var(--jing-text); background: var(--jing-bg-card);
-    border: 1px solid var(--jing-border); border-radius: 6px;
-    padding: 0.45rem 0.5rem; width: 100%; box-sizing: border-box;
+}
+@media (max-width: 760px) {
+  .jing-route-bazi .bazi-timeline button, .jing-route-bazi .bazi-view-tabs button,
+  .jing-route-bazi .jing-bazi-pillar header button, .jing-route-bazi .bazi-relation-list button { min-height: 44px; }
+  .jing-route-bazi .bazi-form-head,
+  .jing-route-bazi .jing-study-result-head,
+  .jing-route-bazi .bazi-section-head {
+    align-items: flex-start;
+    flex-direction: column;
   }
-  .jing-bazi input:focus-visible, .jing-bazi select:focus-visible {
-    outline: 2px solid var(--jing-accent); outline-offset: 1px;
+  .jing-route-bazi .bazi-case-label {
+    width: 100%;
   }
-  .jing-bazi-hint { margin: 0.6rem 0 0; font-family: var(--jing-font-ui); font-size: 0.72rem; color: var(--jing-text-dim); }
-
-  .jing-bazi-radios {
-    display: flex; flex-wrap: wrap; gap: 0.5rem 1.2rem; align-items: center;
-    font-family: var(--jing-font-ui); font-size: 0.85rem;
+  .jing-route-bazi .jing-bazi-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
-  .jing-bazi-radios + .jing-bazi-radios { margin-top: 0.8rem; }
-  .jing-bazi-radios label { display: inline-flex; align-items: center; gap: 0.4rem; cursor: pointer; }
-  .jing-bazi-radios input { width: auto; }
-  .jing-bazi-radio-title { color: var(--jing-text-dim); font-size: 0.78rem; }
-
-  .jing-bazi-place { display: grid; grid-template-columns: 1fr 1fr; gap: 0.6rem; margin-top: 0.8rem; }
-  .jing-bazi-place[hidden], .jing-bazi-result[hidden] { display: none; }
-
-  .jing-bazi-actions { display: flex; gap: 0.8rem; align-items: center; flex-wrap: wrap; }
-  .jing-calc-status { font-family: var(--jing-font-ui); font-size: 0.74rem; color: var(--jing-accent); }
-  .jing-calc-status.is-error { color: var(--jing-vermilion); }
-  .jing-calc-result-title { margin: 0; color: var(--jing-accent); font-size: 1rem; font-weight: 500; letter-spacing: 0.18em; }
-  .jing-study-result-head { display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
-  .jing-study-result-head .jing-eyebrow { margin-bottom: 0.35rem; }
-  .jing-btn-primary { border-color: var(--jing-accent); color: var(--jing-accent); }
-
-  .jing-bazi-error {
-    margin: 0; padding: 0.7rem 0.9rem;
-    border: 1px solid var(--jing-vermilion); border-radius: 6px;
-    color: var(--jing-vermilion); font-family: var(--jing-font-ui); font-size: 0.85rem;
+  .jing-route-bazi .jing-bazi-grid label:last-child {
+    grid-column: 1/-1;
   }
-
-  .jing-bazi-result { display: flex; flex-direction: column; gap: 0.8rem; margin-top: 1.75rem; }
-  .jing-bazi-result details {
-    border: 1px solid var(--jing-border); border-radius: var(--jing-radius);
-    background: var(--jing-bg-raised); padding: 0.6rem 1rem 0.9rem;
+  .jing-route-bazi .bazi-pillar-inputs {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
-  .jing-bazi-result summary {
-    cursor: pointer; letter-spacing: 0.25em; color: var(--jing-accent);
-    padding: 0.4rem 0; font-size: 0.95rem;
+  .jing-route-bazi .bazi-pillar-inputs label:last-child {
+    grid-column: auto;
   }
-  .jing-bazi-result p { margin: 0.5rem 0; }
-
-  .jing-bazi-pillars { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.6rem; margin: 0.5rem 0; }
-  .jing-bazi-pillar {
-    display: flex; flex-direction: column; align-items: stretch; gap: 0.55rem;
-    border: 1px solid var(--jing-border); border-radius: 8px; padding: 0.7rem 0.3rem;
-    background: var(--jing-bg-card);
-    animation: jing-pillar-in 0.55s ease both;
+  .jing-route-bazi .jing-bazi-pillars {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
-  @keyframes jing-pillar-in {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: none; }
+  .jing-route-bazi .bazi-relation-nodes {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
-  .jing-bazi-pillar header { display: flex; align-items: center; justify-content: space-between; gap: 0.5rem; }
-  .jing-bazi-ganzhi { display: grid; gap: 0.2rem; place-items: center; padding: 0.35rem 0; }
-  .jing-bazi-pillar strong { font-size: 1.55rem; letter-spacing: 0.15em; color: var(--jing-text); }
-  .jing-bazi-pillar dl { margin: 0; display: grid; gap: 0.35rem; }
-  .jing-bazi-pillar dl div { display: grid; grid-template-columns: 2.4rem 1fr; gap: 0.35rem; align-items: baseline; }
-  .jing-bazi-pillar dt { font-family: var(--jing-font-ui); font-size: 0.64rem; color: var(--jing-text-dim); }
-  .jing-bazi-pillar dd { margin: 0; font-size: 0.78rem; color: var(--jing-text); }
-  .jing-bazi-pillar dd small { margin: 0 0.5em 0 0.15em; color: var(--jing-vermilion); font-family: var(--jing-font-ui); font-size: 0.58rem; }
-  .jing-bazi-pillar-name, .jing-bazi-pillar-god {
-    font-family: var(--jing-font-ui); font-size: 0.7rem; color: var(--jing-text-dim);
+  .jing-route-bazi .bazi-relation-list li {
+    grid-template-columns: 1fr;
+    gap: 0.2rem;
   }
-  .jing-bazi-pillar-god { color: var(--jing-accent); }
-  .jing-bazi-elements { font-size: 0.9rem; color: var(--jing-text-dim); }
-
-  .jing-bazi-derivation { margin: 0.5rem 0 0; padding-left: 1.4rem; }
-  .jing-bazi-derivation li { margin: 0.4rem 0; font-size: 0.88rem; }
-  .jing-bazi-derivation strong { margin-right: 0.6em; }
-  .jing-bazi-derivation span { color: var(--jing-text-dim); margin-right: 0.6em; font-size: 0.8rem; }
-  .jing-bazi-derivation em { font-style: normal; color: var(--jing-accent); }
-
-  .jing-bazi-reminders { margin: 0.5rem 0 0; padding-left: 1.3rem; font-size: 0.85rem; color: var(--jing-text-dim); }
-  .jing-bazi-copy-state { font-family: var(--jing-font-ui); font-size: 0.75rem; color: var(--jing-text-dim); margin-left: 0.7rem; }
-
-  @media (max-width: 560px) {
-    .jing-bazi-grid { grid-template-columns: repeat(3, 1fr); }
-    .jing-bazi-place { grid-template-columns: 1fr; }
-    .jing-bazi-pillars { grid-template-columns: repeat(2, 1fr); }
+  .jing-route-bazi .jing-bazi-place {
+    grid-template-columns: 1fr;
   }
+}
+@media (prefers-reduced-motion: reduce) {
+  .jing-route-bazi .jing-bazi-pillar,
+  .jing-route-bazi .jing-bazi-element-bar b {
+    animation: none;
+  }
+  .jing-route-bazi .bazi-timeline button.is-selected {
+    transform: none;
+  }
+}
 </style>

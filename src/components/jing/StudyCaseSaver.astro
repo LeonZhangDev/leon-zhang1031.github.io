@@ -1,0 +1,122 @@
+<button id="jing-case-scrim" class="jing-case-scrim" type="button" aria-label="取消保存案卷" hidden></button>
+<section id="jing-case-dialog" class="jing-case-dialog" role="dialog" aria-modal="true" aria-labelledby="jing-case-title" hidden>
+  <p class="jing-eyebrow">显式保存 · AES-GCM 加密</p>
+  <h2 id="jing-case-title">存入静心手札</h2>
+  <p id="jing-case-summary"></p>
+  <label for="jing-case-password">手札密码</label>
+  <input id="jing-case-password" type="password" autocomplete="current-password" />
+  <label id="jing-case-confirm-wrap" for="jing-case-confirm" hidden>再次输入新密码
+    <input id="jing-case-confirm" type="password" autocomplete="new-password" />
+  </label>
+  <p id="jing-case-state" role="status" aria-live="polite"></p>
+  <div>
+    <button id="jing-case-save" class="jing-btn jing-btn-primary" type="button">加密保存</button>
+    <button id="jing-case-cancel" class="jing-btn" type="button">取消</button>
+  </div>
+</section>
+<p id="jing-case-toast" class="jing-case-toast" role="status" aria-live="polite"></p>
+
+<script>
+  import { appendStudyCase, normalizeStudyCase, type StudyCaseRecord } from '../../lib/jing/study-case';
+  import { loadSettings } from '../../lib/jing/settings';
+  import { hasStoredVault, VaultError, VaultSession } from '../../lib/jing/vault';
+
+  const dialog = document.getElementById('jing-case-dialog') as HTMLElement | null;
+  const scrim = document.getElementById('jing-case-scrim') as HTMLButtonElement | null;
+  const summary = document.getElementById('jing-case-summary');
+  const password = document.getElementById('jing-case-password') as HTMLInputElement | null;
+  const confirmWrap = document.getElementById('jing-case-confirm-wrap') as HTMLElement | null;
+  const confirm = document.getElementById('jing-case-confirm') as HTMLInputElement | null;
+  const state = document.getElementById('jing-case-state');
+  const toast = document.getElementById('jing-case-toast');
+  const saveButton = document.getElementById('jing-case-save') as HTMLButtonElement | null;
+  let pending: StudyCaseRecord | null = null;
+  let toastTimer: ReturnType<typeof setTimeout> | null = null;
+  let opener: HTMLElement | null = null;
+
+  const showToast = (message: string) => {
+    if (!toast) return;
+    toast.textContent = message;
+    toast.classList.add('is-visible');
+    if (toastTimer) clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => toast.classList.remove('is-visible'), 2600);
+  };
+  const setOpen = (open: boolean) => {
+    if (!dialog || !scrim) return;
+    dialog.hidden = !open;
+    scrim.hidden = !open;
+    document.body.classList.toggle('jing-case-open', open);
+    if (!open) {
+      pending = null;
+      if (password) password.value = '';
+      if (confirm) confirm.value = '';
+      opener?.focus({ preventScroll: true });
+      opener = null;
+    }
+  };
+  const errorMessage = (error: unknown) => error instanceof VaultError
+    ? error.message
+    : error instanceof Error ? error.message : '保存失败，请重试。';
+
+  window.addEventListener('jing:save-case', ((event: CustomEvent<StudyCaseRecord>) => {
+    opener = document.activeElement instanceof HTMLElement ? document.activeElement : null;
+    try {
+      pending = normalizeStudyCase(event.detail);
+    } catch (error) {
+      showToast(errorMessage(error));
+      return;
+    }
+    const exists = hasStoredVault(localStorage);
+    if (summary) summary.textContent = exists
+      ? `“${pending.title}”只会在输入密码后写入本机加密手札。`
+      : `本机尚无手札，将创建手札并保存“${pending.title}”。请设置至少 4 位密码。`;
+    if (confirmWrap) confirmWrap.hidden = exists;
+    if (password) password.autocomplete = exists ? 'current-password' : 'new-password';
+    if (state) state.textContent = '';
+    setOpen(true);
+    window.setTimeout(() => password?.focus(), 20);
+  }) as EventListener);
+
+  const cancel = () => setOpen(false);
+  document.getElementById('jing-case-cancel')?.addEventListener('click', cancel);
+  scrim?.addEventListener('click', cancel);
+  dialog?.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape') { event.preventDefault(); cancel(); return; }
+    if (event.key !== 'Tab') return;
+    const focusable = Array.from(dialog.querySelectorAll<HTMLElement>('button:not([disabled]), input:not([disabled]):not([hidden])'))
+      .filter((element) => element.offsetParent !== null);
+    if (!focusable.length) return;
+    const first = focusable[0];
+    const last = focusable[focusable.length - 1];
+    if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last.focus(); }
+    else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first.focus(); }
+  });
+  saveButton?.addEventListener('click', async () => {
+    if (!pending || !password) return;
+    const secret = password.value;
+    const exists = hasStoredVault(localStorage);
+    if (secret.length < 4) { if (state) state.textContent = '密码至少 4 位。'; return; }
+    if (!exists && secret !== confirm?.value) { if (state) state.textContent = '两次输入的密码不一致。'; return; }
+    saveButton.disabled = true;
+    if (state) state.textContent = '正在加密保存…';
+    let session: VaultSession | null = null;
+    try {
+      const options = {
+        storage: localStorage,
+        lockTimeoutMs: loadSettings(localStorage).settings.lockTimeoutMinutes * 60 * 1000,
+      };
+      session = exists
+        ? await VaultSession.unlock(secret, options)
+        : await VaultSession.create(secret, options);
+      await session.saveNotes(appendStudyCase(session.getNotes(), pending));
+      session.lock();
+      setOpen(false);
+      showToast('案卷已加密存入静心手札。');
+    } catch (error) {
+      session?.lock();
+      if (state) state.textContent = errorMessage(error);
+    } finally {
+      saveButton.disabled = false;
+    }
+  });
+</script>

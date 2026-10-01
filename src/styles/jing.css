@@ -2193,11 +2193,14 @@ a.jing-room:focus-visible { outline: 2px solid var(--jing-accent); outline-offse
 .jing-study-page .jing-btn-primary { color: #edd299; box-shadow: inset 0 0 0 1px rgba(231, 192, 117, 0.12); }
 
 /* Bazi */
-.jing-route-bazi #bazi-form { max-width: 1120px; margin: 0 auto 28px; display: grid; grid-template-columns: 1fr 1fr; align-items: start; }
+.jing-route-bazi #bazi-form { max-width: 1120px; min-width: 0; margin: 0 auto 28px; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: start; }
+.jing-route-bazi #bazi-form > .bazi-form-head, .jing-route-bazi #bazi-form > fieldset:first-of-type { grid-column: 1 / -1; }
+.jing-route-bazi #bazi-form > * { min-width: 0; min-inline-size: 0; }
 .jing-route-bazi #bazi-form > :is(.jing-bazi-actions, .jing-bazi-error) { grid-column: 1 / -1; justify-content: center; }
-.jing-route-bazi #bazi-result { max-width: 1120px; margin: 0 auto; padding: clamp(16px, 2.5vw, 32px); border: 1px solid rgba(189, 145, 74, 0.42); color: #352719; background: linear-gradient(rgba(221, 204, 166, 0.98), rgba(194, 170, 124, 0.98)), var(--jing-paper); box-shadow: 0 20px 50px rgba(0, 0, 0, 0.38); }
-.jing-route-bazi #bazi-result > details { border-color: rgba(87, 58, 31, 0.28); background: rgba(247, 231, 196, 0.3); }
+.jing-route-bazi #bazi-result { --jing-accent: #62401e; --jing-text: #352719; --jing-text-dim: #71583b; --jing-border: rgba(87, 58, 31, .28); --jing-bg-card: rgba(241, 222, 184, .52); --jing-bg-raised: rgba(247, 231, 196, .3); max-width: 1120px; min-width: 0; box-sizing: border-box; margin: 0 auto; padding: clamp(16px, 2.5vw, 32px); border: 1px solid rgba(189, 145, 74, 0.42); color: #352719; background: linear-gradient(rgba(221, 204, 166, 0.98), rgba(194, 170, 124, 0.98)), var(--jing-paper); box-shadow: 0 20px 50px rgba(0, 0, 0, 0.38); }
+.jing-route-bazi #bazi-result > details { min-width: 0; overflow-wrap: anywhere; border-color: rgba(87, 58, 31, 0.28); background: rgba(247, 231, 196, 0.3); }
 .jing-route-bazi #bazi-result summary { color: #5a3b20; }
+.jing-route-bazi #bazi-result .jing-term-chip { color: #62401e; border-color: rgba(87, 58, 31, .4); }
 .jing-route-bazi .jing-bazi-pillars { gap: 12px; }
 .jing-route-bazi .jing-bazi-pillar { min-height: 220px; display: flex; flex-direction: column; align-items: stretch; justify-content: flex-start; gap: 8px; padding: 14px 12px; border: 1px solid rgba(107, 72, 35, 0.38); color: #402d1c; background: rgba(244, 226, 186, 0.38); box-shadow: inset 0 0 24px rgba(94, 60, 26, 0.07); animation: jing-pillar-in 0.55s ease both; }
 .jing-route-bazi .jing-bazi-pillar header { width: 100%; }
@@ -2376,4 +2379,119 @@ a.jing-room:focus-visible { outline: 2px solid var(--jing-accent); outline-offse
   .jing-yj-coins { height: 126px; gap: 14px; }
   .jing-notebook-page { padding: 28px 10px 58px; }
   .jing-notebook-page #jing-notes-app { padding: 30px 18px 30px 40px; }
+}
+
+/* Local study continuity tools */
+.jing-focus-toggle, .jing-ask-toggle { width: auto; min-width: 54px; padding: 0 9px; display: flex; gap: 5px; }
+.jing-focus-toggle b, .jing-ask-toggle b { font-family: var(--jing-font-ui); font-size: 0.62rem; font-weight: 400; }
+.jing-term-chip { min-height: 30px; padding: 4px 10px; border: 1px dotted rgba(142, 89, 38, 0.55); border-radius: 999px; color: #7d4f2d; background: rgba(255, 249, 225, 0.28); font-family: var(--jing-font-ui); font-size: 0.68rem; cursor: pointer; }
+html.dark .jing-term-chip { color: #d9ba76; border-color: rgba(211, 168, 89, 0.48); background: rgba(114, 76, 30, 0.13); }
+.jing-term-chip:hover, .jing-term-chip:focus-visible { border-style: solid; outline: none; box-shadow: 0 0 0 2px rgba(190, 145, 70, 0.12); }
+.jing-study-result-tools { display: flex; align-items: center; gap: 0.55rem; }
+
+.jing-ask-scrim, .jing-case-scrim { position: fixed; inset: 0; z-index: 190; width: 100%; height: 100%; border: 0; background: rgba(4, 3, 2, 0.62); backdrop-filter: blur(3px); }
+.jing-ask-drawer { position: fixed; z-index: 200; inset: 0 0 0 auto; width: min(430px, 94vw); box-sizing: border-box; display: flex; flex-direction: column; gap: 16px; padding: 26px clamp(20px, 4vw, 34px); overflow-y: auto; color: #d8c9aa; border-left: 1px solid rgba(211, 169, 91, 0.38); background: linear-gradient(90deg, rgba(188, 136, 57, 0.08), transparent 14%), linear-gradient(180deg, #1b1712, #0e0c09); box-shadow: -30px 0 80px rgba(0, 0, 0, 0.5); animation: jing-drawer-in 260ms ease both; }
+.jing-ask-drawer[hidden], .jing-ask-scrim[hidden], .jing-case-dialog[hidden], .jing-case-scrim[hidden], .jing-focus-dock[hidden] { display: none !important; }
+@keyframes jing-drawer-in { from { opacity: 0; transform: translateX(24px); } to { opacity: 1; transform: none; } }
+.jing-ask-drawer > header { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
+.jing-ask-drawer h2 { margin: 3px 0 0; color: #e5c77f; font-size: 1.75rem; letter-spacing: 0.2em; }
+.jing-ask-intro { margin: 0; color: #9f9278; font-family: var(--jing-font-ui); font-size: 0.78rem; line-height: 1.8; }
+.jing-ask-presets { display: flex; flex-wrap: wrap; gap: 7px; }
+.jing-ask-presets button, .jing-ask-answer nav button { min-height: 34px; padding: 5px 10px; border: 1px solid rgba(205, 160, 84, 0.25); border-radius: 999px; color: #c4ad7c; background: rgba(114, 75, 31, 0.12); cursor: pointer; font-family: var(--jing-font-ui); font-size: 0.7rem; }
+.jing-ask-form { display: grid; gap: 7px; }
+.jing-ask-form label { color: #a89a7e; font-family: var(--jing-font-ui); font-size: 0.7rem; }
+.jing-ask-form > div { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 8px; }
+.jing-ask-form input, .jing-case-dialog input { min-height: 42px; box-sizing: border-box; padding: 8px 10px; border: 1px solid rgba(205, 160, 84, 0.34); border-radius: 4px; color: #e3d5b8; background: rgba(5, 4, 3, 0.46); font: inherit; }
+.jing-ask-answer { display: grid; gap: 11px; padding: 18px; border: 1px solid rgba(204, 159, 80, 0.27); background: linear-gradient(145deg, rgba(82, 57, 28, 0.22), rgba(18, 14, 10, 0.5)); }
+.jing-ask-answer h3 { margin: 0; color: #e2c37b; font-size: 1.08rem; letter-spacing: 0.14em; }
+.jing-ask-answer > p { margin: 0; color: #aaa087; line-height: 1.75; }
+.jing-ask-answer > div { display: grid; grid-template-columns: 42px 1fr; gap: 10px; }
+.jing-ask-answer strong { color: #b4894c; font-size: 0.68rem; letter-spacing: 0.15em; }
+.jing-ask-answer > div p { margin: 0; color: #c8bda5; line-height: 1.75; }
+.jing-ask-answer .jing-ask-sources { padding-top: 10px; border-top: 1px solid rgba(204, 159, 80, 0.17); font-size: 0.72rem; }
+.jing-ask-answer nav { display: flex; flex-wrap: wrap; gap: 6px; }
+.jing-ask-drawer > footer { margin-top: auto; display: flex; align-items: center; justify-content: space-between; gap: 10px; color: #756b59; font-family: var(--jing-font-ui); font-size: 0.64rem; }
+
+.jing-case-dialog { position: fixed; z-index: 210; top: 50%; left: 50%; width: min(470px, calc(100vw - 30px)); box-sizing: border-box; transform: translate(-50%, -50%); display: grid; gap: 11px; padding: 28px; color: #d8c9aa; border: 1px solid rgba(211, 169, 91, 0.42); background: linear-gradient(145deg, #201a13, #100d0a); box-shadow: 0 28px 90px rgba(0, 0, 0, 0.64); }
+.jing-case-dialog h2 { margin: 0; color: #e1c27a; letter-spacing: 0.14em; }
+.jing-case-dialog > p { margin: 0; color: #a99b80; line-height: 1.7; }
+.jing-case-dialog label { display: grid; gap: 6px; color: #baa982; font-family: var(--jing-font-ui); font-size: 0.72rem; }
+.jing-case-dialog > div { display: flex; gap: 9px; }
+.jing-case-toast { position: fixed; z-index: 220; left: 50%; bottom: 28px; margin: 0; padding: 10px 16px; border: 1px solid rgba(215, 174, 99, 0.4); border-radius: 4px; color: #e8d29d; background: rgba(17, 13, 9, 0.94); box-shadow: 0 10px 35px rgba(0, 0, 0, 0.4); opacity: 0; transform: translate(-50%, 12px); pointer-events: none; transition: opacity 180ms ease, transform 180ms ease; }
+.jing-case-toast.is-visible { opacity: 1; transform: translate(-50%, 0); }
+.jing-intro-data { margin-top: 1rem; padding-top: 0.9rem; border-top: 1px solid var(--jing-border); }
+.jing-intro-data span { margin-left: 0.6rem; color: var(--jing-accent); font-family: var(--jing-font-ui); font-size: 0.72rem; }
+.jing-intro-data p { margin: 0.55rem 0 0; font-family: var(--jing-font-ui); font-size: 0.7rem; }
+
+.jing-today-hall { position: absolute; z-index: 3; top: clamp(74px, 9vh, 108px); right: clamp(24px, 4vw, 68px); width: min(280px, 25vw); box-sizing: border-box; padding: 18px 19px; border: 1px solid rgba(208, 164, 86, 0.28); color: #c9b994; background: linear-gradient(145deg, rgba(21, 17, 12, 0.86), rgba(12, 10, 8, 0.68)); box-shadow: 0 16px 40px rgba(0, 0, 0, 0.28); backdrop-filter: blur(8px); }
+.jing-today-hall::before { content: ''; position: absolute; inset: 6px; border: 1px solid rgba(208, 164, 86, 0.08); pointer-events: none; }
+.jing-today-hall header { display: flex; justify-content: space-between; color: #d9ba72; letter-spacing: 0.14em; }
+.jing-today-hall header small { color: #80745e; font-family: var(--jing-font-ui); letter-spacing: 0; }
+.jing-today-hall blockquote { margin: 15px 0; padding-left: 12px; border-left: 1px solid rgba(205, 162, 85, 0.35); }
+.jing-today-hall blockquote p { margin: 0 0 5px; line-height: 1.7; }
+.jing-today-hall cite { color: #86785f; font-size: 0.68rem; font-style: normal; }
+.jing-today-topic { width: 100%; padding: 8px 0; border: 0; border-top: 1px solid rgba(204, 158, 79, 0.16); border-bottom: 1px solid rgba(204, 158, 79, 0.16); color: #bda675; background: none; text-align: left; cursor: pointer; }
+.jing-today-hall nav { display: flex; justify-content: space-between; gap: 7px; margin-top: 12px; }
+.jing-today-hall nav a { color: #8f8268 !important; font-family: var(--jing-font-ui); font-size: 0.64rem; text-decoration: none; }
+.jing-today-hall nav a:hover { color: #d5b872 !important; }
+
+.jing-casebook { margin: 1rem 0; padding: 16px; border: 1px solid rgba(105, 68, 33, 0.22); background: rgba(247, 232, 196, 0.22); }
+.jing-casebook > header { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
+.jing-casebook h3 { margin: 2px 0 0; color: #654320; }
+.jing-casebook > header > span, .jing-casebook-tools { color: #8a6842; font-family: var(--jing-font-ui); font-size: 0.72rem; }
+.jing-casebook-tools { display: flex; align-items: center; gap: 8px; }
+.jing-casebook-tools select { border: 1px solid rgba(105, 68, 33, 0.3); padding: 5px 7px; color: #654320; background: rgba(255, 248, 228, 0.45); }
+.jing-casebook > p { color: #70583c; font-family: var(--jing-font-ui); font-size: 0.75rem; }
+.jing-casebook ol { display: grid; gap: 8px; margin: 12px 0 0; padding: 0; list-style: none; }
+.jing-casebook li { display: grid; grid-template-columns: auto 1fr auto; gap: 5px 10px; align-items: center; padding: 10px; border-bottom: 1px solid rgba(105, 68, 33, 0.17); }
+.jing-casebook li input { grid-row: 1 / 3; accent-color: #8d5a2c; }
+.jing-casebook li strong { color: #51351e; }
+.jing-casebook li span { grid-column: 2; color: #866b4d; font-family: var(--jing-font-ui); font-size: 0.66rem; }
+.jing-case-actions { grid-column: 3; grid-row: 1 / 3; display: flex; flex-wrap: wrap; gap: 6px; justify-content: flex-end; }
+.jing-casebook li button { color: #714a25; border-color: rgba(105, 68, 33, 0.3); }
+.jing-case-compare { margin-top: 16px; padding-top: 14px; border-top: 2px double rgba(105, 68, 33, 0.26); }
+.jing-case-compare h4 { margin: 0 0 10px; color: #654320; }
+.jing-case-compare-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.jing-case-compare article { padding: 12px; border: 1px solid rgba(105, 68, 33, 0.18); background: rgba(255, 248, 228, 0.24); }
+.jing-case-compare h5 { margin: 0 0 8px; color: #5c3b20; }
+.jing-case-compare p { margin: 0 0 8px; color: #513d29; white-space: pre-line; line-height: 1.65; }
+.jing-case-compare small { color: #876d50; }
+
+.jing-focus-dock { position: fixed; z-index: 180; top: 16px; right: 18px; display: flex; align-items: center; gap: 7px; padding: 7px 9px; border: 1px solid rgba(211, 169, 91, 0.3); color: #b7a784; background: rgba(13, 10, 8, 0.78); backdrop-filter: blur(8px); font-family: var(--jing-font-ui); font-size: 0.65rem; }
+.jing-focus-dock button { min-height: 30px; border: 1px solid rgba(211, 169, 91, 0.25); color: #d7b971; background: transparent; cursor: pointer; }
+.jing-focus-mode .jing-sidebar, .jing-focus-mode .jing-foot, .jing-focus-mode .jing-room-intro, .jing-focus-mode .jing-study-tabs, .jing-focus-mode .jing-reverence-room-heading, .jing-focus-mode .jing-reverence-selector, .jing-focus-mode .jing-muyu-stats, .jing-focus-mode .jing-muyu-controls, .jing-focus-mode .jing-muyu-history, .jing-focus-mode .jing-meditation-controls, .jing-focus-mode .jing-lot-tabs, .jing-focus-mode .jing-lot-source, .jing-focus-mode #lot-panel > .jing-lot-hint, .jing-focus-mode .jing-lot-ask, .jing-focus-mode .jing-lot-session-history { display: none !important; }
+.jing-focus-mode .jing-topbar { position: absolute; inset: 0; min-height: 0; padding: 0; border: 0; background: transparent; }
+.jing-focus-mode .jing-topbar > :not(.jing-top-actions), .jing-focus-mode .jing-top-actions > :not(.jing-focus-dock) { display: none !important; }
+.jing-focus-mode .jing-content-shell { margin-left: 0; }
+.jing-focus-mode .jing-main { max-width: none; min-height: 100vh; padding-top: 0; }
+.jing-focus-mode .jing-muyu-stage { min-height: 100vh; }
+.jing-focus-mode .jing-lot-stage { min-height: min(92vh, 900px); }
+.jing-focus-mode .jing-lot-actions .jing-btn:not(#lot-draw), .jing-focus-mode .jing-lot-actions .jing-sound { display: none; }
+.jing-focus-mode .jing-lot-actions { justify-content: center; }
+
+@media (max-width: 1180px) {
+  .jing-today-hall { width: 235px; }
+  .jing-today-hall blockquote { display: none; }
+}
+@media (max-width: 760px) {
+  .jing-local-badge { display: none; }
+  .jing-focus-toggle, .jing-ask-toggle { min-width: 34px; width: 34px; padding: 0; }
+  .jing-focus-toggle b, .jing-ask-toggle b { display: none; }
+  .jing-today-hall { position: relative; top: auto; right: auto; width: 100%; margin: 0 0 18px; order: 1; }
+  .jing-today-hall blockquote { display: block; }
+  .jing-hall-heading { order: 0; }
+  .jing-hall-portals { order: 2; }
+  .jing-hall-status { order: 3; }
+  .jing-hall-about { order: 4; }
+  .jing-today-hall nav { flex-wrap: wrap; }
+  .jing-case-compare-grid { grid-template-columns: 1fr; }
+  .jing-casebook li { grid-template-columns: auto 1fr; }
+  .jing-case-actions { grid-column: 2; grid-row: 3; justify-content: flex-start; }
+  .jing-study-result-head { align-items: flex-start; }
+  .jing-study-result-tools { flex-direction: column; align-items: stretch; }
+  .jing-focus-dock { top: auto; bottom: 14px; right: 12px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .jing-ask-drawer { animation: none; }
+  .jing-case-toast { transition: none; }
 }

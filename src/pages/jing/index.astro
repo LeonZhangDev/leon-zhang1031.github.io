@@ -1,6 +1,7 @@
 ---
 import JingLayout from '../../layouts/JingLayout.astro';
 import HallIntro from '../../components/jing/HallIntro.astro';
+import TodayHall from '../../components/jing/TodayHall.astro';
 ---
 
 <JingLayout title="静心堂" isHall>
@@ -10,6 +11,8 @@ import HallIntro from '../../components/jing/HallIntro.astro';
       <h1 id="hall-title" class="jing-hall-title">静心堂</h1>
       <p class="jing-hall-sub">心静则明 · 福自归来</p>
     </div>
+
+    <TodayHall />
 
     <nav class="jing-hall-portals" aria-label="静心堂主要入口">
       <a href="/jing/meditation/" class="jing-portal-card" data-portal="meditation">

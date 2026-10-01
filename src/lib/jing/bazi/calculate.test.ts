@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { calculateBazi, tenGod } from './calculate';
+import { calculateBazi, calculateBaziFromPillars, tenGod, xunKong } from './calculate';
 
 describe('tenGod relations', () => {
   it('walks the full ten-god cycle for a 甲 day master', () => {
@@ -50,7 +50,7 @@ describe('calculateBazi golden chart', () => {
 
   it('returns an auditable envelope with derivation and version', () => {
     expect(envelope.algorithm).toBe('bazi');
-    expect(envelope.version).toContain('bazi-1.0.0');
+    expect(envelope.version).toContain('bazi-2.0.0');
     expect(envelope.version).toContain('lunar-typescript 1.8.6');
     expect(envelope.derivation.length).toBeGreaterThanOrEqual(5);
     expect(envelope.warnings).toEqual([]);
@@ -67,5 +67,12 @@ describe('calculateBazi golden chart', () => {
     expect(sameDay.output.pillars.day).toBe('癸酉');
     expect(sameDay.output.pillars.hour).toBe('壬子');
     expect(sameDay.warnings.some((w) => w.code === 'late-zi')).toBe(true);
+  });
+
+  it('supports a validated direct-pillar chart and exposes xun-kong', () => {
+    const direct = calculateBaziFromPillars({ year: '丙寅', month: '癸巳', day: '癸酉', hour: '壬子' });
+    expect(direct.output.dayMaster.stem).toBe('癸');
+    expect(direct.output.pillarDetails.day.xunKong).toBe('戌亥');
+    expect(xunKong('甲子')).toBe('戌亥');
   });
 });

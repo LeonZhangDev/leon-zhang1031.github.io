@@ -1,0 +1,225 @@
+<button id="jing-focus-toggle" class="jing-icon-btn jing-focus-toggle" type="button" aria-pressed="false" title="隐藏次要界面，进入沉浸模式">
+  <span aria-hidden="true">静</span><b>入静</b>
+</button>
+<button id="jing-ask-toggle" class="jing-icon-btn jing-ask-toggle" type="button" aria-expanded="false" aria-controls="jing-ask-drawer" title="打开问典">
+  <span aria-hidden="true">典</span><b>问典</b>
+</button>
+
+<button id="jing-ask-scrim" class="jing-ask-scrim" type="button" aria-label="关闭问典" hidden></button>
+<aside id="jing-ask-drawer" class="jing-ask-drawer" role="dialog" aria-modal="true" aria-labelledby="jing-ask-title" hidden>
+  <header>
+    <div>
+      <p class="jing-eyebrow">本地释义 · 不联网</p>
+      <h2 id="jing-ask-title">问典</h2>
+    </div>
+    <button id="jing-ask-close" class="jing-icon-btn" type="button" aria-label="关闭问典">×</button>
+  </header>
+  <p class="jing-ask-intro">解释当前页面的名相、推演规则与典籍线索，不预测吉凶，不读取加密手札。</p>
+  <div class="jing-ask-presets" aria-label="常见问题">
+    <button type="button" data-jing-question="这条结论按什么规则得出？">如何得出</button>
+    <button type="button" data-jing-question="白话解释十神">解释十神</button>
+    <button type="button" data-jing-question="奇门三派差在哪里？">三派差异</button>
+    <button type="button" data-jing-question="为什么会有动爻？">动爻规则</button>
+  </div>
+  <form id="jing-ask-form" class="jing-ask-form">
+    <label for="jing-ask-input">想查什么名相或规则？</label>
+    <div><input id="jing-ask-input" type="search" maxlength="120" autocomplete="off" placeholder="例如：藏干是什么？" /><button id="jing-ask-submit" class="jing-btn jing-btn-primary" type="button">查典</button></div>
+  </form>
+  <section id="jing-ask-answer" class="jing-ask-answer" aria-live="polite">
+    <h3>先点页面中的名相，或输入一个问题</h3>
+    <p>带点线的词可直接查典。问典只使用本站内置资料，答案不会离开浏览器。</p>
+  </section>
+  <footer>
+    <button id="jing-install-app" class="jing-btn" type="button" hidden>安装离线版</button>
+    <span>本地规则助手 · 非生成式预测</span>
+  </footer>
+</aside>
+
+<div id="jing-focus-dock" class="jing-focus-dock" hidden>
+  <span>入静模式</span>
+  <button type="button" id="jing-focus-sound" aria-pressed="true">声音开</button>
+  <button type="button" id="jing-focus-exit">退出</button>
+</div>
+
+<script>
+  import { answerStudyQuestion, getKnowledgeEntry, type StudyAnswer } from '../../lib/jing/study-knowledge';
+  import { loadSettings, saveSettings } from '../../lib/jing/settings';
+
+  const askToggle = document.getElementById('jing-ask-toggle') as HTMLButtonElement | null;
+  const askDrawer = document.getElementById('jing-ask-drawer') as HTMLElement | null;
+  const askScrim = document.getElementById('jing-ask-scrim') as HTMLButtonElement | null;
+  const askClose = document.getElementById('jing-ask-close') as HTMLButtonElement | null;
+  const askInput = document.getElementById('jing-ask-input') as HTMLInputElement | null;
+  const askAnswer = document.getElementById('jing-ask-answer');
+  const askForm = document.getElementById('jing-ask-form') as HTMLFormElement | null;
+  const focusToggle = document.getElementById('jing-focus-toggle') as HTMLButtonElement | null;
+  const focusDock = document.getElementById('jing-focus-dock') as HTMLElement | null;
+  const focusExit = document.getElementById('jing-focus-exit');
+  const focusSound = document.getElementById('jing-focus-sound') as HTMLButtonElement | null;
+  const route = document.body.className.match(/jing-route-([^\s]+)/)?.[1] ?? 'hall';
+  let contextTerms: string[] = route === 'bazi' ? ['four-pillars']
+    : route === 'qimen' ? ['qimen-board']
+      : route === 'yijing' ? ['hexagram']
+        : route === 'yixue' ? ['wuxing']
+          : [];
+  let contextFacts: string[] = [];
+  let contextRule = '';
+
+  const renderAnswer = (answer: StudyAnswer) => {
+    if (!askAnswer) return;
+    askAnswer.replaceChildren();
+    const title = document.createElement('h3');
+    title.textContent = answer.title;
+    askAnswer.append(title);
+    if (contextFacts.length || contextRule) {
+      const current = document.createElement('div');
+      current.className = 'jing-ask-current';
+      const strong = document.createElement('strong');
+      const paragraph = document.createElement('p');
+      strong.textContent = '当前盘面';
+      paragraph.textContent = [...contextFacts, contextRule].filter(Boolean).join('；');
+      current.append(strong, paragraph);
+      askAnswer.append(current);
+    }
+    const layers = [
+      ['名相', answer.fact], ['规则', answer.rule], ['边界', answer.caution],
+    ];
+    for (const [label, copy] of layers) {
+      const block = document.createElement('div');
+      const strong = document.createElement('strong');
+      const paragraph = document.createElement('p');
+      strong.textContent = label;
+      paragraph.textContent = copy;
+      block.append(strong, paragraph);
+      askAnswer.append(block);
+    }
+    if (answer.sources.length) {
+      const source = document.createElement('p');
+      source.className = 'jing-ask-sources';
+      source.textContent = `典籍线索：${answer.sources.map((item) => `${item.title}·${item.section}`).join('；')}`;
+      askAnswer.append(source);
+    }
+    if (answer.related.length) {
+      const related = document.createElement('nav');
+      related.setAttribute('aria-label', '相关研习');
+      for (const entry of answer.related) {
+        const button = document.createElement('button');
+        button.type = 'button';
+        button.textContent = entry.term;
+        button.dataset.knowledgeId = entry.id;
+        related.append(button);
+      }
+      askAnswer.append(related);
+    }
+  };
+
+  const setAskOpen = (open: boolean) => {
+    if (!askDrawer || !askScrim || !askToggle) return;
+    askDrawer.hidden = !open;
+    askScrim.hidden = !open;
+    askToggle.setAttribute('aria-expanded', String(open));
+    document.body.classList.toggle('jing-ask-open', open);
+    if (open) window.setTimeout(() => askInput?.focus(), 20);
+    else askToggle.focus({ preventScroll: true });
+  };
+
+  const ask = (question: string) => {
+    const trimmed = question.trim();
+    if (!trimmed) return;
+    renderAnswer(answerStudyQuestion(trimmed, contextTerms));
+  };
+
+  askToggle?.addEventListener('click', () => setAskOpen(askDrawer ? askDrawer.hidden === true : true));
+  askClose?.addEventListener('click', () => setAskOpen(false));
+  askScrim?.addEventListener('click', () => setAskOpen(false));
+  askForm?.addEventListener('submit', (event) => { event.preventDefault(); ask(askInput?.value ?? ''); });
+  document.getElementById('jing-ask-submit')?.addEventListener('click', () => ask(askInput?.value ?? ''));
+  document.querySelectorAll<HTMLButtonElement>('[data-jing-question]').forEach((button) => {
+    button.addEventListener('click', () => {
+      if (askInput) askInput.value = button.dataset.jingQuestion ?? '';
+      ask(button.dataset.jingQuestion ?? '');
+    });
+  });
+  askAnswer?.addEventListener('click', (event) => {
+    const button = (event.target as HTMLElement).closest<HTMLButtonElement>('[data-knowledge-id]');
+    const entry = button ? getKnowledgeEntry(button.dataset.knowledgeId ?? '') : undefined;
+    if (entry) renderAnswer(answerStudyQuestion(entry.term, [entry.id]));
+  });
+  document.addEventListener('click', (event) => {
+    const target = (event.target as HTMLElement).closest<HTMLElement>('[data-jing-term]');
+    if (!target) return;
+    const entry = getKnowledgeEntry(target.dataset.jingTerm ?? '');
+    if (!entry) return;
+    event.preventDefault();
+    setAskOpen(true);
+    renderAnswer(answerStudyQuestion(entry.term, [entry.id]));
+  });
+  window.addEventListener('jing:study-context', ((event: CustomEvent<{ terms?: string[]; facts?: string[]; rule?: string; open?: boolean }>) => {
+    contextTerms = Array.from(new Set([...contextTerms, ...(event.detail.terms ?? [])])).slice(-12);
+    contextFacts = (event.detail.facts ?? contextFacts).slice(0, 8);
+    contextRule = event.detail.rule ?? (event.detail.facts ? '' : contextRule);
+    if (event.detail.open) {
+      setAskOpen(true);
+      renderAnswer(answerStudyQuestion(contextTerms.map((id) => getKnowledgeEntry(id)?.term ?? '').join(' '), contextTerms));
+    }
+  }) as EventListener);
+
+  const syncSound = () => {
+    if (!focusSound) return;
+    const on = loadSettings(localStorage).settings.soundEnabled;
+    focusSound.textContent = on ? '声音开' : '已静音';
+    focusSound.setAttribute('aria-pressed', String(on));
+  };
+  const setFocus = (active: boolean) => {
+    document.body.classList.toggle('jing-focus-mode', active);
+    focusToggle?.setAttribute('aria-pressed', String(active));
+    if (focusToggle) focusToggle.querySelector('b')!.textContent = active ? '出静' : '入静';
+    if (focusDock) focusDock.hidden = !active;
+    if (active) focusExit?.focus({ preventScroll: true });
+  };
+  focusToggle?.addEventListener('click', () => setFocus(!document.body.classList.contains('jing-focus-mode')));
+  focusExit?.addEventListener('click', () => { setFocus(false); focusToggle?.focus({ preventScroll: true }); });
+  focusSound?.addEventListener('click', () => {
+    const current = loadSettings(localStorage).settings;
+    saveSettings(localStorage, { ...current, soundEnabled: !current.soundEnabled });
+    sessionStorage.setItem('jing.sound-on', current.soundEnabled ? '0' : '1');
+    window.dispatchEvent(new CustomEvent('jing:master-sound', { detail: { enabled: !current.soundEnabled } }));
+    syncSound();
+  });
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Tab' && askDrawer && !askDrawer.hidden) {
+      const focusable = Array.from(askDrawer.querySelectorAll<HTMLElement>('button:not([disabled]), input:not([disabled]), a[href]'));
+      if (focusable.length) {
+        const first = focusable[0];
+        const last = focusable[focusable.length - 1];
+        if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last.focus(); }
+        else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first.focus(); }
+      }
+      return;
+    }
+    if (event.key === 'Escape') {
+      if (askDrawer && !askDrawer.hidden) setAskOpen(false);
+      else if (document.body.classList.contains('jing-focus-mode')) setFocus(false);
+    }
+  });
+  syncSound();
+
+  if (route !== 'hall') {
+    try { localStorage.setItem('jing.last-room.v1', location.pathname); } catch {}
+  }
+
+  let installPrompt: Event | null = null;
+  const installButton = document.getElementById('jing-install-app') as HTMLButtonElement | null;
+  window.addEventListener('beforeinstallprompt', (event) => {
+    event.preventDefault();
+    installPrompt = event;
+    if (installButton) installButton.hidden = false;
+  });
+  installButton?.addEventListener('click', async () => {
+    if (!installPrompt) return;
+    const prompt = installPrompt as Event & { prompt: () => Promise<void> };
+    await prompt.prompt();
+    installPrompt = null;
+    installButton.hidden = true;
+  });
+</script>

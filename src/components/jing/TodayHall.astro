@@ -1,0 +1,45 @@
+---
+const entries = [
+  { quote: '知止而后有定，定而后能静。', source: '《礼记·大学》', topic: '五行并非五种物质，而是关系模型', href: '/jing/yixue/', term: 'wuxing' },
+  { quote: '致虚极，守静笃。', source: '《道德经》', topic: '八卦卦画为什么要自下而上读', href: '/jing/yixue/#bagua-reference', term: 'bagua' },
+  { quote: '君子以反身修德。', source: '《周易·蹇卦·象传》', topic: '动爻怎样生成之卦', href: '/jing/yijing/', term: 'moving-line' },
+  { quote: '静而后能安，安而后能虑。', source: '《礼记·大学》', topic: '四柱与日主的结构关系', href: '/jing/bazi/', term: 'day-master' },
+  { quote: '万物负阴而抱阳，冲气以为和。', source: '《道德经》', topic: '奇门九宫的五层盘面', href: '/jing/qimen/', term: 'qimen-board' },
+];
+---
+
+<aside class="jing-today-hall" id="jing-today-hall" aria-labelledby="jing-today-title">
+  <header><span>今日入堂</span><small id="jing-today-date"></small></header>
+  <blockquote><p id="jing-today-quote"></p><cite id="jing-today-source"></cite></blockquote>
+  <button type="button" id="jing-today-topic" class="jing-today-topic" data-jing-term="wuxing"></button>
+  <nav>
+    <a href="/jing/meditation/?minutes=1">一分调息</a>
+    <a href="/jing/muyu/">三声木鱼</a>
+    <a id="jing-today-resume" href="/jing/notes/">续上次研习</a>
+  </nav>
+</aside>
+
+<script is:inline define:vars={{ entries }}>
+  const date = new Date();
+  const daySeed = Number(`${date.getFullYear()}${date.getMonth() + 1}${date.getDate()}`);
+  const entry = entries[daySeed % entries.length];
+  const dateEl = document.getElementById('jing-today-date');
+  const quoteEl = document.getElementById('jing-today-quote');
+  const sourceEl = document.getElementById('jing-today-source');
+  const topicEl = document.getElementById('jing-today-topic');
+  if (dateEl) dateEl.textContent = `${date.getMonth() + 1}月${date.getDate()}日`;
+  if (quoteEl) quoteEl.textContent = entry.quote;
+  if (sourceEl) sourceEl.textContent = entry.source;
+  if (topicEl) {
+    topicEl.textContent = entry.topic;
+    topicEl.dataset.jingTerm = entry.term;
+  }
+  try {
+    const resume = document.getElementById('jing-today-resume');
+    const last = localStorage.getItem('jing.last-room.v1');
+    if (resume && last && /^\/jing\/(?:meditation|muyu|fo|dao|chouqian|yixue|bazi|yijing|qimen|notes)\/$/.test(last)) {
+      resume.setAttribute('href', last);
+      resume.textContent = '续上次研习';
+    }
+  } catch {}
+</script>

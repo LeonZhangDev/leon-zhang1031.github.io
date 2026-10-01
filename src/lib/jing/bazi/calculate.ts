@@ -11,8 +11,9 @@ import {
   type FourPillars,
 } from '../calendar/engine';
 import type { BoundaryWarning, CalendarInput, DerivationStep } from '../calendar/types';
+import { validateFourPillars } from './input';
 
-export const BAZI_ALGORITHM_VERSION = 'bazi-1.0.0';
+export const BAZI_ALGORITHM_VERSION = 'bazi-2.0.0';
 
 export type WuXing = '木' | '火' | '土' | '金' | '水';
 
@@ -83,6 +84,7 @@ export interface BaziOutput {
     branch: string;
     hiddenStems: Array<{ stem: string; tenGod: ShiShen }>;
     naYin: string;
+    xunKong: string;
   }>;
 }
 
@@ -94,10 +96,24 @@ export interface CalculationEnvelope<T> {
   warnings: BoundaryWarning[];
 }
 
-export function calculateBazi(input: CalendarInput): CalculationEnvelope<BaziOutput> {
-  const normalized = normalizeInput(input);
-  const { pillars, derivation, warnings } = computePillars(normalized, input.lateZi);
+const GAN = ['甲', '乙', '丙', '丁', '戊', '己', '庚', '辛', '壬', '癸'] as const;
+const ZHI = ['子', '丑', '寅', '卯', '辰', '巳', '午', '未', '申', '酉', '戌', '亥'] as const;
 
+export function xunKong(ganzhi: string): string {
+  const ganIndex = GAN.indexOf(ganzhi[0] as (typeof GAN)[number]);
+  const zhiIndex = ZHI.indexOf(ganzhi[1] as (typeof ZHI)[number]);
+  if (ganIndex < 0 || zhiIndex < 0) return '—';
+  const xunStart = ((zhiIndex - ganIndex) % 12 + 12) % 12;
+  return `${ZHI[(xunStart + 10) % 12]}${ZHI[(xunStart + 11) % 12]}`;
+}
+
+export function calculateBaziFromPillars(
+  pillars: FourPillars,
+  derivation: DerivationStep[] = [],
+  warnings: BoundaryWarning[] = [],
+): CalculationEnvelope<BaziOutput> {
+  pillars = validateFourPillars(pillars);
+  derivation = [...derivation];
   const elements: Record<WuXing, number> = { 木: 0, 火: 0, 土: 0, 金: 0, 水: 0 };
   for (const pillar of Object.values(pillars)) {
     elements[STEM_ELEMENT[pillar[0]]] += 1;
@@ -110,6 +126,7 @@ export function calculateBazi(input: CalendarInput): CalculationEnvelope<BaziOut
     branch: pillar[1],
     hiddenStems: (HIDDEN_STEMS[pillar[1]] ?? []).map((stem) => ({ stem, tenGod: tenGod(dayStem, stem) })),
     naYin: NA_YIN.get(pillar) ?? '—',
+    xunKong: xunKong(pillar),
   });
   const output: BaziOutput = {
     pillars,
@@ -146,4 +163,10 @@ export function calculateBazi(input: CalendarInput): CalculationEnvelope<BaziOut
     derivation,
     warnings,
   };
+}
+
+export function calculateBazi(input: CalendarInput): CalculationEnvelope<BaziOutput> {
+  const normalized = normalizeInput(input);
+  const { pillars, derivation, warnings } = computePillars(normalized, input.lateZi);
+  return calculateBaziFromPillars(pillars, derivation, warnings);
 }

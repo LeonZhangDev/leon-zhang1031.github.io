@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+
+    <title>末日开箱客 · 设施试炼</title>
+
+    <meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1,minimum-scale=1,maximum-scale=1,minimal-ui=true"/>
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <meta name="mobile-web-app-capable" content="yes"/>
+    <meta name="full-screen" content="yes"/>
+    <meta name="screen-orientation" content="landscape"/>
+    <meta name="x5-fullscreen" content="true"/>
+    <meta name="360-fullscreen" content="true"/>
+
+    <meta name="renderer" content="webkit"/>
+    <meta name="force-rendering" content="webkit"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+
+    <link rel="stylesheet" type="text/css" href="./style.ad77d.css"/>
+    <link rel="icon" href="favicon.ico"/>
+  <style id="release-shell">
+html, body { width:100%; height:100%; margin:0; padding:0; overflow:hidden; background:#101418; }
+#GameDiv { position:fixed !important; inset:0; width:100vw !important; height:100vh !important; margin:0 !important; border:0; border-radius:0; box-shadow:none; }
+#Cocos3dGameContainer { width:100%; height:100%; }
+#GameCanvas { display:block; touch-action:none; }
+</style></head>
+  <body>
+
+    <div id="GameDiv" cc_exact_fit_screen="false" style="width: 1280px; height: 720px;">
+      <div id="Cocos3dGameContainer">
+        <canvas id="GameCanvas" width="1280" height="720" tabindex="99"></canvas>
+      </div>
+    </div>
+    <!-- Polyfills bundle. -->
+
+<script src="src/polyfills.bundle.5adbf.js" charset="utf-8"> </script>    
+
+
+<!-- SystemJS support. -->
+<script src="src/system.bundle.543e6.js" charset="utf-8"> </script>
+
+<!-- Import map -->
+<script src="src/import-map.4b8f7.json" type="systemjs-importmap" charset="utf-8"> </script>
+
+<script>
+    System.import('./index.228dc.js').catch(function(err) { console.error(err); })
+</script>
+  </body>
+</html>

@@ -1,5 +1,12 @@
 # Project Progress
 
+## 2026-10-02 — Survival trial public beta
+
+- Added the PC Web / 18+ survival trial to the existing game archive and generated detail route, with real gameplay WebP and click-to-load MP4. Preserved all three prior playable games and the latest remote-main content.
+- Copied the verified Creator 3.8.8 release package with debug/source maps off and a stable full-viewport shell. Game sidebar phase card has separate cost, due and paid/outstanding lines; regular Debug entry is removed.
+- Pre-release verification: 210 unit tests passed; Astro checked 134 files with zero errors/warnings and five existing hints; production build generated 184 pages. Three focused publication browser tests passed, including actual video loading and 390px width. Release-package and website nested-path real mouse smoke both passed new-game/character/starter-box/combat/management flow without page errors or HTTP failures.
+- Release isolated in a latest-main worktree, preserving unrelated dirty files in the user's original checkout. Uses the existing GitHub main / Vercel / canonical Worker pipeline without domain/proxy changes; `[skip actions]` prevents the unrelated Gitee force-push workflow. Remote publication verification pending.
+
 ## 2026-10-01
 
 - Applied the BaziMiao-inspired study upgrade independently in the existing Astro/TypeScript stack: solar/lunar/direct-pillar modes, gender-based luck direction, minute uncertainty, place calibration preview, basic/pro chart layers, and per-pillar Xun Kong.

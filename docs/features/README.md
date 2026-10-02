@@ -2,7 +2,7 @@
 
 - [blog-reading-quality](blog-reading-quality.md)
 - [comments-reliability](comments-reliability.md)
-- [game-and-blog-discovery](game-and-blog-discovery.md)
+- [game-and-blog-discovery](game-and-blog-discovery.md) — shared game cards and survival trial public beta publication
 - [bottle-flip-publication](bottle-flip-publication.md)
 - [waline-account-modal](waline-account-modal.md)
 - [quiet-cyber-editorial-design](quiet-cyber-editorial-design.md)

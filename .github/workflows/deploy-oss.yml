@@ -1,0 +1,59 @@
+name: Deploy to Aliyun OSS (China mirror)
+
+# 国内镜像：push 到 main 时构建静态站并同步到阿里云 OSS（默认域名临时访问，免备案）。
+# 备案完成后：绑自定义域名 + 开启 CDN，再启用末尾的「刷新 CDN 缓存」步骤。
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: deploy-oss
+  cancel-in-progress: true
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build site (China mirror)
+        # 注入 OSS 默认域名，保证 sitemap / RSS / canonical 指向国内地址
+        env:
+          ASTRO_SITE: https://${{ secrets.OSS_BUCKET }}.${{ secrets.OSS_ENDPOINT }}
+        run: npm run build
+
+      - name: Install ossutil
+        run: curl -L https://gosspublic.alicdn.com/ossutil/install.sh | sudo bash
+
+      - name: Configure ossutil
+        env:
+          OSS_ENDPOINT: ${{ secrets.OSS_ENDPOINT }}
+          OSS_ACCESS_KEY_ID: ${{ secrets.OSS_ACCESS_KEY_ID }}
+          OSS_ACCESS_KEY_SECRET: ${{ secrets.OSS_ACCESS_KEY_SECRET }}
+        run: ossutil config -e "$OSS_ENDPOINT" -i "$OSS_ACCESS_KEY_ID" -k "$OSS_ACCESS_KEY_SECRET"
+
+      - name: Sync dist/ to OSS
+        env:
+          OSS_BUCKET: ${{ secrets.OSS_BUCKET }}
+        run: ossutil sync dist/ oss://"$OSS_BUCKET"/ --delete --update
+
+      # === 备案完成后启用 ===
+      # 1) 在 OSS 控制台「传输管理 > 域名管理」绑定自定义域名并开启 CDN
+      # 2) 取消下方注释，用阿里云 CLI 刷新 CDN 缓存（需额外配置 ALIYUN_CLI 凭证）
+      # - name: Refresh CDN cache
+      #   run: |
+      #     aliyun cdn RefreshObjectCaches --ObjectPath "https://your-domain.com/" --ObjectType Directory

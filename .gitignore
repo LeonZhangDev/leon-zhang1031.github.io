@@ -26,3 +26,21 @@ playwright-report/
 .vercel
 .env*
 .tmp/
+
+# Large binaries / executables — keep out of git
+*.exe
+*.dll
+*.so
+*.dylib
+
+# AI / ML model weights
+*.gguf
+*.safetensors
+*.pt
+*.pth
+*.onnx
+*.h5
+*.keras
+*.ckpt
+*.model
+*.weights

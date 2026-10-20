@@ -6,8 +6,9 @@ import remarkMath from 'remark-math';
 import rehypeKatex from 'rehype-katex';
 
 export default defineConfig({
-  // 国内 OSS 构建时通过 ASTRO_SITE 注入 OSS 默认域名；Vercel 构建不设这个变量，回退到 workers.dev
-  site: process.env.ASTRO_SITE || 'https://zk.lz1031.workers.dev',
+  // 正式站点域名：EdgeOne Pages 托管的 leonzk.cn
+  // sitemap / RSS / canonical 全部由这里推导；如需临时覆盖可用 ASTRO_SITE 环境变量
+  site: process.env.ASTRO_SITE || 'https://leonzk.cn',
   output: 'static',
   adapter: vercel(),
   markdown: {

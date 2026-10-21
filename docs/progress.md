@@ -1,10 +1,18 @@
 # Project Progress
 
-## 2026-10-21 — Artalk replacement selected; hosting needed
+## 2026-10-21 — WWW domain binding verified
 
-- Owner requested replacing Waline with Artalk. Deployment host is not yet supplied; asked whether an existing Docker/Go-capable server is available or a low-cost/free option is needed.
+- Owner requested binding `www.leonzk.cn` to the same website as `leonzk.cn`. Existing EdgeOne project `leon-zhang1031` uses the free plan and includes mainland China; the apex production binding and HTTPS are active.
+- An existing WWW binding had no valid CNAME target and its certificate request had failed. Following the console recommendation, removed only that inactive binding and re-added it to production after the five-minute resource-release interval. EdgeOne assigned `www.leonzk.cn.pages.dnsoe6.com`; added only the WWW CNAME in DNSPod, default line / TTL 600. Google public DNS-over-HTTPS returned this exact target. Existing apex/TXT records remain unchanged.
+- Selected EdgeOne's free automatically validated/renewed/deployed HTTPS certificate. An initial Edge request failed with `ERR_CERT_COMMON_NAME_INVALID` during rollout; no warning bypass was used. Final console status is active / HTTPS deployed. Actual Edge navigation to both HTTPS homepages returned 200 and title `张坤个人主页`; an HTTP WWW visit landed on HTTPS and returned 200 (browser result, not a claim about the precise redirect status).
+- The WWW article `/posts/ai-learning-roadmap/` returned 200, negotiated TLS 1.3 with a TrustAsia certificate for `www.leonzk.cn`, retained the apex canonical URL, and rendered at 390 px with document width 384 px and zero uncaught page errors. This verifies binding and a sample page, not all website/comment functionality. No code deployment or Git push was required.
+- Owner waived historical Waline-comment migration. Preserve the original service/database; the waiver removes the full-export prerequisite, not the obligation to validate new Artalk functionality. No new Artalk service, migration, paid resource or Git push occurred.
+
+## 2026-10-21 — Artalk host verified; full backup pending
+
+- Owner selected `comments.leonzk.cn` and the existing Tencent Cloud Beijing Lighthouse server. Live browser and read-only command checks confirmed Ubuntu 24.04.4, 2 CPUs / 2 GB RAM, 33 GB free disk, no 80/443 listener and no active Docker/Nginx/Caddy. Tencent ICP status for `leonzk.cn` is normal and associated with this server.
 - Keep restored Waline and the original database intact. No Artalk deployment, database import, comment-domain cutover, paid resource or Git push has occurred. Preserve a full authorized export before importing into independent storage and compare historical records before release.
-- Existing account sign-in now reaches its profile, but administrator review privileges have not been established. The website account iframe renders correctly; unauthenticated comment-management access returns 401 without rows.
+- The owner sees comment management in their window, but the controlled Edge session's authenticated token endpoint still reports `guest`, with no management navigation. Requested a full administrative export saved outside Git or a redacted navigation screenshot; no permission elevation. GitHub and Docker Hub requests from the server timed out, so official Artalk artifact delivery remains unresolved.
 - Repository repair is downloading missing current-remote Git objects in resumable batches; remote feature integration and full regression remain pending. See [comments reliability](features/comments-reliability.md) for migration and rollback gates.
 
 ## 2026-10-21 — Waline restored; repository publication pending

@@ -1,5 +1,12 @@
 # Project Progress
 
+## 2026-10-21 — Artalk replacement selected; hosting needed
+
+- Owner requested replacing Waline with Artalk. Deployment host is not yet supplied; asked whether an existing Docker/Go-capable server is available or a low-cost/free option is needed.
+- Keep restored Waline and the original database intact. No Artalk deployment, database import, comment-domain cutover, paid resource or Git push has occurred. Preserve a full authorized export before importing into independent storage and compare historical records before release.
+- Existing account sign-in now reaches its profile, but administrator review privileges have not been established. The website account iframe renders correctly; unauthenticated comment-management access returns 401 without rows.
+- Repository repair is downloading missing current-remote Git objects in resumable batches; remote feature integration and full regression remain pending. See [comments reliability](features/comments-reliability.md) for migration and rollback gates.
+
 ## 2026-10-21 — Waline restored; repository publication pending
 
 - Authenticated Edge inspection confirmed the comment project was connected to the Astro blog. Disconnected that incorrect Git connection; retained Neon integration and all database environment values unchanged.

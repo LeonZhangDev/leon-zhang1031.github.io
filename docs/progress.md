@@ -14,7 +14,16 @@
 - Three-pair loopback medians: cold 6.029s to 5.097s; warm 2.182s to 2.171s
   (effectively unchanged). Resource transfer 1,789KiB to 837KiB at the scene
   frame marker, not full gameplay readiness. Live BEFORE: 10.928s / 4.342s.
-- Live deployment/cache-header acceptance remains a separate post-push check.
+- Live code `c2c916f`, deployment `dpavtdlysn4a`: successful, 186 pages. Initial
+  cloud guard failure was confirmed as CRLF/LF checkout differences and fixed
+  without changing game scripts. All eight exact cache headers are live on
+  apex and WWW, with original security headers and revalidating HTML preserved.
+- Three-pair live BEFORE/AFTER medians: cold 10.928s to 10.802s; warm 4.342s
+  to 3.713s. Cold startup resource transfer 1,979KiB to 1,026KiB (rounded).
+  WAN variance overlaps; these are samples, not a guaranteed speedup percentage.
+- Post-deployment smoke: four live game scenes pass, warm engine uses browser
+  cache (zero transferred bytes), apex/WWW mobile archives have four cards and
+  no overflow, and comment UI/API read pass with no page errors or writes.
   See [scope and measurement method](features/game-loading-optimization.md).
 
 ## 2026-10-21 — Free security and traffic-spike hardening

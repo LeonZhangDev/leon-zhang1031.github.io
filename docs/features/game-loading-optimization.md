@@ -72,5 +72,36 @@ changes. No new dependencies, hosting product or paid resource.
   startup resource transfer 1,979KiB / 1KiB. Do not compare these directly to
   loopback values: CDN compression, latency and browser workload differ.
 
+### Live acceptance (2026-10-21)
+
+- Code `c2c916f`, Pages deployment `dpavtdlysn4a`: successful. Cloud build
+  passed all four cache guards and generated 186 pages; dependency audit: zero.
+- Apex and WWW: all eight engine/WASM URLs return 200, expected MIME, immutable
+  cache policy and the original CSP/nosniff headers. Game HTML uses the small
+  icon and still revalidates; unversioned index.js and cc.js still revalidate.
+- Same browser/CDP profile, three pairs per version; no request interception,
+  forced reload, real-user profile or concurrent local build during timing:
+
+| Metric | Before | After |
+| --- | --- | --- |
+| Cold scene-frame samples (ms) | 11699 / 10928 / 10642 | 12342 / 10802 / 9964 |
+| Cold median (ms) | 10928 | 10802 |
+| Warm scene-frame samples (ms) | 4342 / 4699 / 3849 | 3991 / 3713 / 3518 |
+| Warm median (ms) | 4342 | 3713 |
+| Cold resource transfer at marker (KiB, rounded) | 1979 | 1026 |
+| Warm resource transfer at marker (KiB, rounded) | 1 | 1 |
+
+- BEFORE completed at 13:57:30 UTC; AFTER at 14:14:17 UTC. No page errors.
+  Resource bytes exclude the HTML navigation. Cold time improvement is small;
+  sample spread overlaps and WAN/CDN effects are not controlled. Warm median
+  improved in this sample, but the loopback warm result was effectively flat:
+  do not promise a universal latency percentage. The icon's byte reduction and
+  exact live cache headers are the deterministic improvements.
+- Post-deployment browser smoke: all four live game scenes render (200); warm
+  survival engine transfer is zero bytes with a zero-duration cache hit. Apex
+  and WWW game archives show all four cards without 390px overflow. The comment
+  textarea remains visible and browser-origin comment API read returns 200.
+  No page errors, comment writes, server changes or real-save storage access.
+
 Sources: [Pages cache defaults](https://pages.edgeone.ai/document/configuring-cache),
 [exact URL/header rules](https://pages.edgeone.ai/document/edgeone-json).

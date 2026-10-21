@@ -1,5 +1,7 @@
 # Features
 
+- [game-loading-optimization](game-loading-optimization.md) — small icon and exact engine cache contracts
+
 - [free-security-hardening](free-security-hardening.md) — verified free controls, burst shedding and data-safe rollback
 
 - [build-dependency-security](build-dependency-security.md) — patched static build chain and authorized Waline retirement

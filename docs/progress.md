@@ -1,5 +1,22 @@
 # Project Progress
 
+## 2026-10-21 — First free game-loading batch
+
+- Reused the existing 46,381-byte site icon instead of the survival game's
+  1,021,548-byte ICO; retained the original file for rollback.
+- Added eight literal versioned engine/WASM cache rules across four games and
+  a build-time SHA256/reference guard. HTML, configs, game logic, storage keys,
+  origin, paid services and comment data are unchanged.
+- Passed 210 unit tests, 126 Chrome E2E tests, 18 root Node checks and Astro
+  check (zero errors/warnings, two pre-existing clipboard hints). Four games
+  rendered cold/warm without page errors; synthetic IndexedDB save/revisit and
+  Continue restored an identical slot through the actual UI.
+- Three-pair loopback medians: cold 6.029s to 5.097s; warm 2.182s to 2.171s
+  (effectively unchanged). Resource transfer 1,789KiB to 837KiB at the scene
+  frame marker, not full gameplay readiness. Live BEFORE: 10.928s / 4.342s.
+- Live deployment/cache-header acceptance remains a separate post-push check.
+  See [scope and measurement method](features/game-loading-optimization.md).
+
 ## 2026-10-21 — Free security and traffic-spike hardening
 
 - Inspected live Pages protection, cloud firewall, Artalk configuration,

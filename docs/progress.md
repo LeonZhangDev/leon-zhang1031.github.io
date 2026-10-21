@@ -1,5 +1,13 @@
 # Project Progress
 
+## 2026-10-21 — Artalk production cutover verified
+
+- Normally pushed `4433f0e` to the verified `LeonZhangDev/leon-zhang1031.github.io` main branch. GitHub reports the existing Vercel build successful. EdgeOne's initial rollout still served the old widget; subsequent fresh real browser navigations confirmed the new Artalk client on both apex and WWW. No manual paid deployment or domain rebinding was needed.
+- Verified `https://leonzk.cn/posts/ai-learning-roadmap/` and the equivalent WWW URL without cache-busting parameters: HTTP 200, Artalk editor visible, no active Waline widget, approved comment 2 visible, maintenance message hidden, comment API HTTP 200, no observed uncaught page errors. At 390px both document widths are 390px; both canonical URLs remain apex. Footer management points to the HTTPS Artalk backend. Production mobile screenshot was visually inspected outside the repository.
+- Approved-origin API checks return the matching apex/WWW allow-origin header and public comment ID 2; an untrusted origin receives no allow-origin header. A fresh unauthenticated management request returns 403. The original Waline service/database were not modified during cutover.
+- Fresh post-commit repeat: 210 unit tests pass, production build succeeds with 186 pages; the existing Artalk Rollup annotation warning is non-fatal. Eight focused Node safety checks pass. Complete browser suite passed 125/125 before publication. These checks are not a comprehensive security audit or a guarantee about every external integration.
+- Remaining boundaries: SMTP notifications and off-host backups are not configured; dependency findings described below remain. Authorized test comment 2 is intentionally retained. Unrelated `.workbuddy/` files remain untracked and were not published.
+
 ## 2026-10-21 — Artalk pre-publication acceptance passed
 
 - In a fresh persistent Edge profile, the owner signed in directly. Authenticated status reports administrator/login true and survives reload; management requests return 200. No password or authentication token was read or recorded.

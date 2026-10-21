@@ -2,10 +2,10 @@
 
 ## Overview
 
-The staged frontend uses the bundled Artalk 2.10.0 client after validating
+The production frontend uses the bundled Artalk 2.10.0 client after validating
 `https://comments.leonzk.cn/api/v2/conf`. Unavailable service remains a
-maintenance message with a retry button. Pre-publication acceptance passed;
-production publication status is recorded in the progress log.
+maintenance message with a retry button. Apex and WWW production acceptance
+passed on 2026-10-21; exact evidence is recorded in the progress log.
 The original Waline service/database remain available and unchanged; the
 owner waived historical-comment migration, not data preservation.
 

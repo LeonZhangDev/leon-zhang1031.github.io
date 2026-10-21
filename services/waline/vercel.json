@@ -4,5 +4,8 @@
   "framework": null,
   "buildCommand": null,
   "outputDirectory": null,
+  "functions": {
+    "api/index.js": { "includeFiles": "node_modules/{@mathjax,mhchemparser}/**" }
+  },
   "rewrites": [{ "source": "/(.*)", "destination": "/api/index" }]
 }

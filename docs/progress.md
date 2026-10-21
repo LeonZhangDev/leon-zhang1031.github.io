@@ -1,11 +1,12 @@
 # Project Progress
 
-## 2026-10-21 — Waline recovery in progress (not published)
+## 2026-10-21 — Waline restored; repository publication pending
 
 - Authenticated Edge inspection confirmed the comment project was connected to the Astro blog. Disconnected that incorrect Git connection; retained Neon integration and all database environment values unchanged.
-- Restored old Waline deployment `J79VFQmWmcm6nTDLFasTk7vGkmgN` without promoting it; its API responds with Waline 403. Updated `SITE_URL` and `SECURE_DOMAINS` for the current site, but these changes are not active until a new deployment.
-- Recovered the original server dependency versions and log suppression into `services/waline`; four dependency-free deployment checks passed. Vercel refuses to redeploy the old prebuilt artifact with updated variables, so a fresh source deployment is needed. CLI authorization is pending owner action in Edge.
-- No database migration, initialization, credential reveal/download/change, account creation, comment write or Git push. Current production comments remain unverified and the newer remote website changes still need integration and regression testing before push.
+- Recovered the original server dependency versions and log suppression into `services/waline`; added explicit dynamic MathJax/font and `mhchemparser` function includes after two runtime-failing candidates. Nine dependency-free workflow, identity and service checks passed.
+- Owner authorized Vercel CLI in Edge. Deployment `dpl_AJTLvbieVEqjTYtqA4toNqngjsX1` is now promoted to the existing `lz1031-waline.vercel.app` domain with current `SITE_URL`/allowlist. Browser-origin API read returned HTTP 200 / errno 0; the real article editor rendered with zero console errors and no 390px horizontal overflow.
+- Owner separately approved one isolated test comment: ID 6, status `waiting`, path `/__waline-health-check-20261021/`. Anonymous reads do not expose it. Login/registration forms render; authenticated original-row comparison and approval/email delivery remain unverified.
+- No database migration, initialization, database-credential reveal/download/change, account creation or Git push. Original database configuration was retained, but this is not a full historical-row comparison. Newer remote commits still need integration and regression testing; Git object downloads have encountered a TLS disconnect.
 
 ## 2026-10-21 — Site health audit (not release-ready)
 

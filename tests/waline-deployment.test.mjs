@@ -18,6 +18,7 @@ test('Waline routes do not build or serve the Astro blog', () => {
   const config = JSON.parse(read('vercel.json'));
   assert.equal(config.framework, null);
   assert.equal(config.buildCommand, null);
+  assert.equal(config.functions['api/index.js'].includeFiles, 'node_modules/{@mathjax,mhchemparser}/**');
   assert.deepEqual(config.rewrites, [{ source: '/(.*)', destination: '/api/index' }]);
 });
 

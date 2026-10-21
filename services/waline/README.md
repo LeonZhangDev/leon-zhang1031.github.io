@@ -2,6 +2,8 @@
 
 This is the recovered comment backend, not the Astro website. It preserves the
 deployed `@waline/vercel` 1.41.5 / jsdom 26.1.0 versions and SQL info-log suppression.
+Explicit function includes preserve MathJax's dynamically loaded modules, fonts and
+`mhchemparser`, which automatic dependency tracing otherwise omits.
 
 Deploy this directory only to the existing `leonzhang1031/lz1031-waline` project.
 Keep database connection variables in that project's existing Production

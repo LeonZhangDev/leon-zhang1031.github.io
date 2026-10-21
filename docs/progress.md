@@ -1,5 +1,14 @@
 # Project Progress
 
+## 2026-10-21 — Patched build production acceptance
+
+- Normally pushed `c1e3e5e` to the verified GitHub main branch. EdgeOne production deployment `dpjiok1bwp9t` reports success; its Linux build generated 186 pages and completed publication at 20:47:37 China time.
+- Initial warm-browser requests still returned old asset names during rollout. A new unauthenticated browser context subsequently loaded both apex and WWW roadmap URLs without cache-busting: HTTP 200, all three CSS asset names exactly match the new local build, Artalk editor/approved test comment visible, document width 390px. This supersedes the earlier in-progress result, not just the platform Ready indicator.
+- Post-deployment read-only production smoke completed at 12:49:26 UTC: 12 article/route pages and their figures/results artifacts passed, comment read returned 200. Additional real-browser checks: homepage/games/projects HTTP 200 and 390px width; the actual Transformer course route returned 200 with 29 rendered formulae, zero math errors and loaded local KaTeX font. An exploratory non-existent attention shorthand returned 404; the real course URL is unchanged and passes.
+- Old Waline formal and sampled deployment-specific API endpoints return 503; live table counts were independently verified zero. Current Artalk approved record 2 remains publicly readable. No new comments were written, no Artalk data/config was changed, and no paid resource was created.
+- Residual non-security diagnostics: 12 informational type-check hints and an unsupported `go-html-template` code-highlighting language fallback to plaintext on a clean content sync. These do not fail build or dependency audit. SMTP delivery, off-host backup, all historical deployment artifacts and older-browser compatibility are not newly certified. Neon-managed history may retain deleted Waline data temporarily; no physical vendor-backup purge is claimed.
+- ADR/backfill review used the existing feature/baseline records to document compatibility and retirement decisions; missing packaged ADR reference documents did not become completion evidence. This follow-up changes documentation only; the accepted production code remains `c1e3e5e`.
+
 ## 2026-10-21 — Build security repair and authorized Waline retirement
 
 - Upgraded the vulnerable build chain to Astro 7.4.1 / Tailwind 4.3.3 / Sharp 0.35.5, migrated Content Layer APIs without changing article URLs, retained unified math rendering, and removed unused legacy adapters. Clean Node 24/npm 11 install and fresh root audit both report zero vulnerabilities (460 packages), superseding earlier audit counts below.

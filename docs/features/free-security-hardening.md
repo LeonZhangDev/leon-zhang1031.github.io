@@ -72,6 +72,8 @@ guarantee against intrusion or arbitrary traffic volumes.
   still require a destination/retention decision. No storage was purchased.
 - No real load/attack test or new public test comment was submitted. No claim
   that free services prevent bandwidth saturation or unlimited DDoS is made.
+  Existing server bandwidth/traffic-package billing still applies; request
+  limits do not guarantee zero traffic-overage charges.
 
 Sources: [Pages quotas and protection](https://pages.edgeone.ai/document/limits-and-quotas),
 [default caching](https://pages.edgeone.ai/document/configuring-cache),

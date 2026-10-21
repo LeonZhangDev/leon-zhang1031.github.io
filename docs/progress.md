@@ -25,6 +25,21 @@
   has zero errors/warnings and the same two intentional clipboard API hints.
   No extension code/download bytes changed. Vendor header rollout is verified
   separately after normal push; local preview is not production evidence.
+- Code `836279b` deployed successfully as `dpicwbgtmmof`. Fresh apex/WWW GETs
+  return all three configured headers, with HTML cache policy still
+  public,max-age=0,must-revalidate. Both fresh 390px browser contexts show the
+  editor and approved validation record without overflow or uncaught errors.
+- Post-deployment production smoke passed 12 pages at 13:39:46 UTC. The engine
+  menu renders at 1280x720 without observed page/CSP/MIME errors; its WASM returns
+  200/application/wasm. No gameplay save or remote comment was created.
+- A supplemental type check caught two missing annotations in the newly added
+  test after its first runtime pass. Added explicit header-field types; fresh
+  Astro check now has zero errors/warnings and the same two legacy hints, and
+  the new browser regression passed again. This follow-up changes test types
+  and acceptance notes only, not website or server behavior.
+- Caddy's running admin configuration confirms actual limits (not just the
+  on-disk template). Final DB integrity remains ok with 1/2/1 records; the new
+  consistent local backup is 0600 and the prior proxy config is retained.
 - Details, sources, rollback and deferred SSH/proxy-upgrade/off-host-backup
   work: [free security hardening](features/free-security-hardening.md).
 

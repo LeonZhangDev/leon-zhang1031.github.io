@@ -2,7 +2,9 @@ import { test, expect } from '@playwright/test';
 import { readFileSync } from 'node:fs';
 
 const config = JSON.parse(readFileSync(new URL('../../edgeone.json', import.meta.url), 'utf8'));
-const headers = Object.fromEntries(config.headers[0].headers.map(({ key, value }) => [key.toLowerCase(), value]));
+const headers = Object.fromEntries(config.headers[0].headers.map(
+  ({ key, value }: { key: string; value: string }) => [key.toLowerCase(), value],
+));
 
 test('candidate edge headers preserve mobile navigation, comments and game scripts', async ({ page }) => {
   const errors: string[] = [];

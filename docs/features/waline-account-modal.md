@@ -2,6 +2,12 @@
 
 ## Overview
 
+Retired from the active layout by the staged Artalk replacement. Source and
+styles are temporarily retained for review until cutover acceptance; the
+Waline service and original database must remain intact regardless. The new
+footer links directly to the Artalk administrator page, without advertising
+Waline registration or sharing credentials between systems.
+
 The global footer opens Waline login and registration inside a site-styled modal instead of immediately navigating visitors away from the portfolio.
 
 ## Design decisions

@@ -16,7 +16,7 @@ for (const slug of reviewedPosts) {
   test(`reviewed article renders with scoped evidence: ${slug}`, async ({ page }) => {
     const errors: string[] = [];
     page.on('pageerror', error => errors.push(error.message));
-    await page.route('**/api/comment**', route => route.fulfill({ status:503, body:'{}' }));
+    await page.route('https://comments.leonzk.cn/api/v2/**', route => route.fulfill({ status:503, body:'{}' }));
     await page.setViewportSize({ width:390, height:844 });
     const response = await page.goto(`/posts/${slug}/`);
     expect(response?.status()).toBe(200);
@@ -147,7 +147,7 @@ test('every published post has a built page, valid article links and no math err
 test('learning route links, article tools and mobile dialog work', async ({ page, context }) => {
   const errors: string[] = [];
   page.on('pageerror', error => errors.push(error.message));
-  await page.route('**/api/comment**', route => route.fulfill({ status: 503, body: '{}' }));
+  await page.route('https://comments.leonzk.cn/api/v2/**', route => route.fulfill({ status: 503, body: '{}' }));
   await page.goto('/posts/learning-paths/');
   await expect(page).toHaveTitle(/学习路线/);
   await expect(page.locator('main')).toHaveCount(1);
@@ -185,7 +185,7 @@ test('learning route links, article tools and mobile dialog work', async ({ page
 });
 
 test('copy failure is explained without losing the code', async ({ page }) => {
-  await page.route('**/api/comment**', route => route.fulfill({ status:503, body:'{}' }));
+  await page.route('https://comments.leonzk.cn/api/v2/**', route => route.fulfill({ status:503, body:'{}' }));
   await page.addInitScript(() => {
     Object.defineProperty(navigator, 'clipboard', {
       value:{ writeText:async () => { throw new Error('Clipboard access denied'); } },
@@ -199,7 +199,7 @@ test('copy failure is explained without losing the code', async ({ page }) => {
 });
 
 test('attention formulas render with local fonts on mobile', async ({ page }) => {
-  await page.route('**/api/comment**', route => route.fulfill({ status: 503, body: '{}' }));
+  await page.route('https://comments.leonzk.cn/api/v2/**', route => route.fulfill({ status: 503, body: '{}' }));
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto('/posts/deep-learning-07-transformer-attention/');
   await expect(page.locator('.prose .katex').first()).toBeVisible();
@@ -211,7 +211,7 @@ test('attention formulas render with local fonts on mobile', async ({ page }) =>
 });
 
 test('math works even when an old post says math false', async ({ page }) => {
-  await page.route('**/api/comment**', route => route.fulfill({ status: 503, body: '{}' }));
+  await page.route('https://comments.leonzk.cn/api/v2/**', route => route.fulfill({ status: 503, body: '{}' }));
   await page.goto('/posts/gnn-graph-neural-network/');
   await expect(page.locator('.prose .katex').first()).toBeVisible();
   await expect(page.locator('.prose .katex-error')).toHaveCount(0);
@@ -219,19 +219,23 @@ test('math works even when an old post says math false', async ({ page }) => {
 
 test('comment errors stay visible and a retry can recover', async ({ page }) => {
   let available = false;
-  await page.route('**/api/comment**', route => route.fulfill({
+  await page.route('https://comments.leonzk.cn/api/v2/conf', route => route.fulfill({
     status: 200,
     contentType: 'application/json',
     body: JSON.stringify(available
-      ? { errno: 0, data: { count: 0, totalPages: 0, pageSize: 10, curPage: 1, data: [] } }
-      : { errno: 500, errmsg: 'Database unavailable' }),
+      ? { frontend_conf: {}, version: { app: 'artalk', version: '2.10.0', commit_hash: '' } }
+      : { msg: 'Database unavailable' }),
+  }));
+  await page.route('https://comments.leonzk.cn/api/v2/comments**', route => route.fulfill({
+    contentType: 'application/json',
+    body: JSON.stringify({ comments: [], roots_count: 0, count: 0, page: { key: '/posts/deep-learning-07-transformer-attention/' } }),
   }));
   await page.goto('/posts/deep-learning-07-transformer-attention/');
   await expect(page.locator('.comments-status')).toContainText('目前无法提交');
-  await expect(page.locator('.waline-wrap')).toBeHidden();
+  await expect(page.locator('.artalk-wrap')).toBeHidden();
   available = true;
   await page.getByRole('button', { name: '重新检查' }).click();
-  await expect(page.locator('.waline-wrap')).toBeVisible();
-  await expect(page.locator('.wl-editor')).toBeVisible();
+  await expect(page.locator('.artalk-wrap')).toBeVisible();
+  await expect(page.locator('.atk-textarea')).toBeVisible();
   await expect(page.locator('.comments-status')).toBeHidden();
 });

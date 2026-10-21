@@ -726,7 +726,7 @@ main { position: relative; z-index: 1; }
   color: var(--text-primary);
   cursor: pointer;
 }
-.waline-wrap { position: relative; z-index: 1; }
+.artalk-wrap { position: relative; z-index: 1; min-width: 0; }
 
 /* Long equations scroll locally without widening a mobile article. */
 .prose .katex-display { overflow-x: auto; overflow-y: hidden; padding: 0.5rem 0; }

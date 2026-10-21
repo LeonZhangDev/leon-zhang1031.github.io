@@ -1,0 +1,9 @@
+comments.leonzk.cn {
+    encode zstd gzip
+    header {
+        X-Content-Type-Options nosniff
+        Referrer-Policy strict-origin-when-cross-origin
+        Content-Security-Policy "frame-ancestors 'self' https://leonzk.cn https://www.leonzk.cn http://localhost:4321"
+    }
+    reverse_proxy 127.0.0.1:23366
+}

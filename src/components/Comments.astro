@@ -1,5 +1,5 @@
 ---
-import '@waline/client/waline.css';
+import 'artalk/Artalk.css';
 
 interface Props {
   prompt: string;
@@ -13,20 +13,20 @@ const { prompt } = Astro.props;
   <p class="comments-prompt">{prompt}</p>
   <div class="comments-status" role="status" aria-live="polite">正在连接评论服务，首次访问可能需要几秒…</div>
   <button class="comments-retry" type="button" hidden>重新检查</button>
-  <div class="waline-wrap" hidden></div>
+  <div class="artalk-wrap" hidden></div>
 </section>
 
 <script>
-  import { init } from '@waline/client';
+  import Artalk from 'artalk';
 
-  const serverURL = 'https://lz1031-waline.vercel.app';
+  const serverURL = 'https://comments.leonzk.cn';
 
   document.querySelectorAll<HTMLElement>('[data-comments]').forEach((section) => {
     const status = section.querySelector<HTMLElement>('.comments-status');
     const retry = section.querySelector<HTMLButtonElement>('.comments-retry');
-    const container = section.querySelector<HTMLElement>('.waline-wrap');
+    const container = section.querySelector<HTMLElement>('.artalk-wrap');
     const prompt = section.dataset.prompt || '欢迎留下你的问题或建议。';
-    let waline: ReturnType<typeof init> | undefined;
+    let artalk: Artalk | undefined;
 
     const showUnavailable = (message: string) => {
       if (status) {
@@ -44,34 +44,31 @@ const { prompt } = Astro.props;
       const controller = new AbortController();
       const timer = window.setTimeout(() => controller.abort(), 12000);
       try {
-        const url = new URL('/api/comment', serverURL);
-        url.searchParams.set('path', location.pathname);
-        url.searchParams.set('pageSize', '1');
+        const url = new URL('/api/v2/conf', serverURL);
         const response = await fetch(url, { signal: controller.signal });
         if (!response.ok) throw new Error(`HTTP ${response.status}`);
         const payload = await response.json();
-        if (payload.errno !== 0 || !payload.data || !Array.isArray(payload.data.data)) {
+        if (payload.version?.app !== 'artalk' || !payload.frontend_conf) {
           throw new Error('Invalid comment response');
         }
 
         if (status) status.hidden = true;
         if (container) container.hidden = false;
-        if (!waline && container) {
-          waline = init({
+        if (!artalk && container) {
+          artalk = Artalk.init({
             el: container,
-            serverURL,
-            path: location.pathname,
-            lang: 'zh-CN',
-            dark: 'html.dark',
-            login: 'enable',
-            meta: ['nick', 'mail'],
-            requiredMeta: [],
-            wordLimit: [2, 1000],
-            pageSize: 10,
-            imageUploader: false,
-            locale: {
-              placeholder: `${prompt}\n评论将先进入审核，请勿发布广告或敏感信息。`,
-            },
+            server: serverURL,
+            site: '张坤个人主页',
+            pageKey: location.pathname,
+            pageTitle: document.title,
+            locale: 'zh-CN',
+            darkMode: document.documentElement.classList.contains('dark'),
+            reqTimeout: 12000,
+            emoticons: false,
+            imgUpload: false,
+            versionCheck: false,
+            preferRemoteConf: false,
+            placeholder: `${prompt}\n评论将先进入审核，请勿发布广告或敏感信息。`,
           });
         }
       } catch (error) {
@@ -86,9 +83,7 @@ const { prompt } = Astro.props;
 
     retry?.addEventListener('click', checkAndInit);
     window.addEventListener('themechange', () => {
-      waline?.update({
-        dark: document.documentElement.classList.contains('dark') ? 'html.dark' : '',
-      });
+      artalk?.setDarkMode(document.documentElement.classList.contains('dark'));
     });
     void checkAndInit();
   });

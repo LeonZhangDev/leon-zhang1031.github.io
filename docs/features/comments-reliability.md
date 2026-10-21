@@ -2,9 +2,35 @@
 
 ## Overview
 
-Waline is loaded only after a successful API health check. Unavailable service is shown as a maintenance message with a retry button.
+The staged frontend uses the bundled Artalk 2.10.0 client after validating
+`https://comments.leonzk.cn/api/v2/conf`. Unavailable service remains a
+maintenance message with a retry button. Pre-publication acceptance passed;
+production publication status is recorded in the progress log.
+The original Waline service/database remain available and unchanged; the
+owner waived historical-comment migration, not data preservation.
+
+See [Artalk deployment](../../services/artalk/README.md) and the current
+[progress record](../progress.md) for acceptance gates. The entries below
+describe the historical Waline implementation and recovery, not the new
+service's verified production status.
 
 ## Design decisions
+
+- Current Artalk: independent SQLite on the existing server, HTTPS at
+  `comments.leonzk.cn`, anonymous submissions pending by default, administrator
+  approval before public visibility. The client bundles a pinned version and
+  disables image uploads and remote frontend overrides. Old Waline storage is
+  retained without migration or credential changes.
+- Management: open `https://comments.leonzk.cn/sidebar/#/comments`, sign in,
+  choose the site (or all sites), open 待审, and click the comment's 待审 action;
+  it changes to 已审. Clicking 已审 again returns it to pending. Clicking a
+  comment's page link navigates to its original article; historical synthetic
+  test paths may have no website page and return 404 without an API failure.
+- Acceptance: replacement test comment 2 was hidden anonymously while pending,
+  approved through the real administrator UI, then visible through an anonymous
+  read and the actual mobile article widget. No SMTP-delivery claim is made.
+
+### Historical Waline decisions (not the active frontend)
 
 - Keep comments on detail pages where discussion has a clear subject.
 - Allow anonymous comments with optional nickname and email.

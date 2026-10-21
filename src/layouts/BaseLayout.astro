@@ -328,7 +328,7 @@ const currentPath = Astro.url.pathname;
 
   <!-- WeChat QR Code Popover -->
   <div id="wechat-qr-overlay" class="qr-overlay" style="display:none;">
-    <div class="qr-card" onclick="event.stopPropagation()">
+    <div class="qr-card">
       <button class="qr-close" onclick="document.getElementById('wechat-qr-overlay').style.display='none'" title="关闭">✕</button>
       <img src="/images/wechat-qr.jpg" alt="公众号二维码" class="qr-image" />
       <p class="qr-text">扫码关注公众号</p>
@@ -337,6 +337,7 @@ const currentPath = Astro.url.pathname;
   <script is:inline>
     const qrBtns = document.querySelectorAll('[data-qr-trigger]');
     const qrOverlay = document.getElementById('wechat-qr-overlay');
+    qrOverlay?.querySelector('.qr-card')?.addEventListener('click', (event) => event.stopPropagation());
     qrBtns.forEach(btn => {
       btn?.addEventListener('click', () => {
         if (qrOverlay) {

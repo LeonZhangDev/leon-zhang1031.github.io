@@ -17,8 +17,8 @@ async function setup({ url = 'https://my.feishu.cn/docx/test', response = {}, no
     const chrome = {
         runtime,
         tabs: {
-            query(options, callback) { callback(url === null ? [] : [{ id: 1, url }]); },
-            sendMessage(id, message, options, callback) {
+            query(_options, callback) { callback(url === null ? [] : [{ id: 1, url }]); },
+            sendMessage(_id, message, _options, callback) {
                 sends++;
                 if (noReceiver || (applyError && message.type === 'FEISHU_COPY_SET_MODE')) {
                     runtime.lastError = { message: 'Receiving end does not exist' };
@@ -33,7 +33,7 @@ async function setup({ url = 'https://my.feishu.cn/docx/test', response = {}, no
         } } },
     };
     vm.runInNewContext(source, {
-        document: { getElementById: id => nodes[id], addEventListener(name, callback) { initialize = callback; } },
+        document: { getElementById: id => nodes[id], addEventListener(_name, callback) { initialize = callback; } },
         chrome, URL, setTimeout, clearTimeout,
     });
     await initialize();

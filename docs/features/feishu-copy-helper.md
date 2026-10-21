@@ -17,6 +17,7 @@
 - 扩展在 document_start 加载 copy-formats.js、content.js，Ctrl/Cmd+C 仍通过真实 copy 事件同步写入剪贴板。
 - 使用原页面计算样式和无浏览上下文的文档生成 HTML；Markdown 采用递归转换，保留代码空行和列表层级。
 - 打包命令：在 tools/feishu-copy-helper 中运行 powershell -ExecutionPolicy Bypass -File scripts/package-extension.ps1。发布时同步更新版本号、ZIP、SHA256 与详情页。
+- 2026-10-21 非功能清理：仅将未用回调参数命名为 `_sender`，同步重打 2.3.0 包和 SHA256；功能、版本号不变。保留两处旧复制 API 兼容回退，不通过隐藏诊断移除受限权限下的复制能力。
 - 2026-10-21：18 项 Node 逻辑测试通过；从安装 ZIP 解压的真实扩展通过 17 项快捷键检查、33 项格式及模式检查。
 - 站点预览只构建本次涉及的 2 条页面路由及其真实布局和样式；不是整个站点的完整回归。线上部署另行核对。
 - v2.2 的实际 Edge 纯文本验收来自用户手动确认；新版在 Word、Notion 和真实飞书文档的格式粘贴仍需分别验收。

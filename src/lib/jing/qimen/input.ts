@@ -29,15 +29,10 @@ export function normalizeQimenInput(input: CivilDateTime): QimenInput {
   const prev = lunar.getPrevJieQi();
   const next = lunar.getNextJieQi();
   const prevSolar = prev.getSolar();
-  const nextSolar = next.getSolar();
 
   const prevTime: CivilDateTime = {
     year: prevSolar.getYear(), month: prevSolar.getMonth(), day: prevSolar.getDay(),
     hour: prevSolar.getHour(), minute: prevSolar.getMinute(),
-  };
-  const nextTime: CivilDateTime = {
-    year: nextSolar.getYear(), month: nextSolar.getMonth(), day: nextSolar.getDay(),
-    hour: nextSolar.getHour(), minute: nextSolar.getMinute(),
   };
 
   // 日干支取 0 点换日口径；23:00 后的处理由各派自行决定

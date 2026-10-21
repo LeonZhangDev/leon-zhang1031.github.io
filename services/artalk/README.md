@@ -1,13 +1,15 @@
 # Artalk
 
 Independent Artalk 2.10.0 service for `comments.leonzk.cn`. The original
-`../waline` service and its database remain unchanged; no historical import.
+Waline service has since been paused and its three tables cleared with owner
+approval; its source was retired. Artalk data remains independent; no historical import.
 
 - `bootstrap.sh`: first-install script for the verified official Linux amd64 archive.
 - Bind only `127.0.0.1:23366`; put Caddy HTTPS in front of it.
 - Persistent SQLite: `/var/lib/artalk/artalk.db`; configuration contains a
   server-generated key in `/etc/artalk/artalk.yml`, never in Git.
-- New comments require approval. Uploads, SMTP and social login are disabled.
+- New comments require approval. The website disables client image uploads;
+  this is not proof that backend upload endpoints are disabled. SMTP and social login are disabled.
 - Create the administrator interactively using `artalk admin --config
   /etc/artalk/artalk.yml --name 张坤 --email <owner-email>`; type the password
   only into the server terminal's hidden prompt, never chat or command arguments.
@@ -29,6 +31,7 @@ The authorized replacement validation comment is number 2 on the real learning
 roadmap article; the owner deleted the earlier synthetic-path record.
 
 The website explicitly disables image uploads and ignores remote frontend
-overrides. A later public config check advertised `imgUpload: true`; do not
-infer backend upload-disablement solely from the bootstrap template. SMTP
+overrides. An earlier public config check advertised `imgUpload: true`; the
+2026-10-21 follow-up now returns `false`. Neither frontend setting proves
+backend upload endpoint rejection; do not infer it from the template. SMTP
 delivery and off-host disaster-recovery backups are not part of acceptance.

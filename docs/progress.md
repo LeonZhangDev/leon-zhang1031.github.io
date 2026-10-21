@@ -1,5 +1,33 @@
 # Project Progress
 
+## 2026-10-21 — Non-security diagnostic cleanup, pre-publication
+
+- Removed ten informational hints through unused-code cleanup and explicit QR
+  events; left two copy-API deprecation hints visible to preserve extension
+  behavior when async clipboard is denied. Type check: zero errors/warnings,
+  two hints. No broad suppression or dependency change.
+- Fixed the unsupported Hugo fence language without changing its snippet;
+  refreshed the one editorial-ledger language entry. Build: 186 pages, no
+  unsupported-language fallback. Content audit: 163 posts, no failures.
+- Verification: 210 unit tests, 30 focused Node checks (including two new
+  regressions), 125/125 Chrome E2E at two workers, 50 extension browser checks,
+  full npm audit zero findings. The missing pinned Chromium was resolved by
+  using the existing CLI runtime/browser pair; no browser download. An initial
+  local npm PATH error was corrected before the successful complete E2E run.
+- Real QR checks pass for desktop open, card keeping open, close button,
+  Escape, backdrop and the mobile navigation entry. An initial hidden desktop
+  selector timed out at mobile width; selecting actual mobile navigation
+  confirms the behavior without a product change.
+- Repacked 2.3.0 for the callback-name-only cleanup and refreshed the published
+  SHA256. Artalk documentation now distinguishes historic Waline retirement
+  and current public imgUpload=false from untested backend upload rejection.
+- Security research recommends existing-control verification and incremental
+  hardening rather than another framework. No security settings, DB contents,
+  paid resources or live comment records changed. Details and primary sources
+  are in [build dependency security](features/build-dependency-security.md).
+- Normal push and live deployment acceptance are still pending at this entry.
+  Unrelated `.workbuddy/` remains excluded.
+
 ## 2026-10-21 — Patched build production acceptance
 
 - Normally pushed `c1e3e5e` to the verified GitHub main branch. EdgeOne production deployment `dpjiok1bwp9t` reports success; its Linux build generated 186 pages and completed publication at 20:47:37 China time.

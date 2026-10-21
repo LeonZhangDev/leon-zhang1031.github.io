@@ -2689,7 +2689,7 @@
         "unspecified",
         "toml",
         "markdown",
-        "go-html-template",
+        "html",
         "css",
         "javascript",
         "bash"

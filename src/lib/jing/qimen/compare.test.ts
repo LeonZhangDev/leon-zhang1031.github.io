@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { renderChart } from './base-chart';
-import { chartForSchool, compareSchools } from './compare';
+import { compareSchools } from './compare';
 import { QIMEN_FIXTURES } from './fixtures';
 
 const chartCases = QIMEN_FIXTURES.filter((f) => f.schools['chai-bu'].chart);

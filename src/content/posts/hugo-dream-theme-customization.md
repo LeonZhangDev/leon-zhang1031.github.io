@@ -234,7 +234,7 @@ layouts/partials/header/renderNavItem.html
 
 让它优先检查 `site.Params.navItems`：
 
-```go-html-template
+```html
 {{/* 自定义导航项：优先使用 site.Params.navItems */}}
 {{ range .Site.Params.navItems }}
   {{ if eq .type "text" }}

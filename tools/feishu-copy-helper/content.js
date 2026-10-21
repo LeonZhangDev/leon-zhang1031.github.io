@@ -25,7 +25,7 @@
 
     // 同步回应状态，避免声明异步回应却没有关闭消息端口。
     if (typeof chrome !== 'undefined' && chrome.runtime?.onMessage && chrome.storage?.local) {
-        chrome.runtime.onMessage.addListener((message, sender, respond) => {
+        chrome.runtime.onMessage.addListener((message, _sender, respond) => {
             if (message?.type === 'FEISHU_COPY_GET_STATUS') respond(getStatus());
             else if (message?.type === 'FEISHU_COPY_SET_MODE' && validMode(message.mode)) {
                 settingsRevision++;

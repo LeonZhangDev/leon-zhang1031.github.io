@@ -18,18 +18,6 @@ export type SourceRecord = SourceBase & (
   | { status: 'verification-blocked'; blockedReason: string }
 );
 
-const blocked = (
-  source: Omit<SourceBase, 'attribution' | 'license' | 'checksum'> &
-    Partial<Pick<SourceBase, 'attribution' | 'license' | 'checksum'>> &
-    { blockedReason: string },
-): SourceRecord => ({
-  ...source,
-  attribution: source.attribution ?? '',
-  license: source.license ?? '',
-  checksum: source.checksum ?? '',
-  status: 'verification-blocked',
-});
-
 const verified = (source: SourceBase): SourceRecord => ({
   ...source,
   status: 'verified',

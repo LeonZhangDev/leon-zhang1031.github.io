@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import { chromium } from '@playwright/test';
 
 // Read-only smoke test. Does not submit comments or change remote settings.
-const origin = 'https://zk.lz1031.workers.dev';
+const origin = 'https://leonzk.cn';
 const browser = await chromium.launch({ channel:process.env.PLAYWRIGHT_CHANNEL || 'chrome' });
 try {
   const page = await browser.newPage({ viewport:{ width:390, height:844 } });
@@ -73,16 +73,19 @@ try {
   const comments = await page.evaluate(async () => {
     // Fetching comments is deliberately read-only.
     try {
-      const url = new URL('https://lz1031-waline.vercel.app/api/comment');
-      url.searchParams.set('path', location.pathname);
-      url.searchParams.set('pageSize', '1');
+      const url = new URL('https://comments.leonzk.cn/api/v2/comments');
+      url.searchParams.set('page_key', location.pathname);
+      url.searchParams.set('site_name', '张坤个人主页');
+      url.searchParams.set('limit', '1');
       const response = await fetch(url, { signal:AbortSignal.timeout(15000) });
       const body = await response.json();
-      return { status:response.status, errno:body.errno, scope:'Read only; no comment submitted' };
+      if (!response.ok || !Array.isArray(body.comments)) throw new Error('Artalk comment read failed');
+      return { status:response.status, count:body.count, scope:'Read only; no comment submitted' };
     } catch (error) {
       return { error:String(error), scope:'Read request failed; no comment submitted' };
     }
   });
+  assert.equal(comments.status, 200, 'Artalk public read must succeed');
   const foundationsResponse = await page.request.get(`${origin}/examples/blog-review-04/results.json`);
   assert.equal(foundationsResponse.status(), 200);
   const foundations = await foundationsResponse.json();

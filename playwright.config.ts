@@ -1,7 +1,7 @@
 import { defineConfig } from '@playwright/test';
 
 // E2E runs against the production build so route, metadata, and sitemap
-// behavior match what the Worker deployment serves.
+// behavior match what the static production deployment serves.
 export default defineConfig({
   testDir: './tests/e2e',
   timeout: 30_000,
@@ -13,7 +13,7 @@ export default defineConfig({
     channel: process.env.PLAYWRIGHT_CHANNEL || undefined,
   },
   webServer: {
-    command: 'node node_modules/astro/astro.js build && node node_modules/astro/astro.js preview --port 4321',
+    command: 'npm run build && npm run preview -- --port 4321',
     url: 'http://localhost:4321/',
     reuseExistingServer: !process.env.CI,
     timeout: 180_000,

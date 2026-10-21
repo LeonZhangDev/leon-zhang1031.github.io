@@ -56,7 +56,7 @@ const description = 'Zack-Zhang1031 的技术随笔与开发日志';
           data-cats={post.data.categories.join('||')}
           data-search={`${post.data.title} ${post.data.description || ''} ${post.data.tags.join(' ')}`.toLocaleLowerCase('zh-CN')}
         >
-          <a href={`/posts/${post.slug}/`} class="post-card-link">
+          <a href={`/posts/${post.id}/`} class="post-card-link">
             <div class="post-card-top">
               <span class="post-card-date">{post.data.date.toLocaleDateString('zh-CN', { year: 'numeric', month: '2-digit', day: '2-digit' }).replace(/\//g, '-')}</span>
               {post.data.categories.length > 0 && <span class="post-card-cat">{post.data.categories[0]}</span>}

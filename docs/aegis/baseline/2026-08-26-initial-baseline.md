@@ -3,6 +3,18 @@
 Date: `2026-08-26`
 Status: `initial dual-baseline snapshot`
 
+## Current-state supersession (2026-10-21)
+
+The dated snapshot below is historical. Current schema ownership is
+`src/content.config.ts` with the Content Layer glob loader; static output
+deploys to EdgeOne at `https://leonzk.cn` and `https://www.leonzk.cn`.
+Artalk owns current comments with independent SQLite. After explicit scoped
+owner confirmation the old Neon Waline tables were cleared, the production
+service paused and its source/modal removed. See
+[build dependency security](../../features/build-dependency-security.md) and
+[comments reliability](../../features/comments-reliability.md) for decisions
+and boundaries. Article content ownership and route ownership remain unchanged.
+
 ## Purpose
 
 Record the current content and runtime boundaries used to assess the deep-learning Blog series.

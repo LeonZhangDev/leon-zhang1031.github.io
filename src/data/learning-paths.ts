@@ -20,7 +20,7 @@ export const learningPaths: LearningPath[] = [
   { id: 'research-capstone', title: '科研课程 6 · 演示与复盘', description: '课程案例：把可验证的产物组织成演示与作品集。', slugs: ['research-capstone-01-streamlit-app', 'research-capstone-02-project-retro-portfolio', 'research-capstone-03-job-interview-defense'] },
 ];
 
-export function readingMinutes(body: string): number {
+export function readingMinutes(body: string = ''): number {
   const prose = body.replace(/^ {0,3}(`{3,}|~{3,})[^\n]*\n[\s\S]*?^ {0,3}\1\s*$/gm, '')
     .replace(/<[^>]*>/g, '')
     .replace(/!?\[([^\]]*)\]\([^)]*\)/g, '$1');

@@ -1,5 +1,7 @@
 # Features
 
+- [build-dependency-security](build-dependency-security.md) — patched static build chain and authorized Waline retirement
+
 - [blog-reading-quality](blog-reading-quality.md)
 - [comments-reliability](comments-reliability.md)
 - [game-and-blog-discovery](game-and-blog-discovery.md) — shared game cards and survival trial public beta publication

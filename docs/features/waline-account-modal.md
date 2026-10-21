@@ -2,9 +2,11 @@
 
 ## Overview
 
-Retired from the active layout by the staged Artalk replacement. Source and
-styles are temporarily retained for review until cutover acceptance; the
-Waline service and original database must remain intact regardless. The new
+Retired after Artalk acceptance. On 2026-10-21 the owner explicitly authorized
+clearing old comments/accounts without an export, pausing the old service and
+removing the modal, styles and deployment source. The three Neon Waline tables
+now contain zero rows. Artalk is unaffected. The rest of this document is historical.
+The new
 footer links directly to the Artalk administrator page, without advertising
 Waline registration or sharing credentials between systems.
 

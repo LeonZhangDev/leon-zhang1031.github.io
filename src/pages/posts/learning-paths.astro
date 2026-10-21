@@ -3,7 +3,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import { getCollection } from 'astro:content';
 import { learningPaths } from '../../data/learning-paths';
 const posts = await getCollection('posts', ({ data }) => !data.draft);
-const bySlug = new Map(posts.map(post => [post.slug, post]));
+const bySlug = new Map(posts.map(post => [post.id, post]));
 ---
 <BaseLayout title="学习路线 · 张坤个人主页" description="编程基础、AI 工程与游戏开发的阅读顺序和课程入口。">
   <div class="container-narrow learning-paths">
@@ -27,7 +27,7 @@ const bySlug = new Map(posts.map(post => [post.slug, post]));
     <nav aria-label="学习路线索引"><ul>{learningPaths.map(path => <li><a href={`#${path.id}`}>{path.title}</a></li>)}</ul></nav>
     {learningPaths.map(path => <section id={path.id}>
       <h2>{path.title}</h2><p>{path.description}</p>
-      <ol>{path.slugs.map(slug => bySlug.get(slug)).filter(Boolean).map(post => post && <li><a href={`/posts/${post.slug}/`}>{post.data.title}</a></li>)}</ol>
+      <ol>{path.slugs.map(slug => bySlug.get(slug)).filter(Boolean).map(post => post && <li><a href={`/posts/${post.id}/`}>{post.data.title}</a></li>)}</ol>
     </section>)}
   </div>
 </BaseLayout>

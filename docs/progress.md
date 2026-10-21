@@ -1,5 +1,15 @@
 # Project Progress
 
+## 2026-10-21 — Build security repair and authorized Waline retirement
+
+- Upgraded the vulnerable build chain to Astro 7.4.1 / Tailwind 4.3.3 / Sharp 0.35.5, migrated Content Layer APIs without changing article URLs, retained unified math rendering, and removed unused legacy adapters. Clean Node 24/npm 11 install and fresh root audit both report zero vulnerabilities (460 packages), superseding earlier audit counts below.
+- EdgeOne build runtime was 22.11.0, insufficient for the upgraded Astro; saved the offered 24.18.0 runtime and read back the setting. No paid resources were added.
+- Owner explicitly confirmed clearing only the three old Waline tables, including old accounts, without an export. Neon main/neondb before-counts were comments 3, counters 0, users 2; after-counts independently return 0/0/0. Tables/project/integration remain; Neon-managed history is not physically erased by this operation.
+- Paused Vercel lz1031-waline production. A direct formal API probe returns HTTP 503 with DEPLOYMENT_PAUSED. Removed old service source/lockfile/test and unused modal/CSS; no vulnerable dormant Waline package manifest remains. Preview artifacts are not deleted by pause.
+- Artalk conf and comment reads still return 200, with the roadmap public count still 1. No Artalk configuration/database mutation was performed.
+- Verification before publication: 210 unit tests, 125/125 Chrome E2E (2 workers), 10/10 Node safety tests; content audit 163 posts/32 illustrated/40 image references with no failures. After retiring obsolete files: build 186 pages, type check zero errors/warnings and 12 informational hints, production-only audit zero findings, and 27/27 focused browser tests pass. Fresh 390px homepage screenshot inspected; real local article renders the Artalk editor and approved test comment 2 with document width 390px. Formal and sampled deployment-specific Waline endpoints return 503. Production checks remain gated after the normal push.
+- Decisions/baseline updates: [build dependency security](features/build-dependency-security.md). Unrelated `.workbuddy/` remains excluded. Audit zero is not proof that every integration or historical Git artifact is secure; SMTP/off-host backup remain outside this repair.
+
 ## 2026-10-21 — Artalk production cutover verified
 
 - Normally pushed `4433f0e` to the verified `LeonZhangDev/leon-zhang1031.github.io` main branch. GitHub reports the existing Vercel build successful. EdgeOne's initial rollout still served the old widget; subsequent fresh real browser navigations confirmed the new Artalk client on both apex and WWW. No manual paid deployment or domain rebinding was needed.

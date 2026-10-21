@@ -22,6 +22,7 @@ describe('learning paths', () => {
   });
   it('estimates mixed prose and ignores fenced code', () => {
     expect(readingMinutes('')).toBe(1);
+    expect(readingMinutes()).toBe(1);
     expect(readingMinutes('中'.repeat(401))).toBe(2);
     expect(readingMinutes('word '.repeat(201))).toBe(2);
     expect(readingMinutes('```python\n' + 'code '.repeat(2000) + '\n```')).toBe(1);

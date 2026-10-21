@@ -81,3 +81,12 @@
 
 - Bazi Shensha and strength/useful-god interpretations remain unautomated pending specific versioned rule-table choices; professional results currently expose auditable calendar and relationship structures.
 - I Ching original judgment and line texts remain intentionally untranscribed pending a versioned public-domain text edition decision.
+
+
+## 2026-10-21 — 飞书图文复制 2.3.0
+
+- 在 Projects 的 GitHub 模块增加扩展卡片，提供详情、安装包与源码入口。
+- 源码与测试位于 tools/feishu-copy-helper；ZIP 使用 6 文件白名单，附带 SHA256，避免发布本地会话和配置。
+- 新增保留格式、纯文本、Markdown 模式和真实页面连接检测；18 项逻辑测试、50 项安装包浏览器检查通过。
+- 复用真实布局的 2 页面局部构建通过；完整站点部署结果以 GitHub 提交状态和线上访问核对为准。
+- 设计和验证边界见 [功能说明](features/feishu-copy-helper.md)。

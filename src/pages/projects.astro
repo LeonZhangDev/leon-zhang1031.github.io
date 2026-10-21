@@ -6,6 +6,18 @@ const description = '张坤的开源项目：AI / 机器学习 / Agent 应用，
 
 const githubProjects = [
   {
+    name: '飞书图文复制',
+    badge: '工具',
+    url: '/projects/feishu-copy-helper/',
+    desc: '我维护的 Chrome / Edge 扩展：选中飞书文档内容后，按需复制为保留格式、纯文本或 Markdown。',
+    tech: ['JavaScript', 'Manifest V3', 'Chrome', 'Edge'],
+    features: [
+      '保留标题、颜色、高亮、列表与普通表格',
+      '三种复制模式，本地保存并同步到已打开的文档',
+      '实际检测页面脚本是否连接，提供安装包与使用说明',
+    ],
+  },
+  {
     name: 'MindFace-Lite',
     badge: 'AI',
     url: 'https://github.com/Zack-Zhang1031/MindFace-Lite',
@@ -114,7 +126,7 @@ const giteeProjects = [
     <h2 id="github" class="section-label" style="font-size: 1.3rem; color: var(--text-primary); margin-bottom: 1rem;">🐙 GitHub</h2>
     <div class="project-grid" style="margin-bottom: 2.5rem;">
       {githubProjects.map((p) => (
-        <a class="project-card" href={p.url} target="_blank" rel="noopener">
+        <a class="project-card" href={p.url} target={p.url.startsWith('/') ? undefined : '_blank'} rel="noopener">
           <div class="project-card-header">
             <span class="project-card-name">{p.name}</span>
             <span class={`project-card-badge${p.star ? ' project-card-badge--star' : ''}`}>{p.badge}</span>
@@ -128,7 +140,7 @@ const giteeProjects = [
               {p.features.map((f) => <li>{f}</li>)}
             </ul>
             <div class="project-card-footer">
-              <span class="project-card-arrow">View repo →</span>
+              <span class="project-card-arrow">{p.url.startsWith('/') ? '查看介绍与下载 →' : 'View repo →'}</span>
             </div>
           </div>
         </a>

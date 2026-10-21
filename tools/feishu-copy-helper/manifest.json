@@ -1,0 +1,27 @@
+{
+  "manifest_version": 3,
+  "name": "飞书图文复制",
+  "version": "2.3.0",
+  "description": "解除飞书文档的文本复制限制，支持图文混合复制",
+  "permissions": [
+    "activeTab",
+    "storage"
+  ],
+  "content_scripts": [
+    {
+      "matches": [
+        "*://*.feishu.cn/*",
+        "*://*.larksuite.com/*",
+        "*://feishu.cn/*",
+        "*://larksuite.com/*"
+      ],
+      "js": ["copy-formats.js", "content.js"],
+      "run_at": "document_start"
+    }
+  ],
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "飞书图文复制"
+  }
+}
+

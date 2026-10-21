@@ -9,3 +9,5 @@
 - [deep-learning-course-series](deep-learning-course-series.md)
 - [jingxin-hall](jingxin-hall.md)
 - [ai-research-content-course](ai-research-content-course.md)
+
+- [飞书图文复制产品展示](feishu-copy-helper.md)

@@ -1,5 +1,12 @@
 # Project Progress
 
+## 2026-10-21 — Repository automation repair
+
+- GitHub run `39557325695` fetched project data successfully but failed to push with HTTP 403: `github-actions[bot]` had only `contents: read`. Changed the project sync workflow to `contents: write` and removed unused pull-request write permission.
+- Gitee run `39558743796` failed authentication against the legacy mirror. Made this optional workflow manual-only and removed force push; retained its destination unchanged pending owner confirmation and a valid `GITEE_TOKEN`. Authentication is not repaired, and no Gitee push was attempted.
+- Added a dependency-free regression check: `node --test tests/workflow-safety.test.mjs`. Before the workflow edits all three assertions failed; after the edits all three passed. This checks configuration, not live GitHub token permissions or Gitee authentication.
+- Changes are local only. Repository visibility, credentials, hosting configuration, existing local commits and untracked `.workbuddy/` were not changed. Remote execution remains unverified until the workflow changes are published and project sync runs again.
+
 ## 2026-09-20 — Fourth blog foundations batch
 
 - Revised four ML foundations posts: defer final test evaluation until selection, fix NumPy log indexing and missing imports, distinguish RMSE/MAE and coefficient/inference assumptions, preserve the selected KMeans model and preprocessing, and select tree depth within training folds.

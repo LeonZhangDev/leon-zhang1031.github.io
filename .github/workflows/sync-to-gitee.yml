@@ -1,10 +1,12 @@
 name: Sync to Gitee
 
 on:
-  push:
-    branches:
-      - main
+  # Legacy mirror: confirm the destination and renew GITEE_TOKEN before running.
+  # Keep manual-only so an optional mirror cannot fail every website push.
   workflow_dispatch:
+
+permissions:
+  contents: read
 
 jobs:
   sync:
@@ -19,4 +21,4 @@ jobs:
         env:
           GITEE_TOKEN: ${{ secrets.GITEE_TOKEN }}
         run: |
-          git push "https://rainyjensen:${GITEE_TOKEN}@gitee.com/rainyjensen/zack-zhang1031.github.io.git" main --force
+          git push "https://rainyjensen:${GITEE_TOKEN}@gitee.com/rainyjensen/zack-zhang1031.github.io.git" main

@@ -19,6 +19,8 @@ changes. No new dependencies, hosting product or paid resource.
   cache policies. In particular, no blanket immutable rule for HTML, index.js,
   settings, import maps, service workers, main game code or the whole games tree.
 - Each immutable URL has a recorded SHA256 checked by the normal build command.
+  Text bundle hashes use canonical LF (Git's Windows CRLF checkout normalizes
+  to LF in Pages); binary WASM hashes use exact bytes without normalization.
   Changed resource bytes require a new URL and updated references; do not simply
   update a checksum at the old URL. Browser caches cannot be recalled through
   a CDN purge. Retire old rules only after publishing updated references, and
@@ -51,6 +53,9 @@ changes. No new dependencies, hosting product or paid resource.
 
 ### Pre-publication acceptance (2026-10-21)
 
+- Initial cloud build was safely blocked by Windows CRLF versus cloud LF hash
+  differences. Confirmed each canonical LF bundle equals its committed Git blob,
+  then made text-only hash comparison platform independent; game files unchanged.
 - Astro check: zero errors/warnings, two existing clipboard deprecation hints.
   Vitest: 210 passed; Chrome E2E: 126 passed; root Node checks: 18 passed.
 - All four games rendered Cocos scenes on first and repeat visits without

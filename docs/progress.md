@@ -1,5 +1,20 @@
 # Project Progress
 
+## 2026-10-21 — Waline recovery in progress (not published)
+
+- Authenticated Edge inspection confirmed the comment project was connected to the Astro blog. Disconnected that incorrect Git connection; retained Neon integration and all database environment values unchanged.
+- Restored old Waline deployment `J79VFQmWmcm6nTDLFasTk7vGkmgN` without promoting it; its API responds with Waline 403. Updated `SITE_URL` and `SECURE_DOMAINS` for the current site, but these changes are not active until a new deployment.
+- Recovered the original server dependency versions and log suppression into `services/waline`; four dependency-free deployment checks passed. Vercel refuses to redeploy the old prebuilt artifact with updated variables, so a fresh source deployment is needed. CLI authorization is pending owner action in Edge.
+- No database migration, initialization, credential reveal/download/change, account creation, comment write or Git push. Current production comments remain unverified and the newer remote website changes still need integration and regression testing before push.
+
+## 2026-10-21 — Site health audit (not release-ready)
+
+- Tested local baseline `269d1f3`: 196 unit tests and 112 Chrome Playwright tests passed; Astro check reported zero errors and five hints; 163-post structural audit passed; production build generated 183 pages. These results do not cover newer remote features absent from the local baseline.
+- Fixed the homepage GitHub account link, canonical fallback domain and obsolete hosting attribution. Two identity regression checks passed after failing before the repair; all five dependency-free workflow/identity checks passed. Rebuilt 183 pages and confirmed the local 390px homepage and navigation render with no console errors.
+- Live `leonzk.cn` homepage/mobile navigation rendered, but comments remain blocked. The Waline hostname serves the blog homepage and `/api/comment` returns Vercel 404. See [comments reliability](features/comments-reliability.md) for evidence and the non-destructive backend repair boundary. No real comment, account registration, credential change or database operation was performed.
+- Fetched remote `f94fe3a`; it contains newer study tools, games and downloads. Complete integration and rerun validation before release; old-baseline test counts are not acceptance evidence for those changes. No remote push or hosting deployment was made.
+- Recommendations only: web analytics (Umami), frontend error monitoring (Sentry), retain Waline after backend restoration, and optional read-only article Q&A through a separately secured server API. LangSmith fits future LLM traces/evaluation, not replacement traffic/error monitoring. No analytics, session replay, Agent service or paid plan was enabled.
+
 ## 2026-10-21 — Repository automation repair
 
 - GitHub run `39557325695` fetched project data successfully but failed to push with HTTP 403: `github-actions[bot]` had only `contents: read`. Changed the project sync workflow to `contents: write` and removed unused pull-request write permission.

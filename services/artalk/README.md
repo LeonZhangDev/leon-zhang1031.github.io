@@ -16,6 +16,13 @@ approval; its source was retired. Artalk data remains independent; no historical
 - Daily consistent SQLite backups live in root-only `/var/backups/artalk`.
   Retention/off-host backup needs a later explicit policy; this script never
   deletes backups. Check disk usage periodically.
+- `Caddyfile`: dedicated comment proxy limits request size/time and upstream
+  concurrency without changing Artalk data or administrator authentication.
+  Excess concurrency returns 503 and recovers after requests drain. Caddy 2.6.2
+  reports streaming body overflow as 502; normal subsequent requests recover.
+- `verify-proxy.py`: isolated fake-backend check, not a public-service load test.
+  Run `python3 verify-proxy.py Caddyfile` with Caddy installed and loopback port
+  24443 free. No Artalk data or credentials are used.
 - Do not rerun bootstrap against an existing database. Configuration changes,
   upgrades and restores require an explicit backup and validation first.
 
@@ -35,3 +42,6 @@ overrides. An earlier public config check advertised `imgUpload: true`; the
 2026-10-21 follow-up now returns `false`. Neither frontend setting proves
 backend upload endpoint rejection; do not infer it from the template. SMTP
 delivery and off-host disaster-recovery backups are not part of acceptance.
+
+Current control evidence, limitations and the exact proxy rollback file are in
+[free security hardening](../../docs/features/free-security-hardening.md).

@@ -1,5 +1,33 @@
 # Project Progress
 
+## 2026-10-21 — Free security and traffic-spike hardening
+
+- Inspected live Pages protection, cloud firewall, Artalk configuration,
+  Caddy, SSH, listeners, sandbox, disk, backup timer and read-only SQLite state.
+  Existing Pages DDoS/adaptive controls remain enabled; no paid resources,
+  blanket challenges, cache overrides, credential or firewall changes.
+- Added minimal compatible static response headers and dedicated comment-proxy
+  size/time/concurrency bounds. Excess proxy work gets 503 and recovers as
+  in-flight requests finish. This does not promise unlimited bandwidth protection.
+- Validated the installed Caddy 2.6.2 against an isolated fake backend before
+  changing production. The first candidate exposed a legacy max_fails default
+  problem; explicit max_fails=1 fixed it before live reload. Oversize bodies
+  reject with 502 on this legacy streaming implementation, not 413. Normal and
+  POST access, overload rejection, recovery and subsequent access all pass.
+- Ran consistent SQLite backup, retained the exact original proxy config and
+  gracefully reloaded Caddy. Artalk was not restarted. DB integrity stays ok,
+  comments/users/sites remain 1/2/1. Apex/WWW API reads return comment 2, foreign
+  origins get no CORS allowance, anonymous site management returns 403 and the
+  signed-in sidebar still shows approved status and management actions.
+- Local acceptance: 210 unit tests, 14 focused Node checks, 125 existing Chrome
+  E2E tests plus the new candidate-header browser regression, 186-page build,
+  163-post audit with no failures and npm audit zero vulnerabilities. Astro check
+  has zero errors/warnings and the same two intentional clipboard API hints.
+  No extension code/download bytes changed. Vendor header rollout is verified
+  separately after normal push; local preview is not production evidence.
+- Details, sources, rollback and deferred SSH/proxy-upgrade/off-host-backup
+  work: [free security hardening](features/free-security-hardening.md).
+
 ## 2026-10-21 — Non-security diagnostic cleanup and production acceptance
 
 - Removed ten informational hints through unused-code cleanup and explicit QR

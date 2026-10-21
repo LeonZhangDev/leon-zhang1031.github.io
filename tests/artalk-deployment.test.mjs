@@ -42,3 +42,27 @@ test('Artalk sidebar embedding is restricted to the approved website origins', (
   assert.match(proxy, /https:\/\/leonzk\.cn https:\/\/www\.leonzk\.cn/);
   assert.doesNotMatch(proxy, /X-Frame-Options DENY|frame-ancestors \*/);
 });
+
+test('static security headers preserve scripts, games and platform cache defaults', () => {
+  const config = JSON.parse(readFileSync(new URL('../edgeone.json', import.meta.url), 'utf8'));
+  assert.deepEqual(Object.keys(config), ['headers']);
+  assert.equal(config.headers[0].source, '/*');
+  const headers = Object.fromEntries(config.headers[0].headers.map(({ key, value }) => [key, value]));
+  assert.equal(headers['X-Content-Type-Options'], 'nosniff');
+  assert.equal(headers['Referrer-Policy'], 'strict-origin-when-cross-origin');
+  assert.equal(headers['Content-Security-Policy'], "base-uri 'self'; object-src 'none'");
+  assert.equal(headers['Cache-Control'], undefined);
+  assert.equal(headers['X-Frame-Options'], undefined);
+  assert.equal(headers['Strict-Transport-Security'], undefined);
+});
+
+test('comment overload controls bound work without changing authentication or data', () => {
+  assert.match(proxy, /max_fails 1/);
+  assert.match(proxy, /unhealthy_request_count 64/);
+  assert.match(proxy, /max_conns_per_host 64/);
+  assert.match(proxy, /response_header_timeout 30s/);
+  assert.match(proxy, /read_header 15s/);
+  assert.match(proxy, /read_body 60s/);
+  assert.match(proxy, /max_size 1MiB/);
+  assert.doesNotMatch(proxy, /trusted_proxies|header_up X-Forwarded-For|request_buffers|lb_retries/);
+});

@@ -1,5 +1,7 @@
 # Features
 
+- [free-security-hardening](free-security-hardening.md) — verified free controls, burst shedding and data-safe rollback
+
 - [build-dependency-security](build-dependency-security.md) — patched static build chain and authorized Waline retirement
 
 - [blog-reading-quality](blog-reading-quality.md)

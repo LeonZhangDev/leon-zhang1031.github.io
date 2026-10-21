@@ -1,0 +1,89 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+const title = '日志待办助手 · Leon Zhang';
+const description = '用于 Obsidian 的日志与任务插件：跨笔记汇总今日任务，统一添加入口，保留已有周报。提供 v1.9.2 手动安装包。';
+const version = '1.9.2';
+const modes = [
+  { name: '看今天要做什么', label: '今日任务', text: '汇总日志和任务清单中今天提醒、今天截止的任务，以及今日日志里未设日期的任务。逾期未完成任务单列，同一条不会重复出现。' },
+  { name: '添加前知道存到哪里', label: '统一入口', text: '今日页输入框与快速添加弹窗都默认存入收件箱，也能切换到今日日志。输入框下方显示实际路径，支持“明天下午3点开会”这样的中文时间。' },
+  { name: '留下自己的复盘', label: '周报保护', text: '首次生成本周回顾；之后再次点击，只打开已有文件，不重写统计或覆盖手写内容。需要重新生成时，先另存原周报。' },
+];
+---
+
+<BaseLayout title={title} description={description}>
+  <article class="container extension-page">
+    <a class="back" href="/projects/">← 返回项目列表</a>
+    <header class="hero">
+      <p class="eyebrow">OBSIDIAN PLUGIN · v{version}</p>
+      <h1>日志待办助手</h1>
+      <p class="lead">记下任务，看清今天要做什么，留下每周回顾。</p>
+      <p class="intro">这是我维护的一款 Obsidian 插件，用来写日志、汇总待办和设置提醒。日志与任务保存在库里的 Markdown 文件中，已有文件仍可在编辑器里直接修改。</p>
+      <div class="actions">
+        <a class="download" href={`/downloads/journal-suite-${version}.zip`} download>下载 v{version} 安装包 ↓</a>
+        <a class="source" href={`/downloads/journal-suite-${version}.sha256`}>查看 SHA-256 校验值 ↗</a>
+      </div>
+      <p class="small">Obsidian 1.4.0 及以上 · 手动安装 · 可选云同步</p>
+    </header>
+
+    <section aria-labelledby="modes-title">
+      <h2 id="modes-title">这一版改了什么</h2>
+      <div class="mode-grid">
+        {modes.map(mode => (
+          <div class="mode-card">
+            <span class="mode-label">{mode.label}</span>
+            <h3>{mode.name}</h3>
+            <p>{mode.text}</p>
+          </div>
+        ))}
+      </div>
+      <p>今日页沿用插件配置的任务来源和排除目录。没有日期的收件箱任务在“清单”页查看，不会自动算作今天的任务；未创建今日日志时，也能查看其他笔记中的当天任务。</p>
+    </section>
+
+    <section class="install" aria-labelledby="install-title">
+      <h2 id="install-title">安装与更新</h2>
+      <ol>
+        <li>下载 ZIP 并解压。在你的 Obsidian 库中创建 <code>.obsidian/plugins/journal-suite/</code>。</li>
+        <li>把解压后的 <code>main.js</code>、<code>manifest.json</code> 和 <code>styles.css</code> 放进这个目录。</li>
+        <li>打开 Obsidian → 设置 → 第三方插件，允许加载第三方插件，刷新列表后启用“日志待办助手”。</li>
+      </ol>
+      <p>更新已有安装时，替换这三个文件并重新加载插件，不需要删除日志、任务或插件配置。包内 README 有更完整的功能和使用说明。</p>
+    </section>
+
+    <section aria-labelledby="scope-title">
+      <h2 id="scope-title">还可以做什么</h2>
+      <p>插件还提供重复任务、截止日期、日历月视图、时间线调整、思维导图和编辑工具栏。需要跨设备同步时，可自行配置 WebDAV／坚果云、S3、OneDrive 或 Dropbox。</p>
+      <p>云同步是可选功能。启用后，文件会按所选服务和同步设置传输；普通日志和任务操作不需要配置云服务。</p>
+    </section>
+
+    <section aria-labelledby="verification-title">
+      <h2 id="verification-title">验证范围</h2>
+      <p>2026-10-21，v{version} 的 7 个回归套件共 166 项断言通过，生产构建与未使用导出检查通过。其中新增 16 项工作流检查，覆盖跨笔记今日任务、两个添加入口、重复提交、失败重试和周报保护。</p>
+      <p>这些工作流测试使用模拟 Obsidian 宿主与隔离存储。真实 Obsidian 中的界面、主题适配和人工操作尚未验收。</p>
+    </section>
+  </article>
+</BaseLayout>
+
+<style>
+  .extension-page { padding-top: 2.5rem; padding-bottom: 3rem; max-width: 960px; }
+  .back, .small { font-size: .85rem; color: var(--text-secondary); }
+  .hero { padding: 2rem 0 2.5rem; }
+  .eyebrow, .mode-label { font-family: var(--font-mono, monospace); font-size: .78rem; color: var(--accent, #5eead4); letter-spacing: .06em; }
+  h1 { font-size: clamp(2rem, 5vw, 3.2rem); line-height: 1.2; margin: .75rem 0 1.25rem; }
+  .lead { font-size: 1.2rem; color: var(--text-primary); }
+  p, li { line-height: 1.85; color: var(--text-secondary); }
+  .intro { max-width: 720px; margin: 1rem 0 1.5rem; }
+  .actions { display: flex; flex-wrap: wrap; gap: 1rem; align-items: center; margin-bottom: 1rem; }
+  .download { padding: .75rem 1.1rem; border-radius: 8px; background: #0f766e; color: #fff; font-weight: 600; }
+  .source { padding: .75rem 0; }
+  section { padding: 1.75rem 0; border-top: 1px solid var(--border-color, #334155); }
+  h2 { font-size: 1.35rem; margin: 0 0 1.25rem; }
+  h3 { font-size: 1.1rem; margin: .6rem 0; }
+  .mode-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1rem; margin-bottom: 1.25rem; }
+  .mode-card { border: 1px solid var(--border-color, #334155); border-radius: 10px; padding: 1.25rem; }
+  .mode-card p { font-size: .9rem; margin-bottom: 0; }
+  ol { padding-left: 1.5rem; }
+  li { margin: .5rem 0; }
+  code { overflow-wrap: anywhere; }
+  @media (max-width: 640px) { .mode-grid { grid-template-columns: 1fr; } .hero { padding-top: 1.5rem; } }
+</style>

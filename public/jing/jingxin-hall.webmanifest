@@ -1,0 +1,19 @@
+{
+  "name": "静心堂",
+  "short_name": "静心堂",
+  "description": "本地运行的传统文化研习与静心空间",
+  "lang": "zh-CN",
+  "start_url": "/jing/",
+  "scope": "/jing/",
+  "display": "standalone",
+  "background_color": "#17110c",
+  "theme_color": "#17110c",
+  "icons": [
+    {
+      "src": "/jing/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

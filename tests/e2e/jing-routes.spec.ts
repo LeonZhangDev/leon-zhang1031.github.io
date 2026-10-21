@@ -83,7 +83,10 @@ test.describe('Jingxin eleven routes assembly', () => {
     await expect(page.locator('#bazi-status')).toContainText('排盘完成');
     await expect(page.locator('.jing-bazi-pillar')).toHaveCount(4);
     await expect(page.locator('.jing-bazi-element-bar')).toHaveCount(5);
-    await expect(page.locator('.jing-bazi-year-timeline span')).toHaveCount(9);
+    await expect(page.locator('#bazi-sec-luck')).toBeHidden();
+    await page.locator('[data-bazi-view="pro"]').click();
+    await expect(page.locator('#bazi-dayun-timeline button')).toHaveCount(8);
+    await expect(page.locator('#bazi-liunian-timeline button')).toHaveCount(10);
   });
 
   test('qimen palace click opens its structured inspector', async ({ page }) => {

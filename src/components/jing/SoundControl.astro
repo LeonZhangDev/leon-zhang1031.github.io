@@ -113,6 +113,12 @@ const { layers = [] } = Astro.props;
       if (enabled) emit();
     });
 
+    window.addEventListener('jing:master-sound', ((event: CustomEvent<{ enabled: boolean }>) => {
+      enabled = event.detail.enabled;
+      render();
+      emit();
+    }) as EventListener);
+
     render();
     /* Parent room scripts are separate deferred modules. Emit after the page
        load boundary so every controller is listening, independent of chunk

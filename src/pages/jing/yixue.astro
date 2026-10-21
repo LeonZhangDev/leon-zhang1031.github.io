@@ -88,7 +88,7 @@ const elementClass: Record<string, string> = {
     </div>
 
     <aside class="jing-wuxing-detail jing-scene-panel" aria-live="polite">
-      <header><h2><span id="wuxing-name">木</span> 行</h2><i>五行</i></header>
+      <header><h2><span id="wuxing-name">木</span> 行</h2><button id="wuxing-ask" type="button" class="jing-term-chip" data-jing-term="wood">查典</button><i>五行</i></header>
       <p id="wuxing-note">{WUXING.木.note}</p>
       <dl id="wuxing-fields">
         <div data-field="relations"><dt>相生</dt><dd>生 <span id="wuxing-sheng">{WUXING.木.sheng}</span></dd></div>
@@ -104,8 +104,9 @@ const elementClass: Record<string, string> = {
     </aside>
   </section>
 
-  <details class="jing-bagua-reference">
+  <details class="jing-bagua-reference" id="bagua-reference">
     <summary>展开八卦基础资料</summary>
+    <button type="button" class="jing-term-chip" data-jing-term="bagua">八卦释义</button>
     <p>卦画自下而上读：初爻在最下，上爻在最上。</p>
     <div class="jing-bagua">
       {BAGUA.map((gua) => (
@@ -185,6 +186,12 @@ const elementClass: Record<string, string> = {
       setText('wuxing-stems', node.dataset.stems || '');
       setText('wuxing-branches', node.dataset.branches || '');
       setText('wuxing-note', node.dataset.note || '');
+      const knowledgeId: Record<string, string> = { 木: 'wood', 火: 'fire', 土: 'earth', 金: 'metal', 水: 'water' };
+      const askButton = document.getElementById('wuxing-ask');
+      if (askButton) askButton.dataset.jingTerm = knowledgeId[selected] || 'wuxing';
+      window.dispatchEvent(new CustomEvent('jing:study-context', {
+        detail: { terms: ['wuxing', knowledgeId[selected] || 'wuxing'] },
+      }));
       updateTopic();
   };
 
@@ -198,4 +205,10 @@ const elementClass: Record<string, string> = {
     });
   });
   if (nodes[0]) selectElement(nodes[0]);
+  const requested = new URLSearchParams(location.search).get('term');
+  const requestedName: Record<string, string> = { wood: '木', fire: '火', earth: '土', metal: '金', water: '水' };
+  if (requested && requestedName[requested]) {
+    const node = nodes.find((item) => item.dataset.element === requestedName[requested]);
+    if (node) selectElement(node);
+  }
 </script>

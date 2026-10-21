@@ -1,0 +1,94 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+const title = '飞书图文复制 · Leon Zhang';
+const description = 'Leon Zhang 维护的 Chrome / Edge 扩展，支持保留格式、纯文本、Markdown 三种复制模式和页面连接检测。';
+const version = '2.3.0';
+const source = 'https://github.com/LeonZhangDev/leon-zhang1031.github.io/tree/main/tools/feishu-copy-helper';
+const modes = [
+  { name: '保留格式', label: '默认模式', text: '复制文字与带样式的 HTML，保留标题、字体、颜色、高亮、链接、列表、引用、代码块和普通表格。' },
+  { name: '纯文本', label: '保留原文', text: '只复制选中的原文，不主动清洗字符。适合记事本、搜索框和只接收文字的输入框。' },
+  { name: 'Markdown', label: '写进笔记', text: '把标题、粗体、斜体、链接、列表、引用、代码块和普通表格转换为 Markdown。没有图片的选区也能使用。' },
+];
+---
+
+<BaseLayout title={title} description={description}>
+  <article class="container extension-page">
+    <a class="back" href="/projects/">← 返回项目列表</a>
+    <header class="hero">
+      <p class="eyebrow">BROWSER EXTENSION · v{version}</p>
+      <h1>飞书图文复制</h1>
+      <p class="lead">选中内容，按下 Ctrl+C。格式、纯文本还是 Markdown，由你选择。</p>
+      <p class="intro">这是我维护的一款 Chrome / Edge 扩展，用来整理飞书文档中需要复用的内容。复制模式保存在浏览器本地；打开弹窗，就能确认当前页面是否真正连接到插件。</p>
+      <div class="actions">
+        <a class="download" href={`/downloads/feishu-copy-helper-${version}.zip`} download>下载 v{version} 安装包 ↓</a>
+        <a class="source" href={source} target="_blank" rel="noopener noreferrer">查看源码与说明 ↗</a>
+      </div>
+      <p class="small">Chrome / Edge · 解压后加载 · 本地处理复制内容 · 无 AI 服务</p>
+    </header>
+
+    <section aria-labelledby="modes-title">
+      <h2 id="modes-title">三种模式，随时切换</h2>
+      <div class="mode-grid">
+        {modes.map(mode => (
+          <div class="mode-card">
+            <span class="mode-label">{mode.label}</span>
+            <h3>{mode.name}</h3>
+            <p>{mode.text}</p>
+          </div>
+        ))}
+      </div>
+      <p>默认模式会同步到已打开的文档，刷新后也会保留。右键菜单可以临时使用另一种模式，不改变默认设置。macOS 使用 Cmd+C。</p>
+    </section>
+
+    <section class="install" aria-labelledby="install-title">
+      <h2 id="install-title">安装与更新</h2>
+      <ol>
+        <li>下载安装包并解压，保留解压后的文件夹。</li>
+        <li>打开 <code>chrome://extensions/</code> 或 <code>edge://extensions/</code>，开启“开发者模式”。</li>
+        <li>点击“加载已解压的扩展程序”，选择包含 <code>manifest.json</code> 的文件夹。</li>
+        <li>刷新飞书文档，打开扩展弹窗，确认显示“当前页面已连接”。</li>
+      </ol>
+      <p>更新已有安装时，先在扩展管理页重新加载本扩展，再刷新已打开的文档。支持 feishu.cn、larksuite.com 及其子域名。</p>
+    </section>
+
+    <section aria-labelledby="scope-title">
+      <h2 id="scope-title">使用前了解这些边界</h2>
+      <p>粘贴后的排版取决于目标应用。记事本只接收纯文本；复杂布局、合并表格和飞书专用组件不保证完整还原。图片只保留引用，不自动下载或内嵌，能否显示仍取决于图片权限。</p>
+      <p>“已连接”表示插件脚本回应正常、版本一致并已初始化，不代表取得了文档管理权限。请在有权使用的文档中操作。</p>
+      <p>扩展只在本地保存复制模式，不保存复制历史、不上传文档内容。新增 storage 权限用于记住模式，activeTab 用于检查当前页面。</p>
+    </section>
+
+    <section aria-labelledby="verification-title">
+      <h2 id="verification-title">这一版验证了什么</h2>
+      <p>2026-10-21，v{version} 通过 18 项逻辑测试、17 项快捷键浏览器检查和 33 项格式及模式浏览器检查。测试加载真实扩展，在本地模拟页面上完成复制粘贴，并检查格式、模式保存、多标签页同步和连接检测。</p>
+      <p>新版在 Word、Notion 与实际飞书文档中的格式粘贴仍需分别验收。此前 v2.2 的实际 Edge 文档纯文本复制已由用户手动确认。</p>
+      <p class="small">由 LeonZhangDev 在已有飞书复制插件基础上继续维护。来源与许可证说明见项目 README。</p>
+    </section>
+  </article>
+</BaseLayout>
+
+<style>
+  .extension-page { padding-top: 2.5rem; padding-bottom: 3rem; max-width: 960px; }
+  .back, .small { font-size: .85rem; color: var(--text-secondary); }
+  .hero { padding: 2rem 0 2.5rem; }
+  .eyebrow, .mode-label { font-family: var(--font-mono, monospace); font-size: .78rem; color: var(--accent, #5eead4); letter-spacing: .06em; }
+  h1 { font-size: clamp(2rem, 5vw, 3.2rem); line-height: 1.2; margin: .75rem 0 1.25rem; }
+  .lead { font-size: 1.2rem; color: var(--text-primary); }
+  p, li { line-height: 1.85; color: var(--text-secondary); }
+  .intro { max-width: 720px; margin: 1rem 0 1.5rem; }
+  .actions { display: flex; flex-wrap: wrap; gap: 1rem; align-items: center; margin-bottom: 1rem; }
+  .download { padding: .75rem 1.1rem; border-radius: 8px; background: #0f766e; color: #fff; font-weight: 600; }
+  .source { padding: .75rem 0; }
+  section { padding: 1.75rem 0; border-top: 1px solid var(--border-color, #334155); }
+  h2 { font-size: 1.35rem; margin: 0 0 1.25rem; }
+  h3 { font-size: 1.1rem; margin: .6rem 0; }
+  .mode-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1rem; margin-bottom: 1.25rem; }
+  .mode-card { border: 1px solid var(--border-color, #334155); border-radius: 10px; padding: 1.25rem; }
+  .mode-card p { font-size: .9rem; margin-bottom: 0; }
+  ol { padding-left: 1.5rem; }
+  li { margin: .5rem 0; }
+  code { overflow-wrap: anywhere; }
+  @media (max-width: 640px) { .mode-grid { grid-template-columns: 1fr; } .hero { padding-top: 1.5rem; } }
+</style>
+

@@ -17,6 +17,22 @@ export interface GameInfo {
 
 export const games: GameInfo[] = [
   {
+    id: 'blind-box-survival',
+    name: '末日开箱客',
+    icon: '📦',
+    description: '被困在多重世界试炼设施，管理饱腹与水分，搜查房间、购买盲盒并迎战箱中怪物。四种职业、意图判断回合战斗与八个主题房间；完成设施主线后解锁离岸协议。',
+    poster: '/images/blind-box-survival-1.webp',
+    video: '/videos/blind-box-survival-demo.mp4',
+    playUrl: '/games/blind-box-survival/',
+    platform: 'PC Web / HTML5',
+    status: '18+ · 公开测试',
+    controls: '房间点击 / 战斗点击 · M 管理 · Esc 返回',
+    updatedAt: '2026-10-02',
+    version: '2026.10.02',
+    tags: ['生存', '回合制', '盲盒', '黑色幽默'],
+    accent: 'amber',
+  },
+  {
     id: 'shuqian',
     name: '数钱',
     icon: '💰',

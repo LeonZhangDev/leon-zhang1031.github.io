@@ -39,6 +39,12 @@
       <label for="notes-text">笔记内容（保存时加密，仅本机存储）</label>
       <textarea id="notes-text" rows="12" spellcheck="false"></textarea>
     </p>
+    <section class="jing-casebook" id="notes-casebook" aria-labelledby="notes-casebook-title">
+      <header><div><p class="jing-eyebrow">从排盘与签录显式存入</p><h3 id="notes-casebook-title">研习案卷</h3></div><div class="jing-casebook-tools"><label for="notes-case-filter">筛选</label><select id="notes-case-filter"><option value="all">全部</option><option value="bazi">八字</option><option value="qimen">奇门</option><option value="yijing">周易</option><option value="lot">签录</option></select><span id="notes-case-count">0 卷</span></div></header>
+      <p id="notes-case-empty">尚无案卷。完成八字、奇门、周易或抽签后，可选择“存入手札案卷”。</p>
+      <ol id="notes-case-list"></ol>
+      <section id="notes-case-compare" class="jing-case-compare" hidden aria-live="polite"></section>
+    </section>
     <div class="jing-notes-actions">
       <button type="button" id="notes-save-btn" class="jing-btn">保存（加密）</button>
       <button type="button" id="notes-lock-btn" class="jing-btn">立即锁定</button>
@@ -76,6 +82,8 @@
     hasStoredVault,
   } from '../../lib/jing/vault';
   import { loadSettings, saveSettings } from '../../lib/jing/settings';
+  import { parseStudyCases, type StudyCaseRecord } from '../../lib/jing/study-case';
+  import { openStudyCase } from '../../lib/jing/study-handoff';
 
   type ViewId = 'notes-create' | 'notes-unlock' | 'notes-editor' | 'notes-import-auth';
 
@@ -89,6 +97,19 @@
 
     let session: VaultSession | null = null;
     let pendingImport: string | null = null;
+    let caseRecords: StudyCaseRecord[] = [];
+    const caseFilter = document.getElementById('notes-case-filter') as HTMLSelectElement;
+    let cancelHandoff: (() => void) | null = null;
+    const wipeCasebook = () => {
+      cancelHandoff?.(); cancelHandoff = null;
+      caseRecords = [];
+      document.getElementById('notes-case-list')?.replaceChildren();
+      document.getElementById('notes-case-compare')?.replaceChildren();
+      document.getElementById('notes-case-compare')!.hidden = true;
+      (document.getElementById('notes-new-password') as HTMLInputElement).value = '';
+      (document.getElementById('notes-new-password2') as HTMLInputElement).value = '';
+      (document.getElementById('notes-password') as HTMLInputElement).value = '';
+    };
 
     const say = (msg: string) => { status.textContent = msg; };
 
@@ -105,6 +126,7 @@
       onLock: () => {
         session = null;
         text.value = '';
+        wipeCasebook();
         show('notes-unlock');
         say('已自动锁定。');
       },
@@ -123,11 +145,77 @@
       return '操作失败，请重试。';
     };
 
+    const renderCaseCompare = () => {
+      const compare = document.getElementById('notes-case-compare')!;
+      const selected = Array.from(document.querySelectorAll<HTMLInputElement>('#notes-case-list input:checked'))
+        .map((input) => caseRecords[Number(input.dataset.caseIndex)])
+        .filter(Boolean);
+      if (selected.length !== 2) { compare.hidden = true; compare.replaceChildren(); return; }
+      compare.hidden = false;
+      compare.replaceChildren();
+      const heading = document.createElement('h4');
+      heading.textContent = '双案对照';
+      compare.append(heading);
+      const table = document.createElement('div');
+      table.className = 'jing-case-compare-grid';
+      for (const record of selected) {
+        const article = document.createElement('article');
+        const title = document.createElement('h5');
+        const resultCopy = document.createElement('p');
+        const rule = document.createElement('small');
+        title.textContent = record.title;
+        resultCopy.textContent = record.resultSummary;
+        rule.textContent = `${record.ruleVersion} · ${new Date(record.createdAt).toLocaleString('zh-CN')}`;
+        article.append(title, resultCopy, rule);
+        table.append(article);
+      }
+      compare.append(table);
+    };
+
+    const renderCasebook = () => {
+      caseRecords = parseStudyCases(text.value);
+      const list = document.getElementById('notes-case-list')!;
+      const empty = document.getElementById('notes-case-empty')!;
+      const count = document.getElementById('notes-case-count')!;
+      count.textContent = `${caseRecords.length} 卷`;
+      empty.hidden = caseRecords.length > 0;
+      list.replaceChildren();
+      caseRecords.forEach((record, index) => {
+        if (caseFilter.value !== 'all' && record.kind !== caseFilter.value) return;
+        const item = document.createElement('li');
+        const check = document.createElement('input');
+        const copy = document.createElement('button');
+        const actions = document.createElement('div');
+        const heading = document.createElement('strong');
+        const meta = document.createElement('span');
+        check.type = 'checkbox';
+        check.dataset.caseIndex = String(index);
+        check.setAttribute('aria-label', `选择${record.title}作对照`);
+        heading.textContent = record.title;
+        meta.textContent = `${new Date(record.createdAt).toLocaleString('zh-CN')} · ${record.ruleVersion}`;
+        copy.type = 'button';
+        copy.className = 'jing-btn';
+        copy.dataset.copyCase = String(index);
+        copy.textContent = '复制无隐私摘要';
+        actions.className = 'jing-case-actions';
+        actions.append(copy);
+        if (record.resume?.route === '/jing/bazi/') {
+          const resume = document.createElement('button');
+          resume.type = 'button'; resume.className = 'jing-btn'; resume.dataset.resumeCase = String(index);
+          resume.textContent = '继续研习（新页）'; actions.prepend(resume);
+        }
+        item.append(check, heading, meta, actions);
+        list.append(item);
+      });
+      renderCaseCompare();
+    };
+
     const openEditor = () => {
       if (!session) return;
       text.value = session.getNotes();
       lockMinutes.value = String(loadSettings(localStorage).settings.lockTimeoutMinutes);
       show('notes-editor');
+      renderCasebook();
     };
 
     /* initial view */
@@ -176,6 +264,7 @@
       if (!session) { say('笔记已锁定，请先解锁。'); return; }
       try {
         await session.saveNotes(text.value);
+        renderCasebook();
         say('已保存（加密存储于本机）。');
       } catch (err) {
         say(describeError(err));
@@ -209,6 +298,7 @@
       session?.clearAll();
       session = null;
       text.value = '';
+      wipeCasebook();
       show('notes-create');
       say('已清空。');
     });
@@ -252,6 +342,41 @@
       });
       say('自动锁定时间已更新，下次解锁时生效。');
     });
+
+    document.getElementById('notes-case-list')?.addEventListener('change', (event) => {
+      const input = event.target as HTMLInputElement;
+      if (!input.matches('input[type="checkbox"]')) return;
+      const checked = Array.from(document.querySelectorAll<HTMLInputElement>('#notes-case-list input:checked'));
+      if (checked.length > 2) {
+        input.checked = false;
+        say('双案对照一次最多选择两卷。');
+      }
+      renderCaseCompare();
+    });
+    document.getElementById('notes-case-list')?.addEventListener('click', async (event) => {
+      const resume = (event.target as HTMLElement).closest<HTMLButtonElement>('[data-resume-case]');
+      if (resume) {
+        const record = caseRecords[Number(resume.dataset.resumeCase)];
+        if (record?.resume?.route === '/jing/bazi/') {
+          cancelHandoff?.();
+          cancelHandoff = openStudyCase(record, () => { session?.lock(); say('案卷已在新页恢复，手札已锁定。'); }, say);
+        }
+        return;
+      }
+      const button = (event.target as HTMLElement).closest<HTMLButtonElement>('[data-copy-case]');
+      if (!button) return;
+      const record = caseRecords[Number(button.dataset.copyCase)];
+      if (!record) return;
+      const kindLabel = { bazi: '八字', qimen: '奇门', yijing: '周易', lot: '签录' }[record.kind];
+      const safeSummary = `${kindLabel}研习\n${record.resultSummary}\n规则：${record.ruleVersion}\n—— 静心堂 · 本地研习，不含案卷名与输入摘要`;
+      try {
+        await navigator.clipboard.writeText(safeSummary);
+        say('已复制不含出生时刻与所问事项的案卷摘要。');
+      } catch {
+        say('复制失败，请手动选择案卷摘要。');
+      }
+    });
+    caseFilter.addEventListener('change', renderCasebook);
 
     /* any interaction counts as activity */
     app.addEventListener('input', () => session?.touch());

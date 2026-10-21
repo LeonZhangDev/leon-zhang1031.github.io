@@ -1,5 +1,7 @@
 ---
 import '../styles/jing.css';
+import JingExperienceTools from '../components/jing/JingExperienceTools.astro';
+import StudyCaseSaver from '../components/jing/StudyCaseSaver.astro';
 
 interface Props {
   title: string;
@@ -56,6 +58,8 @@ const groups = [
   <meta name="robots" content="noindex,nofollow" />
   <meta name="description" content={description} />
   <link rel="icon" type="image/svg+xml" href="/jing/favicon.svg" />
+  <link rel="manifest" href="/jing/jingxin-hall.webmanifest" />
+  <meta name="theme-color" content="#17110c" />
   {isHall && <link rel="preload" as="image" href="/jing/scene/hall-courtyard.webp" />}
   <title>{title} · 静心堂</title>
   <script is:inline>
@@ -101,6 +105,7 @@ const groups = [
         )}
         <div class="jing-top-actions">
           <span class="jing-local-badge" title="所有数据只保留在本机">本地静修</span>
+          <JingExperienceTools />
           <button id="jing-theme-toggle" class="jing-icon-btn" type="button" aria-label="切换明暗主题" title="切换明暗主题">
             <span aria-hidden="true">☾</span>
           </button>
@@ -122,6 +127,7 @@ const groups = [
   <button id="jing-back-to-top" class="jing-back-to-top" type="button" aria-label="返回页面顶端" title="返回顶部">
     <span aria-hidden="true">↑</span>
   </button>
+  <StudyCaseSaver />
 
   <script is:inline>
     (function () {
@@ -174,6 +180,21 @@ const groups = [
         window.addEventListener(ev, wake, { passive: true });
       });
       wake();
+
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', function () {
+          var localPreview = location.hostname === '127.0.0.1' || location.hostname === 'localhost';
+          if (localPreview) {
+            navigator.serviceWorker.getRegistrations().then(function (registrations) {
+              registrations.forEach(function (registration) {
+                if (registration.scope.indexOf(location.origin + '/jing/') === 0) registration.unregister();
+              });
+            }).catch(function () {});
+            return;
+          }
+          navigator.serviceWorker.register('/jing/service-worker.js', { scope: '/jing/' }).catch(function () {});
+        });
+      }
 
       document.addEventListener('click', function (e) {
         var link = e.target && e.target.closest ? e.target.closest('a[href^="/jing/"]') : null;

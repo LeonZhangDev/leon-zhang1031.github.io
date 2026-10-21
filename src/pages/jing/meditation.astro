@@ -23,6 +23,7 @@ import SoundControl from '../../components/jing/SoundControl.astro';
     <div class="jing-meditation-controls">
       <fieldset>
         <legend>静坐时长</legend>
+        <label><input type="radio" name="meditation-minutes" value="1" /> 一分钟</label>
         <label><input type="radio" name="meditation-minutes" value="3" /> 三分钟</label>
         <label><input type="radio" name="meditation-minutes" value="5" checked /> 五分钟</label>
         <label><input type="radio" name="meditation-minutes" value="10" /> 十分钟</label>
@@ -112,6 +113,16 @@ import SoundControl from '../../components/jing/SoundControl.astro';
       renderTime();
     });
   });
+
+  const requestedMinutes = Number(new URLSearchParams(location.search).get('minutes'));
+  if ([1, 3, 5, 10, 20].includes(requestedMinutes)) {
+    const requested = document.querySelector<HTMLInputElement>(`input[name="meditation-minutes"][value="${requestedMinutes}"]`);
+    if (requested) {
+      requested.checked = true;
+      totalSeconds = requestedMinutes * 60;
+      remaining = totalSeconds;
+    }
+  }
 
   sound?.addEventListener('jing:sound', ((event: CustomEvent) => {
     const { enabled, volume, layer } = event.detail;

@@ -125,6 +125,8 @@ import SoundControl from './SoundControl.astro';
     <p class="jing-yj-hint">卦象只列名相与结构，不作吉凶断言。结果不保存，刷新即清。卦序核对：<a href="https://ctext.org/book-of-changes/zh" target="_blank" rel="noreferrer">《周易》原典</a>；本站暂不转录卦爻辞。</p>
     <div class="jing-yj-note-actions">
       <button type="button" id="yj-note-copy" class="jing-btn">复制卦录（可粘贴到笔记）</button>
+      <button type="button" id="yj-save-case" class="jing-btn">存入手札案卷</button>
+      <button type="button" class="jing-term-chip" data-jing-term="moving-line">动爻规则</button>
       <span id="yj-note-state" class="jing-yj-note-state" role="status"></span>
     </div>
   </section>
@@ -137,11 +139,13 @@ import SoundControl from './SoundControl.astro';
   import { cryptoRandomSource } from '../../lib/jing/random';
   import { loadSettings } from '../../lib/jing/settings';
   import { FX_SRC, LAYER_SRC, playFx, registerAmbience, setAmbienceVolume } from '../../lib/jing/sound-fx';
+  import { createStudyCase, type StudyCaseRecord } from '../../lib/jing/study-case';
 
   const app = document.getElementById('jing-yijing-app');
   if (app) {
     const $ = <T extends HTMLElement>(id: string) => document.getElementById(id) as T;
     const result = $('yj-result');
+    let lastCase: StudyCaseRecord | null = null;
     const methodStatus = $('yj-method-status');
     const reducedMotion = () =>
       window.matchMedia('(prefers-reduced-motion: reduce)').matches
@@ -224,6 +228,22 @@ import SoundControl from './SoundControl.astro';
       $('yj-mutual').textContent = `${views.mutual.name}（第 ${views.mutual.seq} 卦）`;
       $('yj-opposite').textContent = `${views.opposite.name}（第 ${views.opposite.seq} 卦）`;
       $('yj-reversed').textContent = `${views.reversed.name}（第 ${views.reversed.seq} 卦）`;
+      const activeMethod = app.querySelector<HTMLButtonElement>('[role="tab"][aria-selected="true"]')?.textContent?.trim() ?? '起卦';
+      lastCase = createStudyCase({
+        kind: 'yijing', title: `周易 · ${views.primary.name}`, ruleVersion: 'yijing-1.0.0',
+        inputSummary: `${activeMethod}法 · 六爻值 ${values.join('、')}`,
+        resultSummary: [
+          `本卦：${views.primary.name}（第${views.primary.seq}卦）`,
+          views.moving.length ? `动爻：${views.moving.join('、')}` : '无动爻',
+          `之卦：${views.changed ? `${views.changed.name}（第${views.changed.seq}卦）` : '无变卦'}`,
+          `互卦：${views.mutual.name}；错卦：${views.opposite.name}；综卦：${views.reversed.name}`,
+        ].join('\n'),
+        derivation: [`六爻自下而上：${values.join('、')}`, '六与九为动爻，变后组成之卦'],
+        sourceRefs: ['《周易》卦序', '《周易·系辞传》筮法线索'],
+      });
+      window.dispatchEvent(new CustomEvent('jing:study-context', {
+        detail: { terms: ['hexagram', ...(views.moving.length ? ['moving-line'] : []), 'bagua'] },
+      }));
       result.hidden = false;
       setMethodStatus(`成卦完成 · ${views.primary.name}${views.moving.length ? `，动爻 ${views.moving.join('、')}` : '，六爻安静'}`);
       result.focus({ preventScroll: true });
@@ -251,8 +271,9 @@ import SoundControl from './SoundControl.astro';
       }).join('');
       if (coinValues.length === 6) renderResult(coinValues);
     };
-    $('yj-coins-throw').addEventListener('click', () => {
+    $('yj-coins-throw').addEventListener('click', (event) => {
       if (coinValues.length >= 6 || coinTossing) return;
+      if (event.isTrusted) navigator.vibrate?.([10, 28, 10]);
       const cast = throwCoins(cryptoRandomSource);
       const stage = $('yj-coins-stage');
       const coins = Array.from(stage.querySelectorAll<HTMLElement>('.jing-yj-coin'));
@@ -377,6 +398,10 @@ import SoundControl from './SoundControl.astro';
       } catch {
         state.textContent = '复制失败，请手动选择文本复制。';
       }
+    });
+
+    $('yj-save-case').addEventListener('click', () => {
+      if (lastCase) window.dispatchEvent(new CustomEvent('jing:save-case', { detail: lastCase }));
     });
 
     renderCoins();

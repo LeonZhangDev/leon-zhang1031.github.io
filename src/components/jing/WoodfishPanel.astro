@@ -216,6 +216,7 @@ import SoundControl from './SoundControl.astro';
 
     fish.addEventListener('click', (e) => {
       if (paused) return;
+      if (e.isTrusted) navigator.vibrate?.(12);
       const now = performance.now();
       if (lastStrike > 0) intervals.push(now - lastStrike);
       lastStrike = now;

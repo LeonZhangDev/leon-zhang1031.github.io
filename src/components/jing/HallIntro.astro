@@ -9,10 +9,26 @@
   </p>
   <p>
     这里的一切计算都在你自己的浏览器里完成：不登录、不联网提交、不追踪，刷新页面即清空临时输入。
-    笔记经密码加密后只存于本机。
+    问典只检索本站随包资料；笔记与显式保存的研习案卷经密码加密后只存于本机。安装离线版后，核心房间可在无网络时继续打开。
   </p>
   <p class="jing-intro-warn">
     所有推演与签文均为传统文化研习与自我观照之用，不构成对疾病、灾祸、婚恋、诉讼、
     投资等重大事项的确定性断言；现实事务请循专业途径处理。
   </p>
+  <div class="jing-intro-data">
+    <button type="button" id="jing-clear-practice" class="jing-btn">清理本机练习记录与偏好</button>
+    <span id="jing-clear-practice-state" role="status"></span>
+    <p>此操作不删除加密手札；如需清空手札，请先进入<a href="/jing/notes/">静心手札</a>并解锁后操作。</p>
+  </div>
 </aside>
+
+<script>
+  const clear = document.getElementById('jing-clear-practice');
+  const state = document.getElementById('jing-clear-practice-state');
+  clear?.addEventListener('click', () => {
+    if (!window.confirm('清理本机静修计数、声音偏好与上次房间记录？加密手札不会被删除。')) return;
+    for (const key of ['jing.practice.v1', 'jing.settings.v1', 'jing.last-room.v1']) localStorage.removeItem(key);
+    sessionStorage.removeItem('jing.sound-on');
+    if (state) state.textContent = '已清理；加密手札保持不变。刷新后生效。';
+  });
+</script>

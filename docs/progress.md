@@ -37,6 +37,44 @@
 - Gitee run `39558743796` failed authentication against the legacy mirror. Made this optional workflow manual-only and removed force push; retained its destination unchanged pending owner confirmation and a valid `GITEE_TOKEN`. Authentication is not repaired, and no Gitee push was attempted.
 - Added a dependency-free regression check: `node --test tests/workflow-safety.test.mjs`. Before the workflow edits all three assertions failed; after the edits all three passed. This checks configuration, not live GitHub token permissions or Gitee authentication.
 - Changes are local only. Repository visibility, credentials, hosting configuration, existing local commits and untracked `.workbuddy/` were not changed. Remote execution remains unverified until the workflow changes are published and project sync runs again.
+## 2026-10-21 — Journal Suite v1.9.2 publication
+
+- Added `/projects/journal-suite/` and one project-list card using the existing project-page layout.
+- User explicitly approved a public install ZIP while retaining the private source repository. ZIP contains only main.js, manifest.json, styles.css and README.md; SHA-256: `d1f690c6f3b9723ee8e08dfaffb3a5bc8593baf50d73f314eea14d60f35c7b5d`.
+- Plugin source published normally as `d58738b`; 166 assertions in 7 suites, production build and unused-export check passed. A fresh clone also installed dependencies, passed all suites and built without the old ignored entry file.
+- Site pre-release validation: Astro check 0 errors/0 warnings/5 existing hints; production build generated 186 pages. Sparse checkout omits unrelated media, causing four unresolved unrelated Jingxin asset warnings locally; those tracked assets are preserved remotely.
+- Local Edge/Playwright passed project-card navigation, detail heading, actual ZIP download and byte hash, checksum link, 390px width with no overflow, and no page errors. Desktop/mobile screenshots were inspected. Actual Obsidian host acceptance is still outstanding and stated on the public page.
+- Publish via the existing GitHub main / hosting integration. `[skip actions]` avoids the unrelated Gitee force-push workflow; no domain or proxy change. Production verification will be recorded in the plugin delivery progress once completed.
+
+## 2026-10-02 — Survival trial public beta
+
+- Added the PC Web / 18+ survival trial to the existing game archive and generated detail route, with real gameplay WebP and click-to-load MP4. Preserved all three prior playable games and the latest remote-main content.
+- Copied the verified Creator 3.8.8 release package with debug/source maps off and a stable full-viewport shell. Game sidebar phase card has separate cost, due and paid/outstanding lines; regular Debug entry is removed.
+- Pre-release verification: 210 unit tests passed; Astro checked 134 files with zero errors/warnings and five existing hints; production build generated 184 pages. Three focused publication browser tests passed, including actual video loading and 390px width. Release-package and website nested-path real mouse smoke both passed new-game/character/starter-box/combat/management flow without page errors or HTTP failures.
+- Release isolated in a latest-main worktree, preserving unrelated dirty files in the user's original checkout. Uses the existing GitHub main / Vercel / canonical Worker pipeline without domain/proxy changes; `[skip actions]` prevents the unrelated Gitee force-push workflow.
+- Published `b85bc30` normally to main. Vercel reported successful deployment `5XnCGwZa8MqVFzgL3HmZvV73EVNn` (GitHub production deployment 6807199970). Canonical Worker browser smoke passed at 2026-10-02 11:20:53 UTC: four game cards, real 24-second video metadata, 390px width, detail/play links and release gameplay new-game/starter-box/combat/management. A second gameplay pass explicitly waited for all visible art placeholders to disappear before screenshots; page errors and HTTP failures were zero. Public entry: https://zk.lz1031.workers.dev/games/blind-box-survival/ .
+
+## 2026-10-01
+
+- Applied the BaziMiao-inspired study upgrade independently in the existing Astro/TypeScript stack: solar/lunar/direct-pillar modes, gender-based luck direction, minute uncertainty, place calibration preview, basic/pro chart layers, and per-pillar Xun Kong.
+- Added deterministic eight-period Dayun, selectable Liunian and Jie-based Liuyue, current-period navigation, and matching SVG/textual Ganzhi relations with node/edge highlighting.
+- Connected the selected chart, period, and pillar to factual Ask Classics context and added local knowledge entries for Na Yin, Xun Kong, Dayun, Liunian, Liuyue, and Ganzhi relations.
+- Added privacy-safe text/PNG sharing, subject-filtered encrypted casebooks, and Bazi continuation with an in-memory cross-page handshake. The original lunar input survives continuation; successful transfer locks and wipes the source notebook; refresh clears restored input.
+- Added regression coverage for date/input conversion, luck direction/rule differences, complete relation groups, period interaction, share downloads, mobile overflow, and encrypted lunar-case continuation.
+- Verification: all 206 Vitest tests and all 102 Playwright browser tests passed; the final Bazi contrast adjustment passed another 14 related browser tests. Astro checked 125 files with zero errors and zero warnings (five pre-existing informational hints). The production build completed with all 182 pages. Desktop and 390px result screenshots were inspected, and `git diff --check` passed. These were pre-release checks; publication evidence is recorded below.
+- Release integration: preserved all nine existing remote-main blog commits through `73a6006`, resolving only the shared progress-document insertion by retaining both histories. The integrated tree passed 209 unit tests, 122 browser tests, and Astro checking with zero errors/warnings (five existing hints); the production build generated 183 pages. Deployment uses the existing main-to-Vercel pipeline behind the canonical Worker, with no domain or proxy configuration change and no Gitee force-push task.
+- Published integration `8dfa324` to GitHub main; Vercel reported successful production deployment (`4WvJeTUQC694GmbrvT9QojnDUS4P`). Live Worker checks verified all eleven rooms, the Bazi golden chart and period/relationship controls, all three complete lot sequences, Five Elements, woodfish, Qimen, and I Ching, but detected an intermittent media-volume exception. A RAF timestamp slightly preceding fade setup made the cubic easing extrapolate above 1; both fade progress and final media volume are now bounded. The regression reproduces that earlier timestamp. Remediation passed all 210 unit tests, 47 sound-bearing-room browser tests, and type checking with zero errors/warnings (five existing hints); final live verification follows redeployment.
+- Remediation `f72c2ac` was pushed normally to main and successfully deployed (`GQfv4Yh4zeWoc8rq2KVoGHUHiwvK`). The final canonical Worker browser smoke passed at 2026-10-01 06:24:17 UTC: eleven routes HTTP 200 with private metadata, Bazi golden calculation/period relations/Ask Classics/mobile width/refresh-clears-input, Five Elements interaction, woodfish strike/pause/default sound, all three complete sixteen-frame lot animations, Qimen and I Ching calculation, replacement audio/PWA files, and sitemap exclusion. The browser loaded the fixed compiled woodfish module; no page errors occurred. Production desktop/mobile Bazi screenshots were captured and the desktop image inspected. No domain, Worker proxy, backend, or unrelated dirty-checkout change was made.
+
+## 2026-09-30
+
+- Added a site-wide local `问典` study drawer with versioned Five Elements, Bazi, I Ching, Qimen, and ritual entries; answers separate definitions, rules, boundaries, and source clues and refuse high-stakes prediction prompts.
+- Connected clickable study terms and Five Elements deep links to the same knowledge surface without adding a remote model or transmitting page inputs.
+- Added explicit encrypted study-case saves for Bazi, Qimen, I Ching, and all three lot collections while preserving the existing AES-GCM notebook envelope and refresh-clears-input behavior.
+- Added an unlocked case index, two-case comparison, and privacy-stripped result copying to `静心手札`.
+- Added the non-predictive `今日入堂` hall card, last-room continuation, one-minute breathing entry, reversible focus mode, shared master mute, and trusted-gesture mobile haptics.
+- Added a scoped `/jing/` manifest and offline service worker; non-Jingxin routes remain untouched.
+- Verification added for local knowledge retrieval/refusal, Unicode case markers, Ask Classics UI, focus mode, Five Elements deep links, and encrypted Bazi case save/unlock/index flow.
 
 ## 2026-09-20 — Fourth blog foundations batch
 
@@ -87,5 +125,14 @@
 
 ## Remaining
 
-- Full luck-cycle calculation for Bazi remains intentionally absent until gender/direction and start-luck rule choices are specified.
+- Bazi Shensha and strength/useful-god interpretations remain unautomated pending specific versioned rule-table choices; professional results currently expose auditable calendar and relationship structures.
 - I Ching original judgment and line texts remain intentionally untranscribed pending a versioned public-domain text edition decision.
+
+
+## 2026-10-21 — 飞书图文复制 2.3.0
+
+- 在 Projects 的 GitHub 模块增加扩展卡片，提供详情、安装包与源码入口。
+- 源码与测试位于 tools/feishu-copy-helper；ZIP 使用 6 文件白名单，附带 SHA256，避免发布本地会话和配置。
+- 新增保留格式、纯文本、Markdown 模式和真实页面连接检测；18 项逻辑测试、50 项安装包浏览器检查通过。
+- 复用真实布局的 2 页面局部构建通过；完整站点部署结果以 GitHub 提交状态和线上访问核对为准。
+- 设计和验证边界见 [功能说明](features/feishu-copy-helper.md)。

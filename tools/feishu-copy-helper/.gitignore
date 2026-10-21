@@ -1,0 +1,26 @@
+# Local browser sessions, screenshots and test reports
+.playwright-mcp/
+output/
+test-results/
+playwright-report/
+coverage/
+
+# Dependencies and generated release packages
+node_modules/
+dist/
+*.zip
+*.crx
+
+# Local settings, credentials and editor files
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.log
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+desktop.ini
+

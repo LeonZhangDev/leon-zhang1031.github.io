@@ -83,6 +83,8 @@ const SCHOOLS = ['chai-bu', 'zhi-run', 'mao-shan'] as const;
   <p class="jing-qm-hint">盘面仅作三派规则对照研习，不作吉凶断言。结果不保存，刷新即清。</p>
   <div class="jing-qm-actions">
     <button type="button" id="qm-note-copy" class="jing-btn">复制对照摘要（可粘贴到笔记）</button>
+    <button type="button" id="qm-save-case" class="jing-btn">存入手札案卷</button>
+    <button type="button" class="jing-term-chip" data-jing-term="qimen-schools">三派规则</button>
     <span id="qm-note-state" class="jing-qm-note-state" role="status"></span>
   </div>
 </section>
@@ -91,6 +93,7 @@ const SCHOOLS = ['chai-bu', 'zhi-run', 'mao-shan'] as const;
   import { compareSchools } from '../../lib/jing/qimen/compare';
   import { loadSettings } from '../../lib/jing/settings';
   import { SCHOOL_LABEL, type QimenChart, type SchoolId } from '../../lib/jing/qimen/types';
+  import { createStudyCase, type StudyCaseRecord } from '../../lib/jing/study-case';
 
   const form = document.getElementById('qimen-form') as HTMLFormElement | null;
   if (form) {
@@ -107,6 +110,7 @@ const SCHOOLS = ['chai-bu', 'zhi-run', 'mao-shan'] as const;
     let activeSchool: SchoolId = 'chai-bu';
     let compareMode = false;
     let revealTimers: ReturnType<typeof setTimeout>[] = [];
+    let lastCase: StudyCaseRecord | null = null;
     const clearReveal = () => { revealTimers.forEach(clearTimeout); revealTimers = []; };
     const reducedMotion = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches
       || loadSettings(localStorage).settings.motion === 'reduce';
@@ -203,6 +207,21 @@ const SCHOOLS = ['chai-bu', 'zhi-run', 'mao-shan'] as const;
           $(`qm-derivation-${school}`).innerHTML = chart.derivation
             .map((step) => `<li>${step}</li>`).join('');
         });
+        const caseLines = (Object.keys(comparison.charts) as SchoolId[]).map((school) => {
+          const chart = comparison.charts[school];
+          return `${SCHOOL_LABEL[school]}：${DUN_LABEL[chart.dun]}${chart.juNumber}局 · ${chart.yuan}元 · 值符${chart.zhiFuStar} · 值使${chart.zhiShiDoor}`;
+        });
+        lastCase = createStudyCase({
+          kind: 'qimen', title: `奇门三派 · ${comparison.solarTerm}`, ruleVersion: 'qimen-1.0.0',
+          inputSummary: comparison.inputSummary,
+          resultSummary: [`节气：${comparison.solarTerm}（${comparison.solarTermTime}）`, ...caseLines].join('\n'),
+          derivation: (Object.keys(comparison.charts) as SchoolId[]).flatMap((school) =>
+            comparison.charts[school].derivation.map((line) => `${SCHOOL_LABEL[school]}：${line}`)),
+          sourceRefs: ['《烟波钓叟歌》九宫歌诀', '《遁甲演义》定局规则'],
+        });
+        window.dispatchEvent(new CustomEvent('jing:study-context', {
+          detail: { terms: ['qimen-board', 'qimen-schools'] },
+        }));
         result.querySelectorAll('.jing-qm-cell.is-selected, .jing-qm-cell.is-corresponding')
           .forEach((node) => node.classList.remove('is-selected', 'is-corresponding'));
         $('qm-inspector-title').textContent = '点击任一宫位';
@@ -263,6 +282,7 @@ const SCHOOLS = ['chai-bu', 'zhi-run', 'mao-shan'] as const;
       submitBtn.textContent = '排盘';
       statusEl.textContent = '填写公历时刻后排盘';
       statusEl.classList.remove('is-error');
+      lastCase = null;
     });
 
     result.addEventListener('click', (event) => {
@@ -291,6 +311,7 @@ const SCHOOLS = ['chai-bu', 'zhi-run', 'mao-shan'] as const;
         + `<em>${node.dataset.stems}</em></p>`).join('');
       compare.hidden = false;
       statusEl.textContent = `已选 ${cell.dataset.schoolLabel ?? ''}${cell.dataset.name ?? '宫位'}${palace}宫 · 右侧显示三派同宫对照`;
+      window.dispatchEvent(new CustomEvent('jing:study-context', { detail: { terms: ['qimen-board'] } }));
       if (window.matchMedia('(max-width: 900px)').matches) {
         const inspector = $('qm-inspector');
         inspector.focus({ preventScroll: true });
@@ -317,6 +338,10 @@ const SCHOOLS = ['chai-bu', 'zhi-run', 'mao-shan'] as const;
       } catch {
         state.textContent = '复制失败，请手动选择文本复制。';
       }
+    });
+
+    $('qm-save-case').addEventListener('click', () => {
+      if (lastCase) window.dispatchEvent(new CustomEvent('jing:save-case', { detail: lastCase }));
     });
 
     window.addEventListener('pageshow', () => {

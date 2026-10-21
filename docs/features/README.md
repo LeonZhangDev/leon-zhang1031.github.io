@@ -2,10 +2,13 @@
 
 - [blog-reading-quality](blog-reading-quality.md)
 - [comments-reliability](comments-reliability.md)
-- [game-and-blog-discovery](game-and-blog-discovery.md)
+- [game-and-blog-discovery](game-and-blog-discovery.md) — shared game cards and survival trial public beta publication
 - [bottle-flip-publication](bottle-flip-publication.md)
 - [waline-account-modal](waline-account-modal.md)
 - [quiet-cyber-editorial-design](quiet-cyber-editorial-design.md)
 - [deep-learning-course-series](deep-learning-course-series.md)
 - [jingxin-hall](jingxin-hall.md)
 - [ai-research-content-course](ai-research-content-course.md)
+
+- [飞书图文复制产品展示](feishu-copy-helper.md)
+- [日志待办助手介绍与安装包](journal-suite.md)

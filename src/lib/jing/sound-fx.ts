@@ -63,9 +63,11 @@ const fadeVolume = (audio: HTMLAudioElement, target: number, durationMs: number)
   const from = audio.volume;
   const startedAt = performance.now();
   const tick = (now: number) => {
-    const progress = Math.min(1, (now - startedAt) / durationMs);
+    // A queued RAF timestamp can slightly precede performance.now() at setup.
+    // Clamp both ends so easing never extrapolates past the valid volume range.
+    const progress = Math.max(0, Math.min(1, (now - startedAt) / durationMs));
     const eased = 1 - Math.pow(1 - progress, 3);
-    audio.volume = from + (next - from) * eased;
+    audio.volume = clampGain(from + (next - from) * eased);
     if (progress < 1) volumeAnimations.set(audio, requestAnimationFrame(tick));
     else volumeAnimations.delete(audio);
   };

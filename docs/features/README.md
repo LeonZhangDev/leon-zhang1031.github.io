@@ -11,3 +11,4 @@
 - [ai-research-content-course](ai-research-content-course.md)
 
 - [飞书图文复制产品展示](feishu-copy-helper.md)
+- [日志待办助手介绍与安装包](journal-suite.md)

@@ -1,5 +1,14 @@
 # Project Progress
 
+## 2026-10-21 — Journal Suite v1.9.2 publication
+
+- Added `/projects/journal-suite/` and one project-list card using the existing project-page layout.
+- User explicitly approved a public install ZIP while retaining the private source repository. ZIP contains only main.js, manifest.json, styles.css and README.md; SHA-256: `d1f690c6f3b9723ee8e08dfaffb3a5bc8593baf50d73f314eea14d60f35c7b5d`.
+- Plugin source published normally as `d58738b`; 166 assertions in 7 suites, production build and unused-export check passed. A fresh clone also installed dependencies, passed all suites and built without the old ignored entry file.
+- Site pre-release validation: Astro check 0 errors/0 warnings/5 existing hints; production build generated 186 pages. Sparse checkout omits unrelated media, causing four unresolved unrelated Jingxin asset warnings locally; those tracked assets are preserved remotely.
+- Local Edge/Playwright passed project-card navigation, detail heading, actual ZIP download and byte hash, checksum link, 390px width with no overflow, and no page errors. Desktop/mobile screenshots were inspected. Actual Obsidian host acceptance is still outstanding and stated on the public page.
+- Publish via the existing GitHub main / hosting integration. `[skip actions]` avoids the unrelated Gitee force-push workflow; no domain or proxy change. Production verification will be recorded in the plugin delivery progress once completed.
+
 ## 2026-10-02 — Survival trial public beta
 
 - Added the PC Web / 18+ survival trial to the existing game archive and generated detail route, with real gameplay WebP and click-to-load MP4. Preserved all three prior playable games and the latest remote-main content.

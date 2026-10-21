@@ -1,6 +1,6 @@
 # Project Progress
 
-## 2026-10-21 — Non-security diagnostic cleanup, pre-publication
+## 2026-10-21 — Non-security diagnostic cleanup and production acceptance
 
 - Removed ten informational hints through unused-code cleanup and explicit QR
   events; left two copy-API deprecation hints visible to preserve extension
@@ -25,8 +25,22 @@
   hardening rather than another framework. No security settings, DB contents,
   paid resources or live comment records changed. Details and primary sources
   are in [build dependency security](features/build-dependency-security.md).
-- Normal push and live deployment acceptance are still pending at this entry.
-  Unrelated `.workbuddy/` remains excluded.
+- Normally pushed code `024c537`; EdgeOne deployment `dp5hr9fxfvek` succeeded
+  at 21:08:44 China time with 186 built pages. Initial rollout still served old
+  content; subsequent fresh contexts confirmed both apex/WWW new QR handler,
+  removed old inline handler and the updated download digest.
+- Both live ZIP bodies hash to
+  `7431779ff49ee6cdaffc24b156be07609742a533c04e1ef73b9938258efed608`
+  (18422 bytes), exactly matching the local/source-checked package. Both live
+  roadmap pages render the editor and approved comment 2 at 390px without
+  overflow; mobile QR open/card/close and Hugo HTML highlighting pass, with no
+  observed uncaught page errors. Public roadmap read returns 200/count 1.
+- Post-deployment 12-page read-only production smoke passed at 13:10:19 UTC,
+  including figures/results artifacts and comment API availability. Its final
+  K-Means path has count 0; this is not the roadmap's count. No new comment was
+  submitted. Fresh post-commit type check still has only the two legacy hints.
+- Unrelated `.workbuddy/` remains excluded. This records tested behavior,
+  not exhaustive third-party/old-browser acceptance or a security guarantee.
 
 ## 2026-10-21 — Patched build production acceptance
 

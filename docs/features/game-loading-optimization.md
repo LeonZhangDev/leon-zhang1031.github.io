@@ -182,5 +182,37 @@ No new dependency, paid resource, service worker or cross-page prefetch.
 - Production publication and same-profile measurements are verified separately
   after pushing; local build/test results alone do not establish deployment.
 
+### Production acceptance
+
+- Code commit `55abe8e` pushed successfully. Both apex and WWW subsequently
+  returned all three hints, HTTP 200, CSP and `nosniff`; the exact engine URL
+  retained `public,max-age=31536000,immutable`. No cloud setting was changed.
+- Same-profile live AFTER measured at 09:10:58 UTC (BEFORE at 08:55 UTC):
+
+| Menu-visible time (ms) | Before | After |
+| --- | --- | --- |
+| Cold samples | 15413 / 15295 / 15043 | 12119 / 9577 / 9580 |
+| Cold median | 15295 | 9580 |
+| Warm samples | 5196 / 3978 / 3509 | 3691 / 3898 / 3936 |
+| Warm median | 3978 | 3898 |
+
+- Profile: 5 Mib/s down, 1 Mib/s up, 60ms simulated latency, desktop with
+  unthrottled CPU. Resource transfer at marker stays 1,050,860 bytes cold and
+  900 bytes warm; HTML is excluded. WAN/CDN variability remains uncontrolled:
+  the observed 37% cold median reduction is not a universal speed guarantee.
+- All selected URLs have one timing entry, initiated by `link`; warm transfer
+  is zero. No page errors, credentials mismatch or CSP violations. One pair
+  emitted Chrome's early-preload/late-use advisory for the main script; it was
+  intentionally fetched early and eventually used by the existing Cocos loader.
+  This is not a duplicate transfer, but the rollout is not warning-free.
+- The menu marker is not a promise that asynchronous save reading, all audio
+  or all art are ready; the separate synthetic save/Continue test covers the
+  save path. Physical mobile hardware and all network regions remain untested.
+- Post-publication browser smoke: all four game scenes render with HTTP 200;
+  warm survival engine is a zero-byte cache hit. Apex/WWW archives each show
+  four cards with no 390px horizontal overflow. Comment textarea is visible,
+  browser-origin API read/JSON parsing returns HTTP 200, and no page errors
+  occur. No comment writes, database changes or real-user save access.
+
 References: [preload critical assets](https://web.dev/articles/preload-critical-assets),
 [Creator build options](https://docs.cocos.com/creator/3.8/manual/en/editor/publish/build-options.html).

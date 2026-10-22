@@ -14,6 +14,16 @@
 - Synthetic new game/autosave/revisit/Continue restored an identical slot.
 - Fast-forwarded three unrelated remote commits without overwriting their
   extension release and project synchronization work; preserved `.workbuddy/`.
+- Passed 20 root Node checks, 210 Vitest tests and all 126 Chrome E2E tests
+  with two workers. Astro check: zero errors/warnings, ten unrelated extension
+  hints. An initial high-concurrency animation timeout passed isolated/full reruns.
+- Published code `55abe8e`; apex/WWW serve the three hints with security/cache
+  headers intact. Three live pairs: cold menu median 15.295s to 9.580s; warm
+  3.978s to 3.898s, bytes unchanged. WAN variability limits generalization.
+  One main-script early-preload/late-use advisory, no duplicate fetch or page
+  errors. The marker is menu visible, not all assets or save reading complete.
+- Live smoke passed all four game scenes, apex/WWW 390px game archive layout,
+  comment form visibility and browser-origin API read (200). No data writes.
 - Full checks and production acceptance are tracked in the
   [game-loading feature](features/game-loading-optimization.md).
 

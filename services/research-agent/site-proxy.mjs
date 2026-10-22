@@ -27,16 +27,22 @@ export async function proxySiteRequest(request, fetchImplementation = globalThis
       try {
         for (;;) {
           const chunk = await reader.read(); if (chunk.done) break;
-          size += chunk.value.byteLength;
+          // EdgeOne readers may return ArrayBuffer, views or strings. Normalize
+          // before copying; Uint8Array.set(ArrayBuffer) silently copies no bytes.
+          const value = chunk.value;
+          const bytes = typeof value === 'string' ? new TextEncoder().encode(value)
+            : ArrayBuffer.isView(value) ? new Uint8Array(value.buffer, value.byteOffset, value.byteLength)
+            : value instanceof ArrayBuffer ? new Uint8Array(value) : null;
+          if (!bytes) return reject(400, 'Invalid request stream');
+          size += bytes.byteLength;
           if (size > 16_384) { await reader.cancel(); return reject(413, 'Request too large'); }
-          chunks.push(chunk.value);
+          chunks.push(bytes);
         }
       } finally { reader.releaseLock(); }
     }
     body = new Uint8Array(size); let offset = 0;
     for (const chunk of chunks) { body.set(chunk, offset); offset += chunk.byteLength; }
-    // EdgeOne's fetch runtime does not handle Uint8Array bodies like Node fetch.
-    // Agent POST endpoints accept UTF-8 JSON only; forward a supported string body.
+    // Agent POST endpoints accept UTF-8 JSON only; forward a decoded string body.
     try { body = new TextDecoder('utf-8', { fatal: true }).decode(body); }
     catch { return reject(400, 'Invalid UTF-8 request'); }
     headers.set('origin', BACKEND_ORIGIN);

@@ -120,3 +120,19 @@ test('site proxy rejects cross-origin requests, unapproved paths, oversized bodi
   const unavailable = await proxySiteRequest(new Request('https://leonzk.cn' + PRIVATE_PATH), async () => { throw new Error('private diagnostic'); });
   assert.equal(unavailable.status, 502); assert.ok(!(await unavailable.text()).includes('private diagnostic'));
 });
+
+test('site proxy preserves EdgeOne ArrayBuffer, view and string stream chunks', async () => {
+  const body = JSON.stringify({ goal: '线上中文请求', budgetYuan: 0.5 });
+  const bytes = new TextEncoder().encode(body);
+  const padded = new Uint8Array(bytes.length + 4); padded.set(bytes, 2);
+  for (const chunk of [bytes.buffer, new DataView(padded.buffer, 2, bytes.length), body]) {
+    let read = false;
+    const request = { url: 'https://leonzk.cn' + PRIVATE_PATH + 'api/tasks', method: 'POST',
+      headers: new Headers({ origin: 'https://leonzk.cn', 'content-type': 'application/json' }),
+      body: { getReader: () => ({ read: async () => read ? { done: true } : (read = true, { done: false, value: chunk }), releaseLock() {} }) } };
+    const response = await proxySiteRequest(request, async (url, init) => {
+      assert.equal(init.body, body); return new Response('{}');
+    });
+    assert.equal(response.status, 200);
+  }
+});

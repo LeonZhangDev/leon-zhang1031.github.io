@@ -4,7 +4,7 @@ export const PRIVATE_PATH = '/p7x4m9q2-k6v8n3r5-t2w9c4h7/';
 const BACKEND_ORIGIN = 'https://comments.leonzk.cn';
 const SITE_ORIGINS = new Set(['https://leonzk.cn', 'https://www.leonzk.cn']);
 const privateHeaders = {
-  'x-research-proxy-version': 'private-policy-v3',
+  'x-research-proxy-version': 'private-policy-v4',
   'cache-control': 'private, no-store', 'x-robots-tag': 'noindex, nofollow, noarchive',
   'x-content-type-options': 'nosniff', 'referrer-policy': 'no-referrer',
 };

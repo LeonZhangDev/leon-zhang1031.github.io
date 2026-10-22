@@ -1,114 +1,53 @@
 {
   "headers": [
     {
-      "source": "/p7x4m9q2-k6v8n3r5-t2w9c4h7/*",
+      "source": "/*",
       "headers": [
-        {
-          "key": "Cache-Control",
-          "value": "private, no-store"
-        },
-        {
-          "key": "X-Robots-Tag",
-          "value": "noindex, nofollow, noarchive"
-        },
-        {
-          "key": "Referrer-Policy",
-          "value": "no-referrer"
-        },
-        {
-          "key": "Content-Security-Policy",
-          "value": "default-src 'none'; script-src 'self'; style-src 'self'; connect-src 'self'; img-src 'self' data:; base-uri 'none'; frame-ancestors 'none'; form-action 'self'"
-        }
+        { "key": "X-Content-Type-Options", "value": "nosniff" },
+        { "key": "Referrer-Policy", "value": "strict-origin-when-cross-origin" },
+        { "key": "Content-Security-Policy", "value": "base-uri 'self'; object-src 'none'" }
       ]
     },
     {
-      "source": "/*",
+      "source": "/p7x4m9q2-k6v8n3r5-t2w9c4h7/*",
       "headers": [
-        {
-          "key": "X-Content-Type-Options",
-          "value": "nosniff"
-        },
-        {
-          "key": "Referrer-Policy",
-          "value": "strict-origin-when-cross-origin"
-        },
-        {
-          "key": "Content-Security-Policy",
-          "value": "base-uri 'self'; object-src 'none'"
-        }
+        { "key": "Cache-Control", "value": "private, no-store" },
+        { "key": "X-Robots-Tag", "value": "noindex, nofollow, noarchive" },
+        { "key": "Referrer-Policy", "value": "no-referrer" },
+        { "key": "Content-Security-Policy", "value": "default-src 'none'; script-src 'self'; style-src 'self'; connect-src 'self'; img-src 'self' data:; base-uri 'none'; frame-ancestors 'none'; form-action 'self'" }
       ]
     },
     {
       "source": "/games/blind-box-survival/cocos-js/_virtual_cc-nPspxFOo.js",
-      "headers": [
-        {
-          "key": "Cache-Control",
-          "value": "public,max-age=31536000,immutable"
-        }
-      ]
+      "headers": [{ "key": "Cache-Control", "value": "public,max-age=31536000,immutable" }]
     },
     {
       "source": "/games/blind-box-survival/cocos-js/assets/spine-CC34fKUR.wasm",
-      "headers": [
-        {
-          "key": "Cache-Control",
-          "value": "public,max-age=31536000,immutable"
-        }
-      ]
+      "headers": [{ "key": "Cache-Control", "value": "public,max-age=31536000,immutable" }]
     },
     {
       "source": "/games/jianqian/cocos-js/_virtual_cc-DYTm97mp.js",
-      "headers": [
-        {
-          "key": "Cache-Control",
-          "value": "public,max-age=31536000,immutable"
-        }
-      ]
+      "headers": [{ "key": "Cache-Control", "value": "public,max-age=31536000,immutable" }]
     },
     {
       "source": "/games/jianqian/cocos-js/assets/spine-CC34fKUR.wasm",
-      "headers": [
-        {
-          "key": "Cache-Control",
-          "value": "public,max-age=31536000,immutable"
-        }
-      ]
+      "headers": [{ "key": "Cache-Control", "value": "public,max-age=31536000,immutable" }]
     },
     {
       "source": "/games/rengpingzi/cocos-js/_virtual_cc-Btzvr0DO.js",
-      "headers": [
-        {
-          "key": "Cache-Control",
-          "value": "public,max-age=31536000,immutable"
-        }
-      ]
+      "headers": [{ "key": "Cache-Control", "value": "public,max-age=31536000,immutable" }]
     },
     {
       "source": "/games/rengpingzi/cocos-js/assets/spine-CC34fKUR.wasm",
-      "headers": [
-        {
-          "key": "Cache-Control",
-          "value": "public,max-age=31536000,immutable"
-        }
-      ]
+      "headers": [{ "key": "Cache-Control", "value": "public,max-age=31536000,immutable" }]
     },
     {
       "source": "/games/shuqian/cocos-js/_virtual_cc-Bp5iGE8z.js",
-      "headers": [
-        {
-          "key": "Cache-Control",
-          "value": "public,max-age=31536000,immutable"
-        }
-      ]
+      "headers": [{ "key": "Cache-Control", "value": "public,max-age=31536000,immutable" }]
     },
     {
       "source": "/games/shuqian/cocos-js/assets/spine-CC34fKUR.wasm",
-      "headers": [
-        {
-          "key": "Cache-Control",
-          "value": "public,max-age=31536000,immutable"
-        }
-      ]
+      "headers": [{ "key": "Cache-Control", "value": "public,max-age=31536000,immutable" }]
     }
   ]
 }

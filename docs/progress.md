@@ -8,6 +8,7 @@
 - Validation: 212 Vitest checks, 4 site identity checks and 6 game resource checks passed. Astro check reports zero errors/warnings and 10 existing hints; the normal build generates 211 pages with all 25 course pages present in the sitemap. Static validation checks 11,757 links and 640 image references with no broken local links or duplicate IDs.
 - Headless browser checks passed at 1440, 1280, 1200, 1024 and 390 px, including directory placement, expansion and section anchors. Sampled case/interview images decode; the original deep-learning article TOC and ordered course feed work. External services were blocked during local browser checks; technical examples were not rerun.
 - Prepared in a clean worktree based on `origin/main` (`fc7196d`); unrelated unpublished site changes are excluded. See [course feature](features/agent-learning-course.md).
+- Live verification found a pre-existing Vercel Hugo preset publishing the wrong output directory despite a successful Astro build. Added explicit repository configuration for Astro / `npm run build` / `dist`; preserved the exact cache header rules and existing Worker configuration. Online acceptance is checked after that corrective deployment completes.
 
 ## 2026-10-22 — Second free game-loading batch
 

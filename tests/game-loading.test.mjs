@@ -58,3 +58,42 @@ test('survival icon reuses the small current site icon without loading the old I
   assert.doesNotMatch(html, /href="favicon\.ico"/);
   assert.ok(statSync(new URL('public/favicon-zhang.png', root)).size < 50 * 1024);
 });
+
+test('survival preloads only three current critical resources without executing them', () => {
+  const folder = new URL('public/games/blind-box-survival/', root);
+  const html = readFileSync(new URL('index.html', folder), 'utf8');
+  const hints = [...html.matchAll(/<link\b[^>]*rel="preload"[^>]*>/g)].map(match => match[0]);
+  const expected = new Map([
+    ['./cocos-js/_virtual_cc-nPspxFOo.js', 'script'],
+    ['./src/settings.c7df0.json', 'fetch'],
+    ['./assets/main/index.110bc.js', 'script'],
+  ]);
+  assert.equal(hints.length, expected.size);
+  const seen = new Set();
+  for (const hint of hints) {
+    const href = hint.match(/href="([^"]+)"/)[1];
+    assert.equal(hint.match(/as="([^"]+)"/)[1], expected.get(href));
+    assert.ok(!seen.has(href), `duplicate preload: ${href}`);
+    seen.add(href);
+    assert.ok(statSync(new URL(href, folder)).isFile());
+    if (expected.get(href) === 'fetch' || href.includes('/assets/main/')) {
+      assert.match(hint, /crossorigin="anonymous"/); // XHR and Cocos bundle script credentials.
+    } else assert.doesNotMatch(hint, /crossorigin/); // SystemJS engine script credentials.
+    assert.ok(html.indexOf(hint) < html.indexOf('</head>'));
+  }
+  const application = readFileSync(new URL('application.13180.js', folder), 'utf8');
+  assert.match(application, /settingsPath = 'src\/settings\.c7df0\.json'/);
+  const settings = JSON.parse(readFileSync(new URL('src/settings.c7df0.json', folder), 'utf8'));
+  assert.equal(settings.assets.bundleVers.main, '110bc');
+  const cc = readFileSync(new URL('cocos-js/cc.dfa53.js', folder), 'utf8');
+  assert.match(cc, /_virtual_cc-nPspxFOo\.js/);
+});
+
+test('survival preload hints preserve the existing loader and script execution order', () => {
+  const html = readFileSync(new URL('public/games/blind-box-survival/index.html', root), 'utf8');
+  assert.deepEqual([...html.matchAll(/<script\b[^>]*src="([^"]+)"/g)].map(match => match[1]), [
+    'src/polyfills.bundle.5adbf.js', 'src/system.bundle.543e6.js', 'src/import-map.4b8f7.json',
+  ]);
+  assert.match(html, /System\.import\('\.\/index\.228dc\.js'\)/);
+  assert.doesNotMatch(html, /rel="(?:prefetch|modulepreload)"|fetchpriority=|serviceWorker/);
+});

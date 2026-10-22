@@ -105,3 +105,82 @@ changes. No new dependencies, hosting product or paid resource.
 
 Sources: [Pages cache defaults](https://pages.edgeone.ai/document/configuring-cache),
 [exact URL/header rules](https://pages.edgeone.ai/document/edgeone-json).
+
+## Second batch — 2026-10-22
+
+### Overview
+
+Reduce discovery latency for the survival game's existing critical requests.
+Only its maintained HTML shell changes; no engine, settings, game bundle,
+audio/texture, storage format/key, IndexedDB version, play URL or cache changes.
+No new dependency, paid resource, service worker or cross-page prefetch.
+
+### Design decisions
+
+- Add just three `preload` hints: the current core engine, startup settings and
+  main script. They fetch existing bytes early without executing them. The
+  existing SystemJS/Cocos loading and execution order remain authoritative.
+- Match request credentials separately: SystemJS engine script has no
+  `crossorigin`; XHR settings and the Cocos bundle script use `anonymous`.
+  An initial local probe caught the bundle credentials mismatch before release;
+  an HTTP-cache fallback alone is not proof of preload reuse.
+- Keep the 2,000ms splash setting. This website repository contains published
+  packages, not the original Creator project/build settings. Do not rewrite a
+  cached settings file, patch an engine or bypass branding restrictions.
+  Revisit only with the source project and supported free official build option.
+- Tests bound hint count, check files/current references, request modes and
+  loader execution order. Existing immutable-byte contracts remain unchanged.
+
+### Implementation notes
+
+- Record three cold/warm menu-visible samples under the same browser/CDP
+  profile as batch one. A visible active `新游戏` Cocos label is the marker,
+  not all art/audio ready or completed gameplay. Do not compare this marker
+  directly with the previous scene-frame benchmark.
+- Local baseline/candidate use identical headers, MIME and compression, with
+  both servers primed before measurement. Browser contexts stay fresh per pair;
+  no request interception, cache clear, forced reload or concurrent build.
+- Verify each selected URL is requested once, including its eventual loader
+  use, with no credentials mismatch. Test an isolated synthetic new save and
+  Continue; do not read or clear real-user browser storage.
+
+### Pre-publication results
+
+- After priming server compression caches, three loopback pairs per version:
+
+| Menu-visible time (ms) | Before | Candidate |
+| --- | --- | --- |
+| Cold samples | 5100 / 5131 / 5083 | 4659 / 4682 / 4689 |
+| Cold median | 5100 | 4682 |
+| Warm samples | 2150 / 2131 / 2108 | 2138 / 2133 / 2124 |
+| Warm median | 2131 | 2133 |
+
+- Cold resource transfer at the marker: 856,973 bytes on both versions. Each
+  selected resource has exactly one resource timing entry, initiated by `link`
+  in the candidate, with no preload/credentials/CSP warnings or page errors.
+  This changes request scheduling, not compression or game download size.
+- Live BEFORE menu-visible samples: cold 15413 / 15295 / 15043ms (median
+  15295ms); warm 5196 / 3978 / 3509ms (median 3978ms). Captured at 08:55 UTC,
+  before any publication. These are not comparable to loopback absolute times.
+- Synthetic new game, intro acknowledgement, automatic IndexedDB slot save,
+  revisit and Continue passed. The complete slot serialized identically before
+  and after revisit and restored the same nickname/day/room/inventory. The
+  initial UI probe clicked before slot reading finished; waiting for the normal
+  UI readiness and retrying passed, without storage/logic changes.
+- Source diff under `public/games/` is just four added lines in the survival
+  HTML; all game scripts, images, audio, settings and save code are unchanged.
+
+### Regression verification
+
+- Root Node checks: 20 passed, including six game-loading contracts. Vitest:
+  210 passed across 25 files. Astro check: zero errors/warnings, ten hints in
+  the independently updated clipboard-extension files; no dependency changes.
+- Full Chrome E2E: 126 passed with two workers. An initial default-concurrency
+  run had one unrelated lot-animation timeout (125 passed); the isolated test
+  and the subsequent complete bounded-concurrency run both passed. No animation
+  implementation or test expectations were changed to obtain a pass.
+- Production publication and same-profile measurements are verified separately
+  after pushing; local build/test results alone do not establish deployment.
+
+References: [preload critical assets](https://web.dev/articles/preload-critical-assets),
+[Creator build options](https://docs.cocos.com/creator/3.8/manual/en/editor/publish/build-options.html).

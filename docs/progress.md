@@ -1,5 +1,22 @@
 # Project Progress
 
+## 2026-10-22 — Second free game-loading batch
+
+- Added three exact critical-resource preload hints only to the survival HTML:
+  engine, settings and main script. Matched SystemJS/XHR/Cocos request modes;
+  local probe confirms one request per selected URL and no credential warnings.
+- No game/audio/texture/config bytes, execution order, save key, IndexedDB
+  version, cache headers or origin changes. Retained the 2-second splash:
+  source Creator project/build settings are absent from this website repository.
+- Primed three-pair loopback menu medians: cold 5.100s to 4.682s; warm 2.131s
+  to 2.133s (unchanged). Transfer bytes unchanged. Live BEFORE cold/warm menu
+  medians: 15.295s / 3.978s. Do not mix these with prior scene-frame metrics.
+- Synthetic new game/autosave/revisit/Continue restored an identical slot.
+- Fast-forwarded three unrelated remote commits without overwriting their
+  extension release and project synchronization work; preserved `.workbuddy/`.
+- Full checks and production acceptance are tracked in the
+  [game-loading feature](features/game-loading-optimization.md).
+
 ## 2026-10-21 — First free game-loading batch
 
 - Reused the existing 46,381-byte site icon instead of the survival game's

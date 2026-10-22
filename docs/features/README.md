@@ -1,6 +1,6 @@
 # Features
 
-- [game-loading-optimization](game-loading-optimization.md) — small icon and exact engine cache contracts
+- [game-loading-optimization](game-loading-optimization.md) — small icon, exact engine cache contracts and critical-resource preloads
 
 - [free-security-hardening](free-security-hardening.md) — verified free controls, burst shedding and data-safe rollback
 

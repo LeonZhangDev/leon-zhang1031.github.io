@@ -19,6 +19,10 @@
 
     <link rel="stylesheet" type="text/css" href="./style.ad77d.css"/>
     <link rel="icon" type="image/png" href="/favicon-zhang.png"/>
+    <!-- Fetch late-discovered essentials early; SystemJS still controls execution. -->
+    <link rel="preload" as="script" href="./cocos-js/_virtual_cc-nPspxFOo.js"/>
+    <link rel="preload" as="fetch" href="./src/settings.c7df0.json" crossorigin="anonymous"/>
+    <link rel="preload" as="script" href="./assets/main/index.110bc.js" crossorigin="anonymous"/>
   <style id="release-shell">
 html, body { width:100%; height:100%; margin:0; padding:0; overflow:hidden; background:#101418; }
 #GameDiv { position:fixed !important; inset:0; width:100vw !important; height:100vh !important; margin:0 !important; border:0; border-radius:0; box-shadow:none; }

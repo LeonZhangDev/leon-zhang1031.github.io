@@ -103,6 +103,28 @@ test('Beijing generic and workspace endpoints are accepted without allowing redi
     assert.throws(() => loadConfig({ ...env, QWEN_BASE_URL: url }, approval), /endpoint/);
   }
 });
+
+test('Qwen tool choices follow unread sources and terminate after a single report save', async t => {
+  const f = fixture(t); let requests = 0;
+  const urls = ['https://docs.example.test/serverless', 'https://docs.example.test/node-service'];
+  const runner = new AgentRunner(f.store, f.config, { fetchImplementation: async (url, init) => {
+    const body = JSON.parse(init.body), tools = body.tools.map(tool => tool.function.name);
+    const read = body.tools.find(tool => tool.function.name === 'read_page');
+    requests++;
+    assert.ok(!tools.includes('finish'));
+    if (requests === 1) { assert.equal(read, undefined); return jsonResponse(completion('search', { query: 'compare' })); }
+    if (requests <= 3) {
+      assert.deepEqual(read.function.parameters.properties.url.enum, urls.slice(requests - 2));
+      return jsonResponse(completion('read_page', { url: urls[requests - 2] }));
+    }
+    assert.equal(read, undefined, 'Exhausted source reads must not be offered again');
+    assert.equal(requests, 4, 'No decision is allowed after saving');
+    return jsonResponse(completion('save_report', { markdown: '# 比较\n\n合成资料建议：[方案 A](' + urls[0] + ')；[方案 B](' + urls[1] + ')。' }));
+  } });
+  const task = await runner.start(f.task);
+  assert.equal(task.status, 'completed'); assert.equal(task.stats.pages, 2); assert.equal(requests, 4);
+  assert.equal(f.store.traces(task.id).filter(run => run.name === 'tool.save_report').length, 1);
+});
 test('model pricing profiles remain distinct and unsupported models cannot inherit a cheaper rate', () => {
   const env = modelEnv(), approval = { allowModelCalls: true };
   const flash = loadConfig(env, approval).qwen;

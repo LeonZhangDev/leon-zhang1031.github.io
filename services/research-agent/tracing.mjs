@@ -28,6 +28,7 @@ export class TaskTrace {
           try {
             const response = await fetchImplementation(url, { ...init, redirect: 'error',
               signal: AbortSignal.timeout(remote.requestTimeoutMs) });
+            store.wire(taskId, { transport: 'cloud', path: parsed.pathname, method: 'POST', status: response.status });
             if (!response.ok) { await response.body?.cancel(); throw new Error('TRACE_REJECTED'); }
             await response.body?.cancel();
             return new Response('{}', { status: 200 });

@@ -14,6 +14,13 @@ const securityHeaders = {
   'content-security-policy': "default-src 'none'; script-src 'self'; style-src 'self'; connect-src 'self'; img-src 'self' data:; base-uri 'none'; frame-ancestors 'none'; form-action 'self'",
 };
 const HttpError = class extends Error { constructor(status, message) { super(message); this.status = status; } };
+const assets = {
+  'assets/app.js': new URL('./ui/app.js', import.meta.url),
+  'assets/markdown.mjs': new URL('./ui/markdown.mjs', import.meta.url),
+  'assets/style.css': new URL('./ui/style.css', import.meta.url),
+  'assets/vendor/marked.js': new URL('./node_modules/marked/lib/marked.esm.js', import.meta.url),
+  'assets/vendor/purify.js': new URL('./node_modules/dompurify/dist/purify.es.mjs', import.meta.url),
+};
 
 async function jsonBody(req) {
   if (!/^application\/json(?:;|$)/i.test(req.headers['content-type'] || '')) throw new HttpError(415, '只接受 JSON 请求。');
@@ -61,9 +68,8 @@ export function createApplication(config = loadConfig(), options = {}) {
       if (path === prefix.slice(0, -1) && req.method === 'GET') return respond(res, 303, '', { location: prefix });
       if (!path.startsWith(prefix)) throw new HttpError(404, 'Not found');
       const route = path.slice(prefix.length);
-      if (req.method === 'GET' && ['assets/app.js', 'assets/style.css'].includes(route)) {
-        const file = route.endsWith('.js') ? 'app.js' : 'style.css';
-        return respond(res, 200, await readFile(new URL(`./ui/${file}`, import.meta.url), 'utf8'), { 'content-type': file.endsWith('.js') ? 'text/javascript; charset=utf-8' : 'text/css; charset=utf-8' });
+      if (req.method === 'GET' && Object.hasOwn(assets, route)) {
+        return respond(res, 200, await readFile(assets[route], 'utf8'), { 'content-type': route.endsWith('.css') ? 'text/css; charset=utf-8' : 'text/javascript; charset=utf-8' });
       }
       const token = readSession(req.headers.cookie);
       const signedIn = token ? store.session(tokenHash(token), config) : false;
@@ -98,9 +104,36 @@ export function createApplication(config = loadConfig(), options = {}) {
         return respond(res, 200, { ok: true }, { 'set-cookie': sessionCookie('', prefix, 0, !!config.publicOrigin) });
       }
       if (req.method === 'GET' && route === 'api/status') return respond(res, 200, { mode: config.mode, traceMode: config.traceMode,
-        actualCostYuan: config.mode === 'mock' ? 0 : null, toolsSimulated: true,
+        memoryMode: config.memoryMode, actualCostYuan: config.mode === 'mock' && config.memoryMode !== 'qwen' ? 0 : null, toolsSimulated: true,
         scenarios: config.mode === 'mock' ? SCENARIOS : ['standard'], budget: store.budget(config), trialBudget: store.trialBudget(config) });
       if (req.method === 'GET' && route === 'api/tasks') return respond(res, 200, { tasks: store.listTasks() });
+      if (req.method === 'GET' && route === 'api/memories') return respond(res, 200, {
+        enabled: runner.memory.enabled, mode: `mem0-oss-${config.memoryMode || 'offline'}`, semanticModelVerified: false,
+        memories: await runner.memory.list(), candidates: (await runner.memory.list({ includeCandidates: true })).filter(item => item.metadata.candidate),
+      });
+      if (req.method === 'POST' && route === 'api/memories') {
+        const body = await jsonBody(req);
+        const controller = new AbortController();
+        const disconnected = () => { if (!res.writableEnded) controller.abort(); };
+        res.once('close', disconnected);
+        const options = { signal: controller.signal };
+        try {
+          if (body.action === 'set-enabled' && typeof body.enabled === 'boolean') runner.memory.setEnabled(body.enabled);
+          else if (body.action === 'add') await runner.memory.remember(body.text, { ...options, scope: body.scope });
+          else if (body.action === 'extract') await runner.memory.propose(body.text, options);
+          else if (['confirm', 'reject'].includes(body.action) && /^[0-9a-f-]{36}$/.test(body.id || '')) await runner.memory.review(body.id, body.action, options);
+          else if (['update', 'forget', 'toggle'].includes(body.action) && /^[0-9a-f-]{36}$/.test(body.id || '')) await runner.memory.change(body.id, body.action, body.text, options);
+          else throw new Error('MEMORY_ACTION_INVALID');
+        } catch (error) {
+          if (['MODEL_BUDGET', 'VALIDATION_BUDGET'].includes(error.message)) throw new HttpError(429, '已达到累计 5 元或本轮新增最多 0.5 元的保守预留上限。');
+          if (error.message === 'MEMORY_EXTRACTION_NOT_AUTHORIZED') throw new HttpError(403, '当前为离线记忆模式，未授权模型抽取。');
+          const known = ['MEMORY_TEXT_INVALID', 'MEMORY_SCOPE_INVALID', 'MEMORY_CAPACITY', 'MEMORY_DISABLED', 'MEMORY_NOT_FOUND', 'MEMORY_ACTION_INVALID'];
+          if (!known.includes(error.message)) throw error;
+          throw new HttpError(error.message === 'MEMORY_NOT_FOUND' ? 404 : 400,
+            '记忆操作无效：请检查内容、范围及启用状态；内容限 500 字，不接受密钥，最多保存 200 条。');
+        } finally { res.removeListener('close', disconnected); }
+        return respond(res, 200, { ok: true });
+      }
       if (req.method === 'POST' && route === 'api/tasks') {
         const body = await jsonBody(req);
         if (typeof body.goal !== 'string' || !body.goal.trim() || body.goal.length > 2000) throw new HttpError(400, '请填写 1～2000 字的调研目标。');
@@ -152,9 +185,10 @@ export function createApplication(config = loadConfig(), options = {}) {
 
 if (process.argv[1] && import.meta.url === pathToFileURL(realpathSync(process.argv[1])).href) {
   const args = process.argv.slice(2);
-  if (args.some(arg => !['--allow-model-calls', '--allow-cloud-traces'].includes(arg))) throw new Error('Unknown startup argument');
-  const config = loadConfig(loadLocalEnvironment(), {
-    allowModelCalls: args.includes('--allow-model-calls'), allowCloudTraces: args.includes('--allow-cloud-traces'),
+  if (args.some(arg => !['--allow-model-calls', '--allow-memory-model-calls', '--allow-cloud-traces', '--offline'].includes(arg))) throw new Error('Unknown startup argument');
+  const env = loadLocalEnvironment();
+  const config = loadConfig(args.includes('--offline') ? { ...env, AGENT_MODE: 'mock', AGENT_MEMORY_MODE: 'offline', AGENT_TRACE_MODE: 'offline' } : env, {
+    allowModelCalls: args.includes('--allow-model-calls'), allowMemoryCalls: args.includes('--allow-memory-model-calls'), allowCloudTraces: args.includes('--allow-cloud-traces'),
   });
   const app = createApplication(config);
   const origin = await app.listen();

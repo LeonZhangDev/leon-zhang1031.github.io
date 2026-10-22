@@ -14,11 +14,17 @@ const QWEN_PRICING = Object.freeze({
 });
 
 export function loadConfig(env = process.env, approval = {}) {
+  const memoryMode = env.AGENT_MEMORY_MODE || 'offline';
+  if (!['offline', 'qwen'].includes(memoryMode) || (memoryMode === 'qwen' && approval.allowMemoryCalls !== true)) {
+    throw new Error('MEMORY_REMOTE_NOT_AUTHORIZED: Qwen memory requires --allow-memory-model-calls.');
+  }
   const mode = env.AGENT_MODE || 'mock', traceMode = env.AGENT_TRACE_MODE || 'offline';
   if (!['mock', 'qwen'].includes(mode) || (mode === 'qwen' && approval.allowModelCalls !== true)) throw new Error('Only mock mode is authorized without --allow-model-calls; supported modes: mock/qwen.');
   if (!['offline', 'cloud'].includes(traceMode) || (traceMode === 'cloud' && approval.allowCloudTraces !== true)) throw new Error('Only offline tracing is authorized without --allow-cloud-traces.');
   const trialBudgetUnits = Math.round(Number(env.AGENT_TRIAL_BUDGET_YUAN || 5) * 10_000);
   if (!Number.isSafeInteger(trialBudgetUnits) || trialBudgetUnits < 1 || trialBudgetUnits > 50_000) throw new Error('First-validation budget must be greater than zero and no more than 5 yuan.');
+  const validationBudgetUnits = Math.round(Number(env.AGENT_VALIDATION_BUDGET_YUAN || '0.5') * 10_000);
+  if (!Number.isSafeInteger(validationBudgetUnits) || validationBudgetUnits < 1 || validationBudgetUnits > 5000) throw new Error('Additional validation budget must be greater than zero and no more than 0.5 yuan.');
   const model = env.QWEN_MODEL || 'qwen3.8-flash';
   const pricing = Object.hasOwn(QWEN_PRICING, model) ? QWEN_PRICING[model] : null;
   const qwen = {
@@ -27,12 +33,28 @@ export function loadConfig(env = process.env, approval = {}) {
     pricingSource: 'https://help.aliyun.com/zh/model-studio/model-pricing',
     maxOutputTokens: 1200, maxInputTokenBound: 24_000, requestTimeoutMs: 60_000,
   };
-  if (mode === 'qwen') {
+  if (mode === 'qwen' || memoryMode === 'qwen') {
     if (!qwen.apiKey) throw new Error('Missing DASHSCOPE_API_KEY');
     if (qwen.baseUrl !== 'https://dashscope.aliyuncs.com/compatible-mode/v1'
       && !/^https:\/\/[a-z0-9-]+\.cn-beijing\.maas\.aliyuncs\.com\/compatible-mode\/v1$/i.test(qwen.baseUrl)) throw new Error('QWEN_BASE_URL must be an approved Beijing generic or workspace compatible-mode/v1 HTTPS endpoint.');
-    if (!pricing) throw new Error('No verified Beijing price profile for this Qwen model.');
-    if (env.QWEN_PRICING_CONFIRMED !== 'true') throw new Error('Confirm the Beijing model price before enabling Qwen: QWEN_PRICING_CONFIRMED=true');
+    if (mode === 'qwen' && !pricing) throw new Error('No verified Beijing price profile for this Qwen model.');
+    if (mode === 'qwen' && env.QWEN_PRICING_CONFIRMED !== 'true') throw new Error('Confirm the Beijing model price before enabling Qwen: QWEN_PRICING_CONFIRMED=true');
+  }
+  const memoryModel = env.MEMORY_LLM_MODEL || 'qwen3.8-flash';
+  const memoryPricing = Object.hasOwn(QWEN_PRICING, memoryModel) ? QWEN_PRICING[memoryModel] : null;
+  const memory = {
+    llm: { ...qwen, model: memoryModel, ...memoryPricing, maxOutputTokens: 512, maxInputTokenBound: 8000 },
+    embedding: { ...qwen, model: env.MEMORY_EMBEDDING_MODEL || 'text-embedding-v4',
+      dimensions: Number(env.MEMORY_EMBEDDING_DIMENSIONS || 1024), inputYuanPerMillion: 0.5,
+      outputYuanPerMillion: 0, maxPricedInputTokens: 1_000_000, maxInputTokenBound: 8192, maxBatchSize: 10, requestTimeoutMs: 30_000 },
+    // Calibrated on real v4 vectors; 0.65 filtered relevant top-ranked paraphrases.
+    recallThreshold: Number(env.MEMORY_RECALL_THRESHOLD || 0.55),
+  };
+  if (!Number.isFinite(memory.recallThreshold) || memory.recallThreshold < 0 || memory.recallThreshold > 1) throw new Error('Invalid MEMORY_RECALL_THRESHOLD');
+  if (memoryMode === 'qwen') {
+    if (!memoryPricing) throw new Error('No verified Beijing price profile for MEMORY_LLM_MODEL.');
+    if (memory.embedding.model !== 'text-embedding-v4' || memory.embedding.dimensions !== 1024) throw new Error('This memory trial requires text-embedding-v4 with 1024 dimensions.');
+    if (env.MEMORY_PRICING_CONFIRMED !== 'true') throw new Error('Confirm memory prices before enabling Qwen memory: MEMORY_PRICING_CONFIRMED=true');
   }
   const langsmith = {
     apiKey: env.LANGSMITH_API_KEY || '', endpoint: env.LANGSMITH_ENDPOINT || 'https://api.smith.langchain.com',
@@ -61,8 +83,9 @@ export function loadConfig(env = process.env, approval = {}) {
   return {
     host: '127.0.0.1', port, basePath: BASE_PATH, publicOrigin, trialSeedReservedUnits,
     dataDir: resolve(env.AGENT_DATA_DIR || fileURLToPath(new URL('../../.tmp/research-agent/', import.meta.url))),
-    mode, traceMode, qwen, langsmith, trialBudgetUnits,
+    mode, traceMode, qwen, langsmith, trialBudgetUnits, validationBudgetUnits, memoryMode, memory,
     allowModelCalls: mode === 'qwen' && approval.allowModelCalls === true,
+    allowMemoryCalls: memoryMode === 'qwen' && approval.allowMemoryCalls === true,
     allowCloudTraces: traceMode === 'cloud' && approval.allowCloudTraces === true,
     sessionMs: 8 * 60 * 60 * 1000, idleMs: 30 * 60 * 1000,
     loginWindowMs: 15 * 60 * 1000, loginMaxFailures: 5,

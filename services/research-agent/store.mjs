@@ -3,6 +3,9 @@ import { mkdirSync, openSync, closeSync, writeFileSync, readFileSync, unlinkSync
 import { join } from 'node:path';
 import { randomUUID } from 'node:crypto';
 
+// Stable campaign identity: config changes/restarts must never reset this allowance.
+const VALIDATION_ID = 'mem0-qwen-v1';
+
 export class Store {
   constructor(dataDir, clock = () => Date.now()) {
     mkdirSync(dataDir, { recursive: true, mode: 0o700 });
@@ -35,7 +38,12 @@ export class Store {
       CREATE TABLE IF NOT EXISTS model_calls (id TEXT PRIMARY KEY, task_id TEXT NOT NULL REFERENCES tasks(id),
         reserved_units INTEGER NOT NULL, state TEXT NOT NULL, body TEXT NOT NULL);
       CREATE TABLE IF NOT EXISTS cloud_dispatch (task_id TEXT PRIMARY KEY REFERENCES tasks(id));
+      CREATE TABLE IF NOT EXISTS memory_operations (id TEXT PRIMARY KEY, task_id TEXT REFERENCES tasks(id),
+        kind TEXT NOT NULL, created INTEGER NOT NULL, status TEXT NOT NULL);
+      CREATE TABLE IF NOT EXISTS memory_model_calls (id TEXT PRIMARY KEY, operation_id TEXT NOT NULL REFERENCES memory_operations(id),
+        reserved_units INTEGER NOT NULL, state TEXT NOT NULL, body TEXT NOT NULL);
     `);
+    this.db.prepare("UPDATE memory_operations SET status='interrupted' WHERE status='running'").run();
     // A previous process cannot still own work after a restart. Retain spent mock units; release the remainder.
     for (const row of this.db.prepare("SELECT * FROM tasks WHERE status IN ('queued','running')").all()) {
       const body = JSON.parse(row.body);
@@ -85,7 +93,7 @@ export class Store {
       const budget = this.budget(config);
       if (budget.dayUsedUnits + input.budgetUnits > config.dayBudgetUnits || budget.monthUsedUnits + input.budgetUnits > config.monthBudgetUnits) throw new Error('BUDGET_EXCEEDED');
       const task = { id: randomUUID(), createdAt: new Date(this.clock()).toISOString(), status: 'queued', ...input,
-        estimatedCostUnits: 0, actualCostYuan: config.mode === 'mock' ? 0 : null, simulated: config.mode === 'mock',
+        estimatedCostUnits: 0, actualCostYuan: config.mode === 'mock' && config.memoryMode !== 'qwen' ? 0 : null, simulated: config.mode === 'mock',
         mode: config.mode, traceMode: config.traceMode, toolsSimulated: true, traceStatus: 'pending', report: null };
       this.db.prepare('INSERT INTO tasks(id,created,day,month,status,reserved,body) VALUES (?,?,?,?,?,?,?)').run(task.id, this.clock(), budget.day, budget.month, 'queued', input.budgetUnits, JSON.stringify(task));
       this.db.exec('COMMIT'); return task;
@@ -103,33 +111,52 @@ export class Store {
   listTasks() { return this.db.prepare('SELECT body FROM tasks ORDER BY created DESC, rowid DESC LIMIT 100').all().map(row => JSON.parse(row.body)); }
   trialBudget(config, taskId) {
     const rows = taskId
-      ? this.db.prepare('SELECT reserved_units,body,state FROM model_calls WHERE task_id=?').all(taskId)
-      : this.db.prepare('SELECT reserved_units,body,state FROM model_calls').all();
+      ? this.db.prepare(`SELECT reserved_units,body,state FROM model_calls WHERE task_id=?
+          UNION ALL SELECT c.reserved_units,c.body,c.state FROM memory_model_calls c
+          JOIN memory_operations o ON o.id=c.operation_id WHERE o.task_id=?`).all(taskId, taskId)
+      : this.db.prepare('SELECT reserved_units,body,state FROM model_calls UNION ALL SELECT reserved_units,body,state FROM memory_model_calls').all();
     const usage = rows.map(row => JSON.parse(row.body));
+    const validationRows = rows.filter((row, index) => usage[index].pricingSnapshot?.validationId === VALIDATION_ID);
     return { limitYuan: Math.min(config.trialBudgetUnits, 50_000) / 10_000,
       reservedYuan: rows.reduce((total, row) => total + row.reserved_units, 0) / 10_000,
       usageEstimateYuan: Number(usage.reduce((total, body) => total + (body.usageEstimateYuan || 0), 0).toFixed(6)),
       uncertainCalls: rows.filter(row => row.state !== 'measured').length, calls: rows.length,
       locked: this.getSetting('model-budget-locked') === 'true',
+      validation: { id: VALIDATION_ID, limitYuan: Math.min(config.validationBudgetUnits ?? 5000, 5000) / 10_000,
+        reservedYuan: validationRows.reduce((total, row) => total + row.reserved_units, 0) / 10_000, calls: validationRows.length },
       accounting: 'conservative-no-refund', vendorBillVerified: false };
   }
-  reserveModelCall(taskId, units, config, pricingSnapshot = {}) {
+  createMemoryOperation(kind, taskId = null) {
+    const id = randomUUID();
+    this.db.prepare('INSERT INTO memory_operations VALUES (?,?,?,?,?)').run(id, taskId, kind, this.clock(), 'running');
+    return id;
+  }
+  finishMemoryOperation(id, status) {
+    this.db.prepare('UPDATE memory_operations SET status=? WHERE id=?').run(status, id);
+  }
+  reserveModelCall(taskId, units, config, pricingSnapshot = {}, operationId = null) {
     if (!Number.isSafeInteger(units) || units < 1) throw new Error('INVALID_RESERVATION');
     this.db.exec('BEGIN IMMEDIATE');
     try {
-      const task = this.task(taskId), budget = this.trialBudget(config), perTask = this.trialBudget(config, taskId);
-      if (!task || budget.locked || Math.round(budget.reservedYuan * 10_000) + units > Math.min(config.trialBudgetUnits, 50_000)
-        || Math.round(perTask.reservedYuan * 10_000) + units > task.budgetUnits) throw new Error('MODEL_BUDGET');
+      const operation = operationId ? this.db.prepare('SELECT * FROM memory_operations WHERE id=?').get(operationId) : null;
+      if (operationId && (!operation || operation.status !== 'running' || operation.task_id !== taskId)) throw new Error('MODEL_OPERATION_INVALID');
+      const task = taskId ? this.task(taskId) : null, budget = this.trialBudget(config);
+      if ((!operation && !task) || (taskId && !task) || budget.locked
+        || Math.round(budget.reservedYuan * 10_000) + units > Math.min(config.trialBudgetUnits, 50_000)
+        || (task && Math.round(this.trialBudget(config, taskId).reservedYuan * 10_000) + units > task.budgetUnits)) throw new Error('MODEL_BUDGET');
+      if (Math.round(budget.validation.reservedYuan * 10_000) + units > Math.min(config.validationBudgetUnits ?? 5000, 5000)) throw new Error('VALIDATION_BUDGET');
       const id = randomUUID();
       // No refunds, including on cancellation, errors, process death or timeout.
-      this.db.prepare('INSERT INTO model_calls VALUES (?,?,?,?,?)').run(id, taskId, units, 'uncertain', JSON.stringify({ pricingSnapshot }));
+      this.db.prepare(operation ? 'INSERT INTO memory_model_calls VALUES (?,?,?,?,?)' : 'INSERT INTO model_calls VALUES (?,?,?,?,?)')
+        .run(id, operationId || taskId, units, 'uncertain', JSON.stringify({ pricingSnapshot: { ...pricingSnapshot, validationId: VALIDATION_ID } }));
       this.db.exec('COMMIT'); return id;
     } catch (error) { this.db.exec('ROLLBACK'); throw error; }
   }
   recordModelUsage(id, usage) {
-    const row = this.db.prepare('SELECT body FROM model_calls WHERE id=?').get(id);
+    const table = this.db.prepare('SELECT id FROM model_calls WHERE id=?').get(id) ? 'model_calls' : 'memory_model_calls';
+    const row = this.db.prepare(`SELECT body FROM ${table} WHERE id=?`).get(id);
     if (!row) throw new Error('MODEL_RESERVATION_MISSING');
-    this.db.prepare('UPDATE model_calls SET state=?,body=? WHERE id=?').run('measured', JSON.stringify({ ...JSON.parse(row.body), ...usage }), id);
+    this.db.prepare(`UPDATE ${table} SET state=?,body=? WHERE id=?`).run('measured', JSON.stringify({ ...JSON.parse(row.body), ...usage }), id);
   }
   lockModelBudget() { this.setSetting('model-budget-locked', 'true'); }
   claimCloudTrace(taskId, maxTraces) {

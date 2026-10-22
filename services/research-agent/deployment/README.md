@@ -1,5 +1,19 @@
 # HTTPS deployment
 
+## 2026-10-22 Mem0 release
+
+Backend `mem0-a8784daf9571` is active with Qwen decisions, Qwen memory and summary-only cloud tracing. Its 42 source hashes were verified before install; Windows tests passed 106/106, Ubuntu non-browser tests 104/104. Chrome verified the actual private route, candidate confirmation/recall, terminal report save, GFM/source/download, 390px layout and logout. All 20 run writes for task `e81dc395-911b-45f6-969d-77bf71300a82` returned HTTP202. The configured key is Tracing Only: project readback HTTP403 is an expected key-type restriction. Keep that upload-only key in production; use a separate local PAT for readback, without replaying the paid task. Tracing-key permissions cannot be edited. API ingest does not prove cloud UI/quota or vendor billing.
+
+The authoritative ledger is `/var/lib/research-agent/agent.sqlite`: 93 calls, CNY0.4282 conservative cumulative reservation, including CNY0.1374 of the fixed CNY0.50 validation allowance; one historical unknown-use timeout remains reserved. Local accounting was reconciled back from production after acceptance; local configuration remains offline. Only production may issue subsequent real calls. Refresh the seed floor from the latest ledger before every transfer; the template CNY0.3230 is the pre-release minimum, not the present balance.
+
+Use `ledger-transfer.mjs export/inspect/import --apply` to merge task-linked calls, standalone memory calls/operations and cloud dispatches by ID. The bundle excludes credentials, sessions and memory text, but includes private task bodies: keep it outside public/Git paths. Stop services and back up first. Never replace production SQLite; conflicts, active work, missing references and either budget overrun stop import. Existing task bodies are preserved; this transfers accounting, not complete event/trace history. Remember to merge cloud dispatches too.
+
+The server env adds `AGENT_MEMORY_MODE=qwen`, `MEMORY_PRICING_CONFIRMED=true`, `MEMORY_LLM_MODEL=qwen3.8-flash`, `MEMORY_EMBEDDING_MODEL=text-embedding-v4`, `MEMORY_EMBEDDING_DIMENSIONS=1024`, `MEMORY_RECALL_THRESHOLD=0.55` and `AGENT_VALIDATION_BUDGET_YUAN=0.5`. The actual unit has all three explicit authorization flags. The checked-in env/unit templates remain offline by default.
+
+Rollback backup: `/var/backups/research-agent/20261022-mem0-a8784daf9571/`. Reverting to pre-Mem0 source requires forcing `AGENT_MODE=mock`, `AGENT_MEMORY_MODE=offline` and `AGENT_TRACE_MODE=offline`: older code cannot count the new memory-call table. Do not resume paid calls on an old release or restore an old budget DB. The activation failure handler restores source/config in offline mode while retaining all new ledger data. Caddy and Artalk were not reconfigured by this upgrade.
+
+The following records describe the earlier production release.
+
 Target: existing Ubuntu server `82.156.68.115`, Caddy host `comments.leonzk.cn`.
 The public website remains Astro/EdgeOne Pages. Only its private random path is
 proxied to the Node service. Existing Artalk routes and data must be preserved.

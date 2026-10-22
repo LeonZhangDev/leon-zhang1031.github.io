@@ -1,9 +1,12 @@
+import { renderMarkdown as renderReport } from './markdown.mjs';
+
 const base = new URL('.', location.href).pathname;
 const $ = (id) => document.getElementById(id);
 const yuan = (units = 0) => `¥${(units / 10000).toFixed(4)}`;
 const statusText = { queued: '排队中', running: '调研中', completed: '已完成', cancelled: '已取消', limited: '达到限制', failed: '失败', interrupted: '重启中断' };
 const traceText = { pending: '准备中', 'sdk-offline-verified': 'SDK · 本地已记录', 'failed-local-retained': '失败 · 本地已保留', 'cloud-api-accepted': '云端 API 已接收', 'cloud-limit-local-retained': '云端试验上限 · 本地保留' };
 let currentId = null, currentTask = null, pollTimer = null, historyTasks = [];
+let memoryBusy = false;
 
 async function api(path, options = {}) {
   const response = await fetch(`${base}api/${path}`, { credentials: 'same-origin', ...options,
@@ -23,41 +26,6 @@ function node(tag, text, className) {
   if (className) item.className = className;
   return item;
 }
-function appendInline(parent, text) {
-  const links = /\[([^\]]+)\]\((https:\/\/[^\s)]+)\)/g;
-  let end = 0;
-  for (const match of text.matchAll(links)) {
-    parent.append(document.createTextNode(text.slice(end, match.index)));
-    const link = node('a', match[1]); link.href = match[2]; link.target = '_blank'; link.rel = 'noopener noreferrer';
-    parent.append(link); end = match.index + match[0].length;
-  }
-  parent.append(document.createTextNode(text.slice(end)));
-}
-// Render the supported report subset with DOM text nodes. Never execute provider HTML.
-function renderReport(markdown, target) {
-  target.replaceChildren();
-  const lines = markdown.split('\n');
-  for (let i = 0; i < lines.length; i++) {
-    const line = lines[i]; if (!line.trim()) continue;
-    if (line.startsWith('|') && lines[i + 1]?.match(/^\|\s*[-:]/)) {
-      const table = node('table', undefined, 'report-table');
-      const header = node('tr');
-      for (const cell of line.split('|').slice(1, -1)) header.append(node('th', cell.trim()));
-      table.append(header); i++;
-      while (lines[i + 1]?.startsWith('|')) {
-        const row = node('tr');
-        for (const cell of lines[++i].split('|').slice(1, -1)) row.append(node('td', cell.trim()));
-        table.append(row);
-      }
-      target.append(table); continue;
-    }
-    const heading = /^(#{1,3})\s+(.+)$/.exec(line);
-    const item = heading ? node(`h${heading[1].length}`, heading[2]) : node(line.startsWith('> ') ? 'blockquote' : 'p');
-    if (!heading) appendInline(item, line.replace(/^> /, ''));
-    target.append(item);
-  }
-}
-
 async function loginPage() {
   const auth = await api('auth/status');
   if (auth.authenticated) { location.replace(base); return; }
@@ -97,20 +65,21 @@ async function updateHistory() {
   if ([...select.options].some(option => option.value === previous)) select.value = previous;
 }
 async function updateBudget() {
-  const { budget, trialBudget = { reservedYuan: 0, limitYuan: 5, usageEstimateYuan: 0 }, mode, traceMode } = await api('status');
+  const { budget, trialBudget = { reservedYuan: 0, limitYuan: 5, usageEstimateYuan: 0 }, mode, traceMode, memoryMode } = await api('status');
   $('mode-badge').textContent = mode === 'qwen' ? 'QWEN · 模拟资料' : 'MOCK MODE';
-  $('runtime-status').textContent = `模型 ${mode} · 追踪 ${traceMode}`;
+  $('runtime-status').textContent = `模型 ${mode} · 记忆 ${memoryMode || 'offline'} · 追踪 ${traceMode}`;
   $('runtime-notice').textContent = mode === 'qwen' ? `Qwen 模型已启用，搜索和网页仍为合成资料。追踪模式 ${traceMode}；报告不代表实时调研。` : `模型、搜索和网页为合成响应。追踪模式 ${traceMode}；报告不代表实时事实。`;
   for (const option of $('scenario').options) option.disabled = mode === 'qwen' && option.value !== 'standard';
   if (mode === 'qwen') $('scenario').value = 'standard';
   $('budget-status').textContent = `模拟流程账本：今日 ${yuan(budget.dayUsedUnits)} / ${yuan(budget.dayLimitUnits)} · 本月 ${yuan(budget.monthUsedUnits)} / ${yuan(budget.monthLimitUnits)}。首次模型验证累计预留 ¥${trialBudget.reservedYuan.toFixed(4)} / ¥${trialBudget.limitYuan.toFixed(2)}（重启不清零、不退款）。usage 估算 ¥${trialBudget.usageEstimateYuan.toFixed(6)}，未核对供应商账单。`;
+  if (trialBudget.validation) $('budget-status').textContent += ` 本轮新增验证预留 ¥${trialBudget.validation.reservedYuan.toFixed(4)} / ¥${trialBudget.validation.limitYuan.toFixed(2)}，包含在累计上限内。`;
 }
 function displayTask(task, events) {
   currentTask = task;
   const active = ['running', 'queued'].includes(task.status);
   $('task-status').textContent = statusText[task.status]; $('estimated-cost').textContent = yuan(task.estimatedCostUnits);
   $('trace-status').textContent = traceText[task.traceStatus] || task.traceStatus;
-  $('model-cost').textContent = task.simulated ? '¥0.0000' : task.modelBilling ? `¥${task.modelBilling.usageEstimateYuan.toFixed(6)}` : '待核算';
+  $('model-cost').textContent = task.modelBilling ? `¥${task.modelBilling.usageEstimateYuan.toFixed(6)}` : task.simulated ? '¥0.0000' : '待核算';
   $('cancel-task').hidden = !active; $('start-task').disabled = active;
   const activity = $('activity'); const atBottom = activity.scrollTop + activity.clientHeight >= activity.scrollHeight - 30;
   activity.replaceChildren();
@@ -122,7 +91,14 @@ function displayTask(task, events) {
   }
   if (atBottom) activity.scrollTop = activity.scrollHeight;
   $('report-empty').hidden = !!task.report; $('report').hidden = !task.report;
-  if (task.report) renderReport(task.report, $('report'));
+  if (task.report && $('report-source').value !== task.report) {
+    renderReport(task.report, $('report')); $('report-source').value = task.report;
+  }
+  $('report-source').hidden = !task.report || $('report-view').value !== 'source';
+  $('report').hidden = !task.report || $('report-view').value !== 'preview';
+  $('context-status').textContent = task.context ? `上下文：${task.context.strategy} · 版本 ${task.context.version} · UTF-8 保守边界 ${task.context.afterByteBound}/${task.context.limit}；未调用压缩模型。` : '';
+  $('memory-used').textContent = (task.memoryUsed || []).length ? `本次召回：${task.memoryUsed.map(item => item.text).join('；')}` : '本次未召回长期记忆。';
+  $('skills-used').textContent = `Skills：${(task.skills || []).map(item => `${item.id} v${item.version}`).join('、') || '未记录'}`;
   $('copy-report').disabled = !task.report; $('reuse-task').disabled = false;
   $('download-report').hidden = !task.report; $('download-report').href = `${base}api/tasks/${task.id}/report`;
   $('download-trace').hidden = active; $('download-trace').href = `${base}api/tasks/${task.id}/trace`;
@@ -133,6 +109,7 @@ async function selectTask(id) {
   try {
     const { task, events } = await api(`tasks/${id}`); if (currentId !== id) return;
     displayTask(task, events); await updateHistory(); compareTasks(); await updateBudget();
+    if (!['queued', 'running'].includes(task.status)) await refreshMemories();
     if (currentId === id && ['queued', 'running'].includes(task.status)) pollTimer = setTimeout(() => selectTask(id), 450);
   } catch (error) { $('task-error').textContent = error.message; }
 }
@@ -152,6 +129,16 @@ function compareTasks() {
 }
 
 async function workspacePage() {
+  $('report-view').addEventListener('change', () => {
+    $('report').hidden = !currentTask?.report || $('report-view').value !== 'preview';
+    $('report-source').hidden = !currentTask?.report || $('report-view').value !== 'source';
+  });
+  $('memory-form').addEventListener('submit', async event => {
+    event.preventDefault();
+    await memoryAction({ action: 'add', text: $('memory-text').value, scope: $('memory-scope').value });
+  });
+  $('memory-enabled').addEventListener('change', () => memoryAction({ action: 'set-enabled', enabled: $('memory-enabled').checked }));
+  $('extract-memory').addEventListener('click', () => memoryAction({ action: 'extract', text: $('memory-text').value }));
   $('logout').addEventListener('click', async () => {
     try { await post('auth/logout'); location.replace(base); } catch (error) { $('task-error').textContent = error.message; }
   });
@@ -178,8 +165,46 @@ async function workspacePage() {
     try { await post(`tasks/${currentId}/feedback`, { score: Number(event.submitter.value), note: $('feedback-note').value }); $('feedback-status').textContent = '反馈已保存在本地。'; }
     catch (error) { $('feedback-status').textContent = error.message; }
   });
-  await updateHistory(); await updateBudget();
+  await updateHistory(); await updateBudget(); await refreshMemories();
   const active = historyTasks.find(task => ['running', 'queued'].includes(task.status)); if (active) await selectTask(active.id);
+}
+
+async function memoryAction(body) {
+  if (memoryBusy) return;
+  memoryBusy = true;
+  try { await post('memories', body); $('memory-text').value = ''; $('memory-error').textContent = ''; }
+  catch (error) { $('memory-error').textContent = error.message; }
+  finally {
+    try { await refreshMemories(); await updateBudget(); }
+    catch (error) { $('memory-error').textContent = error.message; }
+    memoryBusy = false;
+  }
+}
+async function refreshMemories() {
+  const data = await api('memories'); $('memory-enabled').checked = data.enabled;
+  $('extract-memory').disabled = data.mode !== 'mem0-oss-qwen' || !data.enabled;
+  $('memory-mode').textContent = `Mem0 OSS · ${data.mode === 'mem0-oss-qwen' ? 'Qwen 语义向量' : '本地模拟向量'}。明确提交的内容直接保存；抽取候选需确认后才参与召回。网页和报告不会自动入库，当前任务约束优先。`;
+  $('memory-list').replaceChildren();
+  for (const memory of data.memories) {
+    const row = node('div', undefined, 'memory-item');
+    const text = node('textarea'); text.value = memory.memory; text.maxLength = 500;
+    text.setAttribute('aria-label', '记忆内容');
+    row.append(node('small', `${memory.metadata.scope === 'user' ? '用户' : '当前项目'} · ${memory.metadata.enabled ? '启用' : '停用'} · ${memory.metadata.source === 'confirmed-user' ? '用户已确认' : '显式用户来源'}`), text);
+    for (const [label, action] of [['保存修改', 'update'], [memory.metadata.enabled ? '停用' : '启用', 'toggle'], ['删除', 'forget']]) {
+      const button = node('button', label, 'text-button'); button.type = 'button';
+      button.addEventListener('click', () => memoryAction({ action, id: memory.id, text: text.value })); row.append(button);
+    }
+    $('memory-list').append(row);
+  }
+  for (const memory of data.candidates || []) {
+    const row = node('div', undefined, 'memory-item');
+    row.append(node('small', '候选记忆 · 尚未参与召回'), node('p', memory.memory), node('small', `原文依据：${memory.metadata.sourceQuote}`));
+    for (const [label, action] of [['确认记住', 'confirm'], ['丢弃', 'reject']]) {
+      const button = node('button', label, 'text-button'); button.type = 'button';
+      button.addEventListener('click', () => memoryAction({ action, id: memory.id })); row.append(button);
+    }
+    $('memory-list').append(row);
+  }
 }
 
 (document.body.dataset.page === 'login' ? loginPage() : workspacePage()).catch(error => {

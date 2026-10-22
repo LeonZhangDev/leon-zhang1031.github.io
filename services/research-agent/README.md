@@ -1,5 +1,117 @@
 # Local Research Agent
 
+## 2026-10-22 新版生产验收
+
+已获用户追加上线与摘要追踪授权，新版后端 `mem0-a8784daf9571` 已通过现有网站私有路径提供服务。服务器保留原密钥和密码，启用 `qwen / qwen memory / cloud` 三个独立开关；本机 `.env.local` 与普通离线启动方式不变。Mem0、上下文管理、3 个 Skills 和 Markdown 渲染已部署，无需改动公开博客内容或随机入口。
+
+- Windows 服务回归 **106/106**，Ubuntu **104/104**（浏览器两例在 Windows Chrome 执行）；生产源码 42 个文件逐一 SHA-256 核对。
+- 线上真实任务 `e81dc395-911b-45f6-969d-77bf71300a82` 使用已确认记忆、3 个 Skills 和上下文管理；9 次 Qwen 决策后保存一次报告并结束。记忆召回参与真实任务，本次上下文未达到压缩阈值；压缩边界仍由离线回归覆盖。
+- LangSmith 接收 **20/20** run，HTTP 202，包含 `memory.recall`，只上传结构和计数；本地保存接收状态，未上传用户记忆、目标或报告正文。当前密钥已确认是 **Tracing Only**，仅可上传，读取项目返回 **403** 属预期权限限制。此类密钥不能修改权限；线上保留该密钥，本机需另建个人令牌（PAT）才可回读。云端页面、账户免费余额和供应商账单仍未验收，不能把 API 接收说成回读成功。
+- Chrome 验证了候选确认前不启用、确认后用于任务、Markdown 表格/源文/下载、390px 布局、退出和 401 保护。测试记忆已删除、临时会话已撤销，浏览器错误为 0。首次浏览器脚本误用默认 30 秒等待而超时；保留失败记录，修正等待参数后只回看同一已完成任务，没有重复付费调研。
+- 本次发布验证新增 usage 估算 **0.019066 元**、保守预扣 **0.1052 元**。连同前轮 Mem0 验证，固定验证批次累计 **0.1374 / 0.5 元**；所有历史累计 **0.4282 / 5 元**，93 次请求，原 1 次未知用量仍完整保留。原服务器 230 条数据逐行哈希不变；原个人记忆未迁移。
+- 发布前后使用 `ledger-transfer.mjs` 双向补齐调用账本，原本地和生产已对齐上述余额。合并不覆盖目的库已有任务、密码、会话或调用，不转移真实记忆内容。生产是后续真实调用的唯一执行处；本机继续离线，避免分叉账本同时消费。
+
+详情与截图见 [生产验收证据](../../.tmp/agent-final-release-20261022/browser-final-receipt.json)。服务连接关闭会中止付费记忆请求；模拟决策配真实记忆时，界面也按记忆 usage 显示费用。
+
+### LangSmith 回读凭据
+
+在 [Settings → API Keys](https://smith.langchain.com/settings) 新建 Personal Access Token（Personal），用于本机回读现有项目；PAT 继承登录用户权限。将其自行填入本机 `LANGSMITH_API_KEY`，不要提交或发到聊天，生产继续保留原 Tracing Only key。免费 Developer 版无需企业 RBAC 设置；Tracing Only key 无法增加读取权限。原 endpoint/project 保持不变；跨 workspace 密钥须填对应 `LANGSMITH_WORKSPACE_ID`。只回读已有任务，无需重新调用 Qwen。参见 [密钥类型](https://docs.langchain.com/langsmith/create-account-api-key)、[权限说明](https://docs.langchain.com/langsmith/rbac)。
+
+### 保留账本的转移
+
+这些命令只访问本地 SQLite，不调用模型或 LangSmith。先停止相关服务并做一致性备份；不复制 `.env.local` 或整个数据库来覆盖目的库。
+
+```sh
+node ledger-transfer.mjs export DATA_DIR PRIVATE_LEDGER_JSON
+node ledger-transfer.mjs inspect TARGET_DATA_DIR PRIVATE_LEDGER_JSON
+node ledger-transfer.mjs import TARGET_DATA_DIR PRIVATE_LEDGER_JSON --apply
+```
+
+导出文件含私有任务，须放在静态站和 Git 之外。默认 `inspect` 只读，导出不覆盖已有文件；导入遇到运行中工作、记录冲突、缺失关联或预算越界会拒绝。相同 ID 幂等合并，未知预扣和预算锁不释放；不改旧报价。数据结构不符时先检查，不要编辑 ID 或另建批次绕过限制。
+
+## 2026-10-22 Mem0 真实验证，本地完成
+
+用户授权后的真实验证已完成：Mem0 OSS `3.3.1` 使用原百炼通用地址，Qwen3.8-Flash 抽取、text-embedding-v4 / 1024 维向量。3 条候选均有原文依据；确认前不参与召回，确认 2 条、丢弃 1 条，重启与删除隔离通过；无明确偏好的文本没有生成候选。默认模式及原 `.env.local` 未改，没有上传 LangSmith 追踪或部署。
+
+初评发现阈值 0.65 使 3 条相关记忆被过滤（10 条命中 7 条），目标未过滤时均排第一。复用真实向量离线校准，将代码默认值及模板改为 **0.55**，再锁定另一组查询复验：**10/10** 命中且均排名第一，**5/5** 无关查询被拒绝。这是合成小样本结果，不能视为通用召回保证。完整服务测试 **101/101**，包含本机 Chrome 既有离线界面流程；真实记忆链路由服务层验证。
+
+本轮 46 次请求（抽取 2、embedding 44），usage 估算 **0.000898 元**，保守预扣 **0.0322 / 0.5 元**；历史累计预扣 **0.3230 / 5 元**。调用前只读核对服务器账本，将本地缺失的 14 条历史调用及 4 条关联任务按原 ID 补齐，未覆盖原记录；原 112 条数据及配置哈希不变。原 1 次超时的未知用量预扣继续保留，未核对供应商账单。
+
+合成记忆使用独立向量库，真实调用仍写入原累计费用库。服务器前后调用和云端派发记录不变。未来在服务器恢复真实调用前，须合并本轮新增本地账本，不能仅使用旧服务器余额。备份、逐题结果、初评失败与费用证据见 [验证报告](../../.tmp/mem0-qwen-live-20261022/report.md)。置信度 B；生产版本、原用户语义记忆迁移和更大样本质量不在本次验收内。
+
+## 2026-10-22 Qwen memory adapter preparation
+
+以下是此前接入准备阶段的记录：当时新增代码、模板和离线测试，**未调用真实模型、上传追踪或更新线上**。不要用模板覆盖已有私密配置，也不要用新数据目录重新开始真实验证。最新授权验证及累计费用以上一节为准。
+
+### Configuration and authorization
+
+| 配置 | 默认值 | 作用 |
+| --- | --- | --- |
+| `AGENT_MEMORY_MODE` | `offline` | `offline` 使用模拟向量；`qwen` 需独立显式参数 `--allow-memory-model-calls` |
+| `MEMORY_LLM_MODEL` | `qwen3.8-flash` | 抽取候选偏好，非思考/非联网/JSON，输出最多 512 Token 加 10 Token 计费余量 |
+| `MEMORY_EMBEDDING_MODEL` | `text-embedding-v4` | 本轮固定模型，不自动替换或降级 |
+| `MEMORY_EMBEDDING_DIMENSIONS` | `1024` | 本轮固定维度；不发探测向量请求 |
+| `MEMORY_RECALL_THRESHOLD` | `0.55` | 经本地真实小样本校准；更换模型或扩大数据时需复评 |
+| `MEMORY_PRICING_CONFIRMED` | `false` | 未来核价并授权测试后才能设置 true |
+| `AGENT_VALIDATION_BUDGET_YUAN` | `0.5` | 新增验证上限，最多 0.5 元，包含在原 5 元累计预算内 |
+
+复用现有 `DASHSCOPE_API_KEY` 与 `QWEN_BASE_URL`，不需要 Mem0 Cloud 或 OpenAI 密钥。保留现有密钥，不打印、不复制到前端。`AGENT_MODE`、`AGENT_MEMORY_MODE`、`AGENT_TRACE_MODE` 的授权互相独立；普通启动器以及 `npm run start:offline` 均强制模型 mock、记忆 offline、追踪 offline，即使配置已填写也不会启用真实请求。本次未修改 `.env.local` 或传入任何真实启动授权参数。
+
+### Memory and billing decisions
+
+- Mem0 OSS 固定为 `3.3.1`，保留 SQLite 扩展。真实向量独立存于 `memory-qwen-text-embedding-v4-1024-v1.sqlite`；旧 `memory-offline.sqlite` 保留，不自动迁移、重新嵌入或上传原记忆。索引记录模型/维度版本；模型或维度不符直接拒绝，不混用同维度的不同模型。
+- 明确提交/`记住：` 使用 Mem0 `infer:false`，只付向量化费用。用户点击“提取候选记忆”时，通过绑定到 Mem0 的 Qwen LLM 接口抽取最多 3 条；必须是输入中连续原文，保存原文依据，候选默认禁用。用户确认后才参与召回，丢弃会删除候选；网页/报告/工具结果不自动入库。当前任务约束仍优先。
+- 应用拥有抽取与确认流程，避免原生 `infer:true` 在 SDK 内修改事实、忽略格式错误或执行批量失败回退。初始化扩展绑定最小 LLM 接口，无需添加 `@langchain/core` 来转换消息；真实 Mem0 SDK 契约及重启由离线测试覆盖。SDK 升级前必须重跑这些测试。
+- `paid-client.mjs` 是 Agent 与记忆唯一付费 HTTP 入口，请求前预留完整输入 UTF-8 字节上界和最大输出费用；所有 SDK 派生 embedding 也通过该入口。聊天 60 秒、embedding 30 秒、零 HTTP 自动重试、拒绝重定向。单操作失败后锁住该操作的后续子请求，阻止 SDK 兜底再付费。
+- embedding 每条使用保守 8192 字节上界，按最多 10 条分批，检查返回索引、数量、维度、有限数值和非零向量。只在单次操作内去重缓存，结束即清除；查询/编辑/辅助实体请求都受预算保护。修改仅元数据时 SDK 仍可能向量化，也会记账。
+- 原 `model_calls` 不改写。新增 `memory_operations` / `memory_model_calls` 处理页面独立记忆操作，并关联可选任务；累计账本合并两张调用表。所有新 Agent/记忆请求标记固定 `mem0-qwen-v1` 验证批次，事务同时检查累计 5 元、本轮 0.5 元和关联任务上限。历史未标记请求只计入原累计额度，旧模型报价及未知用量保留。重启、切换模式、降低再恢复配置均不清零；没有重置入口。
+- 超时、取消、HTTP 错误、缺少 usage 保留全额预扣；usage 越界锁住后续所有模型调用。已知 usage 即使输出格式不合格也记录。模型名、用途、维度、报价快照、请求 ID、用量保存在本地，不存 API key 或请求正文。总账是本 Agent 的保护措施，不能限制其他程序或服务器旧副本的消费；真实验证前需核对权威账本，不能同时使用分叉账本。
+- 未来真实请求会将选定记忆文本/查询发送百炼，抽取只发送用户主动提交的片段；Mem0 存储、原始报告和追踪留在本地。遥测强制关闭；上下文仍采用原离线摘录压缩。LangSmith 云端开关未改变且本次没有启用。
+
+北京标准报价快照（2026-10-22）：Qwen3.8-Flash 输入/输出 0.8/2.7 元每百万 Token，text-embedding-v4 输入 0.5 元每百万 Token。5 万聊天输入、8000 输出和 2 万 embedding 输入约 0.0716 元；不假设免费额度或缓存折扣。保守预扣通常更高，新增请求不得超过 `min(0.5, 5 - 历史保守预扣)`。来源：[价格](https://help.aliyun.com/zh/model-studio/model-pricing)、[embedding 接口](https://help.aliyun.com/zh/model-studio/text-embedding-synchronous-api)。
+
+### Validation boundary
+
+运行 `npm test` / `npm run evaluate` 只用独立临时库、合成响应与被拦截的供应商传输。本地 Chrome 验证候选确认和默认离线禁用状态；不会验证真实模型权限或真实语义召回效果。未来获准后按“最小聊天+向量请求 → 小样本语义评测 → Agent 闭环”逐段验证；不自动上传历史记忆或云端追踪。真实语义目标是 10 条预标注换说法查询 Recall@5 至少 90%，并检查无关查询拒绝、原文支持、删除隔离及预算；当前测试的合成向量不构成该质量验收。
+
+本次最终验证：服务测试 **100/100**（含本机 Chrome 默认离线及候选确认流程），离线评测 **20/20**；评测外部调用 0、费用 0；原配置及 SQLite/WAL/SHM **4/4** SHA-256 不变。完整测试结果和原文件哈希保护证据见 [项目进度](../../docs/progress.md)。离线接入验证结论为 B，真实权限、语义质量和生产验收待确认。下方记录属于前一次升级及历史生产版本。
+
+## 2026-10-22 local memory and context upgrade
+
+本次升级只在本地实现和离线验证，**尚未更新线上版本**。原有 `.env.local`、密码、任务数据和首次 5 元累计预留账本不迁移、不重置；下方历史上线记录仍属于旧版本。
+
+- **Mem0 OSS**：固定 `mem0ai@3.3.1`，使用 `mem0ai/oss`，不使用托管记忆 API，加载前强制关闭遥测。Mem0 的新增、召回、修改、删除使用本地 SQLite 存储扩展；SDK 初始化和实体存储扩展点有契约测试，升级 SDK 必须重跑这些测试。长期记忆以 `memory-offline.sqlite` 中的向量和正文为准；`agent.sqlite` 保留任务、费用及当次召回快照，便于重现历史结果。记忆审计仅保存 ID、动作、时间和内容哈希。
+- **主动记忆**：任务开始前主动召回最多 5 条；只保存你在记忆面板明确提交的内容，或目标/约束中单独一行的 `记住：内容`。自动去重，不把网页、报告或模型推测当作用户事实。面板支持用户/项目范围、编辑、停用、删除和总开关，最多 200 条。当前是单站长、单调研项目，范围是用途标签，尚无多用户登录体系；不同 SDK user/agent 命名空间有隔离测试。删除只删除长期记忆，不改写原始任务记录。
+- **离线边界**：当前使用确定性字符特征向量，验证持久化和召回链路，**不是实际语义模型**。Mem0 设置 `infer:false`；提取 LLM 入口直接拒绝调用。Qwen embedding、记忆自动抽取和语义压缩尚未启用，也不能绕过费用账本。`AGENT_MEMORY_MODE` 只接受 `offline`。未来接真实记忆模型需要另行核定单价、接到同一个预留账本并取得验证授权。
+- **上下文**：固定保留目标、约束、当前状态与停止标记；先去重网页正文和工具记录，保留最近两条动作。达到输入保守边界的 70% 时从原文生成结构化摘录，85% 时标记紧急压缩。尽量缩至 55% 以下，但数字、单位、冲突和未知事项优先，不能满足硬上限时停止请求。使用 UTF-8 字节上界与协议余量，不声称这是实际 token 数；Qwen 发送前仍对完整请求独立核验 24,000 上限并预留费用。
+- **压缩可追溯**：摘要带版本、覆盖动作数、来源 ID、哈希、数字原句及错误；保存到任务事件。每次从原始事件重建，避免反复总结旧摘要。`read_evidence` 从本任务原始缓存分段恢复页面；不再访问网页、不放宽 URL 白名单。本次只有确定性摘录压缩，调用压缩模型次数为零。
+- **Skills**：`skills/` 中有技术比较、官方来源核查和成本估算 3 个可信 `SKILL.md`。根据目标加载正文，记录版本和哈希；`load_skill` 只能加载注册项。Skills 是流程说明，不能改变工具权限、预算或报告保存即终止的规则。没有新增 MCP 或任意代码执行入口。
+- **Markdown**：本地提供 Marked + DOMPurify，不访问 CDN。支持 GFM 表格、嵌套列表、任务清单、代码块、引用、强调与 HTTPS 链接；预览/源文切换，整篇复制、代码复制和原文下载。原始 HTML 显示为文本，远程图片不加载，危险链接被移除；表格可横向滚动。
+
+### Safe local startup and verification
+
+```sh
+# 服务目录，Node >=22.22.0；即使原配置为 qwen/cloud，也强制本次 mock/offline。
+npm run start:offline
+# 仓库根目录
+npm run agent:test
+npm run agent:evaluate
+```
+
+不要使用历史真实验证命令来验收本次升级。离线测试强制 mock/offline，只用独立临时目录，不打开原始账本。CLI 子进程烟测会加载本地配置，但模型模式、追踪模式和数据目录由测试覆盖，不发送密钥或业务数据。浏览器测试默认使用本机 Chrome；可设置 `AGENT_TEST_BROWSER_CHANNEL=msedge`，不会自动下载浏览器。启动离线服务本身会沿用配置的数据目录；如需独立演示，在终端设置 `AGENT_DATA_DIR` 为新目录，保留原目录。
+
+记忆接口 `GET/POST api/memories` 需要原有会话；写操作要求同源。POST 动作包括 `add`、`update`、`toggle`、`forget` 和 `set-enabled`。前端行动记录展示召回、已选 Skills 与压缩事件，报告区展示本次使用的记忆和上下文指标。
+
+### Offline verification receipt
+
+2026-10-22：Node v24.19.0，服务测试 **74/74** 通过（含本机 Chrome 的登录/记忆/GFM/复制/下载/XSS/390px 流程），离线评测 **20/20** 通过，真实模型和追踪上传调用为零。原 `.env.local`、`agent.sqlite` 及 WAL/SHM 共 **4/4** 文件 SHA-256 与升级前一致；未清空或重置累计预算。
+
+- 完整测试输出：[verification-tests.txt](../../.tmp/agent-upgrade-20261022-203230/verification-tests.txt)。
+- 隔离评测：[results.json](../../.tmp/research-agent-eval-MDzjGk/results.json)。
+- 仍未覆盖：真实 Qwen 语义 embedding、LLM 记忆抽取与语义压缩效果；新增功能的生产部署和线上验收。这些入口继续关闭。
+
+## Previous release baseline
+
 本地入口：`http://127.0.0.1:4322/p7x4m9q2-k6v8n3r5-t2w9c4h7/`。
 默认模型、搜索、网页为合成响应，LangSmith SDK 的请求在本地拦截记录。
 已接入百炼 Qwen 和 LangSmith 云端适配器。2026-10-22 修复保存报告后的重复操作，追加一次授权真实验证，

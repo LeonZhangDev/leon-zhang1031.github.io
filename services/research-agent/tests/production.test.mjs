@@ -13,13 +13,13 @@ import { createApplication } from '../server.mjs';
 import { newToken, hashPassword } from '../security.mjs';
 import { proxySiteRequest, PRIVATE_PATH } from '../site-proxy.mjs';
 
-test('CLI starts its HTTP listener when launched through a release-directory symlink', { timeout: 10_000 }, async t => {
+for (const offline of [false, true]) test(`CLI starts through a release-directory symlink${offline ? ' and --offline overrides configured qwen/memory/cloud' : ''}`, { timeout: 10_000 }, async t => {
   const temp = mkdtempSync(join(tmpdir(), 'research-symlink-start-')), entry = join(temp, 'current');
   symlinkSync(fileURLToPath(new URL('../', import.meta.url)), entry, process.platform === 'win32' ? 'junction' : 'dir');
   const probe = createServer(); await new Promise(resolve => probe.listen(0, '127.0.0.1', resolve));
   const port = probe.address().port; await new Promise(resolve => probe.close(resolve));
-  const child = spawn(process.execPath, [join(entry, 'server.mjs')], { stdio: ['ignore', 'pipe', 'pipe'],
-    env: { ...process.env, AGENT_MODE: 'mock', AGENT_TRACE_MODE: 'offline', AGENT_PORT: String(port),
+  const child = spawn(process.execPath, [join(entry, 'server.mjs'), ...(offline ? ['--offline'] : [])], { stdio: ['ignore', 'pipe', 'pipe'],
+    env: { ...process.env, AGENT_MODE: offline ? 'qwen' : 'mock', AGENT_TRACE_MODE: offline ? 'cloud' : 'offline', AGENT_PORT: String(port), AGENT_MEMORY_MODE: offline ? 'qwen' : 'offline',
       AGENT_DATA_DIR: join(temp, 'data'), AGENT_PUBLIC_ORIGIN: '', AGENT_TRIAL_SEED_RESERVED_UNITS: '0' } });
   t.after(async () => { if (child.exitCode === null) { child.kill(); await once(child, 'exit'); } });
   child.stderr.resume();

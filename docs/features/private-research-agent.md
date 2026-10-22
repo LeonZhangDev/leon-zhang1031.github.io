@@ -2,6 +2,14 @@
 
 ## overview
 
+2026-10-22 用户追加授权后完成新版上线与实际浏览器验收。Mem0 真实记忆、上下文管理、Skills 和 Markdown 均由现有私有路由提供；Windows 106/106、Ubuntu 104/104 测试通过。线上任务 `e81dc395-911b-45f6-969d-77bf71300a82` 使用已确认记忆和 3 个 Skills，保存一次报告即结束，20 条摘要追踪获 HTTP202。固定验证批次累计保守预扣 0.1374/0.5 元，全部历史累计 0.4282/5 元。配置的 Tracing Only 密钥只可上传，项目回读 403 属预期限制；本机需另建个人令牌回读，线上保留上传专用密钥。云端 UI/额度和供应商账单不属于已确认结果。详见 [最新生产验收](../../services/research-agent/README.md#2026-10-22-新版生产验收)。
+
+2026-10-22 经追加授权完成本地真实记忆验证：Qwen3.8-Flash 抽取、text-embedding-v4 / 1024 维，3/3 候选有原文依据，确认/丢弃、删除隔离及重启通过。将召回默认阈值从 0.65 校准为 0.55；独立复验 10/10 命中、5/5 无关查询拒绝，服务回归 101/101。新增 usage 估算 0.000898 元、保守预扣 0.0322 元，历史累计预扣 0.3230 元。原数据和配置保留，未上传追踪、迁移原记忆或更新线上。详见 [真实验证及证据](../../services/research-agent/README.md#2026-10-22-mem0-真实验证本地完成)。以下各段为此前阶段和生产版本记录。
+
+2026-10-22 继续完成 Mem0 的 Qwen 抽取和 1024 维 embedding 接入、候选确认与统一付费入口，仅使用模拟响应验收。新增验证累计最多 0.5 元，包含在原累计 5 元内；本轮不调用真实模型、不上传追踪、不更新线上。配置和数据保留规则见 [当前接入说明](../../services/research-agent/README.md#2026-10-22-qwen-memory-adapter-preparation)。下述上线记录属于此前生产版本。
+
+2026-10-22 新增本地升级：Mem0 OSS 显式记忆与主动召回、结构化上下文压缩、3 个可信 Skills、净化后的 GFM 渲染。该升级仅离线验证，未调用真实模型、上传云端追踪或更新线上。详见 [升级说明](../../services/research-agent/README.md#2026-10-22-local-memory-and-context-upgrade)。
+
 本地私人技术调研工作台，入口固定为
 `http://127.0.0.1:4322/p7x4m9q2-k6v8n3r5-t2w9c4h7/`。
 需求见 [005](../requirements/005-private-research-agent.md)，操作见 [服务说明](../../services/research-agent/README.md)。
@@ -13,6 +21,12 @@
 当前按用户选择使用 `qwen3.8-flash` + 北京通用 DashScope 地址；最新计费和验证见文末。
 
 ## design decisions
+
+- Mem0 默认本地 SQLite + 模拟向量；增加需独立授权的 Qwen 抽取与 `text-embedding-v4` 1024 维适配。新旧向量库分开，不自动迁移；强制关闭遥测。显式记忆直接存，抽取候选必须有用户原文、确认后启用；应用拥有抽取流程，避免 SDK 自动改写与批量重试。仍是单站长的用户/项目标签，真实语义效果通过本地合成小样本验证，尚不代表生产或大规模质量。
+- Agent 对话、Mem0 LLM 和所有派生 embedding 共用 `paid-client.mjs`。页面记忆操作另有操作 ID，与原模型记录合并计算累计 5 元；固定验证批次同时受新增 0.5 元限制。事务预扣、超时/取消不退款、usage 越界锁定、失败操作禁止继续子请求。新增表不会改写旧任务、旧报价或未知费用记录。
+- 上下文先去重，70% 阈值启动结构化摘录、85% 紧急压缩，保留目标、约束、数字原句、冲突、未知和来源 ID；保守输入上界仍超限则停止。原始事件持久化，用 `read_evidence` 恢复。
+- Skills 从服务内注册文件选择与加载，版本/哈希可检查；不允许文件路径或任意命令。应用层继续掌握权限、预算和终止条件。
+- Markdown 使用本地 Marked + DOMPurify，原始 HTML 不执行，远程图片不加载；支持预览/源文、代码复制和表格滚动。
 
 1. **保留现有静态站。** 仓库使用 Astro 静态输出，新增独立 Node 服务，私有 HTML 位于
    `services/research-agent/ui/`，不放入 `src/pages` 或 `public`。
@@ -43,9 +57,13 @@
 | `server.mjs` | HTTP 路由、认证、输入与同源校验 |
 | `security.mjs` | scrypt、令牌、Cookie、尽力脱敏 |
 | `store.mjs` | SQLite、进程锁、预算、历史与重启恢复 |
+| `ledger-transfer.mjs` | 私有账本只读导出/预览、事务幂等合并、冲突和双重预算保护 |
 | `agent.mjs` | 决策/工具循环、调用限制、硬超时与取消 |
 | `mock-provider.mjs` | 合成资料、模拟模型和只读工具 |
 | `qwen-provider.mjs` | 百炼兼容接口、工具动作、usage 校验与模型生成报告 |
+| `paid-client.mjs` | 唯一付费 HTTP 入口、预扣与 usage、无重试及中止 |
+| `memory-qwen.mjs` | Mem0 Qwen/embedding 回调、操作上下文、分批与向量校验 |
+| `memory.mjs` | 本地向量库、原文候选/确认、显式记忆与召回 |
 | `local-env.mjs` | 读取服务专用被忽略的本地环境文件 |
 | `tracing.mjs` | LangSmith run 树、SDK 离线请求记录 |
 | `evaluate.mjs` | 20 个本地评测案例与独立证据目录 |

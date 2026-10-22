@@ -10,6 +10,7 @@ import { AgentRunner } from '../agent.mjs';
 import { createQwenProviders } from '../qwen-provider.mjs';
 import { TaskTrace } from '../tracing.mjs';
 import { newToken } from '../security.mjs';
+import { randomUUID } from 'node:crypto';
 
 // Every vendor request in this file MUST use a stub. No DNS/socket fallback exists.
 globalThis.fetch = () => { throw new Error('External network forbidden in integration tests'); };
@@ -29,6 +30,12 @@ const completion = (tool = 'search', args = { query: 'test' }, usage = { prompt_
 });
 const jsonResponse = (body, status = 200) => new Response(JSON.stringify(body), { status, headers: { 'content-type': 'application/json' } });
 const stateFor = task => ({ ...task, allowedUrls: new Set(), readUrls: new Set(), evidence: [], observations: [], searches: 0, pages: 0, report: null });
+// Reproduce immutable pre-upgrade rows. Historical calls have no new campaign tag.
+function seedHistorical(store, taskId, units, pricingSnapshot = {}) {
+  const id = randomUUID();
+  store.db.prepare('INSERT INTO model_calls VALUES (?,?,?,?,?)').run(id, taskId, units, 'uncertain', JSON.stringify({ pricingSnapshot }));
+  return id;
+}
 
 test('keys alone never opt into paid calls or cloud upload, even with ambient LANGSMITH_TRACING', async t => {
   const previous = process.env.LANGSMITH_TRACING;
@@ -146,7 +153,7 @@ test('legacy model keeps its own output parameter and recorded usage price', asy
 test('existing cumulative reservations still stop Flash requests before transport at the 5-yuan boundary', async t => {
   const f = fixture(t); let oldTask = f.task, requests = 0;
   for (const units of [20_000, 20_000, 9999]) {
-    const id = f.store.reserveModelCall(oldTask.id, units, f.config, { model: 'qwen-plus-2025-12-01', outputYuanPerMillion: 2 });
+    const id = seedHistorical(f.store, oldTask.id, units, { model: 'qwen-plus-2025-12-01', outputYuanPerMillion: 2 });
     f.store.recordModelUsage(id, { inputTokens: 1, outputTokens: 1, usageEstimateYuan: 0.0000028 });
     oldTask.status = 'completed'; f.store.saveTask(oldTask);
     oldTask = f.store.createTask({ goal: 'next', budgetUnits: 20_000 }, f.config);
@@ -190,6 +197,7 @@ test('input and cumulative/per-task budget checks happen before any vendor reque
   const provider = createQwenProviders(f.store, f.config, { fetchImplementation: async () => { requests++; return jsonResponse(completion()); } });
   const state = stateFor(f.task); state.observations.push('x'.repeat(30_000));
   await assert.rejects(provider.decide(state), /MODEL_CONTEXT_LIMIT/);
+  f.task.budgetUnits = 100; f.store.saveTask(f.task);
   f.store.reserveModelCall(f.task.id, f.task.budgetUnits, f.config);
   await assert.rejects(provider.decide(stateFor(f.task)), /MODEL_BUDGET/);
   assert.equal(requests, 0);
@@ -198,7 +206,7 @@ test('first-validation 5-yuan ledger survives restart and never refunds uncertai
   const config = { ...loadConfig({}), dataDir: mkdtempSync(join(tmpdir(), 'research-budget-restart-')) };
   const first = new Store(config.dataDir);
   const task = first.createTask({ goal: 'budget', constraints: '', scenario: 'standard', budgetUnits: 50_000 }, config);
-  first.reserveModelCall(task.id, 49_999, config); first.close();
+  seedHistorical(first, task.id, 49_999); first.close();
   const second = new Store(config.dataDir);
   try {
     assert.equal(second.task(task.id).status, 'interrupted');
@@ -219,7 +227,9 @@ test('usage beyond reservation bound locks subsequent model calls', async t => {
   await assert.rejects(provider.decide(stateFor(f.task)), /MODEL_BUDGET/); assert.equal(requests, 1);
 });
 test('task deadline aborts the underlying Qwen request and retains uncertain reservation', async t => {
-  const f = fixture(t, modelEnv(), { allowModelCalls: true }, { taskTimeoutMs: 30 }); let aborted = false;
+  // Leave startup time under parallel browser/SDK load so this tests an in-flight
+  // request abort, rather than a deadline reached before transport even starts.
+  const f = fixture(t, modelEnv(), { allowModelCalls: true }, { taskTimeoutMs: 1000 }); let aborted = false;
   const runner = new AgentRunner(f.store, f.config, { fetchImplementation: (url, init) => new Promise((resolve, reject) => {
     init.signal.addEventListener('abort', () => { aborted = true; reject(new Error('stopped')); }, { once: true });
   }) });
@@ -268,6 +278,7 @@ test('LangSmith SDK cloud adapter sends counters only through an injected transp
   await trace.span('agent.decision', 'llm', { step: 1, evidenceCount: 2, raw: 'private-input-marker' }, () => ({ secretText: 'private-output-marker' }));
   assert.equal(await trace.finish({ status: 'completed', rawReport: 'private-report-marker' }), 'cloud-api-accepted');
   assert.equal(payloads.length, 2);
+  assert.ok(f.store.wires(f.task.id).every(record => record.transport === 'cloud' && record.status === 200 && !record.payload));
   const serialized = JSON.stringify(payloads);
   assert.ok(!/private-(goal|input|output|report)-marker/.test(serialized));
   assert.ok(!serialized.includes(f.config.langsmith.apiKey));

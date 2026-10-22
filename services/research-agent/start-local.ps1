@@ -1,4 +1,4 @@
-param([switch]$AllowModelCalls, [switch]$AllowCloudTraces)
+param([switch]$AllowModelCalls, [switch]$AllowCloudTraces, [switch]$AllowMemoryModelCalls)
 $ErrorActionPreference = 'Stop'
 $candidates = @()
 $nodeCommand = Get-Command node -ErrorAction SilentlyContinue
@@ -18,6 +18,7 @@ if (-not (Test-Path -LiteralPath (Join-Path $PSScriptRoot 'node_modules\langsmit
 # Ordinary startup is always offline. Explicit switches also require matching local config.
 $agentArguments = @()
 if ($AllowModelCalls) { $agentArguments += '--allow-model-calls' } else { $env:AGENT_MODE = 'mock' }
+if ($AllowMemoryModelCalls) { $agentArguments += '--allow-memory-model-calls' } else { $env:AGENT_MEMORY_MODE = 'offline' }
 if ($AllowCloudTraces) { $agentArguments += '--allow-cloud-traces' } else { $env:AGENT_TRACE_MODE = 'offline' }
 & $selectedNode (Join-Path $PSScriptRoot 'server.mjs') @agentArguments
 exit $LASTEXITCODE

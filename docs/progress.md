@@ -1,5 +1,40 @@
 # Project Progress
 
+## 2026-10-22 — Agent 新版上线与真实闭环验收
+
+- 用户追加授权后，部署后端 `mem0-a8784daf9571`，沿用现有随机路径/密码和服务器，不变更公开博客及 Caddy/Artalk 配置。Mem0 真实 Qwen/embedding、上下文管理、3 个 Skills、安全 GFM 已上线；源码 42 文件哈希核对，Windows 106/106、Ubuntu 104/104 测试通过。
+- 隔离发布工作区静态站构建 211 页、6 项游戏加载回归通过；公开站文件未加入本次提交。
+- 补齐生产记忆配置模板与独立启动开关；付费记忆 HTTP 连接断开后中止实际传输。Agent 初始记忆召回加入追踪，云端接收状态本地留证；模拟决策使用真实记忆时费用不再错误显示为零。
+- 新增 `ledger-transfer.mjs`：只读导出/预览及显式事务导入，按 ID 幂等，冲突/活动任务/缺失关联/双预算越界拒绝；不覆盖旧任务或移交密码和会话。发布前补入 46 条本地记忆调用，验收后回同步全部新增预算及云端派发记录。原服务器 230 条数据逐行哈希不变，SQLite 完整性/外键检查通过，原未知用量保留。
+- 线上真实任务 `e81dc395-911b-45f6-969d-77bf71300a82` 使用已确认记忆和 3 个 Skills，经 9 次 Qwen 决策保存一次报告即结束。20/20 run（含 memory.recall）HTTP202；只发摘要，不发记忆、目标、报告。浏览器实际验证候选确认、召回使用、Markdown 表格/源文/下载、390px 无溢出、登出及 401；浏览器错误 0，合成测试记忆/临时会话已清理。
+- 首次浏览器脚本误用 30 秒等待超时，应用任务正常完成；保留原失败记录并修正等待参数，只回看同一任务，没有重跑付费调研。本轮新增 usage 估算 0.019066 元、保守预扣 0.1052 元；固定新增验证累计 0.1374/0.5 元，全历史累计 0.4282/5 元，93 请求、原未知用量 1 次。本机配置与离线默认不变，生产作为后续真实调用唯一执行处。
+- 尚受权限限制：现有 LangSmith 密钥已确认是 Tracing Only，仅上传密钥读取项目 HTTP403 属预期行为，权限不可修改。线上保留该密钥，本机另建 PAT 才能回读；不能确认云端回读、账户余额和最终供应商账单。真实压缩阈值未在本次短任务触发，压缩由离线回归覆盖；搜索/网页工具仍按既定合成模式。置信度 B。证据：`.tmp/agent-final-release-20261022/`；[部署和回退边界](../services/research-agent/deployment/README.md#2026-10-22-mem0-release)。
+
+## 2026-10-22 — Mem0 真实 Qwen/embedding 验证，本地完成
+
+- 经用户授权，使用原百炼通用地址完成 2 次 Qwen3.8-Flash 抽取和 44 次 text-embedding-v4/1024D 请求。3/3 候选有原文依据，确认前不召回；确认 2 条、丢弃 1 条、删除隔离及重启正确。无明确偏好的文本不生成候选。未上传 LangSmith 追踪、上线或发送原个人记忆。
+- 默认阈值 0.65 的初评命中 7/10；三个漏召回目标未过滤时均排第一。保留失败证据，复用已有向量离线校准，默认与模板改为 0.55。另一组预先锁定的复验查询 10/10 命中且均排第一，5/5 无关查询拒绝。新增一项边界回归；完整服务测试 101/101（含既有本机 Chrome 离线流程）。小样本结论，置信度 B，不外推为通用质量保证。
+- 新增 usage 估算 CNY0.000898，保守预扣 CNY0.0322/0.50；所有历史累计预扣 CNY0.3230/5.00，历史 1 次未知用量仍保留。先备份并只读核对服务器，再向原本地账本补齐缺失 14 条调用和 4 条关联任务；原 112 条数据逐行哈希与原配置文件哈希不变，SQLite 完整性/外键检查通过。合成记忆另库存放，累计费用不另起账本。
+- 服务器前后 34 条调用、任务和 5 条云端派发记录不变；默认记忆/追踪模式及 `.env.local` 不变。后续在服务器发起真实调用前必须合并本轮新增本地预算记录。详细报告、逐题结果、备份与全部请求费用见 [.tmp/mem0-qwen-live-20261022/report.md](../.tmp/mem0-qwen-live-20261022/report.md)。
+
+## 2026-10-22 — Mem0 Qwen/embedding adapters, offline validation only
+
+- Implemented Qwen3.8-Flash candidate extraction and text-embedding-v4/1024D callbacks for pinned Mem0 OSS, using the existing Bailian key/Beijing endpoint and Node-SQLite storage. Added exact model/dimension index profiles and an independent real-vector filename; preserved the offline index and did not migrate historical memory. Explicit user memory skips LLM extraction; quoted candidates remain inactive until confirmed.
+- Consolidated Agent and memory HTTP calls in `paid-client.mjs`. Memory operation IDs cover UI requests outside research tasks; all SDK-derived requests are charged through the same local accounting authority. New `mem0-qwen-v1` reservations persist across restarts/mode changes and stop at CNY0.50 inside the original cumulative CNY5 cap. Historical model rows/price snapshots and unknown-usage reservations are not rewritten. Added tables initialize on the next startup; this work did not open the original database.
+- Default configuration, ordinary Windows launcher and `--offline` keep memory offline; memory requires its own future CLI authorization and price confirmation, separately from Agent and LangSmith switches. No new dependencies. The application owns extraction/confirmation and binds a minimal Mem0 LLM callback, avoiding the optional LangChain message-conversion dependency and native infer:true retry/mutation paths.
+- Final evidence: **100/100 service tests passed** under Node v24.19.0, including real local Chrome for default offline behavior and stubbed-Qwen candidate confirmation; **20/20 offline evaluation cases passed**, external calls=0, actual cost=0. Tests cover paid request formats, vector validation/batching, inactive candidates, unknown-index refusal, redaction, namespace/restart compatibility, timeout/cancel/no-retry, SDK fallback latching and both persistent caps.
+- Original `.env.local`, `agent.sqlite` and its WAL/SHM matched their initial SHA-256 snapshots: **4/4 unchanged**. Tests used isolated temporary data and synthetic credentials/responses; no real model/embedding request, cloud trace upload, service restart against user data, push or deployment occurred. Related root-site dirty changes remain untouched.
+- Evidence: [service-tests-final.txt](../.tmp/mem0-qwen-offline-1792674264058/service-tests-final.txt), [protected-after.json](../.tmp/mem0-qwen-offline-1792674264058/protected-after.json), evaluation [results.json](../.tmp/research-agent-eval-O201RH/results.json). Confidence **B**: transport/accounting and local UI are verified offline; real model permissions, semantic Recall@5/fact selection, threshold calibration, vendor bills and production rollout remain unverified. Next check, only after user confirmation: one synthetic-text chat/embedding smoke against the preserved authoritative ledger, with cloud tracing still off.
+- Complexity review: one shared paid gateway plus a Mem0 operation adapter; additive memory-operation/call tables avoid migrating the old task-bound ledger. Offline fixture vectors are retained for safe local testing and rollback, isolated by filename/profile; their retirement requires separately authorized data migration. SDK internal initialization/LLM binding is pinned and covered by contract tests, and must be rechecked before upgrading Mem0.
+
+## 2026-10-22 — Local Agent memory/context/Skills/Markdown upgrade
+
+- Added pinned Mem0 OSS with local Node-SQLite vectors, telemetry off, inference disabled and deterministic offline embedding fixtures. Explicit user memory supports active recall, edit, disable and forget; research pages/reports are not automatically memorized. User/agent namespaces are isolated; this UI remains a single-owner, single-project workspace.
+- Added context deduplication, structured extractive compression at 70%/85%, versioned raw-source references, preserved numerical claims and errors, cached `read_evidence` recovery and a hard input bound. No semantic-summary model was called. Added three versioned research Skills and bounded local memory/Skill tools; report saving remains terminal.
+- Replaced the report subset renderer with locally served Marked/DOMPurify, GFM, preview/source views, code copy and responsive tables. Raw HTML, dangerous URLs and remote images are blocked.
+- Validation uses isolated temporary data and stubbed providers. Existing configuration, password, historic tasks and cumulative CNY5 reservations remain protected; no real model request, cloud export, push or deployment is part of this upgrade. Full validation receipts are in the service README; prior production evidence below belongs to the previous release.
+- Final offline evidence: 74/74 service tests including local Chrome; 20/20 evaluation cases with external calls=0 and actual cost=0. SHA-256 matches for the original local configuration and SQLite/WAL/SHM files (4/4). Real semantic memory/summary quality and production rollout remain unverified.
+
 ## 2026-10-22 — Private Agent deployed and production task completed
 
 - Verified the user-supplied ED25519 SSH fingerprint and connected as `ubuntu` to

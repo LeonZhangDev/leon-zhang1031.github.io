@@ -1,13 +1,41 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { mkdtempSync } from 'node:fs';
+import { mkdtempSync, symlinkSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
+import { fileURLToPath } from 'node:url';
+import { spawn } from 'node:child_process';
+import { once } from 'node:events';
+import { createServer } from 'node:net';
 import { loadConfig, BASE_PATH } from '../config.mjs';
 import { Store } from '../store.mjs';
 import { createApplication } from '../server.mjs';
 import { newToken, hashPassword } from '../security.mjs';
 import { proxySiteRequest, PRIVATE_PATH } from '../site-proxy.mjs';
+
+test('CLI starts its HTTP listener when launched through a release-directory symlink', { timeout: 10_000 }, async t => {
+  const temp = mkdtempSync(join(tmpdir(), 'research-symlink-start-')), entry = join(temp, 'current');
+  symlinkSync(fileURLToPath(new URL('../', import.meta.url)), entry, process.platform === 'win32' ? 'junction' : 'dir');
+  const probe = createServer(); await new Promise(resolve => probe.listen(0, '127.0.0.1', resolve));
+  const port = probe.address().port; await new Promise(resolve => probe.close(resolve));
+  const child = spawn(process.execPath, [join(entry, 'server.mjs')], { stdio: ['ignore', 'pipe', 'pipe'],
+    env: { ...process.env, AGENT_MODE: 'mock', AGENT_TRACE_MODE: 'offline', AGENT_PORT: String(port),
+      AGENT_DATA_DIR: join(temp, 'data'), AGENT_PUBLIC_ORIGIN: '', AGENT_TRIAL_SEED_RESERVED_UNITS: '0' } });
+  t.after(async () => { if (child.exitCode === null) { child.kill(); await once(child, 'exit'); } });
+  child.stderr.resume();
+  let timer;
+  try {
+    await new Promise((resolve, reject) => {
+      let output = '';
+      child.stdout.on('data', chunk => { output += chunk.toString(); if (output.includes('Local research agent:')) resolve(); });
+      child.once('error', reject); child.once('exit', code => reject(new Error(`CLI exited before listening (${code})`)));
+      timer = setTimeout(() => reject(new Error('CLI did not start its listener')), 5000);
+    });
+  } finally { clearTimeout(timer); }
+  const response = await fetch(`http://127.0.0.1:${port}${BASE_PATH}api/auth/status`);
+  assert.equal(response.status, 200); const auth = await response.json();
+  assert.equal(auth.mode, 'mock'); assert.equal(auth.traceMode, 'offline'); assert.equal(auth.setupRequired, true);
+});
 
 test('public configuration requires exact HTTPS, persistent storage and a cumulative seed floor', () => {
   for (const origin of ['http://comments.leonzk.cn', 'https://comments.leonzk.cn/path', 'https://user@comments.leonzk.cn', 'https://localhost'])

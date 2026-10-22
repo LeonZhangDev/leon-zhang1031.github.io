@@ -1,5 +1,6 @@
 import { createServer } from 'node:http';
 import { readFile } from 'node:fs/promises';
+import { realpathSync } from 'node:fs';
 import { pathToFileURL } from 'node:url';
 import { loadConfig, SCENARIOS } from './config.mjs';
 import { loadLocalEnvironment } from './local-env.mjs';
@@ -149,7 +150,7 @@ export function createApplication(config = loadConfig(), options = {}) {
   };
 }
 
-if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
+if (process.argv[1] && import.meta.url === pathToFileURL(realpathSync(process.argv[1])).href) {
   const args = process.argv.slice(2);
   if (args.some(arg => !['--allow-model-calls', '--allow-cloud-traces'].includes(arg))) throw new Error('Unknown startup argument');
   const config = loadConfig(loadLocalEnvironment(), {

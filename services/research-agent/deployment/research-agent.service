@@ -11,7 +11,7 @@ WorkingDirectory=/opt/research-agent/current
 EnvironmentFile=/etc/research-agent/agent.env
 # Confirm the Node executable location before installing this unit.
 # Add --allow-model-calls / --allow-cloud-traces only with matching env modes.
-ExecStart=/usr/local/bin/node /opt/research-agent/current/server.mjs
+ExecStart=/opt/research-agent/node/bin/node /opt/research-agent/current/server.mjs
 Restart=on-failure
 RestartSec=5
 TimeoutStopSec=30

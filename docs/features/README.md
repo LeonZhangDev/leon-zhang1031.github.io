@@ -1,5 +1,7 @@
 # Features
 
+- [private-research-agent](private-research-agent.md) — password workspace, terminal-report fix, verified Qwen/LangSmith ingest and HTTPS release preparation
+
 - [game-loading-optimization](game-loading-optimization.md) — small icon, exact engine cache contracts and critical-resource preloads
 
 - [free-security-hardening](free-security-hardening.md) — verified free controls, burst shedding and data-safe rollback

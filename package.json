@@ -16,7 +16,10 @@
     "blog:audit": "node scripts/blog/audit-content.mjs",
     "blog:check": "node scripts/blog/audit-content.mjs --check",
     "blog:figures": "node scripts/blog/build-figures.mjs",
-    "test:e2e": "playwright test"
+    "test:e2e": "playwright test",
+    "agent:dev": "node services/research-agent/server.mjs",
+    "agent:test": "node --test services/research-agent/tests/*.test.mjs",
+    "agent:evaluate": "node services/research-agent/evaluate.mjs"
   },
   "dependencies": {
     "@astrojs/markdown-remark": "7.3.3",

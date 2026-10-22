@@ -1,0 +1,27 @@
+[Unit]
+Description=Private technical research agent
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=research-agent
+Group=research-agent
+WorkingDirectory=/opt/research-agent/current
+EnvironmentFile=/etc/research-agent/agent.env
+# Confirm the Node executable location before installing this unit.
+# Add --allow-model-calls / --allow-cloud-traces only with matching env modes.
+ExecStart=/usr/local/bin/node /opt/research-agent/current/server.mjs
+Restart=on-failure
+RestartSec=5
+TimeoutStopSec=30
+UMask=0077
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/var/lib/research-agent
+RestrictSUIDSGID=true
+
+[Install]
+WantedBy=multi-user.target

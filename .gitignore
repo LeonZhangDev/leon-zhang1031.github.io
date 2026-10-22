@@ -44,3 +44,5 @@ playwright-report/
 *.ckpt
 *.model
 *.weights
+
+!services/research-agent/.env.example

@@ -1,5 +1,129 @@
 # Project Progress
 
+## 2026-10-22 — Terminal-report fix, successful real validation, HTTPS preparation
+
+- User authorized fixing the loop, one further real validation/upload, and release.
+  `save_report` now completes the task as soon as it returns valid nonempty
+  Markdown. It cannot trigger another paid decision or duplicate tool action.
+  Invalid reports still fail; cancellation, deadline and premature-finish guards remain.
+- 59/59 service tests passed, including duplicate-save regression and HTTPS
+  configuration, seeded-ledger startup, Secure Cookie, disabled public setup,
+  origin checks and fixed-target Pages proxy checks. Offline evaluation passed
+  20/20 again in the release checkout; no external calls or evaluation charges.
+  Astro check: 0 errors, 0 warnings, 15 hints; static build: 211 pages and six
+  game-loading tests passed. Private HTML/data are absent from the static output.
+- New real task `df526952-d641-42ed-a093-8c365e45bedc` completed after eight HTTP200
+  Qwen decisions and exactly one report save. Input/output: 10,848/1,055 tokens.
+  This task's model estimate CNY0.011527; original cumulative ledger now estimates
+  CNY0.039477, conservatively reserved CNY0.1881 against the unchanged CNY5 cap.
+  All 17 cloud run writes returned HTTP202 (one root, eight LLM, eight tool).
+  Cloud UI/readback, remaining free quota and final vendor bills remain unverified.
+- Search/page tools remain synthetic. Original history, password and ignored
+  credential file were preserved; default service restored to mock/offline.
+  Evidence: `.tmp/research-agent-live-fixed-pvVjir/`. The older limited task and
+  its evidence remain unchanged below.
+- Prepared persistent Node/systemd/Caddy templates and a private-path EdgeOne
+  proxy; no credentials in frontend or source. Startup refuses an empty/reset
+  production database. Production setup is disabled and cookies require HTTPS.
+  See [deployment notes](../services/research-agent/deployment/README.md).
+- Release checkout `codex/private-research-agent-release` starts from latest
+  `origin/main` (`8cd9c55`), retaining the recently published 25-post Agent course
+  and keeping unrelated dirty performance changes out of this release.
+  Browser verified the live first course chapter at `leonzk.cn`.
+- User selected the existing Tencent server and interactive console login.
+  Server deployment, Caddy validation, public private-route acceptance and Git
+  push have not occurred. The public proxy must wait until backend health passes.
+
+## 2026-10-22 — One authorized real-model task and LangSmith upload
+
+- Ran exactly one user-authorized Qwen task with `qwen3.8-flash` through the
+  Beijing generic endpoint. Search/page tools remained synthetic; the report
+  explicitly identifies this limitation. No deployment or push occurred.
+- All 12 model requests returned HTTP 200 with measured usage: 24,424 input and
+  3,115 output tokens; estimated model cost CNY0.02795. Cumulative conservative
+  model reservation is CNY0.123 against the original CNY5 cap; no uncertain calls.
+  One-task model reservation cap was CNY0.50, leaving a separate CNY1 trace
+  allowance inside the overall trial envelope. Provider bills remain unverified.
+- LangSmith accepted all 25 run records (one root, 12 LLM, 12 tool) with HTTP 202,
+  using one cloud-dispatch claim. Only summaries and token usage were uploaded.
+  The tracing-only key cannot read projects, runs or billing usage (HTTP 403), so
+  cloud readback, account free quota and final trace charges remain unverified.
+- The model saved a report but did not call `finish`: it repeated searches and
+  report saves until the 12-step cap stopped the task as `limited`. This is a
+  termination defect, not a fully completed agent-loop acceptance. Do not rerun
+  automatically; fix locally by making successful `save_report` terminal in
+  `AgentRunner.run`, then cover duplicate-save prevention with an offline test.
+- Backed up the original database; original history, password and credential
+  file were preserved. Restored the loopback service to mock/offline and checked
+  its auth-status endpoint. The real run/report remain in local history.
+- Re-ran 47 service tests: all passed before the real task. Evidence, report,
+  one-shot script and database backup: `.tmp/research-agent-live-u9GvIn/`.
+  Trace/task ID: `d041f454-0599-44fd-b276-5aff0e13aee8`;
+  project: `private-research-agent-dev`. No further real call is authorized by
+  this validation record.
+
+## 2026-10-22 — User-selected Flash model and generic endpoint, offline only
+
+- Adapted the service to the user's configured `qwen3.8-flash` and Beijing generic
+  DashScope endpoint. Added exact model price profiles: Flash CNY0.8/M input and
+  CNY2.7/M output; unsupported models cannot reuse another model's rate.
+- Flash uses `max_completion_tokens=1200`, reserves the documented 10-token
+  allowance, and explicitly disables thinking and built-in search. Each model
+  reservation retains its price snapshot, including after usage recording.
+- Kept the cumulative 5-yuan cap, existing accounting, no-refund/no-retry rules,
+  user credential file, password and default database unchanged. Default remains
+  mock/offline; no real model call, trace upload, server restart, release or push.
+- Passed 47 service tests and 20 offline evaluation cases (external calls=0,
+  actual cost=0). Evidence: `.tmp/research-agent-eval-Wg6mFx/results.json`.
+- See [updated setup and accounting](../services/research-agent/README.md) and
+  [selected-model changes](features/private-research-agent.md#selected-flash-model-and-generic-endpoint--2026-10-22).
+
+## 2026-10-22 — Qwen and LangSmith adapters prepared, offline only
+
+- Selected Beijing Bailian `qwen-plus-2025-12-01` and LangSmith Developer free tier.
+  Prepared native-fetch tool-calling adapter and ignored blank `.env.local` with
+  a tracked `.env.example`; keys remain user-supplied and default modes mock/offline.
+- Both real-model and cloud tracing require independent explicit CLI flags and
+  configuration confirmations. No real API call, cloud upload, deployment or push.
+- Added a persistent cumulative 5-yuan trial reservation ledger, no refunds or
+  retries, bounded input/output, cancellation/deadline aborts and usage checks.
+  Retained the existing password, default database/history and unrelated work.
+- Added summary-only LangSmith transport with durable local-first traces,
+  a 20-trace trial cap and no historical replay. Search/page tools remain synthetic.
+- Passed 41 service tests with stubbed vendor transports, 20 offline evaluation
+  cases (external calls=0, cost=0), and 210 existing unit tests. The latest evaluation
+  evidence is `.tmp/research-agent-eval-BiOxN0/results.json`. No live-model/cloud QA.
+- Configuration, later approval steps, pricing assumptions and accounting limits:
+  [service instructions](../services/research-agent/README.md),
+  [feature](features/private-research-agent.md), [requirements](requirements/005-private-research-agent.md).
+
+## 2026-10-22 — Private research agent, local mock version
+
+- Follow-up: applied the user's six-character local password preference without
+  storing plaintext in code/docs, invalidated old sessions, and preserved task data.
+  All 20 service tests and local login/logout verification pass. Documented required
+  model/LangSmith/search settings, staged validation and current official price
+  estimates in the feature document; no real API, cloud trace or deployment enabled.
+
+- Added an isolated loopback Node service at `/p7x4m9q2-k6v8n3r5-t2w9c4h7/`,
+  with first-use password setup, server-side session checks, local SQLite history,
+  reports, feedback, comparison, cancellation and persistent simulated budgets.
+- Added observation-driven mock research decisions, readonly tool allowlists,
+  nine failure/normal scenarios, source records and hard task deadlines.
+- Integrated LangSmith 0.11.0 through an intercepted offline transport; local
+  run trees and actual SDK request payloads are retained. No cloud verification.
+- Passed 20 service tests, 20 offline evaluation cases, Chrome login/research
+  flows, 390px layout, existing 210 unit tests and Astro check (0 errors/warnings,
+  10 existing hints). Isolated 186-page static build passed with no private route
+  or resources; its six resource-contract tests also passed.
+- Real model/search calls, cloud trace uploads and production deployment remain
+  disabled pending explicit user confirmation. Mock costs and token counts are
+  synthetic; actual external API cost is zero. Existing unrelated work preserved.
+- See [requirements](requirements/005-private-research-agent.md),
+  [feature and evidence](features/private-research-agent.md), and
+  [startup instructions](../services/research-agent/README.md).
+
+
 ## 2026-10-22 — Agent learning course publication
 
 - Added the reviewed learning overview and 24 public chapters, 531 local images and shared reading order: overview → chapters 01–24.

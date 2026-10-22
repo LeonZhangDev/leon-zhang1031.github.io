@@ -1,0 +1,22 @@
+# Fragment to merge INSIDE the existing comments.leonzk.cn site block.
+# Preserve all existing site directives. Put the original Artalk reverse_proxy
+# (including its options) inside a separate fallback `handle { ... }` block.
+# Do not use handle_path: the agent requires the full private prefix.
+@research_agent path /p7x4m9q2-k6v8n3r5-t2w9c4h7 /p7x4m9q2-k6v8n3r5-t2w9c4h7/*
+handle @research_agent {
+    header {
+        Cache-Control "private, no-store"
+        X-Robots-Tag "noindex, nofollow, noarchive"
+        Referrer-Policy "no-referrer"
+        Content-Security-Policy "default-src 'none'; script-src 'self'; style-src 'self'; connect-src 'self'; img-src 'self' data:; base-uri 'none'; frame-ancestors 'none'; form-action 'self'"
+    }
+    reverse_proxy 127.0.0.1:4322 {
+        header_up Host 127.0.0.1:4322
+        header_up X-Forwarded-Proto https
+        header_up X-Forwarded-Host comments.leonzk.cn
+        transport http {
+            dial_timeout 3s
+            response_header_timeout 15s
+        }
+    }
+}

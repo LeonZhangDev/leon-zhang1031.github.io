@@ -1,0 +1,46 @@
+---
+interface Props {
+  headings: { depth: number; slug: string; text: string }[];
+}
+const { headings } = Astro.props;
+---
+
+<aside class="section-sidebar" aria-label="本章小节">
+  <details class="section-sidebar-panel" open>
+    <summary>本章小节 <span>{headings.length}</span></summary>
+    <nav class="course-sections" aria-label="本文目录">
+      <ul>{headings.map(heading => <li data-depth={heading.depth}><a href={`#${heading.slug}`}>{heading.text}</a></li>)}</ul>
+    </nav>
+  </details>
+</aside>
+
+<script>
+  const panel = document.querySelector<HTMLDetailsElement>('.section-sidebar-panel');
+  if (panel) {
+    const desktop = matchMedia('(min-width: 1200px)');
+    const syncPanel = () => { panel.open = desktop.matches; };
+    syncPanel();
+    desktop.addEventListener('change', syncPanel);
+  }
+</script>
+
+<style>
+  .section-sidebar { min-width: 0; padding-top: 2.5rem; }
+  .section-sidebar-panel { border: 1px solid var(--border); border-radius: 12px; background: var(--bg-surface); }
+  summary { cursor: pointer; font-weight: 600; padding: .8rem 1rem; font-size: .9rem; }
+  summary span { color: var(--text-secondary); font-weight: 400; margin-left: .4rem; font-size: .8rem; }
+  .course-sections { max-height: calc(100dvh - 10rem); overflow-y: auto; overscroll-behavior: contain; scrollbar-width: thin; padding: .5rem; border-top: 1px solid var(--border); }
+  ul { list-style: none; padding: 0; }
+  li { font-size: .8rem; line-height: 1.6; }
+  li[data-depth="3"] { padding-left: .8rem; }
+  a { display: block; padding: .35rem .5rem; border-radius: 5px; color: var(--text-secondary); overflow-wrap: anywhere; }
+  a:hover, a:focus-visible { color: var(--text-primary); background: var(--bg-card-hover); }
+  @media (min-width: 1200px) {
+    .section-sidebar { align-self: start; position: sticky; top: 5rem; padding-top: 0; margin-top: 2.5rem; }
+  }
+  @media (max-width: 1199px) {
+    .section-sidebar { padding-top: .7rem; }
+    .course-sections { max-height: 40dvh; }
+  }
+  @media print { .section-sidebar { display: none; } }
+</style>

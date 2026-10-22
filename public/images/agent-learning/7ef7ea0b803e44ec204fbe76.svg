@@ -1,0 +1,633 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="564.5" height="1110" id="mermaid-1770449321446" xmlns="http://www.w3.org/2000/svg" class="flowchart" style="max-width: 564.5px;" viewBox="0.5 0 564.5 1110" role="graphics-document document" aria-roledescription="flowchart-v2"><rect width="100%" height="100%" fill="#f3f4f6"/><style>
+
+        /* Organic Natural Style - Soft, flowing, nature-inspired design */
+        
+        /* Flowchart nodes - Organic shapes with soft colors */
+        .node rect, .node polygon {
+          fill: #d4e7d0 !important;
+          stroke: #6a9c89 !important;
+          stroke-width: 2px !important;
+          rx: 16px !important;
+          ry: 16px !important;
+          filter: drop-shadow(2px 2px 4px rgba(45,80,22,0.15));
+        }
+        
+        .node circle {
+          fill: #d4e7d0 !important;
+          stroke: #6a9c89 !important;
+          stroke-width: 2px !important;
+          filter: drop-shadow(2px 2px 4px rgba(45,80,22,0.15));
+        }
+        
+        .node .label {
+          fill: #2d5016 !important;
+          font-weight: 500;
+          font-size: 14px;
+        }
+        
+        /* Alternate node colors - Natural palette */
+        .node:nth-child(2n) rect,
+        .node:nth-child(2n) circle,
+        .node:nth-child(2n) polygon {
+          fill: #e8f4e5 !important;
+          stroke: #8ba888 !important;
+        }
+        
+        .node:nth-child(3n) rect,
+        .node:nth-child(3n) circle,
+        .node:nth-child(3n) polygon {
+          fill: #c8d5b9 !important;
+          stroke: #6a9c89 !important;
+        }
+        
+        .node:nth-child(5n) rect,
+        .node:nth-child(5n) circle,
+        .node:nth-child(5n) polygon {
+          fill: #b8cdb1 !important;
+          stroke: #5a7c3e !important;
+        }
+        
+        /* Connection lines - Smooth organic flow */
+        .edgePath .path {
+          stroke: #6a9c89 !important;
+          stroke-width: 2px !important;
+          stroke-linecap: round;
+          stroke-linejoin: round;
+        }
+        
+        .arrowheadPath {
+          fill: #6a9c89 !important;
+          stroke: #6a9c89 !important;
+        }
+        
+        .edgeLabel {
+          color: #2d5016 !important;
+          font-size: 13px;
+          font-weight: 500;
+        }
+        
+        .edgeLabel rect {
+          fill: #f5f9f3 !important;
+          stroke: #8ba888 !important;
+          stroke-width: 1.5px !important;
+          rx: 8px !important;
+          filter: drop-shadow(1px 1px 2px rgba(45,80,22,0.1));
+        }
+        
+        /* Sequence Diagram - Natural organic style */
+        .actor {
+          fill: #d4e7d0 !important;
+          stroke: #6a9c89 !important;
+          stroke-width: 2px !important;
+          rx: 16px !important;
+          ry: 16px !important;
+          filter: drop-shadow(2px 2px 4px rgba(45,80,22,0.15));
+        }
+        
+        .actor:nth-child(2n) {
+          fill: #e8f4e5 !important;
+        }
+        
+        .actor:nth-child(3n) {
+          fill: #c8d5b9 !important;
+        }
+        
+        .actor:nth-child(4n) {
+          fill: #b8cdb1 !important;
+        }
+        
+        .actor text {
+          fill: #2d5016 !important;
+          font-weight: 600;
+        }
+        
+        .actor-line, g line.actor-line, g path.actor-line {
+          stroke: #8ba888 !important;
+          stroke-width: 1.5px !important;
+          stroke-dasharray: 4 2 !important;
+        }
+        
+        .activation0, .activation1, .activation2 {
+          fill: #b8cdb1 !important;
+          stroke: #6a9c89 !important;
+          stroke-width: 2px !important;
+          rx: 8px !important;
+          filter: drop-shadow(2px 2px 3px rgba(45,80,22,0.12));
+        }
+        
+        .messageLine0, .messageLine1 {
+          stroke: #6a9c89 !important;
+          stroke-width: 2px !important;
+          stroke-linecap: round;
+        }
+        
+        .messageText {
+          fill: #2d5016 !important;
+          font-weight: 500;
+          font-size: 13px;
+        }
+        
+        #arrowhead path, .arrowheadPath {
+          fill: #6a9c89 !important;
+          stroke: #6a9c89 !important;
+        }
+        
+        /* Note boxes - Soft yellow-green */
+        .note {
+          fill: #f5f9dc !important;
+          stroke: #8ba888 !important;
+          stroke-width: 2px !important;
+          rx: 12px !important;
+          ry: 12px !important;
+          filter: drop-shadow(2px 2px 4px rgba(45,80,22,0.15));
+        }
+        
+        .noteText {
+          fill: #2d5016 !important;
+          font-weight: 500;
+        }
+        
+        /* Loop/Alt/Opt boxes */
+        .labelBox {
+          fill: #c8d5b9 !important;
+          stroke: #6a9c89 !important;
+          stroke-width: 2px !important;
+          rx: 12px !important;
+          ry: 12px !important;
+          filter: drop-shadow(2px 2px 4px rgba(45,80,22,0.15));
+        }
+        
+        .labelText, .loopText {
+          fill: #2d5016 !important;
+          font-weight: 600;
+        }
+        
+        .loopLine {
+          stroke: #6a9c89 !important;
+          stroke-width: 2px !important;
+          rx: 12px !important;
+        }
+        
+        /* Cluster/Subgraph styling */
+        .cluster rect {
+          fill: rgba(200,213,185,0.3) !important;
+          stroke: #8ba888 !important;
+          stroke-width: 2px !important;
+          rx: 20px !important;
+          ry: 20px !important;
+          stroke-dasharray: 5 3;
+          filter: drop-shadow(1px 1px 2px rgba(45,80,22,0.1));
+        }
+        
+        .cluster text {
+          fill: #2d5016 !important;
+          font-weight: 600;
+        }
+        
+        /* State diagram */
+        .statediagram-state rect,
+        .statediagram-state .state-inner {
+          fill: #d4e7d0 !important;
+          stroke: #6a9c89 !important;
+          stroke-width: 2px !important;
+          rx: 16px !important;
+          filter: drop-shadow(2px 2px 4px rgba(45,80,22,0.15));
+        }
+        
+        .statediagram-state:nth-child(2n) rect,
+        .statediagram-state:nth-child(2n) .state-inner {
+          fill: #e8f4e5 !important;
+        }
+        
+        .statediagram-state:nth-child(3n) rect,
+        .statediagram-state:nth-child(3n) .state-inner {
+          fill: #c8d5b9 !important;
+        }
+        
+        .statediagram-state:nth-child(5n) rect,
+        .statediagram-state:nth-child(5n) .state-inner {
+          fill: #b8cdb1 !important;
+        }
+        
+        .stateLabel text {
+          fill: #2d5016 !important;
+          font-weight: 600;
+        }
+        
+        .transition {
+          stroke: #6a9c89 !important;
+          stroke-width: 2px !important;
+        }
+        
+        /* Class Diagram */
+        .classGroup rect {
+          fill: #d4e7d0 !important;
+          stroke: #6a9c89 !important;
+          stroke-width: 2px !important;
+          rx: 12px !important;
+          filter: drop-shadow(2px 2px 4px rgba(45,80,22,0.15));
+        }
+        
+        .classGroup:nth-child(2n) rect {
+          fill: #e8f4e5 !important;
+        }
+        
+        .classGroup:nth-child(3n) rect {
+          fill: #c8d5b9 !important;
+        }
+        
+        .classGroup line {
+          stroke: #6a9c89 !important;
+          stroke-width: 1.5px !important;
+        }
+        
+        .classLabel .label {
+          fill: #2d5016 !important;
+          font-weight: 600;
+        }
+        
+        .classLabel .box {
+          stroke: #6a9c89 !important;
+          stroke-width: 2px !important;
+          rx: 12px !important;
+        }
+        
+        .relationshipLine {
+          stroke: #6a9c89 !important;
+          stroke-width: 2px !important;
+        }
+        
+        .relationshipLabelBox {
+          fill: #f5f9f3 !important;
+          stroke: #8ba888 !important;
+          stroke-width: 1.5px !important;
+          rx: 8px !important;
+        }
+        
+        /* ER Diagram */
+        .er.entityBox {
+          fill: #e8f4e5 !important;
+          stroke: #6a9c89 !important;
+          stroke-width: 2px !important;
+          rx: 12px !important;
+          filter: drop-shadow(2px 2px 4px rgba(45,80,22,0.15));
+        }
+        
+        .er.entityBox:nth-child(2n) {
+          fill: #d4e7d0 !important;
+        }
+        
+        .er.entityBox:nth-child(3n) {
+          fill: #c8d5b9 !important;
+        }
+        
+        .er.entityLabel,
+        .er.relationshipLabel {
+          fill: #2d5016 !important;
+          font-weight: 600;
+        }
+        
+        .er .relationshipLine {
+          stroke: #6a9c89 !important;
+          stroke-width: 2px !important;
+        }
+        
+        .er .relationshipLabelBox {
+          fill: #f5f9f3 !important;
+          stroke: #8ba888 !important;
+          stroke-width: 1.5px !important;
+          rx: 8px !important;
+        }
+        
+        /* Gantt Chart */
+        .titleText {
+          fill: #2d5016 !important;
+          font-weight: 700;
+          font-size: 20px;
+        }
+        
+        .grid .tick text {
+          fill: #2d5016 !important;
+          font-size: 12px;
+        }
+        
+        .grid line {
+          stroke: #c8d5b9 !important;
+          stroke-width: 1px !important;
+          opacity: 0.6;
+        }
+        
+        .taskText {
+          fill: #2d5016 !important;
+          font-weight: 500;
+        }
+        
+        .taskTextOutsideRight,
+        .taskTextOutsideLeft {
+          fill: #2d5016 !important;
+          font-weight: 500;
+        }
+        
+        .task0, .task1, .task2, .task3 {
+          stroke: #6a9c89 !important;
+          stroke-width: 2px !important;
+          rx: 10px !important;
+        }
+        
+        .task0 {
+          fill: #d4e7d0 !important;
+        }
+        
+        .task1 {
+          fill: #e8f4e5 !important;
+        }
+        
+        .task2 {
+          fill: #c8d5b9 !important;
+        }
+        
+        .task3 {
+          fill: #b8cdb1 !important;
+        }
+        
+        .section0, .section1, .section2, .section3 {
+          fill: #2d5016 !important;
+          font-weight: 700;
+          font-size: 14px;
+        }
+        
+        .sectionTitle0, .sectionTitle1, .sectionTitle2, .sectionTitle3 {
+          fill: #f5f9f3 !important;
+        }
+        
+        .done0, .done1, .done2, .done3 {
+          stroke: #4d7c0f !important;
+          stroke-width: 2px !important;
+          fill: #a3e635 !important;
+          opacity: 0.8;
+        }
+        
+        .active0, .active1, .active2, .active3 {
+          stroke: #6a9c89 !important;
+          stroke-width: 2px !important;
+          fill: #8ba888 !important;
+        }
+        
+        .crit0, .crit1, .crit2, .crit3 {
+          stroke: #b45309 !important;
+          stroke-width: 2px !important;
+          fill: #fbbf24 !important;
+          opacity: 0.8;
+        }
+        
+        .activeCrit0, .activeCrit1, .activeCrit2, .activeCrit3 {
+          stroke: #854d0e !important;
+          stroke-width: 2px !important;
+          fill: #fde047 !important;
+        }
+        
+        /* Pie Chart */
+        .pieCircle {
+          stroke: #6a9c89 !important;
+          stroke-width: 2px !important;
+        }
+        
+        .pieTitleText {
+          fill: #2d5016 !important;
+          font-weight: 700;
+          font-size: 20px;
+        }
+        
+        .slice {
+          stroke: #6a9c89 !important;
+          stroke-width: 2px !important;
+          filter: drop-shadow(1px 1px 2px rgba(45,80,22,0.1));
+        }
+        
+        .slice:nth-child(1) {
+          fill: #d4e7d0 !important;
+        }
+        
+        .slice:nth-child(2) {
+          fill: #e8f4e5 !important;
+        }
+        
+        .slice:nth-child(3) {
+          fill: #c8d5b9 !important;
+        }
+        
+        .slice:nth-child(4) {
+          fill: #b8cdb1 !important;
+        }
+        
+        .slice:nth-child(5) {
+          fill: #a8c5a1 !important;
+        }
+        
+        .slice:nth-child(6) {
+          fill: #8ba888 !important;
+        }
+        
+        .pieOuterCircle {
+          stroke: #6a9c89 !important;
+          stroke-width: 2px !important;
+          fill: none;
+        }
+        
+        .legend text {
+          fill: #2d5016 !important;
+          font-weight: 500;
+          font-size: 13px;
+        }
+        
+        .legend rect {
+          stroke: #6a9c89 !important;
+          stroke-width: 1.5px !important;
+          rx: 4px !important;
+        }
+        
+        /* Journey Diagram */
+        .journey-section {
+          stroke: #6a9c89 !important;
+          stroke-width: 2px !important;
+          fill: #c8d5b9 !important;
+          rx: 12px !important;
+        }
+        
+        .task-section {
+          fill: #d4e7d0 !important;
+          stroke: #6a9c89 !important;
+          stroke-width: 2px !important;
+          rx: 10px !important;
+        }
+        
+        .task-section:nth-child(2n) {
+          fill: #e8f4e5 !important;
+        }
+        
+        .task-section:nth-child(3n) {
+          fill: #b8cdb1 !important;
+        }
+        
+        /* XYChart styles - Natural organic colors */
+        .line-plot-0 path {
+          stroke: #6a9c89 !important;
+          stroke-width: 3px !important;
+          stroke-linecap: round;
+          stroke-linejoin: round;
+        }
+        
+        .line-plot-1 path {
+          stroke: #5a7c3e !important;
+          stroke-width: 3px !important;
+          stroke-linecap: round;
+          stroke-linejoin: round;
+        }
+        
+        .line-plot-2 path {
+          stroke: #7ba05b !important;
+          stroke-width: 3px !important;
+          stroke-linecap: round;
+          stroke-linejoin: round;
+        }
+        
+        .bar-plot-0 rect {
+          fill: #d4e7d0 !important;
+          stroke: #6a9c89 !important;
+          stroke-width: 2px !important;
+          rx: 6px !important;
+        }
+        
+        .bar-plot-1 rect {
+          fill: #c8d5b9 !important;
+          stroke: #5a7c3e !important;
+          stroke-width: 2px !important;
+          rx: 6px !important;
+        }
+        
+        .bar-plot-2 rect {
+          fill: #b8cdb1 !important;
+          stroke: #7ba05b !important;
+          stroke-width: 2px !important;
+          rx: 6px !important;
+        }
+        
+        .ticks path {
+          stroke: #6a9c89 !important;
+          stroke-width: 1.5px !important;
+        }
+        
+        .chart-title text {
+          fill: #2d5016 !important;
+          font-weight: 700 !important;
+          font-size: 20px !important;
+        }
+        
+        .left-axis .label text, .bottom-axis .label text {
+          fill: #2d5016 !important;
+          font-size: 13px !important;
+          font-weight: 500;
+        }
+        
+        .left-axis .title text, .bottom-axis .title text {
+          fill: #2d5016 !important;
+          font-size: 15px !important;
+          font-weight: 600;
+        }
+        
+        .legend text {
+          fill: #2d5016 !important;
+          font-size: 13px !important;
+          font-weight: 500;
+        }
+        
+        .legend rect {
+          stroke: #6a9c89 !important;
+          stroke-width: 1.5px !important;
+          rx: 4px !important;
+        }
+        
+        /* Git Graph */
+        .commit-id, .commit-msg, .branch-label {
+          fill: #2d5016 !important;
+          font-weight: 600;
+        }
+        
+        .commit {
+          stroke: #6a9c89 !important;
+          stroke-width: 2px !important;
+        }
+        
+        .commit0 {
+          fill: #d4e7d0 !important;
+        }
+        
+        .commit1 {
+          fill: #e8f4e5 !important;
+        }
+        
+        .commit2 {
+          fill: #c8d5b9 !important;
+        }
+        
+        .commit3 {
+          fill: #b8cdb1 !important;
+        }
+        
+        .commit-highlight-outer {
+          fill: #fbbf24;
+          opacity: 0.3;
+        }
+        
+        .commit-highlight-inner {
+          fill: #fbbf24;
+          opacity: 0.5;
+          stroke: #f59e0b;
+        }
+        
+        .branch path {
+          stroke-width: 2.5px !important;
+          stroke-linecap: round;
+          stroke-linejoin: round;
+        }
+        
+        .branch.branch0 {
+          stroke: #6a9c89 !important;
+        }
+        
+        .branch.branch1 {
+          stroke: #5a7c3e !important;
+        }
+        
+        .branch.branch2 {
+          stroke: #7ba05b !important;
+        }
+        
+        .branch.branch3 {
+          stroke: #8ba888 !important;
+        }
+        
+        /* Timeline */
+        .timeline-event {
+          fill: #d4e7d0 !important;
+          stroke: #6a9c89 !important;
+          stroke-width: 2px !important;
+          rx: 12px !important;
+          filter: drop-shadow(2px 2px 4px rgba(45,80,22,0.15));
+        }
+        
+        .timeline-event:nth-child(2n) {
+          fill: #e8f4e5 !important;
+        }
+        
+        .timeline-event:nth-child(3n) {
+          fill: #c8d5b9 !important;
+        }
+        
+        .timeline-event-text {
+          fill: #2d5016 !important;
+          font-weight: 600;
+        }
+      
+</style><style>#mermaid-1770449321446{font-family:"Inter","Noto Sans SC",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;font-size:14px;fill:#2d5016;}@keyframes edge-animation-frame{from{stroke-dashoffset:0;}}@keyframes dash{to{stroke-dashoffset:0;}}#mermaid-1770449321446 .edge-animation-slow{stroke-dasharray:9,5!important;stroke-dashoffset:900;animation:dash 50s linear infinite;stroke-linecap:round;}#mermaid-1770449321446 .edge-animation-fast{stroke-dasharray:9,5!important;stroke-dashoffset:900;animation:dash 20s linear infinite;stroke-linecap:round;}#mermaid-1770449321446 .error-icon{fill:#c8d5b9;}#mermaid-1770449321446 .error-text{fill:#372a46;stroke:#372a46;}#mermaid-1770449321446 .edge-thickness-normal{stroke-width:1px;}#mermaid-1770449321446 .edge-thickness-thick{stroke-width:3.5px;}#mermaid-1770449321446 .edge-pattern-solid{stroke-dasharray:0;}#mermaid-1770449321446 .edge-thickness-invisible{stroke-width:0;fill:none;}#mermaid-1770449321446 .edge-pattern-dashed{stroke-dasharray:3;}#mermaid-1770449321446 .edge-pattern-dotted{stroke-dasharray:2;}#mermaid-1770449321446 .marker{fill:#6a9c89;stroke:#6a9c89;}#mermaid-1770449321446 .marker.cross{stroke:#6a9c89;}#mermaid-1770449321446 svg{font-family:"Inter","Noto Sans SC",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;font-size:14px;}#mermaid-1770449321446 p{margin:0;}#mermaid-1770449321446 .label{font-family:"Inter","Noto Sans SC",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:#2d5016;}#mermaid-1770449321446 .cluster-label text{fill:#372a46;}#mermaid-1770449321446 .cluster-label span{color:#372a46;}#mermaid-1770449321446 .cluster-label span p{background-color:transparent;}#mermaid-1770449321446 .label text,#mermaid-1770449321446 span{fill:#2d5016;color:#2d5016;}#mermaid-1770449321446 .node rect,#mermaid-1770449321446 .node circle,#mermaid-1770449321446 .node ellipse,#mermaid-1770449321446 .node polygon,#mermaid-1770449321446 .node path{fill:#d4e7d0;stroke:#8ba888;stroke-width:1px;}#mermaid-1770449321446 .rough-node .label text,#mermaid-1770449321446 .node .label text,#mermaid-1770449321446 .image-shape .label,#mermaid-1770449321446 .icon-shape .label{text-anchor:middle;}#mermaid-1770449321446 .node .katex path{fill:#000;stroke:#000;stroke-width:1px;}#mermaid-1770449321446 .rough-node .label,#mermaid-1770449321446 .node .label,#mermaid-1770449321446 .image-shape .label,#mermaid-1770449321446 .icon-shape .label{text-align:center;}#mermaid-1770449321446 .node.clickable{cursor:pointer;}#mermaid-1770449321446 .root .anchor path{fill:#6a9c89!important;stroke-width:0;stroke:#6a9c89;}#mermaid-1770449321446 .arrowheadPath{fill:#0a060c;}#mermaid-1770449321446 .edgePath .path{stroke:#6a9c89;stroke-width:2.0px;}#mermaid-1770449321446 .flowchart-link{stroke:#6a9c89;fill:none;}#mermaid-1770449321446 .edgeLabel{background-color:#e8f4e5;text-align:center;}#mermaid-1770449321446 .edgeLabel p{background-color:#e8f4e5;}#mermaid-1770449321446 .edgeLabel rect{opacity:0.5;background-color:#e8f4e5;fill:#e8f4e5;}#mermaid-1770449321446 .labelBkg{background-color:rgba(232, 244, 229, 0.5);}#mermaid-1770449321446 .cluster rect{fill:#c8d5b9;stroke:hsl(87.8571428571, 0%, 68.0392156863%);stroke-width:1px;}#mermaid-1770449321446 .cluster text{fill:#372a46;}#mermaid-1770449321446 .cluster span{color:#372a46;}#mermaid-1770449321446 div.mermaidTooltip{position:absolute;text-align:center;max-width:200px;padding:2px;font-family:"Inter","Noto Sans SC",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;font-size:12px;background:#c8d5b9;border:1px solid hsl(87.8571428571, 0%, 68.0392156863%);border-radius:2px;pointer-events:none;z-index:100;}#mermaid-1770449321446 .flowchartTitleText{text-anchor:middle;font-size:18px;fill:#2d5016;}#mermaid-1770449321446 rect.text{fill:none;stroke-width:0;}#mermaid-1770449321446 .icon-shape,#mermaid-1770449321446 .image-shape{background-color:#e8f4e5;text-align:center;}#mermaid-1770449321446 .icon-shape p,#mermaid-1770449321446 .image-shape p{background-color:#e8f4e5;padding:2px;}#mermaid-1770449321446 .icon-shape rect,#mermaid-1770449321446 .image-shape rect{opacity:0.5;background-color:#e8f4e5;fill:#e8f4e5;}#mermaid-1770449321446 .label-icon{display:inline-block;height:1em;overflow:visible;vertical-align:-0.125em;}#mermaid-1770449321446 .node .label-icon path{fill:currentColor;stroke:revert;stroke-width:revert;}#mermaid-1770449321446 .node rect,#mermaid-1770449321446 .node polygon{fill:#d4e7d0!important;stroke:#6a9c89!important;stroke-width:2px!important;rx:16px!important;ry:16px!important;filter:drop-shadow(2px 2px 4px rgba(45,80,22,0.15));}#mermaid-1770449321446 .node circle{fill:#d4e7d0!important;stroke:#6a9c89!important;stroke-width:2px!important;filter:drop-shadow(2px 2px 4px rgba(45,80,22,0.15));}#mermaid-1770449321446 .node .label{fill:#2d5016!important;font-weight:500;font-size:14px;}#mermaid-1770449321446 .node:nth-child(2n) rect,#mermaid-1770449321446 .node:nth-child(2n) circle,#mermaid-1770449321446 .node:nth-child(2n) polygon{fill:#e8f4e5!important;stroke:#8ba888!important;}#mermaid-1770449321446 .node:nth-child(3n) rect,#mermaid-1770449321446 .node:nth-child(3n) circle,#mermaid-1770449321446 .node:nth-child(3n) polygon{fill:#c8d5b9!important;stroke:#6a9c89!important;}#mermaid-1770449321446 .node:nth-child(5n) rect,#mermaid-1770449321446 .node:nth-child(5n) circle,#mermaid-1770449321446 .node:nth-child(5n) polygon{fill:#b8cdb1!important;stroke:#5a7c3e!important;}#mermaid-1770449321446 .edgePath .path{stroke:#6a9c89!important;stroke-width:2px!important;stroke-linecap:round;stroke-linejoin:round;}#mermaid-1770449321446 .arrowheadPath{fill:#6a9c89!important;stroke:#6a9c89!important;}#mermaid-1770449321446 .edgeLabel{color:#2d5016!important;font-size:13px;font-weight:500;}#mermaid-1770449321446 .edgeLabel rect{fill:#f5f9f3!important;stroke:#8ba888!important;stroke-width:1.5px!important;rx:8px!important;filter:drop-shadow(1px 1px 2px rgba(45,80,22,0.1));}#mermaid-1770449321446 .actor{fill:#d4e7d0!important;stroke:#6a9c89!important;stroke-width:2px!important;rx:16px!important;ry:16px!important;filter:drop-shadow(2px 2px 4px rgba(45,80,22,0.15));}#mermaid-1770449321446 .actor:nth-child(2n){fill:#e8f4e5!important;}#mermaid-1770449321446 .actor:nth-child(3n){fill:#c8d5b9!important;}#mermaid-1770449321446 .actor:nth-child(4n){fill:#b8cdb1!important;}#mermaid-1770449321446 .actor text{fill:#2d5016!important;font-weight:600;}#mermaid-1770449321446 .actor-line,#mermaid-1770449321446 g line.actor-line,#mermaid-1770449321446 g path.actor-line{stroke:#8ba888!important;stroke-width:1.5px!important;stroke-dasharray:4 2!important;}#mermaid-1770449321446 .activation0,#mermaid-1770449321446 .activation1,#mermaid-1770449321446 .activation2{fill:#b8cdb1!important;stroke:#6a9c89!important;stroke-width:2px!important;rx:8px!important;filter:drop-shadow(2px 2px 3px rgba(45,80,22,0.12));}#mermaid-1770449321446 .messageLine0,#mermaid-1770449321446 .messageLine1{stroke:#6a9c89!important;stroke-width:2px!important;stroke-linecap:round;}#mermaid-1770449321446 .messageText{fill:#2d5016!important;font-weight:500;font-size:13px;}#mermaid-1770449321446 #arrowhead path,#mermaid-1770449321446 .arrowheadPath{fill:#6a9c89!important;stroke:#6a9c89!important;}#mermaid-1770449321446 .note{fill:#f5f9dc!important;stroke:#8ba888!important;stroke-width:2px!important;rx:12px!important;ry:12px!important;filter:drop-shadow(2px 2px 4px rgba(45,80,22,0.15));}#mermaid-1770449321446 .noteText{fill:#2d5016!important;font-weight:500;}#mermaid-1770449321446 .labelBox{fill:#c8d5b9!important;stroke:#6a9c89!important;stroke-width:2px!important;rx:12px!important;ry:12px!important;filter:drop-shadow(2px 2px 4px rgba(45,80,22,0.15));}#mermaid-1770449321446 .labelText,#mermaid-1770449321446 .loopText{fill:#2d5016!important;font-weight:600;}#mermaid-1770449321446 .loopLine{stroke:#6a9c89!important;stroke-width:2px!important;rx:12px!important;}#mermaid-1770449321446 .cluster rect{fill:rgba(200,213,185,0.3)!important;stroke:#8ba888!important;stroke-width:2px!important;rx:20px!important;ry:20px!important;stroke-dasharray:5 3;filter:drop-shadow(1px 1px 2px rgba(45,80,22,0.1));}#mermaid-1770449321446 .cluster text{fill:#2d5016!important;font-weight:600;}#mermaid-1770449321446 .statediagram-state rect,#mermaid-1770449321446 .statediagram-state .state-inner{fill:#d4e7d0!important;stroke:#6a9c89!important;stroke-width:2px!important;rx:16px!important;filter:drop-shadow(2px 2px 4px rgba(45,80,22,0.15));}#mermaid-1770449321446 .statediagram-state:nth-child(2n) rect,#mermaid-1770449321446 .statediagram-state:nth-child(2n) .state-inner{fill:#e8f4e5!important;}#mermaid-1770449321446 .statediagram-state:nth-child(3n) rect,#mermaid-1770449321446 .statediagram-state:nth-child(3n) .state-inner{fill:#c8d5b9!important;}#mermaid-1770449321446 .statediagram-state:nth-child(5n) rect,#mermaid-1770449321446 .statediagram-state:nth-child(5n) .state-inner{fill:#b8cdb1!important;}#mermaid-1770449321446 .stateLabel text{fill:#2d5016!important;font-weight:600;}#mermaid-1770449321446 .transition{stroke:#6a9c89!important;stroke-width:2px!important;}#mermaid-1770449321446 .classGroup rect{fill:#d4e7d0!important;stroke:#6a9c89!important;stroke-width:2px!important;rx:12px!important;filter:drop-shadow(2px 2px 4px rgba(45,80,22,0.15));}#mermaid-1770449321446 .classGroup:nth-child(2n) rect{fill:#e8f4e5!important;}#mermaid-1770449321446 .classGroup:nth-child(3n) rect{fill:#c8d5b9!important;}#mermaid-1770449321446 .classGroup line{stroke:#6a9c89!important;stroke-width:1.5px!important;}#mermaid-1770449321446 .classLabel .label{fill:#2d5016!important;font-weight:600;}#mermaid-1770449321446 .classLabel .box{stroke:#6a9c89!important;stroke-width:2px!important;rx:12px!important;}#mermaid-1770449321446 .relationshipLine{stroke:#6a9c89!important;stroke-width:2px!important;}#mermaid-1770449321446 .relationshipLabelBox{fill:#f5f9f3!important;stroke:#8ba888!important;stroke-width:1.5px!important;rx:8px!important;}#mermaid-1770449321446 .er.entityBox{fill:#e8f4e5!important;stroke:#6a9c89!important;stroke-width:2px!important;rx:12px!important;filter:drop-shadow(2px 2px 4px rgba(45,80,22,0.15));}#mermaid-1770449321446 .er.entityBox:nth-child(2n){fill:#d4e7d0!important;}#mermaid-1770449321446 .er.entityBox:nth-child(3n){fill:#c8d5b9!important;}#mermaid-1770449321446 .er.entityLabel,#mermaid-1770449321446 .er.relationshipLabel{fill:#2d5016!important;font-weight:600;}#mermaid-1770449321446 .er .relationshipLine{stroke:#6a9c89!important;stroke-width:2px!important;}#mermaid-1770449321446 .er .relationshipLabelBox{fill:#f5f9f3!important;stroke:#8ba888!important;stroke-width:1.5px!important;rx:8px!important;}#mermaid-1770449321446 .titleText{fill:#2d5016!important;font-weight:700;font-size:20px;}#mermaid-1770449321446 .grid .tick text{fill:#2d5016!important;font-size:12px;}#mermaid-1770449321446 .grid line{stroke:#c8d5b9!important;stroke-width:1px!important;opacity:0.6;}#mermaid-1770449321446 .taskText{fill:#2d5016!important;font-weight:500;}#mermaid-1770449321446 .taskTextOutsideRight,#mermaid-1770449321446 .taskTextOutsideLeft{fill:#2d5016!important;font-weight:500;}#mermaid-1770449321446 .task0,#mermaid-1770449321446 .task1,#mermaid-1770449321446 .task2,#mermaid-1770449321446 .task3{stroke:#6a9c89!important;stroke-width:2px!important;rx:10px!important;}#mermaid-1770449321446 .task0{fill:#d4e7d0!important;}#mermaid-1770449321446 .task1{fill:#e8f4e5!important;}#mermaid-1770449321446 .task2{fill:#c8d5b9!important;}#mermaid-1770449321446 .task3{fill:#b8cdb1!important;}#mermaid-1770449321446 .section0,#mermaid-1770449321446 .section1,#mermaid-1770449321446 .section2,#mermaid-1770449321446 .section3{fill:#2d5016!important;font-weight:700;font-size:14px;}#mermaid-1770449321446 .sectionTitle0,#mermaid-1770449321446 .sectionTitle1,#mermaid-1770449321446 .sectionTitle2,#mermaid-1770449321446 .sectionTitle3{fill:#f5f9f3!important;}#mermaid-1770449321446 .done0,#mermaid-1770449321446 .done1,#mermaid-1770449321446 .done2,#mermaid-1770449321446 .done3{stroke:#4d7c0f!important;stroke-width:2px!important;fill:#a3e635!important;opacity:0.8;}#mermaid-1770449321446 .active0,#mermaid-1770449321446 .active1,#mermaid-1770449321446 .active2,#mermaid-1770449321446 .active3{stroke:#6a9c89!important;stroke-width:2px!important;fill:#8ba888!important;}#mermaid-1770449321446 .crit0,#mermaid-1770449321446 .crit1,#mermaid-1770449321446 .crit2,#mermaid-1770449321446 .crit3{stroke:#b45309!important;stroke-width:2px!important;fill:#fbbf24!important;opacity:0.8;}#mermaid-1770449321446 .activeCrit0,#mermaid-1770449321446 .activeCrit1,#mermaid-1770449321446 .activeCrit2,#mermaid-1770449321446 .activeCrit3{stroke:#854d0e!important;stroke-width:2px!important;fill:#fde047!important;}#mermaid-1770449321446 .pieCircle{stroke:#6a9c89!important;stroke-width:2px!important;}#mermaid-1770449321446 .pieTitleText{fill:#2d5016!important;font-weight:700;font-size:20px;}#mermaid-1770449321446 .slice{stroke:#6a9c89!important;stroke-width:2px!important;filter:drop-shadow(1px 1px 2px rgba(45,80,22,0.1));}#mermaid-1770449321446 .slice:nth-child(1){fill:#d4e7d0!important;}#mermaid-1770449321446 .slice:nth-child(2){fill:#e8f4e5!important;}#mermaid-1770449321446 .slice:nth-child(3){fill:#c8d5b9!important;}#mermaid-1770449321446 .slice:nth-child(4){fill:#b8cdb1!important;}#mermaid-1770449321446 .slice:nth-child(5){fill:#a8c5a1!important;}#mermaid-1770449321446 .slice:nth-child(6){fill:#8ba888!important;}#mermaid-1770449321446 .pieOuterCircle{stroke:#6a9c89!important;stroke-width:2px!important;fill:none;}#mermaid-1770449321446 .legend text{fill:#2d5016!important;font-weight:500;font-size:13px;}#mermaid-1770449321446 .legend rect{stroke:#6a9c89!important;stroke-width:1.5px!important;rx:4px!important;}#mermaid-1770449321446 .journey-section{stroke:#6a9c89!important;stroke-width:2px!important;fill:#c8d5b9!important;rx:12px!important;}#mermaid-1770449321446 .task-section{fill:#d4e7d0!important;stroke:#6a9c89!important;stroke-width:2px!important;rx:10px!important;}#mermaid-1770449321446 .task-section:nth-child(2n){fill:#e8f4e5!important;}#mermaid-1770449321446 .task-section:nth-child(3n){fill:#b8cdb1!important;}#mermaid-1770449321446 .line-plot-0 path{stroke:#6a9c89!important;stroke-width:3px!important;stroke-linecap:round;stroke-linejoin:round;}#mermaid-1770449321446 .line-plot-1 path{stroke:#5a7c3e!important;stroke-width:3px!important;stroke-linecap:round;stroke-linejoin:round;}#mermaid-1770449321446 .line-plot-2 path{stroke:#7ba05b!important;stroke-width:3px!important;stroke-linecap:round;stroke-linejoin:round;}#mermaid-1770449321446 .bar-plot-0 rect{fill:#d4e7d0!important;stroke:#6a9c89!important;stroke-width:2px!important;rx:6px!important;}#mermaid-1770449321446 .bar-plot-1 rect{fill:#c8d5b9!important;stroke:#5a7c3e!important;stroke-width:2px!important;rx:6px!important;}#mermaid-1770449321446 .bar-plot-2 rect{fill:#b8cdb1!important;stroke:#7ba05b!important;stroke-width:2px!important;rx:6px!important;}#mermaid-1770449321446 .ticks path{stroke:#6a9c89!important;stroke-width:1.5px!important;}#mermaid-1770449321446 .chart-title text{fill:#2d5016!important;font-weight:700!important;font-size:20px!important;}#mermaid-1770449321446 .left-axis .label text,#mermaid-1770449321446 .bottom-axis .label text{fill:#2d5016!important;font-size:13px!important;font-weight:500;}#mermaid-1770449321446 .left-axis .title text,#mermaid-1770449321446 .bottom-axis .title text{fill:#2d5016!important;font-size:15px!important;font-weight:600;}#mermaid-1770449321446 .legend text{fill:#2d5016!important;font-size:13px!important;font-weight:500;}#mermaid-1770449321446 .legend rect{stroke:#6a9c89!important;stroke-width:1.5px!important;rx:4px!important;}#mermaid-1770449321446 .commit-id,#mermaid-1770449321446 .commit-msg,#mermaid-1770449321446 .branch-label{fill:#2d5016!important;font-weight:600;}#mermaid-1770449321446 .commit{stroke:#6a9c89!important;stroke-width:2px!important;}#mermaid-1770449321446 .commit0{fill:#d4e7d0!important;}#mermaid-1770449321446 .commit1{fill:#e8f4e5!important;}#mermaid-1770449321446 .commit2{fill:#c8d5b9!important;}#mermaid-1770449321446 .commit3{fill:#b8cdb1!important;}#mermaid-1770449321446 .commit-highlight-outer{fill:#fbbf24;opacity:0.3;}#mermaid-1770449321446 .commit-highlight-inner{fill:#fbbf24;opacity:0.5;stroke:#f59e0b;}#mermaid-1770449321446 .branch path{stroke-width:2.5px!important;stroke-linecap:round;stroke-linejoin:round;}#mermaid-1770449321446 .branch.branch0{stroke:#6a9c89!important;}#mermaid-1770449321446 .branch.branch1{stroke:#5a7c3e!important;}#mermaid-1770449321446 .branch.branch2{stroke:#7ba05b!important;}#mermaid-1770449321446 .branch.branch3{stroke:#8ba888!important;}#mermaid-1770449321446 .timeline-event{fill:#d4e7d0!important;stroke:#6a9c89!important;stroke-width:2px!important;rx:12px!important;filter:drop-shadow(2px 2px 4px rgba(45,80,22,0.15));}#mermaid-1770449321446 .timeline-event:nth-child(2n){fill:#e8f4e5!important;}#mermaid-1770449321446 .timeline-event:nth-child(3n){fill:#c8d5b9!important;}#mermaid-1770449321446 .timeline-event-text{fill:#2d5016!important;font-weight:600;}#mermaid-1770449321446 :root{--mermaid-font-family:"trebuchet ms",verdana,arial,sans-serif;}</style><g><marker id="mermaid-1770449321446_flowchart-v2-pointEnd" class="marker flowchart-v2" viewBox="0 0 10 10" refX="5" refY="5" markerUnits="userSpaceOnUse" markerWidth="8" markerHeight="8" orient="auto"><path d="M 0 0 L 10 5 L 0 10 z" class="arrowMarkerPath" style="stroke-width: 1; stroke-dasharray: 1, 0;"/></marker><marker id="mermaid-1770449321446_flowchart-v2-pointStart" class="marker flowchart-v2" viewBox="0 0 10 10" refX="4.5" refY="5" markerUnits="userSpaceOnUse" markerWidth="8" markerHeight="8" orient="auto"><path d="M 0 5 L 10 10 L 10 0 z" class="arrowMarkerPath" style="stroke-width: 1; stroke-dasharray: 1, 0;"/></marker><marker id="mermaid-1770449321446_flowchart-v2-circleEnd" class="marker flowchart-v2" viewBox="0 0 10 10" refX="11" refY="5" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto"><circle cx="5" cy="5" r="5" class="arrowMarkerPath" style="stroke-width: 1; stroke-dasharray: 1, 0;"/></marker><marker id="mermaid-1770449321446_flowchart-v2-circleStart" class="marker flowchart-v2" viewBox="0 0 10 10" refX="-1" refY="5" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto"><circle cx="5" cy="5" r="5" class="arrowMarkerPath" style="stroke-width: 1; stroke-dasharray: 1, 0;"/></marker><marker id="mermaid-1770449321446_flowchart-v2-crossEnd" class="marker cross flowchart-v2" viewBox="0 0 11 11" refX="12" refY="5.2" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto"><path d="M 1,1 l 9,9 M 10,1 l -9,9" class="arrowMarkerPath" style="stroke-width: 2; stroke-dasharray: 1, 0;"/></marker><marker id="mermaid-1770449321446_flowchart-v2-crossStart" class="marker cross flowchart-v2" viewBox="0 0 11 11" refX="-1" refY="5.2" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto"><path d="M 1,1 l 9,9 M 10,1 l -9,9" class="arrowMarkerPath" style="stroke-width: 2; stroke-dasharray: 1, 0;"/></marker><g class="root"><g class="clusters"/><g class="edgePaths"><path d="M220,59L220,63.167C220,67.333,220,75.667,220,83.333C220,91,220,98,220,101.5L220,105" id="L_A_B_0" class="edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_A_B_0" data-points="W3sieCI6MjIwLCJ5Ijo1OX0seyJ4IjoyMjAsInkiOjg0fSx7IngiOjIyMCwieSI6MTA5fV0=" marker-end="url(#mermaid-1770449321446_flowchart-v2-pointEnd)"/><path d="M220,160L220,164.167C220,168.333,220,176.667,220,184.333C220,192,220,199,220,202.5L220,206" id="L_B_C_0" class="edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_B_C_0" data-points="W3sieCI6MjIwLCJ5IjoxNjB9LHsieCI6MjIwLCJ5IjoxODV9LHsieCI6MjIwLCJ5IjoyMTB9XQ==" marker-end="url(#mermaid-1770449321446_flowchart-v2-pointEnd)"/><path d="M161.691,259.343L150.826,263.786C139.961,268.229,118.23,277.114,107.365,285.057C96.5,293,96.5,300,96.5,303.5L96.5,307" id="L_C_D_0" class="edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_C_D_0" data-points="W3sieCI6MTYxLjY5MTQwNjI1LCJ5IjoyNTkuMzQyNzg1Mjk4NTgzfSx7IngiOjk2LjUsInkiOjI4Nn0seyJ4Ijo5Ni41LCJ5IjozMTF9XQ==" marker-end="url(#mermaid-1770449321446_flowchart-v2-pointEnd)"/><path d="M96.5,488L96.5,493.792C96.5,499.583,96.5,511.167,96.5,522.083C96.5,533,96.5,543.25,96.5,548.375L96.5,553.5" id="L_D_E_0" class="edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_D_E_0" data-points="W3sieCI6OTYuNSwieSI6NDg4fSx7IngiOjk2LjUsInkiOjUyMi43NX0seyJ4Ijo5Ni41LCJ5Ijo1NTcuNX1d" marker-end="url(#mermaid-1770449321446_flowchart-v2-pointEnd)"/><path d="M96.5,608.5L96.5,612.667C96.5,616.833,96.5,625.167,101.079,633.078C105.658,640.989,114.815,648.478,119.394,652.223L123.973,655.968" id="L_E_F_0" class="edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_E_F_0" data-points="W3sieCI6OTYuNSwieSI6NjA4LjV9LHsieCI6OTYuNSwieSI6NjMzLjV9LHsieCI6MTI3LjA2OTMwNjkzMDY5MzA3LCJ5Ijo2NTguNX1d" marker-end="url(#mermaid-1770449321446_flowchart-v2-pointEnd)"/><path d="M189.431,658.5L194.526,654.333C199.62,650.167,209.81,641.833,214.905,629.25C220,616.667,220,599.833,220,581.375C220,562.917,220,542.833,220,512.25C220,481.667,220,440.583,220,401.125C220,361.667,220,323.833,220,301.417C220,279,220,272,220,268.5L220,265" id="L_F_C_0" class="edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_F_C_0" data-points="W3sieCI6MTg5LjQzMDY5MzA2OTMwNjkzLCJ5Ijo2NTguNX0seyJ4IjoyMjAsInkiOjYzMy41fSx7IngiOjIyMCwieSI6NTgzfSx7IngiOjIyMCwieSI6NTIyLjc1fSx7IngiOjIyMCwieSI6Mzk5LjV9LHsieCI6MjIwLCJ5IjoyODZ9LHsieCI6MjIwLCJ5IjoyNjF9XQ==" marker-end="url(#mermaid-1770449321446_flowchart-v2-pointEnd)"/><path d="M149.412,435.088L171.135,449.698C192.858,464.308,236.304,493.529,265.537,513.542C294.769,533.555,309.788,544.359,317.297,549.762L324.807,555.164" id="L_D_G_0" class="edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_D_G_0" data-points="W3sieCI6MTQ5LjQxMjMxNjQ3NjM0NTg0LCJ5Ijo0MzUuMDg3NjgzNTIzNjU0MTZ9LHsieCI6Mjc5Ljc1LCJ5Ijo1MjIuNzV9LHsieCI6MzI4LjA1Mzk0MTkwODcxMzcsInkiOjU1Ny41fV0=" marker-end="url(#mermaid-1770449321446_flowchart-v2-pointEnd)"/><path d="M278.309,254.285L294.715,259.571C311.122,264.857,343.936,275.428,360.343,299.631C376.75,323.833,376.75,361.667,376.75,401.125C376.75,440.583,376.75,481.667,375.62,507.349C374.489,533.031,372.228,543.312,371.098,548.453L369.967,553.593" id="L_C_G_0" class="edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_C_G_0" data-points="W3sieCI6Mjc4LjMwODU5Mzc1LCJ5IjoyNTQuMjg1MjI0NzgwNzAxNzV9LHsieCI6Mzc2Ljc1LCJ5IjoyODZ9LHsieCI6Mzc2Ljc1LCJ5IjozOTkuNX0seyJ4IjozNzYuNzUsInkiOjUyMi43NX0seyJ4IjozNjkuMTA3ODgzODE3NDI3MzYsInkiOjU1Ny41fV0=" marker-end="url(#mermaid-1770449321446_flowchart-v2-pointEnd)"/><path d="M363.5,608.5L363.5,612.667C363.5,616.833,363.5,625.167,363.5,632.833C363.5,640.5,363.5,647.5,363.5,651L363.5,654.5" id="L_G_H_0" class="edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_G_H_0" data-points="W3sieCI6MzYzLjUsInkiOjYwOC41fSx7IngiOjM2My41LCJ5Ijo2MzMuNX0seyJ4IjozNjMuNSwieSI6NjU4LjV9XQ==" marker-end="url(#mermaid-1770449321446_flowchart-v2-pointEnd)"/><path d="M363.5,709.5L363.5,713.667C363.5,717.833,363.5,726.167,363.5,733.833C363.5,741.5,363.5,748.5,363.5,752L363.5,755.5" id="L_H_I_0" class="edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_H_I_0" data-points="W3sieCI6MzYzLjUsInkiOjcwOS41fSx7IngiOjM2My41LCJ5Ijo3MzQuNX0seyJ4IjozNjMuNSwieSI6NzU5LjV9XQ==" marker-end="url(#mermaid-1770449321446_flowchart-v2-pointEnd)"/><path d="M331.422,848.422L318.852,859.56C306.282,870.698,281.141,892.974,268.57,909.237C256,925.5,256,935.75,256,940.875L256,946" id="L_I_J_0" class="edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_I_J_0" data-points="W3sieCI6MzMxLjQyMjMxODEyNTc3MDYzLCJ5Ijo4NDguNDIyMzE4MTI1NzcwNn0seyJ4IjoyNTYsInkiOjkxNS4yNX0seyJ4IjoyNTYsInkiOjk1MH1d" marker-end="url(#mermaid-1770449321446_flowchart-v2-pointEnd)"/><path d="M395.578,848.422L408.148,859.56C420.718,870.698,445.859,892.974,458.43,909.237C471,925.5,471,935.75,471,940.875L471,946" id="L_I_K_0" class="edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_I_K_0" data-points="W3sieCI6Mzk1LjU3NzY4MTg3NDIyOTM3LCJ5Ijo4NDguNDIyMzE4MTI1NzcwNn0seyJ4Ijo0NzEsInkiOjkxNS4yNX0seyJ4Ijo0NzEsInkiOjk1MH1d" marker-end="url(#mermaid-1770449321446_flowchart-v2-pointEnd)"/><path d="M256,1001L256,1005.167C256,1009.333,256,1017.667,256,1025.333C256,1033,256,1040,256,1043.5L256,1047" id="L_J_L_0" class="edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_J_L_0" data-points="W3sieCI6MjU2LCJ5IjoxMDAxfSx7IngiOjI1NiwieSI6MTAyNn0seyJ4IjoyNTYsInkiOjEwNTF9XQ==" marker-end="url(#mermaid-1770449321446_flowchart-v2-pointEnd)"/></g><g class="edgeLabels"><g class="edgeLabel"><g class="label" data-id="L_A_B_0" transform="translate(0, 0)"><foreignObject width="0" height="0"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel"></span></div></foreignObject></g></g><g class="edgeLabel"><g class="label" data-id="L_B_C_0" transform="translate(0, 0)"><foreignObject width="0" height="0"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel"></span></div></foreignObject></g></g><g class="edgeLabel"><g class="label" data-id="L_C_D_0" transform="translate(0, 0)"><foreignObject width="0" height="0"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel"></span></div></foreignObject></g></g><g class="edgeLabel" transform="translate(96.5, 522.75)"><g class="label" data-id="L_D_E_0" transform="translate(-6.5, -9.75)"><foreignObject width="13" height="19.5"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel"><p>是</p></span></div></foreignObject></g></g><g class="edgeLabel"><g class="label" data-id="L_E_F_0" transform="translate(0, 0)"><foreignObject width="0" height="0"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel"></span></div></foreignObject></g></g><g class="edgeLabel"><g class="label" data-id="L_F_C_0" transform="translate(0, 0)"><foreignObject width="0" height="0"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel"></span></div></foreignObject></g></g><g class="edgeLabel" transform="translate(239.26913, 495.52344)"><g class="label" data-id="L_D_G_0" transform="translate(-6.5, -9.75)"><foreignObject width="13" height="19.5"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel"><p>否</p></span></div></foreignObject></g></g><g class="edgeLabel"><g class="label" data-id="L_C_G_0" transform="translate(0, 0)"><foreignObject width="0" height="0"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel"></span></div></foreignObject></g></g><g class="edgeLabel"><g class="label" data-id="L_G_H_0" transform="translate(0, 0)"><foreignObject width="0" height="0"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel"></span></div></foreignObject></g></g><g class="edgeLabel"><g class="label" data-id="L_H_I_0" transform="translate(0, 0)"><foreignObject width="0" height="0"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel"></span></div></foreignObject></g></g><g class="edgeLabel" transform="translate(256, 915.25)"><g class="label" data-id="L_I_J_0" transform="translate(-6.5, -9.75)"><foreignObject width="13" height="19.5"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel"><p>是</p></span></div></foreignObject></g></g><g class="edgeLabel" transform="translate(471, 915.25)"><g class="label" data-id="L_I_K_0" transform="translate(-6.5, -9.75)"><foreignObject width="13" height="19.5"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel"><p>否</p></span></div></foreignObject></g></g><g class="edgeLabel"><g class="label" data-id="L_J_L_0" transform="translate(0, 0)"><foreignObject width="0" height="0"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel"></span></div></foreignObject></g></g></g><g class="nodes"><g class="node default" id="flowchart-A-0" transform="translate(220, 33.5)"><rect class="basic label-container" style="" x="-58" y="-25.5" width="116" height="51"/><g class="label" style="" transform="translate(-28, -10.5)"><rect/><foreignObject width="56" height="21"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel"><p>用户输入</p></span></div></foreignObject></g></g><g class="node default" id="flowchart-B-1" transform="translate(220, 134.5)"><rect class="basic label-container" style="" x="-58" y="-25.5" width="116" height="51"/><g class="label" style="" transform="translate(-28, -10.5)"><rect/><foreignObject width="56" height="21"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel"><p>短期记忆</p></span></div></foreignObject></g></g><g class="node default" id="flowchart-C-3" transform="translate(220, 235.5)"><rect class="basic label-container" style="" x="-58.30859375" y="-25.5" width="116.6171875" height="51"/><g class="label" style="" transform="translate(-28.30859375, -10.5)"><rect/><foreignObject width="56.6171875" height="21"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel"><p>LLM处理</p></span></div></foreignObject></g></g><g class="node default" id="flowchart-D-5" transform="translate(96.5, 399.5)"><polygon points="88.5,0 177,-88.5 88.5,-177 0,-88.5" class="label-container" transform="translate(-88, 88.5)"/><g class="label" style="" transform="translate(-63, -10.5)"><rect/><foreignObject width="126" height="21"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel"><p>是否需要长期记忆？</p></span></div></foreignObject></g></g><g class="node default" id="flowchart-E-7" transform="translate(96.5, 583)"><rect class="basic label-container" style="" x="-72" y="-25.5" width="144" height="51"/><g class="label" style="" transform="translate(-42, -10.5)"><rect/><foreignObject width="84" height="21"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel"><p>查询长期记忆</p></span></div></foreignObject></g></g><g class="node default" id="flowchart-F-9" transform="translate(158.25, 684)"><rect class="basic label-container" style="" x="-72" y="-25.5" width="144" height="51"/><g class="label" style="" transform="translate(-42, -10.5)"><rect/><foreignObject width="84" height="21"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel"><p>检索相关信息</p></span></div></foreignObject></g></g><g class="node default" id="flowchart-G-13" transform="translate(363.5, 583)"><rect class="basic label-container" style="" x="-58" y="-25.5" width="116" height="51"/><g class="label" style="" transform="translate(-28, -10.5)"><rect/><foreignObject width="56" height="21"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel"><p>生成回答</p></span></div></foreignObject></g></g><g class="node default" id="flowchart-H-17" transform="translate(363.5, 684)"><rect class="basic label-container" style="" x="-72" y="-25.5" width="144" height="51"/><g class="label" style="" transform="translate(-42, -10.5)"><rect/><foreignObject width="84" height="21"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel"><p>更新短期记忆</p></span></div></foreignObject></g></g><g class="node default" id="flowchart-I-19" transform="translate(363.5, 820)"><polygon points="60.5,0 121,-60.5 60.5,-121 0,-60.5" class="label-container" transform="translate(-60, 60.5)"/><g class="label" style="" transform="translate(-35, -10.5)"><rect/><foreignObject width="70" height="21"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel"><p>是否重要？</p></span></div></foreignObject></g></g><g class="node default" id="flowchart-J-21" transform="translate(256, 975.5)"><rect class="basic label-container" style="" x="-79" y="-25.5" width="158" height="51"/><g class="label" style="" transform="translate(-49, -10.5)"><rect/><foreignObject width="98" height="21"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel"><p>保存到长期记忆</p></span></div></foreignObject></g></g><g class="node default" id="flowchart-K-23" transform="translate(471, 975.5)"><rect class="basic label-container" style="" x="-86" y="-25.5" width="172" height="51"/><g class="label" style="" transform="translate(-56, -10.5)"><rect/><foreignObject width="112" height="21"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel"><p>仅保留在短期记忆</p></span></div></foreignObject></g></g><g class="node default" id="flowchart-L-25" transform="translate(256, 1076.5)"><rect class="basic label-container" style="" x="-72" y="-25.5" width="144" height="51"/><g class="label" style="" transform="translate(-42, -10.5)"><rect/><foreignObject width="84" height="21"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel"><p>长期记忆存储</p></span></div></foreignObject></g></g></g></g></g></svg>

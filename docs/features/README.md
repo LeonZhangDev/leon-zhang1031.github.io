@@ -7,6 +7,7 @@
 - [build-dependency-security](build-dependency-security.md) — patched static build chain and authorized Waline retirement
 
 - [blog-reading-quality](blog-reading-quality.md)
+- [agent-learning-course](agent-learning-course.md) — 24-chapter Agent course with left chapter navigation and right section navigation
 - [comments-reliability](comments-reliability.md)
 - [game-and-blog-discovery](game-and-blog-discovery.md) — shared game cards and survival trial public beta publication
 - [bottle-flip-publication](bottle-flip-publication.md)

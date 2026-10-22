@@ -1,0 +1,74 @@
+---
+import { agentCourseOverview, agentCourseStages } from '../data/agent-course-navigation';
+
+interface Props {
+  currentId: string;
+  chapters: { id: string; data: { title: string } }[];
+}
+const { currentId, chapters } = Astro.props;
+---
+
+<aside class="course-sidebar" aria-label="Agent 学习目录">
+  <details class="course-sidebar-panel" open>
+    <summary class="course-sidebar-title">学习目录 <span>24 章</span></summary>
+    <div class="course-sidebar-body">
+      <a class="course-overview" href={`/posts/${agentCourseOverview}/`} aria-current={currentId === agentCourseOverview ? 'page' : undefined}>学习路线总览</a>
+      <details class="course-chapter-panel" open>
+        <summary>章节目录</summary>
+        <nav class="course-chapters" aria-label="按学习顺序浏览章节">
+          {agentCourseStages.map(stage => <section>
+            <h2>{stage.title}</h2>
+            <ol start={stage.first}>
+              {chapters.slice(stage.first - 1, stage.last).map(chapter => <li>
+                <a href={`/posts/${chapter.id}/`} aria-current={currentId === chapter.id ? 'page' : undefined}>{chapter.data.title.replace(/^第\s*\d+\s*章\s*·\s*/, '')}</a>
+              </li>)}
+            </ol>
+          </section>)}
+        </nav>
+      </details>
+    </div>
+  </details>
+</aside>
+
+<script>
+  const panel = document.querySelector<HTMLDetailsElement>('.course-sidebar-panel');
+  if (panel) {
+    const desktop = matchMedia('(min-width: 1200px)');
+    const syncPanel = () => { panel.open = desktop.matches; };
+    syncPanel();
+    desktop.addEventListener('change', syncPanel);
+    // Reveal the current chapter inside its own scroll area without moving the page.
+    const chapters = panel.querySelector<HTMLElement>('.course-chapters');
+    const current = chapters?.querySelector<HTMLElement>('[aria-current="page"]');
+    if (chapters && current && desktop.matches) {
+      chapters.scrollTop = current.getBoundingClientRect().top - chapters.getBoundingClientRect().top - 70;
+    }
+  }
+</script>
+
+<style>
+  .course-sidebar { min-width: 0; padding-top: 2.5rem; }
+  .course-sidebar-panel { border: 1px solid var(--border); border-radius: 12px; background: var(--bg-surface); }
+  summary { cursor: pointer; font-weight: 600; padding: .8rem 1rem; font-size: .85rem; }
+  summary span { color: var(--text-secondary); font-weight: 400; margin-left: .4rem; }
+  .course-sidebar-title { border-bottom: 1px solid var(--border); font-size: .95rem; }
+  .course-sidebar-body { padding: .5rem; }
+  .course-overview { display: block; padding: .6rem; border-radius: 6px; font-size: .85rem; }
+  .course-chapters { overflow-y: auto; overscroll-behavior: contain; scrollbar-width: thin; padding: 0 .5rem .5rem; max-height: calc(100dvh - 17rem); }
+  h2 { font-size: .73rem; color: var(--text-secondary); margin: .9rem 0 .4rem; font-weight: 500; }
+  ol { padding-left: 1.7rem; list-style: decimal-leading-zero; }
+  li { color: var(--text-secondary); font-size: .8rem; line-height: 1.6; }
+  li a { display: block; padding: .3rem .4rem; border-radius: 5px; color: var(--text-secondary); overflow-wrap: anywhere; }
+  a:hover, a:focus-visible { color: var(--text-primary); background: var(--bg-card-hover); }
+  a[aria-current="page"] { color: var(--accent); background: var(--accent-dim); font-weight: 600; }
+  @media (min-width: 1200px) {
+    .course-sidebar { align-self: start; position: sticky; top: 5rem; padding-top: 0; margin-top: 2.5rem; }
+    .course-sidebar-body { max-height: calc(100dvh - 9rem); overflow-y: auto; scrollbar-width: thin; }
+  }
+  @media (max-width: 1199px) {
+    .course-sidebar { padding-top: 1.2rem; }
+    .course-sidebar-panel:not([open]) > summary { border-bottom: 0; }
+    .course-chapters { max-height: 40dvh; }
+  }
+  @media print { .course-sidebar { display: none; } }
+</style>

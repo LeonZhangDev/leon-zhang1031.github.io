@@ -1,5 +1,14 @@
 # Project Progress
 
+## 2026-10-22 — Agent learning course publication
+
+- Added the reviewed learning overview and 24 public chapters, 531 local images and shared reading order: overview → chapters 01–24.
+- Desktop widths from 1200 px use left chapter navigation, central article and right section navigation. Smaller screens offer two independent expandable directories above the article. Existing non-course article navigation remains intact.
+- Preserved the reviewed article bodies and image bytes; only publication frontmatter changes from the local editorial copy. Technical references, GitHub and teaching-video links remain. Source document/proxy and workshop promotion links are absent from course pages.
+- Validation: 212 Vitest checks, 4 site identity checks and 6 game resource checks passed. Astro check reports zero errors/warnings and 10 existing hints; the normal build generates 211 pages with all 25 course pages present in the sitemap. Static validation checks 11,757 links and 640 image references with no broken local links or duplicate IDs.
+- Headless browser checks passed at 1440, 1280, 1200, 1024 and 390 px, including directory placement, expansion and section anchors. Sampled case/interview images decode; the original deep-learning article TOC and ordered course feed work. External services were blocked during local browser checks; technical examples were not rerun.
+- Prepared in a clean worktree based on `origin/main` (`fc7196d`); unrelated unpublished site changes are excluded. See [course feature](features/agent-learning-course.md).
+
 ## 2026-10-22 — Second free game-loading batch
 
 - Added three exact critical-resource preload hints only to the survival HTML:

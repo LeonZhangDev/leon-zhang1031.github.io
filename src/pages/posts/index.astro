@@ -2,9 +2,9 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { getCollection } from 'astro:content';
 import { readingMinutes } from '../../data/learning-paths';
+import { orderPostsForReading } from '../../data/agent-course-navigation';
 
-const posts = (await getCollection('posts', ({ data }) => !data.draft))
-  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+const posts = orderPostsForReading(await getCollection('posts', ({ data }) => !data.draft));
 
 const categoryCounts = new Map<string, number>();
 posts.forEach((post) => post.data.categories.forEach((category) => {

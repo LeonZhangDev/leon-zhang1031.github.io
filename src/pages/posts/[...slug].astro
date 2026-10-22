@@ -3,6 +3,9 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import 'katex/dist/katex.min.css';
 import Comments from '../../components/Comments.astro';
 import ArticleTools from '../../components/ArticleTools.astro';
+import AgentLearningSidebar from '../../components/AgentLearningSidebar.astro';
+import ArticleSectionSidebar from '../../components/ArticleSectionSidebar.astro';
+import { getAgentCourse } from '../../data/agent-course-navigation';
 import { learningPaths, readingMinutes } from '../../data/learning-paths';
 import { getCollection, render } from 'astro:content';
 
@@ -28,6 +31,12 @@ const lessons = series?.slugs.map(slug => allPosts.find(item => item.id === slug
 const lessonIndex = lessons.findIndex(item => item?.id === post.id);
 const previousLesson = lessons[lessonIndex - 1];
 const nextLesson = lessons[lessonIndex + 1];
+const agentCourse = getAgentCourse(allPosts);
+const courseIndex = agentCourse.findIndex(item => item.id === post.id);
+const isAgentCourse = courseIndex >= 0;
+const coursePrevious = agentCourse[courseIndex - 1];
+const courseNext = agentCourse[courseIndex + 1];
+const courseToc = toc.filter(heading => heading.text !== '本章目录');
 const prerequisitePosts = post.data.prerequisites.map(slug => allPosts.find(item => item.id === slug)).filter(Boolean);
 const related = allPosts.filter(item => item.id !== post.id && !series?.slugs.includes(item.id))
   .map(item => ({ item, score: item.data.tags.filter(tag => post.data.tags.includes(tag)).length }))
@@ -36,7 +45,9 @@ const verificationLabels = { 'not-run':'示例未复跑', 'example-tested':'指�
 ---
 
 <BaseLayout title={post.data.title} description={post.data.description}>
-  <article class="post-detail container-narrow">
+  <div class:list={['post-layout', { 'course-layout': isAgentCourse }]}>
+  {isAgentCourse && <AgentLearningSidebar currentId={post.id} chapters={agentCourse.slice(1)} />}
+  <article class:list={['post-detail container-narrow', { 'agent-learning': isAgentCourse }]}>
     <header class="post-detail-header">
       <h1 class="post-detail-title">{post.data.title}</h1>
       <div class="post-detail-meta">
@@ -58,7 +69,7 @@ const verificationLabels = { 'not-run':'示例未复跑', 'example-tested':'指�
       {prerequisitePosts.length > 0 && <p>前置阅读：{prerequisitePosts.map(item => item && <a href={`/posts/${item.id}/`}>{item.data.title} </a>)}</p>}
       {post.data.verification && <p>{verificationLabels[post.data.verification.status]}：{post.data.verification.scope}</p>}
     </aside>}
-    {toc.length > 2 && <details class="article-toc">
+    {!isAgentCourse && toc.length > 2 && <details class="article-toc">
       <summary>本文目录（{toc.length} 节）</summary>
       <nav aria-label="本文目录"><ul>{toc.map(heading => <li data-depth={heading.depth}><a href={`#${heading.slug}`}>{heading.text}</a></li>)}</ul></nav>
     </details>}
@@ -67,7 +78,7 @@ const verificationLabels = { 'not-run':'示例未复跑', 'example-tested':'指�
       <Content />
     </div>
 
-    {series && <nav class="article-learning" aria-label="系列前后篇">
+    {series && !isAgentCourse && <nav class="article-learning" aria-label="系列前后篇">
       {previousLesson && <p>上一课：<a href={`/posts/${previousLesson.id}/`}>{previousLesson.data.title}</a></p>}
       {nextLesson && <p>下一课：<a href={`/posts/${nextLesson.id}/`}>{nextLesson.data.title}</a></p>}
       <a href={`/posts/learning-paths/#${series.id}`}>查看完整路线</a>
@@ -75,7 +86,17 @@ const verificationLabels = { 'not-run':'示例未复跑', 'example-tested':'指�
     {related.length > 0 && <aside class="article-learning" aria-label="延伸阅读"><h2>延伸阅读</h2><ul>{related.map(({ item }) => <li><a href={`/posts/${item.id}/`}>{item.data.title}</a></li>)}</ul></aside>}
     <ArticleTools />
 
-    {(prevPost || nextPost) && (
+    {isAgentCourse && <nav class="post-nav" aria-label="按学习顺序浏览">
+      {coursePrevious && <a href={`/posts/${coursePrevious.id}/`} class="post-nav-link post-nav-prev" rel="prev">
+        <span class="post-nav-label">← {courseIndex === 1 ? '路线总览' : '上一章'}</span>
+        <span class="post-nav-title">{coursePrevious.data.title}</span>
+      </a>}
+      {courseNext && <a href={`/posts/${courseNext.id}/`} class="post-nav-link post-nav-next" rel="next">
+        <span class="post-nav-label">{courseIndex === 0 ? '开始学习' : '下一章'} →</span>
+        <span class="post-nav-title">{courseNext.data.title}</span>
+      </a>}
+    </nav>}
+    {!isAgentCourse && (prevPost || nextPost) && (
       <nav class="post-nav" aria-label="按发布日期浏览">
         {prevPost && (
           <a href={`/posts/${prevPost.id}/`} class="post-nav-link post-nav-prev">
@@ -94,4 +115,34 @@ const verificationLabels = { 'not-run':'示例未复跑', 'example-tested':'指�
 
     <Comments prompt="这套方案在哪一步卡住了？也欢迎补充你的实现方式或踩坑经验。" />
   </article>
+  {isAgentCourse && courseToc.length > 0 && <ArticleSectionSidebar headings={courseToc} />}
+  </div>
 </BaseLayout>
+
+<style>
+  .course-layout { max-width: 1480px; margin: 0 auto; padding: 0 1.5rem; display: grid; grid-template-areas: 'chapters' 'sections' 'article'; }
+  .course-layout :global(.course-sidebar) { grid-area: chapters; }
+  .course-layout :global(.section-sidebar) { grid-area: sections; }
+  .course-layout .post-detail { grid-area: article; }
+  .course-layout .post-detail { min-width: 0; width: 100%; }
+  /* The generated inline index is available in the sidebar; retain it in Markdown. */
+  .agent-learning :global(.prose h2[id="本章目录"]),
+  .agent-learning :global(.prose h2[id="本章目录"] + ul) { display: none; }
+  .agent-learning :global(.prose) { overflow-wrap: anywhere; }
+  .agent-learning :global(.prose table) { display: block; max-width: 100%; overflow-x: auto; }
+  .agent-learning :global(.prose pre) { overflow-wrap: normal; }
+  .agent-learning :global(.prose [id]) { scroll-margin-top: 5rem; }
+  @media (min-width: 1200px) {
+    .course-layout { grid-template-areas: 'chapters article sections'; grid-template-columns: 230px minmax(0, 760px) 230px; gap: 2rem; justify-content: center; }
+    .course-layout .post-detail { max-width: none; padding-inline: 0; }
+  }
+  @media (max-width: 1199px) {
+    .course-layout { max-width: 760px; padding-inline: 1rem; }
+    .course-layout .post-detail { padding-inline: 0; }
+  }
+  @media print {
+    .course-layout { display: block; }
+    .agent-learning :global(.prose h2[id="本章目录"]),
+    .agent-learning :global(.prose h2[id="本章目录"] + ul) { display: block; }
+  }
+</style>

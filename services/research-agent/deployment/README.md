@@ -1,9 +1,11 @@
-# HTTPS release preparation
+# HTTPS deployment
 
 Target: existing Ubuntu server `82.156.68.115`, Caddy host `comments.leonzk.cn`.
 The public website remains Astro/EdgeOne Pages. Only its private random path is
 proxied to the Node service. Existing Artalk routes and data must be preserved.
-These templates have not been installed on the server.
+Deployment completed on 2026-10-22. Backend release `a3d4031` runs under systemd;
+the website proxy is published from GitHub main. Local defaults remain mock/offline;
+production explicitly enables qwen/cloud with both startup approval flags.
 
 ## Files
 
@@ -30,6 +32,9 @@ These templates have not been installed on the server.
    mode 0600. Transfer the user's configured keys only over the authenticated
    connection, without echoing them. Initially retain mock/offline. Give the service
    account sole access to its persistent data (directory 0700, database 0600).
+   Check WAL/SHM ownership as well: a root SQLite inspection can create root-owned
+   sidecars and prevent service writes. Use the service account for live reads;
+   inspect an inactive seed with read-only immutable mode, then verify ownership.
    The current seed floor is 1881 units = CNY0.1881; refresh it from the ledger if
    another authorized call occurs before transfer.
 5. Review the unit's Node executable path and install it. Start the service and
@@ -60,8 +65,24 @@ all trial accounting; do not roll the budget back to an earlier snapshot after
 any paid request. Source build, offline proxy tests and API ingest do not prove
 production routing, cloud UI visibility or vendor billing.
 
-Current real verification: task `df526952-d641-42ed-a093-8c365e45bedc`, 8 HTTP200
-model requests, 17 HTTP202 trace writes, completed immediately after the first
-valid report save. Search/page tools are still synthetic. Cumulative model usage
-estimate CNY0.039477; conservative reservation CNY0.1881. Final vendor bills and
-LangSmith quota/readback remain unverified.
+Current production verification: task/root trace `e7c3a82c-479b-4086-bb04-35b11c6bad84`,
+4 measured Qwen requests, 9 cloud run writes accepted, one valid report save and
+no subsequent model/tool activity. Search/page tools remain synthetic. Cumulative
+known model usage estimate CNY0.053245; conservative reservation CNY0.2908. One
+earlier timed-out request has unknown usage; its full reservation remains charged
+against the CNY5 cap. Final vendor bills and LangSmith quota/readback are unverified.
+
+The server uses private Node v24.22.1 under `/opt/research-agent/node`, unprivileged
+user `research-agent`, root-only `/etc/research-agent/agent.env`, and persistent
+`/var/lib/research-agent/agent.sqlite`. Caddy reload was validated; Artalk remains
+healthy. Backup configuration is under `/var/backups/research-agent/20261022-c9db487/`;
+pre-live env/unit backups are under `/var/backups/research-agent/20261022-a246bc6/`.
+Do not roll back the live database when reverting source/configuration.
+
+Deployment fixes: resolve the CLI entrypoint's real path when `current` is a symlink;
+normalize EdgeOne string/ArrayBuffer/view chunks before UTF-8 JSON forwarding;
+allow up to 60 seconds per model request inside the 180-second task deadline;
+offer only unread URL choices to the model. Windows and Ubuntu service tests: 63/63.
+Private path security headers also need a matching `edgeone.json` rule because
+site-wide configured headers can override the upstream response. Keep no-store
+and the private CSP/referrer policy when editing global website headers.

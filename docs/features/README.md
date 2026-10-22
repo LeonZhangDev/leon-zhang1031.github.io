@@ -1,6 +1,6 @@
 # Features
 
-- [private-research-agent](private-research-agent.md) — password workspace, terminal-report fix, verified Qwen/LangSmith ingest and HTTPS release preparation
+- [private-research-agent](private-research-agent.md) — deployed password workspace, terminal reports, Qwen/LangSmith API acceptance and preserved trial budget
 
 - [game-loading-optimization](game-loading-optimization.md) — small icon, exact engine cache contracts and critical-resource preloads
 

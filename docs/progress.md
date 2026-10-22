@@ -1,5 +1,42 @@
 # Project Progress
 
+## 2026-10-22 — Private Agent deployed and production task completed
+
+- Verified the user-supplied ED25519 SSH fingerprint and connected as `ubuntu` to
+  the existing Tencent server. Installed private Node v24.22.1, an unprivileged
+  systemd service and persistent SQLite; retained the password hash, two historic
+  real tasks, all model reservations and dispatch records. Local defaults remain
+  mock/offline; production explicitly enables qwen/cloud. No new paid resources.
+- Validated/reloaded Caddy with a private route and unchanged Artalk fallback;
+  comment configuration API remains HTTP200. Website private route is published
+  from GitHub main, preserving the 25 newly published Agent course articles and
+  excluding unrelated dirty performance edits.
+- Fixed release-symlink startup, SQLite sidecar ownership and EdgeOne ArrayBuffer
+  stream forwarding. Online mock task completed with one report. Added explicit
+  private-path response headers to protect them from site-wide header overrides.
+- Production real task/root trace `e7c3a82c-479b-4086-bb04-35b11c6bad84` completed:
+  four model requests, 4,193 input/556 output tokens, one report save, nine cloud
+  records accepted. No model/tool operation follows saving. Markdown download,
+  desktop and 390px mobile rendering passed. Search/page tools remain synthetic.
+- Two earlier production trials remain failed in history: one 20-second model
+  timeout, one duplicate source read rejected by the guard. Request timeout is
+  now 60 seconds inside the 180-second task deadline; model tools list unread
+  sources only. No automatic retry or historical trace replay was introduced.
+- Cumulative known model estimate CNY0.053245; conservative reservation CNY0.2908
+  against the original CNY5 cap, 34 requests including one unknown-usage timeout.
+  That timeout's reservation remains retained. LangSmith UI/readback, remaining
+  free quota and actual vendor bills remain unverified.
+- Backend release `a3d4031`: 63/63 service tests passed on Windows and Ubuntu.
+  Six game-cache tests passed with private no-store rules excluded from cacheable
+  assets. Full Astro build: 211 pages; check: 0 errors/0 warnings/18 hints.
+  Blog chapter 15 and its comment editor loaded. Logout returned to the login
+  page; unauthenticated task/report requests returned 401. Apex and WWW private
+  responses enforce no-store, noindex, no-referrer and the strict private CSP.
+  Credential scan found no configured keys in 1,811 tracked text files or 1,650
+  built text files; the static output contains no private-path content.
+  Evidence: `.tmp/research-agent-release-smynUo/`; deployment/rollback
+  details: [service deployment](../services/research-agent/deployment/README.md).
+
 ## 2026-10-22 — Terminal-report fix, successful real validation, HTTPS preparation
 
 - User authorized fixing the loop, one further real validation/upload, and release.

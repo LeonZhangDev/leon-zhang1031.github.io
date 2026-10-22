@@ -25,7 +25,7 @@ export function loadConfig(env = process.env, approval = {}) {
     apiKey: env.DASHSCOPE_API_KEY || '', baseUrl: (env.QWEN_BASE_URL || 'https://dashscope.aliyuncs.com/compatible-mode/v1').replace(/\/$/, ''),
     model, ...pricing, pricingCheckedDate: '2026-10-22', pricingRegion: 'cn-beijing',
     pricingSource: 'https://help.aliyun.com/zh/model-studio/model-pricing',
-    maxOutputTokens: 1200, maxInputTokenBound: 24_000, requestTimeoutMs: 20_000,
+    maxOutputTokens: 1200, maxInputTokenBound: 24_000, requestTimeoutMs: 60_000,
   };
   if (mode === 'qwen') {
     if (!qwen.apiKey) throw new Error('Missing DASHSCOPE_API_KEY');

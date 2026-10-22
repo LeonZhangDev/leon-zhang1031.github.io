@@ -35,6 +35,10 @@ export async function proxySiteRequest(request, fetchImplementation = globalThis
     }
     body = new Uint8Array(size); let offset = 0;
     for (const chunk of chunks) { body.set(chunk, offset); offset += chunk.byteLength; }
+    // EdgeOne's fetch runtime does not handle Uint8Array bodies like Node fetch.
+    // Agent POST endpoints accept UTF-8 JSON only; forward a supported string body.
+    try { body = new TextDecoder('utf-8', { fatal: true }).decode(body); }
+    catch { return reject(400, 'Invalid UTF-8 request'); }
     headers.set('origin', BACKEND_ORIGIN);
   }
   const upstream = new URL(url.pathname + url.search, BACKEND_ORIGIN);

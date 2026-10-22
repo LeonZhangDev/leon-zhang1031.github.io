@@ -91,11 +91,20 @@ test('site proxy uses only the fixed backend, preserves session cookies and priv
     async (url, init) => { requests++; assert.equal(String(url), 'https://comments.leonzk.cn' + PRIVATE_PATH + 'api/auth/login');
       assert.equal(init.headers.get('origin'), 'https://comments.leonzk.cn'); assert.equal(init.headers.get('cookie'), 'research_session=' + token);
       assert.equal(init.headers.get('authorization'), null); assert.equal(init.headers.get('x-forwarded-host'), null);
-      assert.equal(init.redirect, 'manual'); assert.equal(new TextDecoder().decode(init.body), '{"password":"synthetic-only"}');
+      assert.equal(init.redirect, 'manual'); assert.equal(init.body, '{"password":"synthetic-only"}');
       return new Response('{}', { headers: { 'set-cookie': 'research_session=' + token + '; Secure; HttpOnly', 'cache-control': 'public', 'access-control-allow-origin': '*' } }); });
   assert.equal(response.status, 200); assert.equal(requests, 1); assert.equal(response.headers.get('cache-control'), 'private, no-store');
   assert.match(response.headers.get('set-cookie'), /Secure/); assert.equal(response.headers.get('access-control-allow-origin'), null);
   assert.match(response.headers.get('x-robots-tag'), /noindex/);
+});
+
+test('site proxy forwards Unicode JSON as a string and rejects invalid UTF-8 before upstream fetch', async () => {
+  const body = JSON.stringify({ goal: '比较个人网站方案', budgetYuan: 0.5 }); let calls = 0;
+  const upstream = async (url, init) => { calls++; assert.equal(typeof init.body, 'string'); assert.equal(init.body, body); return new Response('{}'); };
+  const headers = { origin: 'https://leonzk.cn', 'content-type': 'application/json' };
+  assert.equal((await proxySiteRequest(new Request('https://leonzk.cn' + PRIVATE_PATH, { method: 'POST', headers, body }), upstream)).status, 200);
+  assert.equal((await proxySiteRequest(new Request('https://leonzk.cn' + PRIVATE_PATH, { method: 'POST', headers, body: new Uint8Array([0xc3, 0x28]) }), upstream)).status, 400);
+  assert.equal(calls, 1);
 });
 
 test('site proxy rejects cross-origin requests, unapproved paths, oversized bodies and external redirects', async () => {

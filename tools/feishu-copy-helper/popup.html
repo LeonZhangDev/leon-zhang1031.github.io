@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <style>
         body {
-            width: 280px;
+            width: 310px;
             padding: 16px;
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             margin: 0;
@@ -45,7 +45,9 @@
         }
         select, button { font: inherit; }
         select { width: 100%; padding: 8px; margin: 8px 0; border: 1px solid #d0d7de; border-radius: 6px; }
-        #check-status { padding: 6px 10px; margin-bottom: 12px; cursor: pointer; }
+        button { padding: 7px 10px; margin-bottom: 8px; cursor: pointer; }
+        label { display: block; margin: 8px 0; font-size: 13px; }
+        #selection-status { white-space: pre-line; }
         #mode-feedback { min-height: 36px; margin: 0 0 12px; }
         .feature-list {
             margin-top: 12px;
@@ -83,11 +85,15 @@
     </style>
 </head>
 <body>
-    <div class="title">飞书复制助手</div>
+    <div class="title">文档复制助手</div>
+    <p id="site-name" class="description"></p>
     <div id="status" class="status inactive" role="status" aria-live="polite">
         正在检测当前页面…
     </div>
     <button id="check-status" type="button">重新检测</button>
+    <button id="toggle-page" type="button" disabled>启用当前页面增强</button>
+    <label><input id="remember-site" type="checkbox" disabled> 记住本站，自动启用（需授权）</label>
+    <label><input id="enable-paste" type="checkbox" disabled> 恢复粘贴（默认关闭）</label>
     <label for="copy-mode">默认复制模式</label>
     <select id="copy-mode" disabled>
         <option value="rich">保留格式</option>
@@ -95,9 +101,11 @@
         <option value="markdown">Markdown</option>
     </select>
     <p id="mode-feedback" class="description" aria-live="polite">默认用于 Ctrl+C / Cmd+C 和双击复制。</p>
+    <button id="prepare-images" type="button" disabled>准备选区图文复制</button>
+    <p id="selection-status" class="description" aria-live="polite"></p>
     
     <div class="description">
-        专为飞书文档设计的复制助手，解除文本复制限制，支持多种复制方式。
+        飞书与腾讯文字文档支持格式转换；其他网页按需启用。关闭增强后恢复页面原有行为。
     </div>
     
     <div class="feature-list">
@@ -116,7 +124,7 @@
     </div>
     
     <p class="description">“已连接”表示页面脚本已就绪。粘贴后的格式取决于目标应用；图片引用仍受原文档权限影响。</p>
+    <script src="copy-platforms.js"></script>
     <script src="popup.js"></script>
 </body>
 </html>
-

@@ -36,7 +36,7 @@ function setup({ text = '中文 <标签> & 😀', activeElement = null, htmlThro
         },
         chrome: {
             runtime: { onMessage: { addListener() {} } },
-            storage: { local: { get(_defaults, callback) { callback({ copyMode: mode }); } }, onChanged: { addListener() {} } },
+            storage: { local: { get(defaults, callback) { callback({ copyMode: mode }); } }, onChanged: { addListener() {} } },
         },
         console: { log() {}, warn() {} },
         MutationObserver: class { observe() {} },
@@ -146,4 +146,3 @@ test('synthetic events and missing or unwritable clipboard preserve native copy'
         assert.equal(e.stopped, false);
     }
 });
-

@@ -1,7 +1,7 @@
 // 可由 Playwright MCP 调用，也可在已安装 playwright 的环境中直接运行。
-async function runCopyShortcutBrowserTests(browserType, extensionPath) {
+async function runCopyShortcutBrowserTests(browserType, extensionPath, channel = 'chromium') {
     const context = await browserType.launchPersistentContext('', {
-        channel: 'chromium',
+        channel,
         headless: true,
         args: [`--disable-extensions-except=${extensionPath}`, `--load-extension=${extensionPath}`],
     });
@@ -117,7 +117,7 @@ async function runCopyShortcutBrowserTests(browserType, extensionPath) {
         const worlds = [];
         session.on('Runtime.executionContextCreated', ({ context: world }) => worlds.push(world));
         await session.send('Runtime.enable');
-        const extensionWorld = worlds.find(world => world.name === '飞书图文复制');
+        const extensionWorld = worlds.find(world => world.name === '文档复制助手');
         if (!extensionWorld) throw new Error('Extension isolated execution context not found');
         const override = await session.send('Runtime.evaluate', {
             contextId: extensionWorld.id,
@@ -143,9 +143,8 @@ if (typeof module !== 'undefined') {
     module.exports = runCopyShortcutBrowserTests;
     if (require.main === module) {
         const { chromium } = require(process.env.PLAYWRIGHT_MODULE || 'playwright');
-        runCopyShortcutBrowserTests(chromium, require('node:path').resolve(__dirname, '..'))
+        runCopyShortcutBrowserTests(chromium, process.argv[2] || require('node:path').resolve(__dirname, '..'), process.argv[3] || 'chromium')
             .then(result => console.log(JSON.stringify(result, null, 2)))
             .catch(error => { console.error(error); process.exitCode = 1; });
     }
 }
-

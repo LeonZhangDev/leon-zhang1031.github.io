@@ -1,27 +1,31 @@
 {
   "manifest_version": 3,
-  "name": "飞书图文复制",
-  "version": "2.3.0",
-  "description": "解除飞书文档的文本复制限制，支持图文混合复制",
+  "name": "文档复制助手",
+  "version": "2.4.0",
+  "description": "飞书与腾讯文字文档格式复制，支持纯文本、Markdown和按站点启用的网页增强",
   "permissions": [
     "activeTab",
-    "storage"
+    "storage",
+    "scripting"
   ],
+  "optional_host_permissions": ["https://*/*", "http://*/*"],
+  "background": { "service_worker": "background.js" },
   "content_scripts": [
     {
       "matches": [
         "*://*.feishu.cn/*",
         "*://*.larksuite.com/*",
         "*://feishu.cn/*",
-        "*://larksuite.com/*"
+        "*://larksuite.com/*",
+        "https://docs.qq.com/doc/*",
+        "https://docs.qq.com/aio/*"
       ],
-      "js": ["copy-formats.js", "content.js"],
+      "js": ["copy-platforms.js", "copy-formats.js", "content.js"],
       "run_at": "document_start"
     }
   ],
   "action": {
     "default_popup": "popup.html",
-    "default_title": "飞书图文复制"
+    "default_title": "文档复制助手"
   }
 }
-

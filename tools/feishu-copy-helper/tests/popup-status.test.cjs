@@ -3,52 +3,56 @@ const { readFileSync } = require('node:fs');
 const { join } = require('node:path');
 const { test } = require('node:test');
 const vm = require('node:vm');
+const platformSource = readFileSync(join(__dirname, '..', 'copy-platforms.js'), 'utf8');
 const source = readFileSync(join(__dirname, '..', 'popup.js'), 'utf8');
 
 async function setup({ url = 'https://my.feishu.cn/docx/test', response = {}, noReceiver = false, saveError = false, applyError = false } = {}) {
-    const nodes = Object.fromEntries(['status', 'copy-mode', 'mode-feedback', 'check-status'].map(id => [id, {
+    const nodes = Object.fromEntries(['status', 'copy-mode', 'mode-feedback', 'check-status', 'toggle-page', 'remember-site', 'enable-paste', 'prepare-images', 'selection-status', 'site-name'].map(id => [id, {
         disabled: id === 'copy-mode', value: 'rich', textContent: '', handlers: {},
         addEventListener(name, handler) { this.handlers[name] = handler; },
     }]));
     let initialize;
     let saved;
     let sends = 0;
-    const runtime = { getManifest: () => ({ version: '2.3.0' }) };
+    const runtime = { getManifest: () => ({ version: '2.4.0' }) };
     const chrome = {
         runtime,
         tabs: {
-            query(_options, callback) { callback(url === null ? [] : [{ id: 1, url }]); },
-            sendMessage(_id, message, _options, callback) {
+            query(options, callback) { callback(url === null ? [] : [{ id: 1, url }]); },
+            sendMessage(id, message, options, callback) {
                 sends++;
                 if (noReceiver || (applyError && message.type === 'FEISHU_COPY_SET_MODE')) {
                     runtime.lastError = { message: 'Receiving end does not exist' };
                     callback(); runtime.lastError = undefined;
-                } else callback({ type: 'FEISHU_COPY_STATUS', version: '2.3.0', ready: true, mode: message.mode || 'rich', ...response });
+                } else callback({ type: 'FEISHU_COPY_STATUS', version: '2.4.0', ready: true, enabled: true, mode: message.mode || 'rich', ...response });
             },
         },
-        storage: { local: { set(value, callback) {
+        storage: { local: { get(defaults, callback) { callback({ copyMode: 'rich', siteSettings: {} }); }, set(value, callback) {
             if (saveError) runtime.lastError = { message: 'Storage denied' };
-            else saved = value.copyMode;
+            else saved = Object.values(value.siteSettings)[0].mode;
             callback(); runtime.lastError = undefined;
         } } },
     };
-    vm.runInNewContext(source, {
-        document: { getElementById: id => nodes[id], addEventListener(_name, callback) { initialize = callback; } },
-        chrome, URL, setTimeout, clearTimeout,
-    });
+    const sandbox = {
+        document: { getElementById: id => nodes[id], addEventListener(name, callback) { initialize = callback; } },
+        chrome, URL, setTimeout, clearTimeout, location: { href: url },
+    };
+    vm.createContext(sandbox);
+    vm.runInContext(platformSource, sandbox);
+    vm.runInContext(source, sandbox);
     await initialize();
     return { nodes, saved: () => saved, sends: () => sends };
 }
 
 test('real handshake is required before enabling mode controls', async () => {
     const { nodes, sends } = await setup();
-    assert.equal(nodes.status.textContent, '✓ 当前页面已连接 · v2.3.0');
+    assert.equal(nodes.status.textContent, '✓ 当前页面已连接 · v2.4.0');
     assert.equal(nodes['copy-mode'].disabled, false);
     assert.equal(sends(), 1);
 });
 
-test('lookalike domains and empty tab do not claim enabled', async () => {
-    for (const url of ['https://feishu.cn.evil.test/', 'https://evil.test/feishu.cn', 'https://notfeishu.cn/', 'file:///feishu.cn', 'edge://extensions/', null]) {
+test('restricted schemes, unsupported Tencent types and empty tab stay inactive', async () => {
+    for (const url of ['file:///feishu.cn', 'edge://extensions/', null, 'https://docs.qq.com/sheet/test']) {
         const { nodes, sends } = await setup({ url });
         assert.match(nodes.status.textContent, /不受支持/);
         assert.equal(nodes['copy-mode'].disabled, true);
@@ -57,7 +61,7 @@ test('lookalike domains and empty tab do not claim enabled', async () => {
 });
 
 test('Lark and apex domains are supported', async () => {
-    for (const url of ['https://larksuite.com/', 'https://team.larksuite.com/docx/x', 'https://feishu.cn/']) {
+    for (const url of ['https://larksuite.com/', 'https://team.larksuite.com/docx/x', 'https://feishu.cn/', 'https://docs.qq.com/doc/x', 'https://docs.qq.com/aio/x']) {
         const { nodes } = await setup({ url });
         assert.match(nodes.status.textContent, /已连接/);
     }
@@ -105,4 +109,3 @@ test('failed page acknowledgement distinguishes saved setting from applied mode'
     assert.match(result.nodes.status.textContent, /设置已保存.*未确认生效/);
     assert.equal(result.nodes['copy-mode'].disabled, true);
 });
-

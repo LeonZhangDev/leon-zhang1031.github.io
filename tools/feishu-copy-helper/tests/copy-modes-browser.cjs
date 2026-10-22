@@ -1,7 +1,7 @@
 // 加载真实扩展，验证 CSS、三种模式、设置持久化与弹窗消息握手。
-async function runCopyModesBrowserTests(browserType, extensionPath) {
+async function runCopyModesBrowserTests(browserType, extensionPath, channel = 'chromium') {
     const context = await browserType.launchPersistentContext('', {
-        channel: 'chromium', headless: true,
+        channel, headless: true,
         args: [`--disable-extensions-except=${extensionPath}`, `--load-extension=${extensionPath}`],
     });
     const results = [];
@@ -32,14 +32,14 @@ async function runCopyModesBrowserTests(browserType, extensionPath) {
         const worlds = [];
         session.on('Runtime.executionContextCreated', ({ context: world }) => worlds.push(world));
         await session.send('Runtime.enable');
-        const world = worlds.find(candidate => candidate.name === '飞书图文复制');
+        const world = worlds.find(candidate => candidate.name === '文档复制助手');
         if (!world) throw new Error('Extension isolated world missing');
         const extensionId = (await session.send('Runtime.evaluate', { contextId: world.id, expression: 'chrome.runtime.id' })).result.value;
 
         const popup = await context.newPage();
         popup.on('pageerror', error => errors.push(error.message));
         await popup.goto(`chrome-extension://${extensionId}/popup.html`);
-        await popup.getByText('当前页面不受支持，请打开飞书或 Lark 文档').waitFor();
+        await popup.getByText('当前页面不受支持，请打开飞书、腾讯文字文档或普通网页').waitFor();
         check('unsupported popup tab never claims connected', await popup.locator('#copy-mode').isDisabled(), true);
         // 标签页形式的 popup 没有工具栏点击带来的 activeTab URL 授权。
         // 仅补齐这一查询的文档 URL；消息、内容脚本、存储及 UI 均用真实实现。
@@ -53,7 +53,7 @@ async function runCopyModesBrowserTests(browserType, extensionPath) {
         }, context.pages().indexOf(page));
         await popup.getByRole('button', { name: '重新检测' }).click();
         await popup.waitForFunction(() => !document.getElementById('status').textContent.includes('正在检测'));
-        check('actual page connected version', await popup.locator('#status').textContent(), '✓ 当前页面已连接 · v2.3.0');
+        check('actual page connected version', await popup.locator('#status').textContent(), '✓ 当前页面已连接 · v2.4.0');
         check('default rich mode and live handshake', await popup.locator('#copy-mode').inputValue(), 'rich');
 
         const selectHtml = async value => {
@@ -77,7 +77,7 @@ async function runCopyModesBrowserTests(browserType, extensionPath) {
         };
         const choose = async value => {
             await popup.locator('#copy-mode').selectOption(value);
-            await popup.getByText('已保存，当前页面已生效；其他已打开的文档也会同步。', { exact: true }).waitFor();
+            await popup.getByText('已保存，当前页面已生效；本站其他已打开的文档也会同步。', { exact: true }).waitFor();
             await popup.locator('#copy-mode:not([disabled])').waitFor();
         };
         const status = async () => popup.evaluate(async () => {
@@ -121,7 +121,7 @@ async function runCopyModesBrowserTests(browserType, extensionPath) {
         check('partial selection retains ancestor style', await page.locator('#rich').evaluate(root => Array.from(root.querySelectorAll('*')).some(node => getComputedStyle(node).color === 'rgb(180, 30, 40)')), true);
 
         await choose('plain');
-        check('UI persists mode', await popup.evaluate(async () => (await chrome.storage.local.get('copyMode')).copyMode), 'plain');
+        check('UI persists mode', await popup.evaluate(async () => (await chrome.storage.local.get('siteSettings')).siteSettings['https://copy-mode-test.feishu.cn'].mode), 'plain');
         check('active page applies mode', (await status()).mode, 'plain');
         await selectHtml('<p><strong>原文 &lt;标签&gt; &amp; 😀</strong></p>');
         await page.keyboard.press('Control+c'); await pasteRich();
@@ -135,9 +135,9 @@ async function runCopyModesBrowserTests(browserType, extensionPath) {
         const secondWorlds = [];
         secondSession.on('Runtime.executionContextCreated', ({ context: value }) => secondWorlds.push(value));
         await secondSession.send('Runtime.enable');
-        const secondWorld = secondWorlds.find(value => value.name === '飞书图文复制');
+        const secondWorld = secondWorlds.find(value => value.name === '文档复制助手');
         const secondMode = async () => (await secondSession.send('Runtime.evaluate', {
-            contextId: secondWorld.id, expression: 'new Promise(resolve => chrome.storage.local.get("copyMode", value => resolve(value.copyMode)))', awaitPromise: true,
+            contextId: secondWorld.id, expression: 'DocCopyController.getStatus().mode', awaitPromise: true,
         })).result.value;
         check('new page sees persisted mode', await secondMode(), 'plain');
 
@@ -198,9 +198,8 @@ if (typeof module !== 'undefined') {
     module.exports = runCopyModesBrowserTests;
     if (require.main === module) {
         const { chromium } = require(process.env.PLAYWRIGHT_MODULE || 'playwright');
-        runCopyModesBrowserTests(chromium, require('node:path').resolve(__dirname, '..'))
+        runCopyModesBrowserTests(chromium, process.argv[2] || require('node:path').resolve(__dirname, '..'), process.argv[3] || 'chromium')
             .then(result => console.log(JSON.stringify(result, null, 2)))
             .catch(error => { console.error(error); process.exitCode = 1; });
     }
 }
-

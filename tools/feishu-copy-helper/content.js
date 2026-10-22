@@ -1,337 +1,184 @@
-// 飞书复制助手 - 内容脚本
+// 文档复制助手：真实 copy 事件同步写入；可逆启用，不改页面权限或文档内容。
 (function () {
     'use strict';
-
-    let cleanupInterval = null;
-    let copyMode = 'rich';
-    let settingsReady = false;
-    let settingsError = false;
-    let settingsRevision = 0;
-    let pendingCopyPayload = null;
-    let lastCopyFallback = false;
-    let closeCopyMenu = null;
+    if (globalThis.DocCopyController) {
+        if (globalThis.DocCopyBootstrap) globalThis.DocCopyController.configure(globalThis.DocCopyBootstrap);
+        return;
+    }
+    const platform = globalThis.DocCopyPlatforms?.detect() || { id: 'feishu', name: '飞书 / Lark', automatic: true };
+    const origin = globalThis.location?.origin || 'https://my.feishu.cn';
+    let config = { enabled: platform.automatic, mode: 'rich', paste: false, ...globalThis.DocCopyBootstrap };
+    let savedSettings = {};
+    let copyMode = config.mode;
+    let settingsReady = false, settingsError = false, settingsRevision = 0;
+    let pendingCopyPayload = null, lastCopyFallback = false, closeCopyMenu = null;
+    let lastCopy = null, prepared = null, preparing = false, preparation = null, prepareRevision = 0;
     const validMode = mode => ['rich', 'plain', 'markdown'].includes(mode);
 
+    function configure(value = {}) {
+        if (typeof value.enabled === 'boolean') config.enabled = value.enabled;
+        if (typeof value.paste === 'boolean') config.paste = value.paste;
+        if (validMode(value.mode)) config.mode = copyMode = value.mode;
+        applyStyle();
+        if (!config.enabled) {
+            closeCopyMenu?.();
+            prepared = preparation = null;
+            preparing = false; prepareRevision++;
+        }
+    }
     function getStatus() {
+        const selected = getCopySelection();
         return {
-            type: 'FEISHU_COPY_STATUS',
-            version: chrome.runtime.getManifest().version,
-            ready: settingsReady && !!globalThis.FeishuCopyFormats && !!document.getElementById('feishu-copy-style'),
-            mode: copyMode,
-            settingsError,
-            lastCopyFallback,
+            type: 'FEISHU_COPY_STATUS', version: chrome.runtime.getManifest().version,
+            ready: settingsReady && !!globalThis.FeishuCopyFormats && (!config.enabled || !!document.getElementById('feishu-copy-style')),
+            mode: copyMode, enabled: config.enabled, paste: config.paste,
+            platform: platform.id, platformName: platform.name, settingsError, lastCopyFallback,
+            selectedCharacters: selected?.text.length || 0, selectionAvailable: !!selected,
+            lastCopy, preparation, preparing,
         };
     }
+    globalThis.DocCopyController = { configure, getStatus };
 
-    // 同步回应状态，避免声明异步回应却没有关闭消息端口。
+    function applySaved(saved) {
+        savedSettings = saved.siteSettings || {};
+        const site = savedSettings[origin] || {};
+        configure({ enabled: platform.automatic || site.remember ? site.enabled ?? platform.automatic : config.enabled, mode: site.mode || saved.copyMode || 'rich', paste: site.paste ?? false });
+    }
     if (typeof chrome !== 'undefined' && chrome.runtime?.onMessage && chrome.storage?.local) {
-        chrome.runtime.onMessage.addListener((message, _sender, respond) => {
+        chrome.runtime.onMessage.addListener((message, sender, respond) => {
             if (message?.type === 'FEISHU_COPY_GET_STATUS') respond(getStatus());
             else if (message?.type === 'FEISHU_COPY_SET_MODE' && validMode(message.mode)) {
-                settingsRevision++;
-                copyMode = message.mode;
-                settingsReady = true;
-                settingsError = false;
+                settingsRevision++; configure({ mode: message.mode });
+                settingsReady = true; settingsError = false; respond(getStatus());
+            } else if (message?.type === 'DOC_COPY_CONFIGURE') {
+                settingsRevision++; configure(message.config);
+                settingsReady = true; settingsError = false; respond(getStatus());
+            } else if (message?.type === 'DOC_COPY_PREPARE') {
+                const selected = getCopySelection();
+                if (config.enabled && selected?.selection && !preparing) void prepareSelection(selected);
                 respond(getStatus());
             }
         });
         chrome.storage.onChanged.addListener((changes, area) => {
-            if (area === 'local' && changes.copyMode) {
+            if (area !== 'local') return;
+            if (changes.copyMode || changes.siteSettings) {
                 settingsRevision++;
-                copyMode = validMode(changes.copyMode.newValue) ? changes.copyMode.newValue : 'rich';
-                settingsReady = true;
-                settingsError = false;
+                const siteSettings = changes.siteSettings ? changes.siteSettings.newValue || {} : savedSettings;
+                // 站点配置被删除时，恢复平台默认设置。
+                if (changes.siteSettings && !siteSettings[origin]) config.enabled = platform.automatic;
+                applySaved({ siteSettings, copyMode: changes.copyMode?.newValue || copyMode });
+                settingsReady = true; settingsError = false;
             }
         });
         const revision = settingsRevision;
-        chrome.storage.local.get({ copyMode: 'rich' }, saved => {
+        chrome.storage.local.get({ copyMode: 'rich', siteSettings: {} }, saved => {
             const error = chrome.runtime.lastError;
             if (revision !== settingsRevision) return;
             settingsError = !!error;
-            if (!error && validMode(saved?.copyMode)) copyMode = saved.copyMode;
+            if (!error) applySaved(saved || {});
             settingsReady = true;
         });
     }
-
     function createCopyPayload(selected, mode) {
-        const payload = { text: selected.text, html: '' };
+        const payload = { text: selected.text, html: '', warnings: [] };
         lastCopyFallback = false;
         if (!selected.selection || mode === 'plain') return payload;
         try {
-            const html = globalThis.FeishuCopyFormats.selectionHtml(selected.selection);
+            const result = globalThis.FeishuCopyFormats.selectionDocument
+                ? globalThis.FeishuCopyFormats.selectionDocument(selected.selection, platform.id)
+                : { html: globalThis.FeishuCopyFormats.selectionHtml(selected.selection), warnings: [] };
+            let html = result.html;
+            payload.warnings = result.warnings || [];
             if (!html && selected.text) throw new Error('Empty formatted selection');
+            if (prepared && prepared.sourceHtml === html) {
+                html = prepared.html;
+                if (prepared.failed) payload.warnings.push(prepared.failed + ' 张图片仍为原地址或不可用');
+            } else if (prepared) { prepared = null; preparation = null; }
             if (mode === 'markdown') payload.text = globalThis.FeishuCopyFormats.markdown(html);
             else payload.html = html;
-        } catch (error) {
+        } catch {
             lastCopyFallback = true;
-            console.warn('飞书复制助手：格式处理失败，仅复制原文', error);
+            payload.warnings = ['格式处理失败，已回退为纯文本'];
         }
         return payload;
     }
-
-    // 在页面自己的处理器之前接收真实复制事件，保留浏览器的 Ctrl/Cmd+C 默认动作。
-    function getCopySelection() {
-        const active = document.activeElement;
-        if (active && (active.tagName === 'INPUT' || active.tagName === 'TEXTAREA')) {
-            if (typeof active.selectionStart !== 'number' || active.selectionStart === active.selectionEnd) {
-                return null;
-            }
-            return { text: active.value.slice(active.selectionStart, active.selectionEnd), selection: null };
-        }
-
-        const selection = window.getSelection();
-        if (!selection || selection.rangeCount === 0 || selection.isCollapsed) {
-            return null;
-        }
-        return { text: selection.toString(), selection };
+    async function prepareSelection(selected) {
+        const revision = ++prepareRevision;
+        preparing = true;
+        preparation = { state: 'preparing' };
+        try {
+            const sourceHtml = globalThis.FeishuCopyFormats.selectionHtml(selected.selection);
+            const result = await globalThis.FeishuCopyFormats.prepareImages(sourceHtml);
+            if (revision !== prepareRevision) return;
+            prepared = { sourceHtml, ...result };
+            preparation = { state: 'ready', embedded: result.embedded, failed: result.failed, total: result.total };
+        } catch {
+            if (revision === prepareRevision) preparation = { state: 'failed' };
+        } finally { if (revision === prepareRevision) preparing = false; }
     }
 
-    window.addEventListener('keydown', function (e) {
-        if ((e.ctrlKey || e.metaKey) && !e.altKey && !e.isComposing &&
-            e.key.toLowerCase() === 'c' && getCopySelection()) {
-            // 只阻止页面劫持快捷键，不取消触发原生 copy 事件的默认动作。
-            e.stopImmediatePropagation();
+    function getCopySelection() {
+        const active = document.activeElement;
+        if (active && (active.tagName === 'INPUT' || active.tagName === 'TEXTAREA') && !globalThis.DocCopyPlatforms?.isProxyInput(active, platform.id)) {
+            if (typeof active.selectionStart !== 'number' || active.selectionStart === active.selectionEnd) return null;
+            return { text: active.value.slice(active.selectionStart, active.selectionEnd), selection: null };
         }
+        const selection = window.getSelection();
+        if (!selection || selection.rangeCount === 0 || selection.isCollapsed) return null;
+        return { text: selection.toString(), selection };
+    }
+    window.addEventListener('keydown', function (e) {
+        if (config.enabled && (e.ctrlKey || e.metaKey) && !e.altKey && !e.isComposing &&
+            e.key.toLowerCase() === 'c' && getCopySelection()) e.stopImmediatePropagation();
     }, true);
-
     window.addEventListener('copy', function (e) {
-        if (!e.isTrusted || !e.clipboardData) return;
+        if (!config.enabled || !e.isTrusted || !e.clipboardData) return;
         const selected = pendingCopyPayload ? null : getCopySelection();
         if (!pendingCopyPayload && !selected) return;
-        const payload = pendingCopyPayload || createCopyPayload(selected, copyMode);
-
-        try {
-            e.clipboardData.setData('text/plain', payload.text);
-        } catch (error) {
-            console.warn('飞书复制助手：无法写入复制事件，保留原生复制', error);
+        // 普通网页的保留格式模式保留浏览器原生 HTML 生成，只隔离网页的复制拦截。
+        if (!pendingCopyPayload && platform.id === 'generic' && copyMode === 'rich' && !prepared) {
+            e.stopImmediatePropagation();
+            lastCopy = { method: 'native', warnings: [] };
             return;
         }
-
-        // 图文格式准备失败也不能影响已经取得的纯文本。
+        const payload = pendingCopyPayload || createCopyPayload(selected, copyMode);
+        try { e.clipboardData.setData('text/plain', payload.text); }
+        catch { return; }
         if (payload.html) {
-            try {
-                e.clipboardData.setData('text/html', payload.html);
-            } catch (error) {
-                lastCopyFallback = true;
-                console.warn('飞书复制助手：仅复制纯文本', error);
-            }
+            try { e.clipboardData.setData('text/html', payload.html); }
+            catch { lastCopyFallback = true; }
         }
+        lastCopy = { method: 'copy-event', html: !!payload.html && !lastCopyFallback, warnings: payload.warnings || [] };
         e.preventDefault();
         e.stopImmediatePropagation();
     }, true);
-
-    document.addEventListener('selectstart', function (e) {
-        e.stopImmediatePropagation();
+    window.addEventListener('selectstart', e => { if (config.enabled) e.stopImmediatePropagation(); }, true);
+    window.addEventListener('paste', e => {
+        if (config.enabled && config.paste) e.stopImmediatePropagation();
     }, true);
 
-    // 强制启用文本选择和复制
-    function forceEnableCopy() {
-        console.log('飞书复制助手：开始强制启用复制功能');
-
-        // 2. 强制覆盖CSS样式 - 针对飞书的特殊样式
-        const forceStyle = document.getElementById('feishu-copy-style') || document.createElement('style');
-        forceStyle.id = 'feishu-copy-style';
-        forceStyle.textContent = `
-            *, *::before, *::after {
-                -webkit-user-select: text !important;
-                -moz-user-select: text !important;
-                -ms-user-select: text !important;
-                user-select: text !important;
-                -webkit-touch-callout: default !important;
-                -webkit-user-drag: auto !important;
-                -khtml-user-select: text !important;
-            }
-            
-            /* 针对飞书特定的类名和元素 */
-            .doc-content, .doc-editor, .editor-content, .text-content,
-            .lark-doc, .lark-editor, .suite-doc, .suite-editor,
-            [class*="doc"], [class*="editor"], [class*="content"], [class*="text"],
-            [class*="lark"], [class*="suite"], [class*="feishu"] {
-                -webkit-user-select: text !important;
-                -moz-user-select: text !important;
-                -ms-user-select: text !important;
-                user-select: text !important;
-                pointer-events: auto !important;
-            }
-            
-            /* 图片选择支持 */
-            img, [class*="image"], [class*="img"], .docx-image {
-                -webkit-user-select: auto !important;
-                -moz-user-select: auto !important;
-                -ms-user-select: auto !important;
-                user-select: auto !important;
-                -webkit-user-drag: auto !important;
-                -khtml-user-drag: auto !important;
-                user-drag: auto !important;
-                pointer-events: auto !important;
-                cursor: pointer !important;
-            }
-            
-            /* 移除可能的遮罩层和保护层 */
-            [style*="user-select: none"], 
-            [style*="webkit-user-select: none"],
-            .no-select, .unselectable, [unselectable],
-            .copy-protect, .text-protect, .content-protect {
-                -webkit-user-select: text !important;
-                -moz-user-select: text !important;
-                -ms-user-select: text !important;
-                user-select: text !important;
-                pointer-events: auto !important;
-            }
-            
-            /* 飞书可能的保护层 */
-            .lark-prevent-select, .suite-prevent-select,
-            [data-prevent-select], [data-no-select] {
-                -webkit-user-select: text !important;
-                -moz-user-select: text !important;
-                -ms-user-select: text !important;
-                user-select: text !important;
-            }
-            
-            /* 飞书图片特殊处理 */
-            img[draggable="false"] {
-                -webkit-user-drag: auto !important;
-                -khtml-user-drag: auto !important;
-                user-drag: auto !important;
-                -webkit-user-select: auto !important;
-                -moz-user-select: auto !important;
-                user-select: auto !important;
-            }
-        `;
-        if (!forceStyle.isConnected) document.head.appendChild(forceStyle);
-
-        // 3. 移除所有阻止选择的属性（优化性能）
-        function removeSelectRestrictions() {
-            // 只处理可能有限制的元素，而不是所有元素
-            const restrictedSelectors = [
-                '[unselectable]',
-                '[onselectstart]',
-                '[oncontextmenu]',
-                '[data-prevent-select]',
-                '[data-no-select]',
-                '.lark-prevent-select',
-                '.suite-prevent-select',
-                '.no-select',
-                '.unselectable',
-                'img[draggable="false"]'
-            ];
-
-            restrictedSelectors.forEach(selector => {
-                try {
-                    const elements = document.querySelectorAll(selector);
-                    elements.forEach(el => {
-                        // 移除各种禁用属性
-                        el.removeAttribute('unselectable');
-                        el.removeAttribute('onselectstart');
-                        el.removeAttribute('oncontextmenu');
-                        el.removeAttribute('ondragstart');
-                        el.removeAttribute('data-prevent-select');
-                        el.removeAttribute('data-no-select');
-
-                        // 强制设置样式
-                        el.style.setProperty('-webkit-user-select', 'text', 'important');
-                        el.style.setProperty('-moz-user-select', 'text', 'important');
-                        el.style.setProperty('user-select', 'text', 'important');
-                        el.style.setProperty('pointer-events', 'auto', 'important');
-
-                        // 移除可能的事件处理器
-                        el.onselectstart = null;
-                        el.oncontextmenu = null;
-                        el.ondragstart = null;
-                        
-                        // 特别处理图片
-                        if (el.tagName.toLowerCase() === 'img') {
-                            el.removeAttribute('draggable');
-                            el.style.setProperty('-webkit-user-drag', 'auto', 'important');
-                            el.style.setProperty('-khtml-user-drag', 'auto', 'important');
-                            el.style.setProperty('user-drag', 'auto', 'important');
-                            
-                            // 处理飞书图片特殊属性
-                            if (el.src && (el.src.includes('feishu.cn') || el.src.includes('larksuite.com'))) {
-                                // 添加alt文本如果没有
-                                if (!el.alt) {
-                                    el.alt = '飞书文档图片';
-                                }
-                            }
-                        }
-                    });
-                } catch (e) {
-                    // 忽略选择器错误
-                }
-            });
+    function applyStyle() {
+        if (!document.documentElement) return;
+        const old = document.getElementById('feishu-copy-style');
+        if (!config.enabled) {
+            old?.remove();
+            document.documentElement.removeAttribute('data-doc-copy-enabled');
+            return;
         }
-
-        removeSelectRestrictions();
-
-        // 4. 重写可能被劫持的方法
-        if (typeof document.onselectstart !== 'undefined') {
-            document.onselectstart = null;
-        }
-        if (typeof document.oncontextmenu !== 'undefined') {
-            document.oncontextmenu = null;
-        }
-
-        // 5. 定期清理（防止动态添加的限制）- 降低频率避免卡顿
-        if (cleanupInterval === null) {
-            cleanupInterval = setInterval(removeSelectRestrictions, 3000);
-        }
-
-        console.log('飞书复制助手：强制复制功能已启用');
+        document.documentElement.setAttribute('data-doc-copy-enabled', 'true');
+        const style = old || document.createElement('style');
+        style.id = 'feishu-copy-style';
+        // 仅覆盖文本选择，不改 pointer-events、拖拽、页面事件属性或按钮行为。
+        style.textContent = 'html[data-doc-copy-enabled="true"] :where(p,div,span,a,article,section,main,h1,h2,h3,h4,h5,h6,li,td,th,pre,code,blockquote,img){-webkit-user-select:text!important;user-select:text!important;-webkit-touch-callout:default!important}';
+        if (!style.isConnected) (document.head || document.documentElement).appendChild(style);
     }
-
-    // document_start 先安装复制处理器，DOM 就绪后再应用样式和清理属性。
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', forceEnableCopy, { once: true });
-    } else {
-        forceEnableCopy();
-    }
-
-    // 监听动态内容变化，持续强制启用（优化性能）
-    let observerTimeout = null;
-    const observer = new MutationObserver(function (mutations) {
-        // 使用防抖，避免频繁触发
-        if (observerTimeout) {
-            clearTimeout(observerTimeout);
-        }
-
-        let shouldReapply = false;
-        mutations.forEach(function (mutation) {
-            if (mutation.addedNodes.length > 0) {
-                // 只有当添加的节点包含文本内容时才重新应用
-                for (let node of mutation.addedNodes) {
-                    if (node.nodeType === 1 && (node.textContent || '').trim().length > 0) {
-                        shouldReapply = true;
-                        break;
-                    }
-                }
-            }
-        });
-
-        if (shouldReapply) {
-            observerTimeout = setTimeout(forceEnableCopy, 200);
-        }
-    });
-
-    if (document.body) {
-        observer.observe(document.body, {
-            childList: true,
-            subtree: true,
-            attributes: true,
-            attributeFilter: ['style', 'class', 'unselectable', 'data-prevent-select']
-        });
-    } else {
-        document.addEventListener('DOMContentLoaded', function () {
-            observer.observe(document.body, {
-                childList: true,
-                subtree: true,
-                attributes: true,
-                attributeFilter: ['style', 'class', 'unselectable', 'data-prevent-select']
-            });
-        });
-    }
+    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', applyStyle, { once: true });
+    else applyStyle();
 
     // 添加右键菜单复制功能（支持图文混合）
-    document.addEventListener('contextmenu', function (e) {
+    window.addEventListener('contextmenu', function (e) {
+        if (!config.enabled) return;
+        if (platform.id === 'generic') { e.stopImmediatePropagation(); return; }
         const selection = window.getSelection();
         const selectedText = selection.toString();
         const selectedContent = getSelectedContent(selection);
@@ -377,7 +224,7 @@
             item.addEventListener('click', () => {
                 let payload = { text, html: '' };
                 try {
-                    if (mode === 'rich') payload.html = selectedContent.html;
+                    if (mode === 'rich') payload.html = prepared?.sourceHtml === selectedContent.html ? prepared.html : selectedContent.html;
                     else if (mode === 'markdown') payload.text = globalThis.FeishuCopyFormats.markdown(selectedContent.html);
                     else if (mode === 'clean') payload.text = cleanTextForCopy(text);
                     else if (mode === 'super-clean') payload.text = superCleanTextForCopy(text);
@@ -408,6 +255,7 @@
 
     // 添加双击复制功能
     document.addEventListener('dblclick', function (e) {
+        if (!config.enabled || platform.id === 'generic') return;
         const target = e.target;
         if (target.closest('input,textarea,select,button,[contenteditable="true"]')) return;
         const text = target.textContent || target.innerText;
@@ -426,6 +274,7 @@
 
     // 主动复制也使用同一个真实 copy 事件，不依赖异步剪贴板权限。
     async function writeCopyPayload(payload) {
+        if (!config.enabled) return;
         let successful = false;
         pendingCopyPayload = payload;
         try { successful = document.execCommand('copy'); }
@@ -678,4 +527,3 @@
     }
 
 })();
-

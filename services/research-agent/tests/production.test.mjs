@@ -96,7 +96,7 @@ test('site proxy uses only the fixed backend, preserves session cookies and priv
   assert.equal(response.status, 200); assert.equal(requests, 1); assert.equal(response.headers.get('cache-control'), 'private, no-store');
   assert.match(response.headers.get('set-cookie'), /Secure/); assert.equal(response.headers.get('access-control-allow-origin'), null);
   assert.match(response.headers.get('x-robots-tag'), /noindex/);
-  assert.equal(response.headers.get('x-research-proxy-version'), 'utf8-stream-v2');
+  assert.equal(response.headers.get('x-research-proxy-version'), 'private-policy-v3');
 });
 
 test('site proxy forwards Unicode JSON as a string and rejects invalid UTF-8 before upstream fetch', async () => {

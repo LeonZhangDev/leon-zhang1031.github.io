@@ -84,6 +84,17 @@ async function runV24BrowserTests(browserType, extensionPath, channel = 'chromiu
         await target(page); await popup.locator('#copy-mode').selectOption('rich');
         await select(page, '<div data-block-type="text">前段</div><div data-block-type="text"><br></div><div data-block-type="text">后段</div>'); await rich(page);
         check('intentional empty source paragraph is retained', await sink.locator('#rich p').count() === 3 && await sink.locator('#rich p').nth(1).textContent() === '');
+        await select(page, '<ol start="3"><li style="padding:0;text-indent:0;color:rgb(160,20,40)">第三项</li><li>第四项<ul><li>嵌套项</li></ul></li><li value="8">跳号项</li></ol>');
+        const listExport = await cdp.send('Runtime.evaluate', { contextId: world.id, expression: 'FeishuCopyFormats.selectionDocument(getSelection(), "feishu").html' });
+        const listHtml = listExport.result.value;
+        check('Office list definitions retain non-one start and explicit restart', listHtml.includes('mso-level-start-at:3') && listHtml.includes('mso-level-start-at:8'));
+        check('Office lists use native list metadata rather than inserted marker text', /mso-list:l0 level1 lfo1/.test(listHtml) && listHtml.includes('mso-level-number-format:bullet') && !listHtml.includes('3.第三项'));
+        check('Office list normalization retains text color and nested HTML', listHtml.includes('rgb(160, 20, 40)') && /<ul[^>]*><li/.test(listHtml));
+        await select(page, '<table style="width:1200px;table-layout:fixed"><colgroup><col style="width:400px"><col style="width:800px"></colgroup><tr><td>第一列</td><td>第二列</td></tr></table><p><img width="1200" height="600" src="/good.png"></p>');
+        const wideExport = await cdp.send('Runtime.evaluate', { contextId: world.id, expression: `JSON.stringify((()=>{const n=document.createElement('div');n.innerHTML=FeishuCopyFormats.selectionDocument(getSelection(), 'feishu').html;const t=n.querySelector('table'),i=n.querySelector('img');return {width:t.style.width,columns:[...t.querySelectorAll('col')].map(c=>parseFloat(c.style.width)),imageWidth:Number(i.getAttribute('width')),imageHeight:Number(i.getAttribute('height')),cells:t.querySelectorAll('td').length}})())` });
+        const wide = JSON.parse(wideExport.result.value);
+        check('wide editable tables fit Office text area with proportional columns', wide.width === '540px' && wide.columns[1] === 2 * wide.columns[0] && wide.cells === 2);
+        check('wide images use explicit proportional dimensions for WPS', wide.imageWidth === 540 && wide.imageHeight === 270);
         await select(page, '<table><tr><td colspan="2">合并</td></tr><tr><td>甲</td><td>乙</td></tr></table>');
         await rich(page);
         check('merged cells retained as HTML', await sink.locator('#rich td[colspan="2"]').count() === 1);
@@ -114,7 +125,7 @@ async function runV24BrowserTests(browserType, extensionPath, channel = 'chromiu
         const generic = await context.newPage(); await generic.goto('https://copy-generic.example/article');
         check('ordinary sites stay untouched before activation', await generic.locator('#feishu-copy-style').count() === 0);
         await target(generic); await popup.locator('#toggle-page').click();
-        await popup.getByText('✓ 当前页面已连接 · v2.4.0', { exact: true }).waitFor();
+        await popup.getByText('✓ 当前页面已连接 · v2.4.1', { exact: true }).waitFor();
         check('page activation injects actual content scripts', await generic.locator('#feishu-copy-style').count() === 1);
         await select(generic, '<h2>原生格式</h2><p><strong>粗体</strong></p>'); await rich(generic);
         check('generic rich mode preserves native clipboard format', await sink.locator('#rich h2').textContent() === '原生格式' && await sink.locator('#rich strong,#rich b').count() > 0);

@@ -5,7 +5,7 @@
     const styleProperties = [
         'font-family', 'font-size', 'font-weight', 'font-style', 'color',
         'background-color', 'text-decoration-line', 'text-align', 'white-space',
-        'line-height', 'vertical-align', 'list-style-type', 'border-collapse',
+        'line-height', 'vertical-align', 'border-collapse',
         'border-top', 'border-right', 'border-bottom', 'border-left', 'padding',
         'margin-top', 'margin-bottom', 'margin-left', 'margin-right', 'text-indent',
         'letter-spacing', 'word-spacing', 'direction', 'border-spacing',
@@ -91,9 +91,11 @@
             }
             if (tag === 'img') {
                 copy.style.maxWidth = '100%';
-                for (const dimension of ['width', 'height']) {
-                    if (source[dimension] > 0) copy.setAttribute(dimension, source[dimension]);
-                }
+                const bounds = source.getBoundingClientRect();
+                const width = bounds.width || source.width;
+                const height = bounds.height || source.height;
+                if (width > 0) copy.setAttribute('width', Math.round(width));
+                if (height > 0) copy.setAttribute('height', Math.round(height));
             }
             for (const child of source.childNodes) {
                 const cloned = cloneSelected(child);
@@ -111,6 +113,7 @@
         if (cloned) container.appendChild(cloned);
         if (platform !== 'generic') normalizeParagraphs(container);
         normalizeLists(container, output);
+        normalizeOfficeLayout(container, output);
         if (container.querySelector('[colspan]:not([colspan="1"]),[rowspan]:not([rowspan="1"])')) warnings.add('合并单元格仅在保留格式模式中保留；Markdown 使用 HTML 表格');
         return { html: container.innerHTML, warnings: [...warnings] };
     }
@@ -142,6 +145,82 @@
                 stack[level].appendChild(node);
             }
         }
+    }
+
+    function normalizeOfficeLayout(root, doc) {
+        // WPS ignores max-width and ol[start]. Explicit dimensions and Office list
+        // definitions keep native editable objects within a typical A4 text area.
+        const pageWidth = 540;
+        for (const table of root.querySelectorAll('table')) {
+            const width = parseFloat(table.style.width);
+            if (!(width > pageWidth)) continue;
+            const scale = pageWidth / width;
+            for (const cell of table.querySelectorAll('col,td,th')) {
+                if (cell.closest('table') !== table) continue;
+                const cellWidth = parseFloat(cell.style.width);
+                if (cellWidth > 0) {
+                    const scaled = Math.max(1, Math.floor(cellWidth * scale));
+                    cell.style.width = scaled + 'px';
+                    cell.setAttribute('width', scaled);
+                }
+                cell.style.whiteSpace = 'normal';
+                cell.style.overflowWrap = 'anywhere';
+            }
+            table.style.width = pageWidth + 'px';
+            table.setAttribute('width', pageWidth);
+            table.style.tableLayout = 'fixed';
+            table.style.borderCollapse = 'collapse';
+            table.setAttribute('cellspacing', '0');
+        }
+        for (const image of root.querySelectorAll('img')) {
+            const width = Number(image.getAttribute('width')) || parseFloat(image.style.width);
+            const cell = image.closest('td,th');
+            const available = Math.min(pageWidth, parseFloat(cell?.style.width) || pageWidth);
+            if (!(width > available)) continue;
+            const height = Number(image.getAttribute('height'));
+            image.setAttribute('width', Math.floor(available));
+            image.style.width = Math.floor(available) + 'px';
+            if (height > 0) {
+                const scaledHeight = Math.max(1, Math.round(height * available / width));
+                image.setAttribute('height', scaledHeight);
+                image.style.height = scaledHeight + 'px';
+            }
+        }
+
+        const definitions = [];
+        let listId = 0;
+        for (const list of root.querySelectorAll('ol,ul')) {
+            const depth = Math.min(8, [...ancestors(list)].filter(n => /^(OL|UL)$/.test(n.tagName)).length);
+            const indent = 18 * (depth + 1);
+            let index = Number(list.getAttribute('start')) || 1;
+            let id;
+            list.removeAttribute('style');
+            list.setAttribute('type', list.tagName === 'OL' ? '1' : 'disc');
+            for (const item of list.children) {
+                if (item.tagName !== 'LI') continue;
+                const value = item.hasAttribute('value') ? Number(item.getAttribute('value')) : index;
+                if (id === undefined || value !== index) {
+                    id = listId++;
+                    const ordered = list.tagName === 'OL';
+                    definitions.push(`@list l${id}{mso-list-id:${1000 + id};mso-list-type:hybrid;}@list l${id}:level1{mso-level-number-format:${ordered ? 'decimal' : 'bullet'};mso-level-start-at:${value};mso-level-text:"${ordered ? '%1.' : '\\2022'}";mso-level-tab-stop:${indent}pt;mso-level-number-position:left;margin-left:${indent}pt;text-indent:-18pt;${ordered ? '' : 'font-family:Arial;'}}`);
+                }
+                // Source editor list geometry confuses Office's list importer.
+                // Keep text styling on the item, but let the list own its indent.
+                for (const property of ['margin', 'margin-left', 'margin-right', 'padding', 'text-indent', 'list-style-type']) item.style.removeProperty(property);
+                // CSSStyleDeclaration drops unknown mso properties in Chromium.
+                item.setAttribute('style', item.getAttribute('style') + `;mso-list:l${id} level1 lfo${id + 1}`);
+                index = value + 1;
+            }
+        }
+        if (definitions.length) {
+            const style = doc.createElement('style');
+            style.textContent = definitions.join('');
+            root.prepend(style);
+        }
+    }
+
+    function* ancestors(node) {
+        for (let parent = node.parentElement; parent; parent = parent.parentElement) yield parent;
     }
 
     const selectionHtml = selection => selectionDocument(selection).html;

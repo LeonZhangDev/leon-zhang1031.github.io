@@ -3,7 +3,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 
 const title = '文档复制助手 · Leon Zhang';
 const description = 'Leon Zhang 维护的 Chrome / Edge 扩展，支持飞书和腾讯文字文档、三种复制模式、段落格式优化与按站点开启的网页增强。';
-const version = '2.4.0';
+const version = '2.4.1';
 const source = 'https://github.com/LeonZhangDev/leon-zhang1031.github.io/tree/main/tools/feishu-copy-helper';
 const modes = [
   { name: '保留格式', label: '默认模式', text: '复制文字与带样式的 HTML，保留标题、字体、颜色、高亮、链接、列表、引用、代码块和普通表格。' },
@@ -19,7 +19,7 @@ const modes = [
       <p class="eyebrow">BROWSER EXTENSION · v{version}</p>
       <h1>文档复制助手</h1>
       <p class="lead">选中内容，按下 Ctrl+C。格式、纯文本还是 Markdown，由你选择。</p>
-      <p class="intro">这是我维护的一款 Chrome / Edge 扩展，用来整理飞书和腾讯文字文档中需要复用的内容。v2.4 修复了飞书复制后的段落多余空行，保留原文空段落、软换行和代码块空行。打开弹窗，可以查看页面连接、选区和图片准备结果。</p>
+      <p class="intro">这是我维护的一款 Chrome / Edge 扩展，用来整理飞书和腾讯文字文档中需要复用的内容。v2.4.1 改善了 Word / WPS 的列表编号、缩进和项目符号，修复宽表格与图片超出页边距的问题，同时保留原文段落与软换行。打开弹窗，可以查看页面连接、选区和图片准备结果。</p>
       <div class="actions">
         <a class="download" href={`/downloads/feishu-copy-helper-${version}.zip`} download>下载 v{version} 安装包 ↓</a>
         <a class="source" href={source} target="_blank" rel="noopener noreferrer">查看源码与说明 ↗</a>
@@ -67,8 +67,8 @@ const modes = [
 
     <section aria-labelledby="verification-title">
       <h2 id="verification-title">这一版验证了什么</h2>
-      <p>2026-10-22，v{version} 通过 18 项逻辑测试，以及 Edge 中的 17 项快捷键、33 项格式与模式、27 项 v2.4 浏览器检查。最终安装包解压后重新加载，并复测真实飞书和腾讯文字文档。</p>
-      <p>真实飞书正文复制到独立本地富文本网页后，5 段仍为 5 段，额外空段落为 0。真实腾讯样本保留了标题、16 个列表项、代码块和 10 行表格，两张图片准备并内嵌成功。浏览器内复制粘贴不替代 Word、WPS、Notion 等应用的人工验收；原生网站授权提示也需单独验收。</p>
+      <p>2026-10-22，v{version} 通过 18 项逻辑测试，以及 Edge 中的 17 项快捷键、33 项格式与模式、32 项 v2.4 浏览器检查，共 100 项。最终安装包解压后，使用本机 Word 16、WPS 12 原生粘贴复测真实飞书、腾讯文档及两组夹具，共 8 份测试文档，并查看导出的 PDF 页面。</p>
+      <p>真实飞书样本的 5 段正文和 6 个列表项完整保留，没有新增正文空段落。真实腾讯样本保留 16 个列表项、10 行 3 列表格及两张内嵌图片，宽度未超出测试文档的 A4 正文区域；正文文字核对一致。字体和分页仍取决于目标应用，特殊分栏可能需要另行调整；Notion 和浏览器原生授权提示尚未验收。</p>
       <p class="small">由 LeonZhangDev 在已有飞书复制插件基础上继续维护。来源与许可证说明见项目 README。</p>
     </section>
   </article>

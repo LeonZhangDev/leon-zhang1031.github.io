@@ -19,7 +19,11 @@
 <script>
   import { appendStudyCase, normalizeStudyCase, type StudyCaseRecord } from '../../lib/jing/study-case';
   import { loadSettings } from '../../lib/jing/settings';
-  import { hasStoredVault, VaultError, VaultSession } from '../../lib/jing/vault';
+  import type { VaultSession } from '../../lib/jing/vault';
+  let loading: Promise<typeof import('../../lib/jing/vault')> | undefined;
+  const loadVault = () => loading ??= import('../../lib/jing/vault')
+    .catch((error) => { loading = undefined; throw error; });
+  let openRevision = 0;
 
   const dialog = document.getElementById('jing-case-dialog') as HTMLElement | null;
   const scrim = document.getElementById('jing-case-scrim') as HTMLButtonElement | null;
@@ -47,6 +51,7 @@
     scrim.hidden = !open;
     document.body.classList.toggle('jing-case-open', open);
     if (!open) {
+      openRevision++;
       pending = null;
       if (password) password.value = '';
       if (confirm) confirm.value = '';
@@ -54,19 +59,26 @@
       opener = null;
     }
   };
-  const errorMessage = (error: unknown) => error instanceof VaultError
-    ? error.message
-    : error instanceof Error ? error.message : '保存失败，请重试。';
+  const errorMessage = (error: unknown) => error instanceof Error ? error.message : '保存失败，请重试。';
 
-  window.addEventListener('jing:save-case', ((event: CustomEvent<StudyCaseRecord>) => {
+  window.addEventListener('jing:save-case', (async (event: Event) => {
+    const revision = ++openRevision;
     opener = document.activeElement instanceof HTMLElement ? document.activeElement : null;
     try {
-      pending = normalizeStudyCase(event.detail);
+      pending = normalizeStudyCase((event as CustomEvent<StudyCaseRecord>).detail);
     } catch (error) {
       showToast(errorMessage(error));
       return;
     }
-    const exists = hasStoredVault(localStorage);
+    let exists: boolean;
+    try {
+      const { hasStoredVault } = await loadVault();
+      if (revision !== openRevision || !pending) return;
+      exists = hasStoredVault(localStorage);
+    } catch (error) {
+      showToast(errorMessage(error));
+      return;
+    }
     if (summary) summary.textContent = exists
       ? `“${pending.title}”只会在输入密码后写入本机加密手札。`
       : `本机尚无手札，将创建手札并保存“${pending.title}”。请设置至少 4 位密码。`;
@@ -93,14 +105,18 @@
   });
   saveButton?.addEventListener('click', async () => {
     if (!pending || !password) return;
+    const record = pending;
+    const revision = openRevision;
     const secret = password.value;
-    const exists = hasStoredVault(localStorage);
     if (secret.length < 4) { if (state) state.textContent = '密码至少 4 位。'; return; }
-    if (!exists && secret !== confirm?.value) { if (state) state.textContent = '两次输入的密码不一致。'; return; }
     saveButton.disabled = true;
     if (state) state.textContent = '正在加密保存…';
     let session: VaultSession | null = null;
     try {
+      const { hasStoredVault, VaultSession } = await loadVault();
+      if (revision !== openRevision || record !== pending) return;
+      const exists = hasStoredVault(localStorage);
+      if (!exists && secret !== confirm?.value) { if (state) state.textContent = '两次输入的密码不一致。'; return; }
       const options = {
         storage: localStorage,
         lockTimeoutMs: loadSettings(localStorage).settings.lockTimeoutMinutes * 60 * 1000,
@@ -108,7 +124,8 @@
       session = exists
         ? await VaultSession.unlock(secret, options)
         : await VaultSession.create(secret, options);
-      await session.saveNotes(appendStudyCase(session.getNotes(), pending));
+      if (revision !== openRevision || record !== pending) { session.lock(); return; }
+      await session.saveNotes(appendStudyCase(session.getNotes(), record));
       session.lock();
       setOpen(false);
       showToast('案卷已加密存入静心手札。');

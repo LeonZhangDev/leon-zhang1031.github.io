@@ -4,6 +4,7 @@ import { unified } from '@astrojs/markdown-remark';
 import sitemap from '@astrojs/sitemap';
 import remarkMath from 'remark-math';
 import rehypeKatex from 'rehype-katex';
+import jingOffline from './scripts/jing/offline-build.mjs';
 
 export default defineConfig({
   // 正式站点域名：EdgeOne Pages 托管的 leonzk.cn
@@ -19,6 +20,7 @@ export default defineConfig({
   },
   vite: { plugins: [tailwind()] },
   integrations: [
+    jingOffline(),
     sitemap({
       filter: (page) => !new URL(page).pathname.startsWith('/jing/'),
     }),

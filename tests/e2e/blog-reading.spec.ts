@@ -202,11 +202,17 @@ test('attention formulas render with local fonts on mobile', async ({ page }) =>
   await page.route('https://comments.leonzk.cn/api/v2/**', route => route.fulfill({ status: 503, body: '{}' }));
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto('/posts/deep-learning-07-transformer-attention/');
+  await expect(page.locator('link[rel="preload"][as="font"]')).toHaveCount(3);
   await expect(page.locator('.prose .katex').first()).toBeVisible();
   await expect(page.locator('.prose .katex-error')).toHaveCount(0);
   expect(await page.locator('.prose .katex-display').count()).toBeGreaterThan(2);
   await page.evaluate(() => document.fonts.ready);
   expect(await page.evaluate(() => document.fonts.check('16px KaTeX_Main'))).toBe(true);
+  const fontRequests = await page.evaluate(() => performance.getEntriesByType('resource')
+    .filter(entry => /KaTeX_(Main-Regular|Math-Italic|AMS-Regular).*\.woff2/.test(entry.name))
+    .map(entry => ({ name:entry.name, initiator:(entry as PerformanceResourceTiming).initiatorType })));
+  expect(fontRequests).toHaveLength(3);
+  expect(fontRequests.every(entry => entry.initiator === 'link')).toBe(true);
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
 });
 
@@ -231,6 +237,7 @@ test('comment errors stay visible and a retry can recover', async ({ page }) => 
     body: JSON.stringify({ comments: [], roots_count: 0, count: 0, page: { key: '/posts/deep-learning-07-transformer-attention/' } }),
   }));
   await page.goto('/posts/deep-learning-07-transformer-attention/');
+  await page.locator('[data-comments]').scrollIntoViewIfNeeded();
   await expect(page.locator('.comments-status')).toContainText('目前无法提交');
   await expect(page.locator('.artalk-wrap')).toBeHidden();
   available = true;

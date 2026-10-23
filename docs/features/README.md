@@ -1,6 +1,8 @@
 # Features
 
-- [private-research-agent](private-research-agent.md) — deployed Tavily/Qwen workspace, cached recovery, verified summary traces and preserved trial budgets
+- [site-performance-first-batch](site-performance-first-batch.md) — deferred loading and before/after performance evidence
+
+- [private-research-agent](private-research-agent.md) — deployed Tavily/Qwen workspace, verified summary traces and preserved trial budgets
 
 - [game-loading-optimization](game-loading-optimization.md) — small icon, exact engine cache contracts and critical-resource preloads
 
@@ -16,7 +18,7 @@
 - [waline-account-modal](waline-account-modal.md)
 - [quiet-cyber-editorial-design](quiet-cyber-editorial-design.md)
 - [deep-learning-course-series](deep-learning-course-series.md)
-- [jingxin-hall](jingxin-hall.md)
+- [jingxin-hall](jingxin-hall.md) — scenes, study tools, optimized woodfish assets, offline caching and production cold-load acceptance
 - [ai-research-content-course](ai-research-content-course.md)
 
 - [飞书图文复制产品展示](feishu-copy-helper.md)

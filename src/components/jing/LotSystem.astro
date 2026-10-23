@@ -43,7 +43,7 @@ import SoundControl from './SoundControl.astro';
   <div class="jing-lot-stage" id="lot-stage" data-phase="idle" aria-live="polite">
     <div class="jing-lot-visual" id="lot-visual" data-frame="0" data-collection="guanyin" role="img" aria-label="观音灵签签筒摇签动画">
       <div class="jing-lot-contact-shadow" aria-hidden="true"></div>
-      <img id="lot-tube-image" class="jing-lot-frame-image" src="/jing/generated/lot/frames-safe/guanyin/frame-0.png" width="768" height="1152" alt="" />
+      <img id="lot-tube-image" class="jing-lot-frame-image" src="/jing/generated/lot/frames-safe/guanyin/frame-0.webp" width="768" height="1152" alt="" />
       <canvas id="lot-animation-canvas" class="jing-lot-animation-canvas" width="768" height="1152" hidden aria-hidden="true"></canvas>
       <div id="lot-falling-stick" class="jing-lot-falling-stick" hidden aria-hidden="true">
         <img id="lot-falling-stick-image" src="/jing/generated/lot/selected-sticks/guanyin.png" alt="" />
@@ -124,8 +124,6 @@ import SoundControl from './SoundControl.astro';
 
 <script>
   import { GUANYIN_COLLECTION } from '../../data/jing/lots/guanyin';
-  import { LUZU_COLLECTION } from '../../data/jing/lots/luzu';
-  import { GUANDI_COLLECTION } from '../../data/jing/lots/guandi';
   import { drawLot, throwCups } from '../../lib/jing/lots/draw';
   import { frameBlendAt, LOT_MOTION_PROFILES, phaseAt, type LotMotionCollectionId, type LotMotionPhase } from '../../lib/jing/lot-motion';
   import { cryptoRandomSource } from '../../lib/jing/random';
@@ -140,9 +138,12 @@ import SoundControl from './SoundControl.astro';
 
     const COLLECTIONS: Record<string, LotCollection> = {
       guanyin: GUANYIN_COLLECTION,
-      luzu: LUZU_COLLECTION,
-      guandi: GUANDI_COLLECTION,
     };
+    const collectionLoads: Record<string, () => Promise<LotCollection>> = {
+      luzu: () => import('../../data/jing/lots/luzu').then((module) => module.LUZU_COLLECTION),
+      guandi: () => import('../../data/jing/lots/guandi').then((module) => module.GUANDI_COLLECTION),
+    };
+    let selecting = false;
     let current: LotCollection = GUANYIN_COLLECTION;
     let lastDraw: DrawResult | null = null;
     let pendingDraw: DrawResult | null = null;
@@ -207,7 +208,7 @@ import SoundControl from './SoundControl.astro';
     const hasIntegratedStickSequence = (collectionId: string) =>
       collectionId === 'guanyin' || collectionId === 'luzu' || collectionId === 'guandi';
     const frameSrc = (collectionId: string, frame: number) =>
-      `/jing/generated/lot/frames-safe/${collectionId}/frame-${frame}.png`;
+      `/jing/generated/lot/frames-safe/${collectionId}/frame-${frame}.webp`;
     const frameCache = new Map<string, Promise<HTMLImageElement[]>>();
     const decodeImage = async (image: HTMLImageElement) => {
       try {
@@ -233,7 +234,7 @@ import SoundControl from './SoundControl.astro';
         image.src = frameSrc(collectionId, frame);
         await decodeImage(image);
         return image;
-      }));
+      })).catch((error) => { frameCache.delete(collectionId); throw error; });
       frameCache.set(collectionId, loading);
       return loading;
     };
@@ -362,7 +363,9 @@ import SoundControl from './SoundControl.astro';
       $('lot-edition').textContent = editionText();
       $('lot-panel').setAttribute('aria-labelledby', `lot-tab-${current.id}`);
       setVisualFrame(0);
-      void preloadFrames(current.id).catch(() => {});
+      // Release decoded sequences when changing editions. The first static frame
+      // is sufficient until the user approaches the draw control.
+      for (const id of frameCache.keys()) if (id !== current.id) frameCache.delete(id);
       lotVisual.dataset.collection = current.id;
       fallingStickImage.src = `/jing/generated/lot/selected-sticks/${current.id}.png`;
       lotVisual.setAttribute('aria-label', `${current.name}签筒摇签动画`);
@@ -372,12 +375,31 @@ import SoundControl from './SoundControl.astro';
     const tabs = Array.from(app.querySelectorAll<HTMLButtonElement>('[role="tab"]'));
     const setTabsDisabled = (disabled: boolean) => tabs.forEach((tab) => { tab.disabled = disabled; });
     for (const tab of tabs) {
-      tab.addEventListener('click', () => {
-        for (const t of tabs) t.setAttribute('aria-selected', String(t === tab));
-        current = COLLECTIONS[tab.id.replace('lot-tab-', '')];
-        renderEdition();
+      tab.addEventListener('click', async () => {
+        if (selecting || animating) return;
+        const id = tab.id.replace('lot-tab-', '');
+        selecting = true;
+        setTabsDisabled(true);
+        drawBtn.disabled = true;
+        try {
+          current = COLLECTIONS[id] ??= await collectionLoads[id]();
+          for (const t of tabs) t.setAttribute('aria-selected', String(t === tab));
+          renderEdition();
+          stageText.textContent = '静心默念所问 · 点击下方抽签';
+        } catch {
+          stageText.textContent = '签文暂未载入，请重新选择签种。';
+        } finally {
+          selecting = false;
+          setTabsDisabled(false);
+          drawBtn.disabled = false;
+        }
       });
     }
+    const prepareFrames = () => {
+      if (!reducedMotion()) void preloadFrames(current.id).catch(() => {});
+    };
+    drawBtn.addEventListener('pointerenter', prepareFrames);
+    drawBtn.addEventListener('focus', prepareFrames);
 
     /* ---- rendering ---- */
     const renderSessionHistory = () => {
@@ -510,6 +532,9 @@ import SoundControl from './SoundControl.astro';
     };
 
     const startCleanse = () => {
+      prepareFrames();
+      drawBtn.disabled = true;
+      setTabsDisabled(true);
       app.classList.add('is-ritual-active');
       cleanseEl.hidden = false;
       cleanseReady.hidden = true;
@@ -539,7 +564,7 @@ import SoundControl from './SoundControl.astro';
     });
 
     $('lot-draw').addEventListener('click', (event) => {
-      if (animating) return;
+      if (animating || selecting || !cleanseEl.hidden) return;
       if (event.isTrusted) navigator.vibrate?.([12, 36, 12]);
       if (reducedMotion()) {
         app.classList.add('is-ritual-active');

@@ -18,7 +18,8 @@ test('public layout identifies the current domain and hosting platform', () => {
 test('WeChat card uses an explicit click event instead of the deprecated global event', () => {
   const layout = source('src/layouts/BaseLayout.astro');
   assert.doesNotMatch(layout, /onclick="event\.stopPropagation\(\)"/);
-  assert.match(layout, /querySelector\('\.qr-card'\)\?\.addEventListener\('click', \(event\) => event\.stopPropagation\(\)\)/);
+  assert.match(layout, /import '\.\.\/scripts\/site-ui'/);
+  assert.match(source('src/scripts/site-ui.ts'), /querySelector\('\.qr-card'\)\?\.addEventListener\('click', event => event\.stopPropagation\(\)\)/);
 });
 
 test('Hugo example uses a supported HTML code fence', () => {

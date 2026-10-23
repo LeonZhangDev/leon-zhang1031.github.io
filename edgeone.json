@@ -9,6 +9,10 @@
       ]
     },
     {
+      "source": "/jing/service-worker.js",
+      "headers": [{ "key": "Cache-Control", "value": "no-cache" }]
+    },
+    {
       "source": "/p7x4m9q2-k6v8n3r5-t2w9c4h7/*",
       "headers": [
         { "key": "Cache-Control", "value": "private, no-store" },

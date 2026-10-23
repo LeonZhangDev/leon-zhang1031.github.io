@@ -51,13 +51,13 @@ test.describe('Jingxin lot room', () => {
   test('switches the transparent frame sequence with the selected collection', async ({ page }) => {
     await page.goto('/jing/chouqian/');
     const tube = page.locator('#lot-tube-image');
-    await expect(tube).toHaveAttribute('src', '/jing/generated/lot/frames-safe/guanyin/frame-0.png');
+    await expect(tube).toHaveAttribute('src', '/jing/generated/lot/frames-safe/guanyin/frame-0.webp');
     await expect(tube).toHaveAttribute('width', '768');
     await expect(tube).toHaveAttribute('height', '1152');
     await page.locator('#lot-tab-luzu').click();
-    await expect(tube).toHaveAttribute('src', '/jing/generated/lot/frames-safe/luzu/frame-0.png');
+    await expect(tube).toHaveAttribute('src', '/jing/generated/lot/frames-safe/luzu/frame-0.webp');
     await page.locator('#lot-tab-guandi').click();
-    await expect(tube).toHaveAttribute('src', '/jing/generated/lot/frames-safe/guandi/frame-0.png');
+    await expect(tube).toHaveAttribute('src', '/jing/generated/lot/frames-safe/guandi/frame-0.webp');
     const stageSize = await page.locator('.jing-lot-visual').evaluate((element) => {
       const rect = element.getBoundingClientRect();
       return { width: rect.width, height: rect.height };

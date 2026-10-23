@@ -1049,7 +1049,9 @@ body.page-exit { opacity: 0; }
   top: 0;
   left: 0;
   height: 2px;
-  width: 0;
+  width: 100%;
+  transform: scaleX(0);
+  transform-origin: left;
   z-index: 300;
   background: linear-gradient(90deg, var(--accent), var(--accent-gold));
   box-shadow: 0 0 8px var(--accent-glow);

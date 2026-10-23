@@ -2036,7 +2036,7 @@ source .venv/bin/activate
 
 <p id="t-eTquwfwKlH7AJAQPdLGPHq"><span style="border-bottom:1px solid">开通阿里云百炼不会产生费用，仅模型调用（超出免费额度后）、模型部署、模型调优会产生相应计费。</span></p>
 
-<p id="t-DrGMHAhbIpk1vo8pfKjjPa"><span style="border-bottom:1px solid">现在要使用 API，都需要按 token 来计费，还好都不贵，我们可以先购买个最便宜的包：</span><span style="border-bottom:1px solid">阿里云百炼大模型服务平台</span><span style="border-bottom:1px solid">。</span></p>
+<p id="t-DrGMHAhbIpk1vo8pfKjjPa"><span style="border-bottom:1px solid">现在要使用 API，都需要按 token 来计费，还好都不贵，可参考平台的 API 使用与计费说明：</span><span style="border-bottom:1px solid">阿里云百炼大模型服务平台</span><span style="border-bottom:1px solid">。</span></p>
 
 <div id="t-EgU8qR59cQSbfHdZtfYmVW"><img alt="" decoding="async" loading="lazy" src="/images/agent-learning/52879127b872c73c098f6adf.png"/></div>
 

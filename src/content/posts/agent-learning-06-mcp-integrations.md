@@ -48,7 +48,7 @@ verification: {"status": "not-run", "scope": "本次仅整理资料；示例代�
 
 <a id="f-doxcnGtZDPtFItN90Fm9yx2JgXd"></a>
 
-<p id="f-doxcnMUSxt4lfBKJn7TtZjq8mIh"><span>（这章的所有内容都是面试出现过的真题，都是我根据真题来总结的，都建议掌握，这个问题是MCP的概念，肯定是必背的）</span></p>
+<p id="f-doxcnMUSxt4lfBKJn7TtZjq8mIh"></p>
 
 <p id="f-doxcnVHshlI0KLYfjJHLghBecxg"><span>MCP 是一种</span><span style="font-weight:bold">标准化接口协议，</span><span>统一了AI模型与外部资源的连接方式，用于让LLM能够访问外部的</span><span style="font-weight:bold">数据</span><span>，</span><span style="font-weight:bold">工具</span><span>和</span><span style="font-weight:bold">提示词</span><span>。</span></p>
 
@@ -74,7 +74,7 @@ verification: {"status": "not-run", "scope": "本次仅整理资料；示例代�
 
 <a id="f-doxcnoZB0nssSxLNj66LMo0N7df"></a>
 
-<p id="f-doxcn3uxWUaVMDiFZu1hOPDysXg"><span>（我根据这个视频</span><span><span><a href="https://www.youtube.com/watch?v=wlerSyHzoCI"><span>https://www.youtube.com/watch?v=wlerSyHzoCI</span></a></span></span><span>总结的，但是如果有余力，还是建议自己看一下这个视频，表格的东西不难，重要是你自己能够理解，视频里都有，大家可以更深入理解一下，我在字节跳动一面的讲解视频中应该也会过一下这个表格，大概讲一下）</span></p>
+<p id="f-doxcn3uxWUaVMDiFZu1hOPDysXg">表格相关内容可结合下面的视频进一步理解。 <a href="https://www.youtube.com/watch?v=wlerSyHzoCI"><span>https://www.youtube.com/watch?v=wlerSyHzoCI</span></a></p>
 
 <div id="f-doxcnFfHZKBm9spqfOejzTWw7Yf"><img alt="" decoding="async" height="311" loading="lazy" src="/images/agent-learning/b3b2063aa3cef104fb89d297.png" width="926"/></div>
 
@@ -259,7 +259,7 @@ verification: {"status": "not-run", "scope": "本次仅整理资料；示例代�
 
 ##### 2026新特性
 
-<p id="f-doxcnuVKorAfu113Gn6mPVTTsCe"><span>因为MCP 是24年11月就推出的技术，现在如果再考它，回答的时候，我不想你的回答还和2025年那会烂大街，所以这里讲一下2026年MCP的演进，新的技术，在我们下次介绍的时候，可以把这些技术加进去。让答案与时俱进，与众不同。 这里我们不会特别展开，因为其实问的不多，热度也不算很高，我也没看到面试官专门问这个新特性，所以我的策略是大致理解一下，记一下就够了，不深入，然后下次面试官问到我MCP的内容的时候，我在会介绍MCP的内容的时候，把它的新特性带进去。</span></p>
+<p id="f-doxcnuVKorAfu113Gn6mPVTTsCe">本节介绍 MCP 的演进与新特性。</p>
 
 <p id="f-doxcnxnx8Wui60pF75sjKjY2iFb"><span>这里不背版本更新清单，只记三个与 Agent 发展趋势有关的方向：</span></p>
 

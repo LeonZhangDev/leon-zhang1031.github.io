@@ -28,12 +28,12 @@ verification: {"status": "not-run", "scope": "本次仅整理资料；示例代�
 - [后训练项目](#section-0227)
 - [RAG 项目](#section-0228)
 - [案例技术补充](#section-0229)
-- [简历资源](#section-0230)
-- [第一部分：编写方法](#section-0233)
-- [第二部分：动笔取舍](#section-0234)
-- [第三部分：模块写法](#section-0235)
-- [第四部分：表达打磨](#section-0236)
-- [第五部分：定稿提交](#section-0237)
+- [案例分析资源](#section-0230)
+- [第一部分：技术记录方法](#section-0233)
+- [第二部分：方案取舍](#section-0234)
+- [第三部分：技术模块示例](#section-0235)
+- [第四部分：指标与验证](#section-0236)
+- [第五部分：实现核验](#section-0237)
 - [参考来源](#section-0239)
 - [讲解视频](#section-0240)
 - [投递渠道](#section-0242)
@@ -193,9 +193,9 @@ verification: {"status": "not-run", "scope": "本次仅整理资料；示例代�
 
 <div style="margin-left:25px"><p id="f-doxcntx8Ah9y4ERwZEil0u44wBd"><span style="font-weight:bold">1.你的Agent感觉不够智能啊？你的Agent的Agentic特性体现在哪里？</span></p><p id="f-doxcnKDmk2kSSLPK4mCieMWVU4b"><span style="font-weight:bold">2.你这个就是一个Workflow, 真的能叫做Agent吗？ </span></p><p id="f-doxcnUDNUErDY89N6vfUfela9df"><span style="font-weight:bold">3.传统方法是不是也可以做，为什么非要用Agent？</span></p></div>
 
-<p id="f-doxcnARY5dWGpsJnuPrKgiIs2Z7"><span>之前在我自己懂得不是很多的时候，我经常会被面试官带着跑。面试官压力/挑战我这三个问题，我自己就会不自信，或者自我怀疑。其实当你自己的水平达到了以后，面试官压力你的时候，一个是你不会被带跑，你有自己的思路，同时你还可以现场自圆其说，包装和他讨论。其实类似的问题还有面试官说：RAG都过时了，你还做RAG呢？这个问题我们在RAG章节有专题讨论，可以点</span><span><span><a href="/posts/agent-learning-09-rag-data-processing/#f-doxcn6O0mAp7YvxwJJSAG5fr1ue"><span>这里</span></a></span></span><span>。</span></p>
+<p id="f-doxcnARY5dWGpsJnuPrKgiIs2Z7">案例讨论：RAG 是否过时？可以结合 RAG 章节中的相关专题，分析其适用场景与技术取舍。 <a href="/posts/agent-learning-09-rag-data-processing/#f-doxcn6O0mAp7YvxwJJSAG5fr1ue"><span>这里</span></a></p>
 
-<p id="f-doxcnB6nkGjAQ5B78c5eT5pWcFb"><span>今天专题先讲解这个问题，讲清楚了</span><span style="font-weight:bold">相关问题的原理</span><span>，面试官问你的时候其实你可以自信大方的回答。这个小节我们讲理论部分。对应的实战部分可以看 </span><span><span><a href="#f-doxcnTzYfDUhpqGrue0BtYAnnRg"><span>202606 深圳大模型研究院Agent开发一面</span></a></span></span><span> 对应的问题，可以看一下面试官压力我，我是如何现场回答的。要想不被他压力到，就要掌握好今天我们讲的这三个问题的理论部分。</span></p>
+<p id="f-doxcnB6nkGjAQ5B78c5eT5pWcFb">本节说明相关问题的理论部分，实践案例与参考答案见链接。 <a href="#f-doxcnTzYfDUhpqGrue0BtYAnnRg"><span>202606 深圳大模型研究院Agent开发一面</span></a></p>
 
 
 <a id="section-0089"></a>
@@ -484,13 +484,13 @@ verification: {"status": "not-run", "scope": "本次仅整理资料；示例代�
 
 <a id="f-doxcnDBpb5DQYH4IW38hyQeVGcO"></a>
 
-<p id="f-doxcnn2sIVhGi5kRLy2g41Togvg"><span>现在如果面试，我肯定会写一个更高级的项目，或者即使用这个项目，我也会进行一些包装和改进。</span></p>
+<p id="f-doxcnn2sIVhGi5kRLy2g41Togvg"></p>
 
 <p id="f-doxcnKpIwYSGhej7xSlXpIqMa8b"><span>这个项目的好处是：</span><span style="font-weight:bold">最少搭了一套多Agent对话的框架，多Agent流转，流式响应，RAG系统，MCP，也设计了一个持久化机器人，做沉淀，思想还有的。</span></p>
 
 <p id="f-doxcn8stdZykCoujPb61xxCkQXd"><span style="font-weight:bold">缺点是太不成熟</span><span>：没有做持久化记忆，RAG系统其实只是走了embedding匹配，持久化没做完，没有压缩策略。</span></p>
 
-<p id="f-doxcnViVMLzqHWir2Q2uUhcNVIh"><span>如果使用这个项目，我的建议是在这个基础上，进行改进，包装。我给出一些方向和意见。</span></p>
+<p id="f-doxcnViVMLzqHWir2Q2uUhcNVIh">可以在此项目基础上进行以下改进与扩展。</p>
 
 <a id="f-doxcnlZCjzynmEmnApT7GE9WeCc"></a>
 
@@ -529,7 +529,7 @@ verification: {"status": "not-run", "scope": "本次仅整理资料；示例代�
 
 <p id="f-doxcnJwcDhhATSOVHiKAB4CAenP"><span style="font-weight:bold">学习：</span></p>
 
-<p id="f-doxcnvHsf07s4AvV3vsODmGAr9f"><span>学习 </span><span><span><a href="/posts/agent-learning-15-evaluation-observability/#f-doxcnqrKdVGPbNYY8Xm3Fr8NVkh"><span>Agent 测评笔记</span></a></span></span><span>，并参考笔记中基于该项目实现的评估算法与评测方案。这个笔记我写很全，是整个Agent开发链路上如何做测评，还有很多参考资料，先去看，看完了你应该知道如何做Agent评估。对应实战其实也有，</span><span><span><a href="/posts/agent-learning-18-training-inference/#f-doxcnIjLgG7Pe2zBY5bPMMqlIRh"><span>算法项目的二阶段</span></a></span></span><span>就是做的评估，有数据集，代码，可以参考。通过这些学习，我预期你自己应该知道如何做评估了</span></p>
+<p id="f-doxcnvHsf07s4AvV3vsODmGAr9f">学习 Agent 测评相关知识，并参考基于该项目的评估算法与方案。算法项目第二阶段提供了评估数据集和代码，可用于进一步实践。 <a href="/posts/agent-learning-15-evaluation-observability/#f-doxcnqrKdVGPbNYY8Xm3Fr8NVkh"><span>Agent 测评笔记</span></a> <a href="/posts/agent-learning-18-training-inference/#f-doxcnIjLgG7Pe2zBY5bPMMqlIRh"><span>算法项目的二阶段</span></a></p>
 
 <p id="f-doxcnqWzwVl6vYVNBEif0bNRbJf"><span style="font-weight:bold">思考：</span></p>
 
@@ -539,7 +539,7 @@ verification: {"status": "not-run", "scope": "本次仅整理资料；示例代�
 
 <p id="f-doxcngAbUBJydNEerhtHRQAQnwf"><span style="font-weight:bold">进一步扩展：将评估模块做成独立项目</span></p>
 
-<p id="f-doxcniyud2PT2204IA5cHy7Kvxb"><span>这部分可以继续做深，单独包装成一个 </span><span style="font-weight:bold">Agent Evaluation Platform</span><span>。重点不是再写几个单元测试，而是建立一套可重复运行、能够解释失败原因、可以接入 CI/CD 并延伸到线上监控的 Agent 评估基础设施。它既可以评估当前智能预约系统，也可以通过统一 Case、Trace 和 Scorer 协议复用到其他 Agent 项目。</span></p>
+<p id="f-doxcniyud2PT2204IA5cHy7Kvxb"><span>这部分可以继续做深，扩展为一个 </span><span style="font-weight:bold">Agent Evaluation Platform</span><span>。重点不是再写几个单元测试，而是建立一套可重复运行、能够解释失败原因、可以接入 CI/CD 并延伸到线上监控的 Agent 评估基础设施。它既可以评估当前智能预约系统，也可以通过统一 Case、Trace 和 Scorer 协议复用到其他 Agent 项目。</span></p>
 
 <p id="f-doxcny8fiNsRGJK71YfmITlXPYx"><span style="font-weight:bold">评估数据集：</span><span> 在现有 30 个场景测试和 51 条本地模型评估样本基础上，扩展一套 200～300 条业务 Golden Set，按意图路由、预约槽位、RAG 问答、工具调用、多轮状态、多 Agent 交接、安全攻击和异常恢复分层打标。每条 Case 除输入和标准答案外，还保存预期 Agent、允许的工具序列、关键参数、最终状态、禁止行为、最大步数和成本预算。外部数据库、排班和知识库使用固定快照或 Mock，保证同一版本可以重复回放。</span></p>
 
@@ -559,7 +559,7 @@ verification: {"status": "not-run", "scope": "本次仅整理资料；示例代�
 
 <p id="f-doxcnaayoM8vTuInLqscdSIEESf"><span style="font-weight:bold">线上监控闭环：</span><span> 上线后复用同一套 Trace Schema 和指标，在 Dashboard 中监控质量漂移、输入分布变化、工具失败率、循环调用、P95/P99、Token 成本、提示注入和越权行为；新出现的失败请求经脱敏和人工确认后自动加入 Regression Set，形成“线上发现 → 失败归因 → 回灌数据集 → CI 回归 → 灰度发布”的闭环。</span></p>
 
-<p id="f-doxcnLrjLdCR1IT4icwWD0IRMlb"><span style="font-weight:bold">Agent 全生命周期评估与发布平台</span><span> | 个人项目 | Agent Evaluation / LLMOps</span></p>
+<p id="f-doxcnLrjLdCR1IT4icwWD0IRMlb">学习案例：Agent 全生命周期评估与发布平台 | Agent Evaluation / LLMOps</p>
 
 <p id="f-doxcnsTxokJqtLUxV7aONGbr98c"><span style="font-weight:bold">背景：</span></p>
 
@@ -587,7 +587,7 @@ verification: {"status": "not-run", "scope": "本次仅整理资料；示例代�
 
 <p id="f-doxcnDEG8VGqbyWczyxY7CszHOe"><span style="font-weight:bold">学习：</span></p>
 
-<p id="f-doxcnN2EwVysNXZXvMEguztgqte"><span>学习 Claude Code 等经典 Agent 项目的中心化编排方式与 ReAct 推理范式，理解主管 Agent 如何进行任务判断、能力调用和结果整合。要学习</span><span><span><a href="/posts/agent-learning-18-training-inference/#f-doxcnIjLgG7Pe2zBY5bPMMqlIRh"><span>笔记Agent架构</span></a></span></span><span>，里面很多参考资料。然后就是各种开源Agent项目（</span><span><span><a href="/posts/agent-learning-21-open-source-architectures/#f-doxcnYBSPc4kn6qHFK7z9g6dIrd"><span> Claude Code</span></a></span></span><span>、</span><span><span><a href="/posts/agent-learning-21-open-source-architectures/#f-doxcndFasR4Pr3kjVopop9qBJdc"><span>Harmes</span></a></span></span><span>、</span><span><span><a href="/posts/agent-learning-21-open-source-architectures/#f-doxcnfdqX7Xmgd1YRp2zV5utl0e"><span>OpenClaw</span></a></span></span><span>、</span><span><span><a href="/posts/agent-learning-21-open-source-architectures/#f-doxcnFOWnBrl5Ak7OWmNe0UzNBc"><span>pi-agent</span></a></span></span><span> ），面经，我都讲了架构，理解Agent架构是什么，怎么做的，你就会包装了。</span></p>
+<p id="f-doxcnN2EwVysNXZXvMEguztgqte">学习 Claude Code 等经典 Agent 项目的中心化编排与 ReAct 推理范式，理解主管 Agent 的任务判断、能力调用和结果整合，并比较 Claude Code、Hermes、OpenClaw、Pi-Agent 的架构。 <a href="/posts/agent-learning-18-training-inference/#f-doxcnIjLgG7Pe2zBY5bPMMqlIRh"><span>笔记Agent架构</span></a> <a href="/posts/agent-learning-21-open-source-architectures/#f-doxcnYBSPc4kn6qHFK7z9g6dIrd"><span> Claude Code</span></a> <a href="/posts/agent-learning-21-open-source-architectures/#f-doxcndFasR4Pr3kjVopop9qBJdc"><span>Harmes</span></a> <a href="/posts/agent-learning-21-open-source-architectures/#f-doxcnfdqX7Xmgd1YRp2zV5utl0e"><span>OpenClaw</span></a> <a href="/posts/agent-learning-21-open-source-architectures/#f-doxcnFOWnBrl5Ak7OWmNe0UzNBc"><span>pi-agent</span></a></p>
 
 <p id="f-doxcnwqd4ZEFes1EUeBtypFZH7c"><span style="font-weight:bold">思考：</span></p>
 
@@ -625,13 +625,13 @@ verification: {"status": "not-run", "scope": "本次仅整理资料；示例代�
 
 <blockquote id="f-doxcn3yr6DkxnaDHJMbdJgqnTCc"><p id="f-doxcnfUHeLQw8LzeIvXzynmXd8b"><span>• 构建预约槽位提取本地模型评测链路，在 51 条冻结评估集上对比 Qwen3 0.6B/1.7B/4B；选取 1.7B 作为质量与性能平衡方案，相比 4B 任务正确性仅下降 2.9 个百分点，平均时延降低 34.4%、吞吐提升 32.9%，并设计 SFT/DPO 与 GGUF 量化路线进一步优化协议遵循和 CPU 推理性能。</span></p></blockquote>
 
-<p id="f-doxcnupIgR5b8EBtgvvpoRGh1Pd"><span>其实还可以写高可用相关的内容，就是当Agent失败如何重试，优雅回退。我先占个位这部分内容我补了笔记再写。 同时你还可以说，比如写多模态啊等等，但是我的思想是不能天马行空。多模态当然是包装的思路，但是本节暂时没有，我只给你可以行的，你可以照着去学习，思考的方向。</span></p>
+<p id="f-doxcnupIgR5b8EBtgvvpoRGh1Pd">还可以研究高可用设计，包括 Agent 失败重试、优雅回退，以及多模态能力的扩展。</p>
 
 <a id="f-doxcnDrH3KyJzzQnEBhtTxRJeQe"></a>
 
 ##### 案例技术说明
 
-<p id="f-doxcnqR0YjWyONfvWu7fETzq48r"><span style="font-weight:bold">企业售后智能客服与预约 Agent 系统</span><span> | 个人项目 | Agent / LLM 应用开发</span></p>
+<p id="f-doxcnqR0YjWyONfvWu7fETzq48r">学习案例：企业售后智能客服与预约 Agent 系统 | Agent / LLM 应用开发</p>
 
 <p id="f-doxcntkFaYpVaBuHUg0oD03h9yb"><span style="font-weight:bold">背景：</span></p>
 
@@ -663,9 +663,9 @@ verification: {"status": "not-run", "scope": "本次仅整理资料；示例代�
 
 <p id="f-doxcnnjKJwvmvBxw9XxfT4aZrlg"><span style="font-weight:bold">除此之外，这个项目还带一点本地推理部署的内容</span><span>。</span></p>
 
-<p id="f-doxcnvzvF14biBsMJJxozS7fZcO"><span>对于开发的同学来说，能够具备这样的经历，相比其他候选人，无疑是会让你脱颖而出的一个点。 这个项目，</span><span style="font-weight:bold">无论是作为一个加分项，放在你的Agent项目中，还是单独成为一个小的算法项目，可以认为都可以</span><span>。这个项目的目标很明显，提升小模型在资源受限上的可用性，同时效果也很容易验证，因为我们制定了专门的数据集去评估，对比基模和训练后的模型，作为一个简历项目来写，是非常清晰的。</span></p>
+<p id="f-doxcnvzvF14biBsMJJxozS7fZcO">该项目的目标是提升小模型在资源受限条件下的可用性，通过专门数据集对比基模与训练后模型。它既可以集成到 Agent 项目中，也可以独立作为算法学习案例。</p>
 
-<p id="f-doxcnbvN5zM2VYMDjCuPHDKMH1e"><span style="font-weight:bold">面向预约 Agent 的本地小模型后训练与部署</span><span> | 个人项目 | LLM 算法 / 推理优化</span></p>
+<p id="f-doxcnbvN5zM2VYMDjCuPHDKMH1e">学习案例：面向预约 Agent 的本地小模型后训练与部署 | LLM 算法 / 推理优化</p>
 
 <p id="f-doxcn1UmFKWsFXk8Rf9sgyamrTb"><span style="font-weight:bold">背景：</span><span> 智能预约 Agent 需要从多轮对话和工具结果中抽取时间、时长、用户偏好等槽位，并在信息完整时决定是否调用查询工具。远端大模型虽效果稳定，但存在网络依赖、数据隐私、调用成本和响应延迟问题；通用本地小模型则容易出现 JSON 协议损坏、字段幻觉、状态继承错误和 Tool Calling 决策不稳定。</span></p>
 
@@ -698,7 +698,7 @@ verification: {"status": "not-run", "scope": "本次仅整理资料；示例代�
 
 <a id="f-doxcnbjUj7xEBo0TE3tIueuB7kd"></a>
 
-<p id="f-doxcnjheRQ2sgHwGrLoR2QoyPoc"><span>这个RAG项目，我还是相对比较放心的。</span><span style="font-weight:bold">整体就是符合企业RAG的流程，BM25+语义检索 + 重排序</span><span>，以及评估方法。这个项目也是有很多人拿过去面试，我们也收集了很多面试真题 使用这个项目，我的个人建议是： 按照文档，视频，代码，先理解消化这个项目，这个项目的各个流程，都是重点。MCP, 里面的各种RAG技术都是RAG里面最经典的方法，必须要会的。 做完这个其实也满足了该学习案例部分讲的 完成一个生产级别的RAG项目的前两个阶段。</span></p>
+<p id="f-doxcnjheRQ2sgHwGrLoR2QoyPoc">该 RAG 案例包含企业 RAG 流程：BM25、语义检索、重排序与评估。结合文档、视频和代码理解各流程，以及 MCP 与 RAG 技术的实现方式。</p>
 
 <p id="f-doxcnFhpGIvGESsxdmPP0hxd8mg"><span style="font-weight:bold">完成基础学习后，这一部分建议你必做：</span></p>
 
@@ -746,7 +746,7 @@ verification: {"status": "not-run", "scope": "本次仅整理资料；示例代�
 
 ##### 现有技术方案
 
-<p id="f-doxcnXrhwmlj8fwsTFc6FdP1Dfh"><span style="font-weight:bold">模块化企业知识检索与 Agent RAG 系统</span><span> | 个人项目 | RAG / LLM 应用开发</span></p>
+<p id="f-doxcnXrhwmlj8fwsTFc6FdP1Dfh">学习案例：模块化企业知识检索与 Agent RAG 系统 | RAG / LLM 应用开发</p>
 
 <p id="f-doxcnYTRDFsGSUgy6XZPgqOI2Qf"><span style="font-weight:bold">背景：</span></p>
 
@@ -796,19 +796,19 @@ verification: {"status": "not-run", "scope": "本次仅整理资料；示例代�
 
 
 <a id="section-0230"></a>
-## 简历资源
+## 案例分析资源
 
 <a id="f-doxcnMHV1RliuNpK2qIpPnnsF9c"></a>
 
-<p id="f-doxcnJc4er28lKIn3KxpjtbUk6g"><span> /~c0fa3a2GfU~:/ 链接：</span></p>
+<p id="f-doxcnJc4er28lKIn3KxpjtbUk6g"></p>
 
 
 <a id="section-0233"></a>
-## 第一部分：编写方法
+## 第一部分：技术记录方法
 
 <a id="f-doxcn3kmm9NmN7M9a9pFl0Nw9yA"></a>
 
-<p id="f-doxcnpqKqK5xrusLBMvdY36lP6d"><span>国家大学生就业服务平台也建议实践经历具体化，成果尽量“数量化或者具体化”，并按企业与岗位调整重点。</span></p>
+<p id="f-doxcnpqKqK5xrusLBMvdY36lP6d"></p>
 
 <ol start="1"><li id="f-doxcneeeDkCnjIxMCE9a1p85t5g"><span style="font-weight:bold">收集</span><span>：把上述事实、分工和测试记录完整记下。</span></li></ol>
 
@@ -820,76 +820,67 @@ verification: {"status": "not-run", "scope": "本次仅整理资料；示例代�
 
 
 <a id="section-0234"></a>
-## 第二部分：动笔取舍
+## 第二部分：方案取舍
 
 <a id="f-doxcnh659y1ll9yEP5N8wKWZTib"></a>
 
-<p id="f-doxcnlSJB6OqtejoPCRqZdn4XIh"><span style="font-weight:bold">假设素材</span><span>：做过管理后台、支付接口优化、自动化测试工具，也参加过校园活动。</span></p>
+<p id="f-doxcnlSJB6OqtejoPCRqZdn4XIh"></p>
 
-<ul><li id="f-doxcngv5WKs8uDyGvj029Z8az3c"><span style="font-weight:bold">投后端岗</span><span>：优先写支付接口中的事务、幂等与数据库问题，后台页面简写。</span></li></ul>
+<ul><li id="f-doxcngv5WKs8uDyGvj029Z8az3c"></li></ul>
 
-<ul><li id="f-doxcnkq4tAkvEIHJ2rNLqEMhfPg"><span style="font-weight:bold">投测试开发岗</span><span>：优先写自动化测试工具怎样覆盖风险场景、接入交付流程，支付经历保留问题分析部分。</span></li></ul>
+<ul><li id="f-doxcnkq4tAkvEIHJ2rNLqEMhfPg"></li></ul>
 
 <ul><li id="f-doxcnRbGgmpy1rFXznckYbglSug"><span style="font-weight:bold">可信度</span><span>：有实际交付、采用、测试或测量依据吗？</span></li></ul>
 
-<p id="f-doxcnYKLpfddG1k3r96v8KguLbf"><span style="font-weight:bold">检查后发现</span><span>：A里三条分别是“开发查询接口、开发新增接口、开发修改接口”，证明的能力高度重复；B里有一次独立故障定位，反而埋在最后。</span></p>
+<p id="f-doxcnYKLpfddG1k3r96v8KguLbf"></p>
 
-<ul><li id="f-doxcnVyC6cNQ5GFKqsFhPlhXg6b"><span>A合并常规接口开发，保留最有价值的两三条。</span></li></ul>
+<ul><li id="f-doxcnVyC6cNQ5GFKqsFhPlhXg6b"></li></ul>
 
-<p id="f-doxcnE8WHs3oVPc7kxQxe9srCcg"><span style="font-weight:bold">原安排</span><span>：商城、论坛、博客各写一段，但每段都是登录、增删改查、数据库连接。</span></p>
+<p id="f-doxcnE8WHs3oVPc7kxQxe9srCcg"></p>
 
 <ul><li id="f-doxcn1aotNN5r0ED1NbQVIc74Me"><span>论坛：如果确实有不同难点，突出搜索、缓存失效或内容审核流程。</span></li></ul>
 
 <p id="f-doxcnMyHXzMuvZojGEVA0ZMxm6b"><span style="font-weight:bold">版本关系例子</span><span>：同一个工具的V1、V2、V3，合并为“从单机实现到可恢复任务处理的演进”，比拆成三个名称不同的项目更清晰。</span></p>
 
-<ul><li id="f-doxcnjBmt0osWPOqhyRiHrFcNec"><span style="font-weight:bold">资深工程师、技术负责人或团队负责人，可以两页。</span><span> 除技术贡献外，交代架构决策、责任范围、跨团队推进或团队管理成果。</span></li></ul>
+<ul><li id="f-doxcnjBmt0osWPOqhyRiHrFcNec"></li></ul>
 
-<ul><li id="f-doxcnGufEBWnrr3T74z00ADh8g6"><span style="font-weight:bold">迫使作者取舍</span><span>：原本为展示全面，写了所有课程与学习过的工具；调整后只保留与目标岗位相关的课程和有实践证据的工具。</span></li></ul>
+<ul><li id="f-doxcnGufEBWnrr3T74z00ADh8g6"></li></ul>
 
-<ul><li id="f-doxcnmByWew20JUtUBV5DsHou6c"><span style="font-weight:bold">留下追问入口</span><span>：原本用半页解释整个系统架构和所有接口；调整后用两三条说明问题、关键实现和结果，架构图留到面试展开。</span></li></ul>
+<ul><li id="f-doxcnmByWew20JUtUBV5DsHou6c"></li></ul>
 
 
 <a id="section-0235"></a>
-## 第三部分：模块写法
+## 第三部分：技术模块示例
 
 <a id="f-doxcndkZIyKTLn0e2pYVkdsA4Ae"></a>
 
-<p id="f-doxcn4ZQwYAtgNqG7YvhmcVgDAg"><span style="font-weight:bold">写什么</span><span>：姓名、电话、邮箱；按岗位需要补充求职方向、所在或意向城市、作品或代码链接。实习申请可补充真实的可到岗时间、实习时长或出勤安排。</span></p>
+<p id="f-doxcn4ZQwYAtgNqG7YvhmcVgDAg"></p>
 
-<pre id="f-doxcnOBOX0qcpkAdYaEmppFMTvQ"><code>姓名｜后端开发实习
-电话：……｜邮箱：……｜意向城市：……｜代码链接：……
-可到岗时间：20XX年X月｜可实习X个月、每周X天</code></pre>
+<p id="f-doxcnOBOX0qcpkAdYaEmppFMTvQ"></p>
 
-<pre id="f-doxcnimQycpdYXacKpEnvwAGVmd"><code>某大学｜计算机科学与技术｜本科                    20XX.09—20XX.06（预计）
-GPA：3.7/4.0；专业排名：12/180（如真实且值得展示）
-相关课程：数据结构、数据库系统（仅保留与岗位相关的课程）</code></pre>
+<p id="f-doxcnimQycpdYXacKpEnvwAGVmd"></p>
 
-<p id="f-doxcn6avPJy3CQNueGKyYof7Vdp"><span style="font-weight:bold">写什么</span><span>：与目标岗位相关、自己能够解释并有实际使用或练习依据的语言、框架、数据库、工具与技术能力。</span></p>
+<p id="f-doxcn6avPJy3CQNueGKyYof7Vdp"></p>
 
-<p id="f-doxcn2UYe7OwJwNkiNrusokCM3d"><span style="font-weight:bold">怎么组织</span><span>：可按语言、数据存储、工程工具等类别简洁归组。重要技能可以用短语交代应用场景，不必反复列出完整技术栈或概念清单。</span></p>
+<p id="f-doxcn2UYe7OwJwNkiNrusokCM3d"></p>
 
-<pre id="f-doxcnIfFLh0opeui3l9YXe2XeSb"><code>专业技能：Java、MySQL、Git；有接口开发、SQL执行计划分析与协作开发实践。</code></pre>
+<p id="f-doxcnIfFLh0opeui3l9YXe2XeSb">技术栈：Java、MySQL、Git；接口开发、SQL 执行计划分析与协作开发。</p>
 
-<p id="f-doxcneFIgjdhyFky2xIijHr0Vef"><span>前提是这些实践确实存在。技能栏写“MySQL”，项目中写“依据执行计划调整联合索引”：前者方便检索，后者证明实践，不必两边都重复数据库概念清单。</span></p>
+<p id="f-doxcneFIgjdhyFky2xIijHr0Vef"></p>
 
-<ul><li id="f-doxcnitmn24Ou0ScfLMQOdHyoif"><span>资深工程师或负责人可进一步交代架构决策、负责范围、跨团队推进及管理成果，但团队产出与本人贡献要区分。</span></li></ul>
+<ul><li id="f-doxcnitmn24Ou0ScfLMQOdHyoif"></li></ul>
 
-<pre id="f-doxcnDQx6npe24pVTUXqEJhwmOd"><code>某公司｜后端开发实习生                         20XX.07—20XX.09
-- 负责支付回调模块，完成重复通知处理、状态转换与异常补偿。
-- 将版本核对步骤封装为工具，被两个协作团队纳入发布检查流程。</code></pre>
+<p id="f-doxcnDQx6npe24pVTUXqEJhwmOd">支付回调：处理重复通知、状态转换与异常补偿。版本核对：将核对步骤封装为工具，接入发布检查流程。</p>
 
-<pre id="f-doxcnMcOQxkLcHH970hInuWoC5c"><code>批量任务处理工具｜个人项目                     20XX.XX—20XX.XX
-面向本地批处理任务，提供任务排队与失败恢复能力。
-- 对比进程内有界队列与外部任务队列的吞吐、故障恢复和运维成本，
-  在当前单实例负载下选择有界队列，并补充失败任务持久化与重启恢复。</code></pre>
+<p id="f-doxcnMcOQxkLcHH970hInuWoC5c">批量任务处理学习案例：面向本地批处理任务，提供任务排队与失败恢复能力。对比进程内有界队列与外部任务队列的吞吐、故障恢复和运维成本；在单实例负载下选择有界队列，并补充失败任务持久化与重启恢复。</p>
 
-<p id="f-doxcnwenJAiYV0077zvJilq5Tfd"><span>正文保留关键判断，完整架构、实验过程和所有接口细节放在项目材料或面试底稿中。</span></p>
+<p id="f-doxcnwenJAiYV0077zvJilq5Tfd"></p>
 
-<blockquote id="f-doxcnR8hk3Srvfce7gTkFztytze"><p id="f-doxcnCUpdpI2FlVvA5YqaKRyLjg"><span>为某开源项目修复导出异常并补充回归测试，PR已合并，附公开链接。</span></p></blockquote>
+<blockquote id="f-doxcnR8hk3Srvfce7gTkFztytze"><p id="f-doxcnCUpdpI2FlVvA5YqaKRyLjg"></p></blockquote>
 
 
 <a id="section-0236"></a>
-## 第四部分：表达打磨
+## 第四部分：指标与验证
 
 <a id="f-doxcnXWCqHK1cBwbDZ25hILmh0g"></a>
 
@@ -902,9 +893,9 @@ GPA：3.7/4.0；专业排名：12/180（如真实且值得展示）
 <blockquote id="f-doxcnCiK7cJZL5tGTK4OxlgTbPf"><p id="f-doxcnJ2LF0azU1vFmszioZyCCjf"><span>在兼容旧版调用方的前提下完成订单接口改造，补充重复请求与超时重试回归测试，并通过灰度发布交付。</span></p>
 </blockquote>
 
-<p id="f-doxcnVULdt2oAjLJX6tmSbkX1He"><span style="font-weight:bold">成果原则</span><span>：尽可能量化，但不强迫每条有数字</span></p>
+<p id="f-doxcnVULdt2oAjLJX6tmSbkX1He"></p>
 
-<p id="f-doxcnvIgqPw7Y3S1eEQs2S4MbWc"><span>MIT 和 Yale 的职业指导使用的是“如果可以”“在可行时量化”，不是要求每条经历必须包含百分比。</span></p>
+<p id="f-doxcnvIgqPw7Y3S1eEQs2S4MbWc"></p>
 
 <ul><li id="f-doxcnNncFFDEHUTCl2dbys6evwg"><span style="font-weight:bold">回归测试、对账或故障演练</span><span>，可以证明正确性、可靠性得到验证。</span></li></ul>
 
@@ -926,21 +917,21 @@ GPA：3.7/4.0；专业排名：12/180（如真实且值得展示）
 
 <p id="f-doxcnrQjDMjLe3OzLHv5iySOPQF"><span style="font-weight:bold">假设场景</span><span>：为批处理任务评估分布式任务队列，但实际任务规模有限，新增队列会引入运维和一致性成本。</span></p>
 
-<blockquote id="f-doxcndmix20O8GjFsap7f2XOjvh"><p id="f-doxcnuOFn2fDQNX8ozmynp29teg"><span>调研多种任务调度技术，熟悉分布式架构。</span></p></blockquote>
+<blockquote id="f-doxcndmix20O8GjFsap7f2XOjvh"><p id="f-doxcnuOFn2fDQNX8ozmynp29teg"></p></blockquote>
 
-<ol start="3"><li id="f-doxcnYjcAKKt8UyRwxNzeLwpMpz"><span style="font-weight:bold">数据与成果。</span><span> 优先展示最有竞争力的真实结果，用前后对比、百分比或绝对值突出变化，细节放面试底稿。不凭空增加提升幅度，不把不同环境的最好结果拼在一起；关键测量条件不能省掉。</span></li></ol>
+<ol start="3"><li id="f-doxcnYjcAKKt8UyRwxNzeLwpMpz"></li></ol>
 
-<ol start="4"><li id="f-doxcnVxFUtJpy056kUnw9FA4EZe"><span style="font-weight:bold">影响力。</span><span> 从代码动作提升到功能交付、用户使用、团队采用、效率改善或风险降低，让读者理解工作意义。影响覆盖多大范围就写多大，不把单模块成果写成全平台收益。</span></li></ol>
+<ol start="4"><li id="f-doxcnVxFUtJpy056kUnw9FA4EZe"></li></ol>
 
 <ol start="5"><li id="f-doxcn0s1wBZTThAKjZNaoqJ4Bke"><span style="font-weight:bold">技术难度。</span><span> 突出兼容性、并发、状态一致性、资源限制和异常恢复等真实难点，而非只列功能。不给普通任务添加没有发生过的规模与约束。</span></li></ol>
 
 
 <a id="section-0237"></a>
-## 第五部分：定稿提交
+## 第五部分：实现核验
 
 <a id="f-doxcnJ1fqDwZwvDTbi1mxJnFjFB"></a>
 
-<ul><li id="f-doxcnyzQ3xZX6qaWBxKx0No7vPc"><span>检查公司、客户和项目的披露要求，不放内部凭据、客户数据或未经允许的材料。</span></li></ul>
+<ul><li id="f-doxcnyzQ3xZX6qaWBxKx0No7vPc"></li></ul>
 
 <p id="f-doxcnRBygoneN4haijcgnBZh1kh"><span style="font-weight:bold">例子</span><span>：一句“缓存优化”应该能展开到什么程度</span></p>
 
@@ -954,9 +945,9 @@ GPA：3.7/4.0；专业排名：12/180（如真实且值得展示）
 
 <ul><li id="f-doxcn74MVTWpba0BzRC9cTe6hHb"><span>并发访问、缓存未命中和缓存服务故障怎样处理？</span></li></ul>
 
-<p id="f-doxcnjzKuAiJxweIr7Z3FRuZ2Uh"><span style="font-weight:bold">需要避免</span><span>：自己只设置过缓存过期时间，却写成“完整解决缓存一致性与高并发问题”。如果没有实现更复杂的机制，可以讨论后续设计，但不要把它说成当时成果。</span></p>
+<p id="f-doxcnjzKuAiJxweIr7Z3FRuZ2Uh"></p>
 
-<ul><li id="f-doxcnA6z8sLofxD8441JOQWRpvy"><span style="font-weight:bold">“主导架构”实际只是实现一个模块</span><span>：改为“负责X模块”，准确突出该模块的实现与决策。</span></li></ul>
+<ul><li id="f-doxcnA6z8sLofxD8441JOQWRpvy"></li></ul>
 
 
 <a id="section-0239"></a>
@@ -964,7 +955,7 @@ GPA：3.7/4.0；专业排名：12/180（如真实且值得展示）
 
 <a id="f-doxcnVCpm8V5OhzAmzy7h1nuFvc"></a>
 
-<ol start="1"><li id="f-doxcnBUUX2pRSAUM5TV1dAxVc7d"><span><span><a href="https://capd.mit.edu/resources/resumes/"><span>MIT CAPD — Resumes</span></a></span></span><span>：篇幅有条件例外；能量化时量化。</span></li></ol>
+<ol start="1"><li id="f-doxcnBUUX2pRSAUM5TV1dAxVc7d"></li></ol>
 
 
 <a id="section-0240"></a>
@@ -972,7 +963,7 @@ GPA：3.7/4.0；专业排名：12/180（如真实且值得展示）
 
 <a id="f-doxcnd3gcraXgECWirqD1kbrBdr"></a>
 
-<p id="f-doxcnNF2hmfJWzYjEs2CgXxZB1f"><span><span><a href="https://www.bilibili.com/video/BV1hDeV6LEXy/?spm_id_from=333.1387.homepage.video_card.click&amp;vd_source=144bec9c3f54e465073138bed788be1b"><span>https://www.bilibili.com/video/BV1hDeV6LEXy/?spm_id_from=333.1387.homepage.video_card.click&amp;vd_source=144bec9c3f54e465073138bed788be1b</span></a></span></span></p>
+<p id="f-doxcnNF2hmfJWzYjEs2CgXxZB1f"></p>
 
 
 <a id="section-0242"></a>
@@ -984,9 +975,9 @@ GPA：3.7/4.0；专业排名：12/180（如真实且值得展示）
 
 ##### AI 搜索
 
-<p id="f-doxcnkXqaEobgzhfSkXhXJ0MDHg"><span>背景说明里写清楚个人经历、擅长的方向、目标岗位，以及地点等限制条件。写在Agent.md或者claude.md的长期记忆里，因为以后基本上每次搜索，他都需要这些内容。</span></p>
+<p id="f-doxcnkXqaEobgzhfSkXhXJ0MDHg"></p>
 
-<p id="f-doxcn9j68bFw7FFczycJDcmeCXc"><span>我的原意不是让 AI 为了“多找几个”硬凑结果，而是让它真正扩大检索范围。找不到就是找不到，访问不了就说明，不要把猜测当成已经查到的岗位。</span></p>
+<p id="f-doxcn9j68bFw7FFczycJDcmeCXc"></p>
 
 <a id="f-doxcn03arVP8v7KPp6NOmEq2IAb"></a>
 
@@ -1020,9 +1011,9 @@ GPA：3.7/4.0；专业排名：12/180（如真实且值得展示）
 <a id="section-0246"></a>
 ## 技术知识与案例补充
 
-<p id="f-doxcniIgrYSUw76IpawigCzv5Ef"><span>1. </span><span style="font-weight:bold">亮身份（学校/公司） + 核心标签</span><span>：eg. 我叫xx,我做过5年AI开发，我擅长Agent，RAG系统，熟悉常见的AI应用和框架，对模型前后训练，推理也有一定的实践。</span></p>
+<p id="f-doxcniIgrYSUw76IpawigCzv5Ef"></p>
 
-<p id="f-doxcnzzsIlxdfeLLNldfokBjQhd"><span>2. </span><span style="font-weight:bold">用结果证明能力</span><span>：本案例用xx方法得到了xx提升。 使用案例中的RAG系统，相比copilot 通用工具，回答的时间降低xx, 准确度提升xx。</span></p>
+<p id="f-doxcnzzsIlxdfeLLNldfokBjQhd"></p>
 
 
 <a id="section-0247"></a>
@@ -1036,7 +1027,7 @@ GPA：3.7/4.0；专业排名：12/180（如真实且值得展示）
 
 <a id="f-doxcnjZcsi2EplFSdEMvVkA9OOf"></a>
 
-<div style="margin-left:25px"><h3 id="f-doxcnnWmmLeWtvhMgvwOdztF8fd"><span>5.1 刷题？论文？还是项目经验</span></h3><p id="f-doxcnAqonJswRuLJbreaJcezkuh"><span>面对大模型相关岗位的激烈竞争，许多求职者常常陷入一个关键抉择：应重点投入算法刷题，深耕学术论文，还是积累项目实践经验？</span></p><p id="f-doxcnBby0o5i4HITcvjVonG9sOh"><span>实际上，这三者在面试中的作用各有不同，适配的岗位类型、能力维度与评估标准也大相径庭。本节将从岗位匹配、能力增长路径与面试实效三个层面，系统剖析如何平衡选择刷题、论文与项目实践，制定最优面试准备策略。</span></p><h4 id="f-doxcnIWhSjvMd0nb2wVedVaos1e"><span style="font-weight:bold">5.1.1 刷题</span></h4><p id="f-doxcntj0WXY9S3xxfxlJTmjuFDd"><span>算法刷题，尤其是针对 LeetCode、LintCode、牛客等平台的高频题，是求职准备中的经典环节。它主要面向以下几类考察目标：</span></p><p id="f-doxcnAr0D2p1KPucrRKKBHtYZzd"><span>（1）</span><span style="font-weight:bold">基础数据结构与算法</span><span>：</span><br/><span> 如数组、链表、哈希表、堆、栈、队列、树、图等。</span></p><p id="f-doxcnocpg4HH8RGzsmtCKTxrKFf"><span>（2）</span><span style="font-weight:bold">算法思维训练</span><span>：</span><br/><span> 如动态规划、二分查找、回溯剪枝、贪心策略等。</span></p><p id="f-doxcngYJqjHrEWtZCncWjJok9Me"><span>（3）</span><span style="font-weight:bold">代码实现能力</span><span>：</span><br/><span> 如语言熟练度、边界控制、时间与空间复杂度评估等。</span></p><p id="f-doxcnsJYOPxnnRjwGnjHFZ2QWsg"><span>在大模型方向，虽然刷题不像传统后端或客户端岗位那样高频必考，但对于以下情境仍具有重要作用：</span></p><p id="f-doxcnnkcnuDDk8rmeCEr09zAohg"><span>（1）</span><span style="font-weight:bold">校招 / 应届类算法工程师岗位</span><span>：</span><br/><span> 仍以基础算法能力作为初筛门槛。</span></p><p id="f-doxcnuFyuunUlSimuxBwJ2HF4Ke"><span>（2）</span><span style="font-weight:bold">多轮面试结构化评估</span><span>：</span><br/><span> 刷题能体现候选人的逻辑思维、编码能力与调试效率。</span></p><p id="f-doxcnHIvP5NO76thlHSk0JPZqcd"><span>（3）</span><span style="font-weight:bold">特定模块工程实现能力</span><span>：</span><br/><span> 如稀疏矩阵计算、图结构建模、窗口滑动优化等。</span></p><p id="f-doxcnFZTmrHt5PLUdqVg0uKHgDc"><span>因此，刷题并非大模型面试的核心，但作为基础训练，具备过滤风险、拉高下限、稳定输出的重要价值。建议每日保持 30–60 分钟算法练习，以巩固逻辑思维与编码熟练度。</span></p><h4 id="f-doxcnERoDLjwOeMSU52GSGuhyAe"><span style="font-weight:bold">5.1.2 论文</span></h4><p id="f-doxcnuUArTgeAbRDFCod9PaS1Qf"><span>阅读、理解并复述经典大模型论文，是构建专业理论框架、展示对大模型认知深度的重要途径，尤其在以下面试情境中具有显著优势：</span></p><p id="f-doxcnfUXSzVD4IRQxd9XLZHw4db"><span>（1）</span><span style="font-weight:bold">算法岗、研究岗、高级工程岗面试</span><span>：</span><br/><span> 面试官往往会基于论文提问，如 Transformer、LoRA、RLHF、Constitutional AI 等经典论文所提出的算法与架构。</span></p><p id="f-doxcnTLMx8KiZgV6GaDqXA1YmSb"><span>（2）</span><span style="font-weight:bold">原理答题或开放式问答</span><span>：</span><br/><span> 通过引用论文结构、图示与结论，可以显著提升答题的专业性。</span></p><p id="f-doxcnjgSlcw6fum6EjevKMkjOPb"><span>（3）</span><span style="font-weight:bold">简历项目延展问题</span><span>：</span><br/><span> 当被问及某模型为何有效、为何选择某种优化策略时，引入论文机制能体现深度思考与行业同步性。</span></p><p id="f-doxcn4mKLprRiROntZswDJG1QKc"><span>在实际面试准备中，建议分层次构建论文知识体系：</span></p><p id="f-doxcnSg4lX3vAcUwgnvT0R6CNoe"><span>（1）</span><span style="font-weight:bold">第一层</span><span>：</span><br/><span> Transformer、GPT、BERT、T5 等主流架构类论文。</span></p><p id="f-doxcnHbBQAMRKTnfm2UVj3Km9Mf"><span>（2）</span><span style="font-weight:bold">第二层</span><span>：</span><br/><span> 微调类（如 LoRA、Adapter）、训练策略类（如 Scaling Law）、对齐类（如 RLHF）。</span></p><p id="f-doxcn80BmzSSZhxoQ1dqg4Detxp"><span>（3）</span><span style="font-weight:bold">第三层</span><span>：</span><br/><span> 实际工作相关论文，如 RAG、Agent、Prompt 优化、多模态处理等。</span></p><p id="f-doxcnqufSdcXCzGoiVavpug2GjE"><span>论文阅读不是为了记忆细节，而是为了建立对模型行为、结构、设计的解释力与抽象能力。建议每周精读 1–2 篇，并形成结构化摘要笔记，便于面试引用。</span></p><h4 id="f-doxcn16ZsvZldlgFxUPDIww1P2c"><span style="font-weight:bold">5.1.3 项目</span></h4><p id="f-doxcnUWDjPBWmBbQm1NtJFfYmYe"><span>在大模型岗位的最终评估中，项目经验仍是最具权重的考察指标。相比刷题与论文，项目更能体现候选人是否具备“解决实际问题”的能力。其优势在于：</span></p><p id="f-doxcnVknCvUbY6TRnZeHtZIoJGi"><span>（1）</span><span style="font-weight:bold">真实场景还原</span><span>：</span><br/><span> 涵盖模型构建、训练调试、接口封装、系统部署、性能评估等全流程。</span></p><p id="f-doxcncc3jiElMnHx32NX7EnjBvh"><span>（2）</span><span style="font-weight:bold">协作能力呈现</span><span>：</span><br/><span> 展示候选人如何与团队对接，如何解决跨模块问题，体现团队适应能力。</span></p><p id="f-doxcnd2thBrllkCtMSJeeAOMYse"><span>（3）</span><span style="font-weight:bold">创新与优化价值</span><span>：</span><br/><span> 工程中解决过的非标准问题、引入的新技术组件、本地化部署技巧等，均为面试中可展开讲述的亮点素材。</span></p><p id="f-doxcnDqntgUAnNDOGoEnciS8Hvf"><span>企业在招聘大模型岗位时，往往希望候选人能立即参与业务落地，构建真实产品功能或支撑平台系统迭代。这使得有完整项目经历，尤其是端到端执行经历的候选人更具竞争力。</span></p><p id="f-doxcnq3LTG6Mp5D48i1Rhp7NwZb"><span>项目经验的准备策略应包括：</span></p><p id="f-doxcnVId9vz9rSXULGvkIDiGQfd"><span>（1）选典型项目深挖讲透，不求多，但要逻辑完整。</span></p><p id="f-doxcnnRhbVTmgfhPHtqoy0VAmke"><span> （2）形成一张项目结构图，让面试官快速理解任务边界。</span></p><p id="f-doxcnXi03wHqNXHPDkrUHJibrvb"><span> （3）围绕结果构建技术故事线，突出问题挑战、解决路径与最终影响。</span></p><p id="f-doxcnDdGuwLkkVC44DIxUSN7h2g"><span> （4）结合代码仓库或在线演示，增加可信度与可展示性。</span></p><p id="f-doxcnVhZqWrewlMYHdKW3z3Qk9f"><span>三者组合策略如下 1-6 所示。</span></p><div id="f-doxcnsvDUvVZgoANwS25A6JaTqf"><img alt="" decoding="async" height="322" loading="lazy" src="/images/agent-learning/768eb47f2f4456932ab52d4e.png" width="1222"/></div><p id="f-doxcnd226nQDkSRJxDPBf0bEiBd"><span>最终目标是构建一个</span><span style="font-weight:bold">基础能力稳定（刷题）</span><span>、</span><span style="font-weight:bold">理论支撑扎实（论文）</span><span>、**工程实践落地（项目）**的三维能力体系。</span></p><p id="f-doxcnByvNyj7PE3QPQNQkHEVnke"><span>概括地说，刷题、论文与项目经验并非对立，而是服务于候选人综合能力呈现的三大支柱。刷题提升思维与代码基础，论文构建技术深度与解释力，项目体现工程实践与业务关联。在准备大模型岗位面试时，应根据岗位类型与个人阶段匹配选择主线方向，并在三者之间形成协同优势，从而在技术深度与落地能力之间构建真正的竞争力体系。</span></p></div>
+<div style="margin-left:25px"><h3 id="f-doxcnnWmmLeWtvhMgvwOdztF8fd"><span>5.1 刷题？论文？还是项目经验</span></h3><p id="f-doxcnAqonJswRuLJbreaJcezkuh"><span>面对大模型相关岗位的激烈竞争，许多求职者常常陷入一个关键抉择：应重点投入算法刷题，深耕学术论文，还是积累项目实践经验？</span></p><p id="f-doxcnBby0o5i4HITcvjVonG9sOh"><span>实际上，这三者在面试中的作用各有不同，适配的岗位类型、能力维度与评估标准也大相径庭。本节将从岗位匹配、能力增长路径与面试实效三个层面，系统剖析如何平衡选择刷题、论文与项目实践，制定最优面试准备策略。</span></p><h4 id="f-doxcnIWhSjvMd0nb2wVedVaos1e"><span style="font-weight:bold">5.1.1 刷题</span></h4><p id="f-doxcntj0WXY9S3xxfxlJTmjuFDd"><span>算法刷题，尤其是针对 LeetCode、LintCode、牛客等平台的高频题，是求职准备中的经典环节。它主要面向以下几类考察目标：</span></p><p id="f-doxcnAr0D2p1KPucrRKKBHtYZzd"><span>（1）</span><span style="font-weight:bold">基础数据结构与算法</span><span>：</span><br/><span> 如数组、链表、哈希表、堆、栈、队列、树、图等。</span></p><p id="f-doxcnocpg4HH8RGzsmtCKTxrKFf"><span>（2）</span><span style="font-weight:bold">算法思维训练</span><span>：</span><br/><span> 如动态规划、二分查找、回溯剪枝、贪心策略等。</span></p><p id="f-doxcngYJqjHrEWtZCncWjJok9Me"><span>（3）</span><span style="font-weight:bold">代码实现能力</span><span>：</span><br/><span> 如语言熟练度、边界控制、时间与空间复杂度评估等。</span></p><p id="f-doxcnsJYOPxnnRjwGnjHFZ2QWsg"><span>在大模型方向，虽然刷题不像传统后端或客户端岗位那样高频必考，但对于以下情境仍具有重要作用：</span></p><p id="f-doxcnnkcnuDDk8rmeCEr09zAohg"><span>（1）</span><span style="font-weight:bold">校招 / 应届类算法工程师岗位</span><span>：</span><br/><span> 仍以基础算法能力作为初筛门槛。</span></p><p id="f-doxcnuFyuunUlSimuxBwJ2HF4Ke"><span>（2）</span><span style="font-weight:bold">多轮面试结构化评估</span><span>：</span><br/><span> 刷题能体现候选人的逻辑思维、编码能力与调试效率。</span></p><p id="f-doxcnHIvP5NO76thlHSk0JPZqcd"><span>（3）</span><span style="font-weight:bold">特定模块工程实现能力</span><span>：</span><br/><span> 如稀疏矩阵计算、图结构建模、窗口滑动优化等。</span></p><p id="f-doxcnFZTmrHt5PLUdqVg0uKHgDc"><span>因此，刷题并非大模型面试的核心，但作为基础训练，具备过滤风险、拉高下限、稳定输出的重要价值。建议每日保持 30–60 分钟算法练习，以巩固逻辑思维与编码熟练度。</span></p><h4 id="f-doxcnERoDLjwOeMSU52GSGuhyAe"><span style="font-weight:bold">5.1.2 论文</span></h4><p id="f-doxcnuUArTgeAbRDFCod9PaS1Qf"><span>阅读、理解并复述经典大模型论文，是构建专业理论框架、展示对大模型认知深度的重要途径，尤其在以下面试情境中具有显著优势：</span></p><p id="f-doxcnfUXSzVD4IRQxd9XLZHw4db"><span>（1）</span><span style="font-weight:bold">算法岗、研究岗、高级工程岗面试</span><span>：</span><br/><span> 面试官往往会基于论文提问，如 Transformer、LoRA、RLHF、Constitutional AI 等经典论文所提出的算法与架构。</span></p><p id="f-doxcnTLMx8KiZgV6GaDqXA1YmSb"><span>（2）</span><span style="font-weight:bold">原理答题或开放式问答</span><span>：</span><br/><span> 通过引用论文结构、图示与结论，可以显著提升答题的专业性。</span></p><p id="f-doxcnjgSlcw6fum6EjevKMkjOPb">（3）项目技术延展问题：当被问及模型为何有效、为何选择某种优化策略时，可以引入相关论文机制解释。</p><p id="f-doxcn4mKLprRiROntZswDJG1QKc"><span>在实际面试准备中，建议分层次构建论文知识体系：</span></p><p id="f-doxcnSg4lX3vAcUwgnvT0R6CNoe"><span>（1）</span><span style="font-weight:bold">第一层</span><span>：</span><br/><span> Transformer、GPT、BERT、T5 等主流架构类论文。</span></p><p id="f-doxcnHbBQAMRKTnfm2UVj3Km9Mf"><span>（2）</span><span style="font-weight:bold">第二层</span><span>：</span><br/><span> 微调类（如 LoRA、Adapter）、训练策略类（如 Scaling Law）、对齐类（如 RLHF）。</span></p><p id="f-doxcn80BmzSSZhxoQ1dqg4Detxp"><span>（3）</span><span style="font-weight:bold">第三层</span><span>：</span><br/><span> 实际工作相关论文，如 RAG、Agent、Prompt 优化、多模态处理等。</span></p><p id="f-doxcnqufSdcXCzGoiVavpug2GjE"><span>论文阅读不是为了记忆细节，而是为了建立对模型行为、结构、设计的解释力与抽象能力。建议每周精读 1–2 篇，并形成结构化摘要笔记，便于面试引用。</span></p><h4 id="f-doxcn16ZsvZldlgFxUPDIww1P2c"><span style="font-weight:bold">5.1.3 项目</span></h4><p id="f-doxcnUWDjPBWmBbQm1NtJFfYmYe"><span>在大模型岗位的最终评估中，项目经验仍是最具权重的考察指标。相比刷题与论文，项目更能体现候选人是否具备“解决实际问题”的能力。其优势在于：</span></p><p id="f-doxcnVknCvUbY6TRnZeHtZIoJGi"><span>（1）</span><span style="font-weight:bold">真实场景还原</span><span>：</span><br/><span> 涵盖模型构建、训练调试、接口封装、系统部署、性能评估等全流程。</span></p><p id="f-doxcncc3jiElMnHx32NX7EnjBvh"><span>（2）</span><span style="font-weight:bold">协作能力呈现</span><span>：</span><br/><span> 展示候选人如何与团队对接，如何解决跨模块问题，体现团队适应能力。</span></p><p id="f-doxcnd2thBrllkCtMSJeeAOMYse"><span>（3）</span><span style="font-weight:bold">创新与优化价值</span><span>：</span><br/><span> 工程中解决过的非标准问题、引入的新技术组件、本地化部署技巧等，均为面试中可展开讲述的亮点素材。</span></p><p id="f-doxcnDqntgUAnNDOGoEnciS8Hvf"><span>企业在招聘大模型岗位时，往往希望候选人能立即参与业务落地，构建真实产品功能或支撑平台系统迭代。这使得有完整项目经历，尤其是端到端执行经历的候选人更具竞争力。</span></p><p id="f-doxcnq3LTG6Mp5D48i1Rhp7NwZb"><span>项目经验的准备策略应包括：</span></p><p id="f-doxcnVId9vz9rSXULGvkIDiGQfd"><span>（1）选典型项目深挖讲透，不求多，但要逻辑完整。</span></p><p id="f-doxcnnRhbVTmgfhPHtqoy0VAmke"><span> （2）形成一张项目结构图，让面试官快速理解任务边界。</span></p><p id="f-doxcnXi03wHqNXHPDkrUHJibrvb"><span> （3）围绕结果构建技术故事线，突出问题挑战、解决路径与最终影响。</span></p><p id="f-doxcnDdGuwLkkVC44DIxUSN7h2g"><span> （4）结合代码仓库或在线演示，增加可信度与可展示性。</span></p><p id="f-doxcnVhZqWrewlMYHdKW3z3Qk9f"><span>三者组合策略如下 1-6 所示。</span></p><div id="f-doxcnsvDUvVZgoANwS25A6JaTqf"><img alt="" decoding="async" height="322" loading="lazy" src="/images/agent-learning/768eb47f2f4456932ab52d4e.png" width="1222"/></div><p id="f-doxcnd226nQDkSRJxDPBf0bEiBd"><span>最终目标是构建一个</span><span style="font-weight:bold">基础能力稳定（刷题）</span><span>、</span><span style="font-weight:bold">理论支撑扎实（论文）</span><span>、**工程实践落地（项目）**的三维能力体系。</span></p><p id="f-doxcnByvNyj7PE3QPQNQkHEVnke"><span>概括地说，刷题、论文与项目经验并非对立，而是服务于候选人综合能力呈现的三大支柱。刷题提升思维与代码基础，论文构建技术深度与解释力，项目体现工程实践与业务关联。在准备大模型岗位面试时，应根据岗位类型与个人阶段匹配选择主线方向，并在三者之间形成协同优势，从而在技术深度与落地能力之间构建真正的竞争力体系。</span></p></div>
 
 
 <a id="section-0250"></a>
@@ -1044,7 +1035,7 @@ GPA：3.7/4.0；专业排名：12/180（如真实且值得展示）
 
 <a id="f-doxcn8STRFyFTu85T5fdX20hkfg"></a>
 
-<p id="f-doxcnpVP11cmOoQ34kLz7MQCSUc"><span>（这个问题几乎是非常高频考点，建议必须准备，认真准备一个最好的答案。其实问了这个问题，是把主动权交给你自己，我们需要准备一个自己认为技术难度比较深入的回答和问题，讲出技术深度，把每个问题想透，经得住和面试官反复推敲和追问，那么一旦问到这个问题，就是送分题了。我对于自己这个问题的准备在  </span><span style="font-weight:bold">2025.11.字节跳动（豆包）</span><span>的视频讲解中，讲到了我对于这个问题的准备的方法和一些思路，有需要可以去看视频讲解。我在这一章总结几个我自己挖掘准备的这个问题的回答，大家可以参考，甚至可以照着答，当然你能有自己总结，结合你的项目的版本会更好。）</span></p>
+<p id="f-doxcnpVP11cmOoQ34kLz7MQCSUc">结合项目梳理技术挑战、排查过程、解决方案与验证结果。</p>
 
 <div style="margin-left:25px"><h4 id="f-doxcnMURXgy2MtfITFupZNjiyLh"><span>6.1.1 模型调用工具失败及排查</span></h4></div>
 
@@ -1052,7 +1043,7 @@ GPA：3.7/4.0；专业排名：12/180（如真实且值得展示）
 
 <p id="f-doxcnsuADbaLMuueWWG1ETSnbhh"><span>1.背景与挑战（Situation &amp; Task)</span></p>
 
-<div style="margin-left:25px"><p id="f-doxcn8BnHxIczavkkQU5HqS7VK2"><span>在这个智能日历项目中，为了保证数据隐私和降低延迟，我负责将云端模型迁移到本地部署的 </span><span style="font-weight:bold">Qwen 2.5</span><span> 模型上。我们的架构依赖于 </span><span style="font-weight:bold">Agent 模式</span><span>，其中</span><span style="font-weight:bold">Function Calling (工具调用)</span><span> 是核心，用于触发日历查询和邮件分析等操作。</span></p><p id="f-doxcnREXJepmkJ5orrm4ojjryBe"><span>遇到的最大困难是：虽然 Qwen 2.5 模型本身在权重层面是经过微调支持 Function Calling 的，但在集成到我们的本地推理环境（使用 Foundry Local 作为 Serving 层）时，Agent 总是无法正确触发工具，而是直接输出文本或幻觉代码。</span></p></div>
+<div style="margin-left:25px"><p id="f-doxcn8BnHxIczavkkQU5HqS7VK2"><span>在这个智能日历项目中，为了保证数据隐私和降低延迟，案例将云端模型迁移到本地部署的 </span><span style="font-weight:bold">Qwen 2.5</span><span> 模型上。我们的架构依赖于 </span><span style="font-weight:bold">Agent 模式</span><span>，其中</span><span style="font-weight:bold">Function Calling (工具调用)</span><span> 是核心，用于触发日历查询和邮件分析等操作。</span></p><p id="f-doxcnREXJepmkJ5orrm4ojjryBe"><span>遇到的最大困难是：虽然 Qwen 2.5 模型本身在权重层面是经过微调支持 Function Calling 的，但在集成到我们的本地推理环境（使用 Foundry Local 作为 Serving 层）时，Agent 总是无法正确触发工具，而是直接输出文本或幻觉代码。</span></p></div>
 
 <p id="f-doxcnkkVPI5NplK00MiZ5OLQ1ng"><span>2. 排查过程（Action &amp; Result)</span></p>
 
@@ -1060,7 +1051,7 @@ GPA：3.7/4.0；专业排名：12/180（如真实且值得展示）
 
 <ul><li id="f-doxcnKT0KguAfbq6u35iX2eFFE8"><span style="font-weight:bold">第一步：抓包与日志分析。</span><span> 因为Semantic Kernel 的 Python 版本底层是通过 </span><span><span><span>openai</span></span></span><span> 官方库连接模型的，而 </span><span><span><span>openai</span></span></span><span> 库底层使用的是 </span><span style="font-weight:bold"><span><span>httpx</span></span></span><span> 库来发送 HTTP 请求。所以我需要在代码中开启 </span><span><span><span>httpx</span></span></span><span> 的 </span><span style="font-weight:bold">Debug 日志</span><span>，就能在控制台看到完整的请求 Header 和响应 Body（Raw JSON），通过这个方式我获取了SK和llm每一轮交互的信息。</span></li></ul>
 
-<ul><li id="f-doxcnooYfVDafjjL6MYPL6S2UCe"><span style="font-weight:bold">第二步：协议对比。</span><span> 我对比了云端 GPT-4 的成功响应和本地 Qwen 的失败响应。我发现，标准的 OpenAI 兼容协议要求模型返回一个结构化的 </span><span><span><span>tool_calls</span></span></span><span> 字段，包含 </span><span><span><span>function_name</span></span></span><span> 和 </span><span><span><span>arguments</span></span></span><span>。但是结合第一步，我发现llm给到我的结果并没有function_calls字段，但此时我不确定是llm的问题还是说foundry_local推理框架的问题，因此我需要进一步看到llm输出的最原始内容。</span></li></ul>
+<ul><li id="f-doxcnooYfVDafjjL6MYPL6S2UCe"><span style="font-weight:bold">第二步：协议对比。</span><span> 对比云端 GPT-4 的成功响应和本地 Qwen 的失败响应。可以发现，标准的 OpenAI 兼容协议要求模型返回一个结构化的 </span><span><span><span>tool_calls</span></span></span><span> 字段，包含 </span><span><span><span>function_name</span></span></span><span> 和 </span><span><span><span>arguments</span></span></span><span>。但是结合第一步，我发现llm给到我的结果并没有function_calls字段，但此时我不确定是llm的问题还是说foundry_local推理框架的问题，因此我需要进一步看到llm输出的最原始内容。</span></li></ul>
 
 <ul><li id="f-doxcnWgpx6JRVxWMySXBvMi8olg"><span style="font-weight:bold">第三步：查找模型原始输出。</span><span>因为是Local部署，我可以查看推理服务的后台日志，我在Foundry Local的控制台输出中，开启了Verbose模式，我清晰看到了模型输出了和工具调用相关的&lt;tool_call&gt; ...&lt;/tool_call&gt;相关的字段，这证明模型</span><span style="font-weight:bold">本身是有意图进行调用的，</span><span>并且qwen2.5 的官方说明文档是完全支持function call的，这也侧面印证了模型本身的调用和输出没有问题。</span></li></ul>
 
@@ -1068,7 +1059,7 @@ GPA：3.7/4.0；专业排名：12/180（如真实且值得展示）
 
 <ul><li id="f-doxcnZFOnwUX1lM5m3shYO0ocGc"><span style="font-weight:bold">第五步：确认根因后，我采取了“双管齐下”的策略</span><span>：</span></li></ul>
 
-<p id="f-doxcnrL9z4bMMw85pjvUq5b6Lth"><span style="font-weight:bold">    反馈与修复</span><span>：我整理了详细的复现日志和协议对比数据，提交给了 Foundry Local 团队，明确指出了其对 Qwen </span><span><span><span>tool_calls</span></span></span><span> 解析支持的缺失，推动他们后续修复。</span></p>
+<p id="f-doxcnrL9z4bMMw85pjvUq5b6Lth">反馈与修复：整理复现日志和协议对比数据，定位 Foundry Local 对 Qwen tool_calls 的解析支持问题。</p>
 
 <p id="f-doxcnKMT1KfRLuBklzuQV4iFusg"><span style="font-weight:bold">    架构迁移（关键决策）</span><span>：为了不阻塞项目进度，我决定更换推理后端。我调研并切换到了 </span><span style="font-weight:bold"><span><span>llama.cpp</span></span></span><span>。</span></p>
 
@@ -1078,13 +1069,13 @@ GPA：3.7/4.0；专业排名：12/180（如真实且值得展示）
 
 ##### MCP 连接偶尔失败
 
-<p id="f-doxcnZhE0VDUScDwwwrBDrSusWf"><span>（我是以这个本节中的RAG项目为例展开的，如果你项目写了一个MCP的Server，使用stdio通信，那么你就可以使用这个例子。你要弄清楚这个例子，你得懂得MCP的原理，特别是如何通信，它的协议是啥样的）</span></p>
+<p id="f-doxcnZhE0VDUScDwwwrBDrSusWf">本例使用 RAG MCP Server 与 stdio 通信，需要理解 MCP 的通信原理和协议格式。</p>
 
 <p id="f-doxcnEL1MlAUkZX1wyh1bT2lnHg"><span>（按照 STAR 思路总结：Situation, Task, Action, Result）</span></p>
 
 <p id="f-doxcnhA7R6GUNTgfbYU5Nnb3ulc"><span style="font-weight:bold">1. 背景与挑战</span></p>
 
-<p id="f-doxcnZcaXCms1sSSnASWI9ZKIdf"><span>在这个模块化 RAG 项目中，我负责实现 MCP Server 模块，通过 MCP协议将 RAG 检索能力暴露给 AI 客户端（如 Claude Desktop、GitHub Copilot）。我们的传输层采用的是 stdio 模式——Server 作为子进程启动，通过 stdin/stdout 与客户端进行 JSON-RPC 通信。</span></p>
+<p id="f-doxcnZcaXCms1sSSnASWI9ZKIdf"><span>在这个模块化 RAG 项目中，案例实现 MCP Server 模块，通过 MCP协议将 RAG 检索能力暴露给 AI 客户端（如 Claude Desktop、GitHub Copilot）。我们的传输层采用的是 stdio 模式——Server 作为子进程启动，通过 stdin/stdout 与客户端进行 JSON-RPC 通信。</span></p>
 
 <p id="f-doxcnY4A7lHbYeqj2jbQ2b00AXc"><span>遇到的最大困难是：Server 独立运行时一切正常，所有 JSON-RPC 消息的构造和处理逻辑都验证通过了，但 AI 客户端（Claude Desktop）连接后，要么在握手阶段直接失败，要么用了几次后突然断连。客户端侧只显示一个通用的"连接失败"错误，Server 端也没有任何异常日志输出。</span></p>
 
@@ -1128,7 +1119,7 @@ GPA：3.7/4.0；专业排名：12/180（如真实且值得展示）
 
 <p id="f-doxcnmhUa5RRNpI8fEOm4Tmhvkc"><span>1. </span><span style="font-weight:bold">对于你美化过的内容</span><span>，首先要说服自己，自己想通你是如何做的？比如数据是怎么来的，实验方法是什么，对照基准是什么？</span></p>
 
-<p id="f-doxcnDJ71N55GCYu5D4205dEvYg"><span>2. </span><span style="font-weight:bold">对于你压根就没做的项目</span><span>，我的个人建议是：你写一份非常清楚的设计文档，笔记里的</span><span><span><a href="/posts/agent-learning-23-learning-cases/#section-0148"><span>RAG项目</span></a></span></span><span>，</span><span><span><a href="/posts/agent-learning-18-training-inference/#f-doxcnIjLgG7Pe2zBY5bPMMqlIRh"><span>算法项目</span></a></span></span><span>，每个项目都有技术设计文档（我们又叫dev_spec)。写这个文档是一个很费时间的过程，但是写明白了，你对于项目的掌握就会清晰很多。你可以把</span><span style="font-weight:bold">它当作一个超级详细的系统设计任务，完成这个系统任务设计再去面试。</span></p>
+<p id="f-doxcnDJ71N55GCYu5D4205dEvYg">可以将项目作为系统设计练习，编写详细的技术设计文档（dev_spec）。RAG 与算法案例均提供了技术设计文档，可参考其模块拆分、接口与验证方法。 <a href="/posts/agent-learning-23-learning-cases/#section-0148"><span>RAG项目</span></a> <a href="/posts/agent-learning-18-training-inference/#f-doxcnIjLgG7Pe2zBY5bPMMqlIRh"><span>算法项目</span></a></p>
 
 <p id="f-doxcnT2LjFFSxSbNuG6V2YhUdCd"><span>注意：由于时间原因，我这些内容大概花了一个工作日的时间准备的，同时对于我们虚构的这个项目，我并没有时间想好技术文档再去面试，所以我就先大概想清楚了它的架构图。如果时间充足：建议你按照这个思路，</span><span style="font-weight:bold">在面试前多准备一下，多抠一下细节，并且完成虚构项目的设计文档再去面试</span><span>！</span></p>
 
@@ -1140,7 +1131,7 @@ GPA：3.7/4.0；专业排名：12/180（如真实且值得展示）
 
 ###### ForgePilot架构设计
 
-<p id="f-doxcnjIJ9ZcWIY2oKD0lUAsY4Bg"><span>我把本节里写的虚构的自动修复bug的企业级Agent项目，叫做：</span><span style="font-weight:bold">ForgePilot。</span></p>
+<p id="f-doxcnjIJ9ZcWIY2oKD0lUAsY4Bg">下面以 ForgePilot 作为自动修复 Bug 的企业 Agent 设计案例。</p>
 
 <p id="f-doxcnKOw5I98PtNQf07WQlwmh6d"><span style="font-weight:bold">1.</span><span style="font-weight:bold">先想清楚该项目基本需求，架构图是什么，有哪些模块，如何运作的。这也是为什么我加了一个3.1小节架构设计。</span></p>
 
@@ -1423,15 +1414,15 @@ GPA：3.7/4.0；专业排名：12/180（如真实且值得展示）
 
 <p id="f-doxcnZ6kBYlWTZOJ3nvzZB9w63g"><span style="font-weight:bold">💡 答题思路： </span><span>很合理的追问，一开始我给这个项目的定位就是企业级的项目。功能也比较复杂，既有本地模型嵌入，又有测评，又有鉴权，又有不同的UI模式，插件化设计，以及要上线的。</span><span style="font-weight:bold">这些不可能一个人完成！</span></p>
 
-<p id="f-doxcnCw4T6azz9waMxvB1p4IaXd"><span>说自己负责哪一块：就根据你哪一块熟练，哪一块有价值（比如jd需要，或者面试官关注来定）。结合案例中的例子来说，我会说我负责</span><span style="font-weight:bold">本地模型适配+Agent核心编排</span><span>（记忆，压缩，评测）这两块。</span><span style="font-weight:bold">前者是我们做过的项目，要体现我们的后训练，部署能力。 后者是Agent最核心的能力，我们也比较熟练。</span></p>
+<p id="f-doxcnCw4T6azz9waMxvB1p4IaXd">本案例可拆分为本地模型适配与 Agent 核心编排两部分；核心编排包括记忆、压缩与评测，本地模型适配涉及后训练与部署。</p>
 
 <p id="f-doxcnnUdc3xDj4XKR51bqWcUMLc">该学习案例是企业级研发平台，涉及工作台、企业系统接入、代码检索、Agent 执行和评审等模块。这里重点讨论 Agent 核心 Harness 的设计，以及本地模型的适配工作。</p>
 
 <p id="f-doxcnODezI63gOcVHvx97riaYdf"><span>第一块是 </span><span style="font-weight:bold">Harness</span><span>，也就是围绕 Agent 执行内核的流程控制和上下文管理。我重点关注三个方面：</span><span style="font-weight:bold">记忆、压缩和编排</span><span>。记忆方面，区分当前任务的状态与执行上下文，以及后续任务可以复用的、经过验证的项目经验；压缩方面，处理长任务中对话和工具结果不断累积的问题，重点考虑怎样保留任务目标、关键证据和未完成事项，而不是简单截断历史；编排方面，把工单整理、信息校验、Agent 执行、验证反馈和人工审核串起来，明确哪些步骤由程序控制、哪些交给 Agent 探索，以及失败或预算耗尽时如何停止、转交处理。这里不是重新实现一套 Pi，而是设计企业任务如何在已有执行内核上受控运行。</span></p>
 
-<p id="f-doxcnzPNNUKMdkCOypGYLt619Xb"><span>第二块是 </span><span style="font-weight:bold">本地模型适配</span><span>。这部分在当前方案中仍是规划方向，主要由我负责适配方案：优先让本地模型承担工单理解、信息提取和任务分类，并设计它与 Harness 之间的输入输出约定、结构化结果校验和异常回退机制。复杂代码分析再交给主模型。我的职责重点是让模型适合这条业务链路，而不是把公司基础模型的训练也算成自己的工作；是否进入微调，要根据任务评测结果再决定。</span></p>
+<p id="f-doxcnzPNNUKMdkCOypGYLt619Xb">第二块是本地模型适配。这部分在当前方案中仍是规划方向：优先让本地模型承担工单理解、信息提取和任务分类，并设计它与 Harness 之间的输入输出约定、结构化结果校验和异常回退机制。复杂代码分析交给主模型；是否进行微调，根据任务评测结果决定。</p>
 
-<p id="f-doxcn74N21YCZbq7WjSgS3gqASb"><span>开源复用方面，</span><span style="font-weight:bold">Pi 提供 Agent 循环，Cordis 提供插件注册、依赖注入和生命周期管理</span><span>；我的工作重点是这些组件之上的企业任务控制、上下文策略和模型适配。工作台、企业检索底层、统一认证和部署等不作为我的主要负责范围，具体由谁负责按团队实际分工说明。我需要了解它们和 Agent 的协作接口，但不会把其他模块的实现都算在自己身上。</span></p>
+<p id="f-doxcn74N21YCZbq7WjSgS3gqASb">开源复用方面，Pi 提供 Agent 循环，Cordis 提供插件注册、依赖注入和生命周期管理。其上可设计企业任务控制、上下文策略和模型适配，并通过接口连接工作台、企业检索、统一认证与部署模块。</p>
 
 <p id="f-doxcnfSdkD8Go3W6iakgfeXlUuh"><span>所以，概括来说，</span><span style="font-weight:bold">团队交付的是企业级研发平台，我主要负责的是让 Agent 带着合适的上下文、按受控流程执行任务，以及本地模型在这条链路中的适配。</span></p>
 
@@ -1485,7 +1476,7 @@ GPA：3.7/4.0；专业排名：12/180（如真实且值得展示）
 
 ###### 追问：你讲到的降低人工 Review 成本，这个是怎么理解，可以展开说说吗？
 
-<p id="f-doxcnLtQcJz7QtZCSUVMlaNLCVe"><span style="font-weight:bold">💡 答题思路：</span><span>在你讲了某个功能，内容，没展开讲的时候，面试官很容易追问。这个降低Review成本，也是我在需求一开始的时候，就设计的一个功能。当我们想清楚了功能设计，这个题很好回答。这个也是一开始我说，即使时间有限，没时间设计具体文档，也先想清楚项目的痛点，功能，架构这些最基本的问题。</span></p>
+<p id="f-doxcnLtQcJz7QtZCSUVMlaNLCVe">降低 Review 成本需要结合需求、功能与架构分析，并说明具体设计方法。</p>
 
 <p id="f-doxcnRjoxNDMs278ctb2YJ4dCQe"><span>我理解的降低人工 Review 成本，主要是</span><span style="font-weight:bold">降低人理解代码变更的成本，而不是让 AI 替人批准代码</span><span>。AI 加快了代码产出，但工程师仍然需要判断这些修改为什么做、是否合理、有没有验证。尤其当代码不是自己写的，一个 PR 又涉及多个文件时，理解修改思路本身就很耗时。</span></p>
 
@@ -1495,7 +1486,7 @@ GPA：3.7/4.0；专业排名：12/180（如真实且值得展示）
 
 <a id="f-doxcn0LPSn7MQ2JYLbmxGhkAKEb"></a>
 
-###### 你在简历里提到了上下文压缩和运行态恢复，具体是怎么做的？
+###### 案例中提到的上下文压缩和运行态恢复，具体是怎么做的？
 
 <blockquote id="f-doxcnTRHyumjZwLe32I6LHgGAxe"><p id="f-doxcn43hCxKcuK6gldBLwpLOlhg"><span>针对长任务上下文超限与摘要后状态丢失，按窗口预算压缩历史、保留近期交互，并保存与恢复关键运行态；通过工具输出分档裁剪、完整工具调用轮次回收及有界恢复与熔断，减少上下文溢出引发的重复失败。</span></p></blockquote>
 
@@ -1523,11 +1514,11 @@ GPA：3.7/4.0；专业排名：12/180（如真实且值得展示）
 
 <a id="f-doxcnYYcbsl48slTpntEXhB4rxe"></a>
 
-###### 你在简历里提到“基于历史 Bug 与修复 PR 构建分层评估链路”，这是什么意思，具体怎么做的？
+###### 案例中提到“基于历史 Bug 与修复 PR 构建分层评估链路”，这是什么意思，具体怎么做的？
 
 <blockquote id="f-doxcnhQGzrAKZMrKzqOnVkQwnYc"><p id="f-doxcnXw1gdWFF7UhGnfARoOMpHg"><span>针对评审质量难以量化、误报漏报难以定位的问题，基于历史 Bug 与修复 PR 构建分层评估链路，以文件及代码区间匹配定位问题，再用独立 LLM Judge 补充语义判断；输出误报、漏报与根因命中分析，为评审策略迭代提供可回放依据。</span></p></blockquote>
 
-<p id="f-doxcnoZWstEsWGzE9eh3uc44Mxd"><span>这道题出自对简历中“基于历史 Bug 与修复 PR 构建分层评估链路”这条表述的提问。</span><span> 我们要针对每一个描述，自己先想清楚：</span><span style="font-weight:bold">这是什么意思？具体是如何做到的？先要说服自己，才能向面试官讲清楚。</span><span> 这里的“分层评估”“文件及代码区间匹配”“独立 LLM Judge”“误报、漏报与根因命中”“可回放”，都要能用具体做法解释，不能只记住这些技术名词。</span></p>
+<p id="f-doxcnoZWstEsWGzE9eh3uc44Mxd">“基于历史 Bug 与修复 PR 构建分层评估链路”需要解释具体实现，包括分层评估、文件及代码区间匹配、独立 LLM Judge、误报、漏报、根因命中与可回放。</p>
 
 <p id="f-doxcnEjXdbASspmBZddIeEAOWZb"><span>这条讲的是</span><span style="font-weight:bold">对 Agent 修复 Bug 中间过程的评估</span><span>，重点检查它有没有找到正确的问题位置和 root cause，而不是只看最后有没有修好。</span></p>
 
@@ -1547,7 +1538,7 @@ GPA：3.7/4.0；专业排名：12/180（如真实且值得展示）
 
 <a id="f-doxcnbsznvTjgtV6x9gKaaUXVAb"></a>
 
-###### 你在简历里写的“长任务执行可靠性”是什么意思？具体是怎么做的？
+###### 案例中所说的“长任务执行可靠性”是什么意思？具体是怎么做的？
 
 <blockquote id="f-doxcnYwhp3BrESsD9C2lDiuBeFg"><p id="f-doxcnfQ14JrrkRWlceePddqcMRc"><span>针对修复任务重复派发、构建失败后流程中断的问题，实现状态驱动的修复—构建—验证流程，以动作去重、并发控制和重试预算约束任务推进；失败时追加验证证据并按条件续跑原会话与原 PR，结合状态对账及中断恢复，减少重复执行和人工接管。</span></p></blockquote>
 
@@ -1571,11 +1562,11 @@ GPA：3.7/4.0；专业排名：12/180（如真实且值得展示）
 
 <a id="f-doxcnMh7dpOxedg5HiAmRXGIB7e"></a>
 
-###### 你在简历里提到“基础工具与代码智能增强方案的对照评估”，具体是什么意思？你是怎么评估 Agent 修复效果的？
+###### 案例中提到“基础工具与代码智能增强方案的对照评估”，具体是什么意思？你是怎么评估 Agent 修复效果的？
 
 <blockquote id="f-doxcnqi7SFYiPfLESXi7d7ZEfFe"><p id="f-doxcnRdv0cu73te2hzENQkDEZ6d"><span>针对代码智能工具对自动修复的实际增益难以判断的问题，基于 SWE-bench 完成基础工具与代码智能增强方案的对照评估，比较代码检索、调用图及结构上下文对修复任务的作用；以测试验证补丁有效性，结合单任务成本、工具调用次数与执行轨迹形成质量—成本对照分析，为工具增强与修复策略选型提供依据。</span></p></blockquote>
 
-<p id="f-doxcnXpAdkPscNog2M8UnFuD8Cb"><span>这道题来自简历中的工具对照评估。先说明：</span><span style="font-weight:bold">我们建立了一套 Bug 修复评估集，通过增加或移除工具做对照实验，判断这些工具能否改善修复效果，以及增加的成本是否值得。</span><span> 再按照“准备评估集 → 对照与消融 → 测试验收 → 分析并选型”展开，既解释简历，也讲清 Agent 的评估方法。</span></p>
+<p id="f-doxcnXpAdkPscNog2M8UnFuD8Cb">建立 Bug 修复评估集，通过增加或移除工具做对照实验，判断工具能否改善修复效果，以及新增成本是否值得。按照准备评估集 → 对照与消融 → 测试验收 → 分析并选型展开。</p>
 
 <p id="f-doxcnrJfnn1lFInhmj1eoejoEvb"><span>这里按之前确定的口径，使用的是</span><span style="font-weight:bold">借鉴 SWE-bench 方法构建的内部评估集</span><span>，不是直接声称使用了官方数据集。本题细化第 2 题的修复评估方法，重点回答工具是否有收益；第 7 题则通过定位与根因分析，帮助解释修复失败的原因。</span></p>
 
@@ -1837,7 +1828,7 @@ GPA：3.7/4.0；专业排名：12/180（如真实且值得展示）
 
 ##### 反思
 
-<p id="f-doxcnqnY4vVUw0DIc0vpxFR9qWb"><span>一面是通过了的，一面完了需要做IQ,EQ题，逻辑题 （类似于公务员考试的逻辑题，大家网上一搜就知道，比如给你前三个图像，让你判断下一个图形是啥，图形推理题之类的）+ 1道编程题（要求用AI，然后会记录你给AI的提示词），需要达到60分，否则直接不通过。 我就是这个题没做好，所以约不了二面。</span></p>
+<p id="f-doxcnqnY4vVUw0DIc0vpxFR9qWb"></p>
 
 <p id="f-doxcnPNG7v46Fe5XNChAYbZeUYe"><span>最终结果是：一面过了，但是过了一面之后有一个测试题，类似于IQ, EQ 那种，因为本身没太想去，其实也没太认真对待，这个测试挂了，如果真的想去安克的，注意这里自己要复习下，这个没过直接没二面资格。</span></p>
 
@@ -1869,7 +1860,7 @@ GPA：3.7/4.0；专业排名：12/180（如真实且值得展示）
 
 <ol start="1"><li id="f-doxcnlbzeBFmF0PvWGxJM906Nkj"><span>如果用户输入了某个事件，可能是一个模糊的情况，会有多个类似的事件，怎么确定是哪一个。</span></li></ol>
 
-<p id="f-doxcnfOlJucny36c6ZhZD2cf0af"><span>(这个其实是功能相关问题的澄清，不做解释，大家不用参考，我记录只是为了完整性)</span></p>
+<p id="f-doxcnfOlJucny36c6ZhZD2cf0af"></p>
 
 <ol start="2"><li id="f-doxcniuoQUf0weB2WuNSPEkJjfd"><span>你这个Agent中集成了哪些工具？</span></li></ol>
 
@@ -1941,7 +1932,7 @@ GPA：3.7/4.0；专业排名：12/180（如真实且值得展示）
 
 ##### 反思
 
-<p id="f-doxcnWzJaPFHBhiuQe9XUN06idf"><span>全程30分钟，没有自我介绍，没有代码题。秒挂。</span></p>
+<p id="f-doxcnWzJaPFHBhiuQe9XUN06idf"></p>
 
 <p id="f-doxcnbYJ8XkNItAeEbvTxgNrNXc"><span>大概原因可以认为一个是多模态的能力，另一个是大模型算法知识答得不好。</span></p>
 
@@ -1957,7 +1948,7 @@ GPA：3.7/4.0；专业排名：12/180（如真实且值得展示）
 
 <p id="f-doxcn0sSda85rfv6KRjMTimPvSg"><span>2. 你重点讲一下智能日历系统是如何用AI 去串这个流程的？</span></p>
 
-<p id="f-doxcnDYClSYqJsz4Sx6WYHUWHIg"><span>（这个还是结合自己实际项目去说，我的这个项目用的是 prompt chaining模式，（谷歌的《Agentic Design Pattern》我基本围绕这个去讲的）</span></p>
+<p id="f-doxcnDYClSYqJsz4Sx6WYHUWHIg">结合具体项目说明架构。本案例采用 Prompt Chaining 模式，可参考 Google《Agentic Design Patterns》。</p>
 
 <p id="f-doxcnDH1B5OpOBr1qRaNC7Isggc"><span>3. 你认为你讲的这个开发模式是否有一定的范式和通用性。</span></p>
 
@@ -2047,7 +2038,7 @@ GPA：3.7/4.0；专业排名：12/180（如真实且值得展示）
 
 ##### 面试点评和学习建议
 
-<p id="f-doxcnc7WqQODZyEkqsf4sev1Deg"><span>整个过程面试官翻来覆去都在探讨Agent/传统业务之间的区别，Agent真正存在的意义，开发Agent和开发后端框架有什么区别。整个过程偏向于和面试官进行思维的碰撞，交流，这些问题可能没有标准的答案。需要能自己深入思考，有过一些业务经验和理解，才能够答出自己的想法。这一部分我就没有总结标准答案，大家可以自己思考，从知识点的角度，参考不大。唯一可以认为可以作为复习准备的是第8，9个问题，我们可以结合美团龙猫的最新论文去回答，并且建议大致阅读论文，学习这个论文中的评估Agent效果的方法：如何准备测试集/如何评估。</span></p>
+<p id="f-doxcnc7WqQODZyEkqsf4sev1Deg">本组问题讨论 Agent、传统业务与后端框架的区别，以及 Agent 的实际价值。评估相关问题可参考美团龙猫论文，学习测试集准备与效果评估。</p>
 
 <a id="f-doxcnPUcgapvRKx9C3L3oqxP3Ld"></a>
 
@@ -2157,7 +2148,7 @@ GPA：3.7/4.0；专业排名：12/180（如真实且值得展示）
 
 <p id="f-doxcnsprnU2hwEqJWMOTWPgayWb"><span>     8.3 你讲到这个消息是片段式的。比如用户问今天天气怎么样，假设他问的时候是10月30号，数据库中有很多条答案都是在回答今天的天气的，有些回答是回答的10月1号，有的是10月30号，你怎么保证你召回的回答是针对10月30号呢？</span></p>
 
-<p id="f-doxcnkRCeAED0mkZ9eLmf8upNMg"><span>     （这是一个综合的问题。只要能理解我在笔记RAG 部分整理的。召回优化策略，其实你就可以从不同的召回策略中入手，解决这一问题）</span></p>
+<p id="f-doxcnkRCeAED0mkZ9eLmf8upNMg">可以从 RAG 的召回优化策略分析这一问题。</p>
 
 <p id="f-doxcnSe52slHGIqoIwT2b8PK9Qf"><span>      比如说，采用 </span><span style="font-weight:bold">内容查询优化 +结合元数据召回</span><span> 。 </span></p>
 
@@ -2167,7 +2158,7 @@ GPA：3.7/4.0；专业排名：12/180（如真实且值得展示）
 
 <p id="f-doxcnhb4kz8hYXNMK4EkdOJZFid"><span>9. 提到RAG，如何提高召回的准确性？</span></p>
 
-<p id="f-doxcnHYbNOvImSwjUrMZrCAMx6c"><span>     各个方面都可以答。比如从</span><span style="font-weight:bold">切块策略/召回优化策略/ 数据库的选取/ 检索的方法 </span><span>等各方面都可以去回答。这个题太宽泛了，没有固定的标准答案，但是不难。就是我在RAG里总结的RAG的各个步骤都理解了， 就会发现可以从很多地方回答。如果不会，就先去理解一下RAG 基础知识和我整理的笔记部分。</span></p>
+<p id="f-doxcnHYbNOvImSwjUrMZrCAMx6c">可以从切块策略、召回优化策略、数据库选择与检索方法等方面回答，结合 RAG 各步骤说明具体设计。</p>
 
 <p id="f-doxcngPgBTdAci162zDVKkwLnVc"><span>     如果还是不会答，那你其实就答笔记部分，RAG 常用的召回策略部分就行。</span></p>
 
@@ -2235,7 +2226,7 @@ GPA：3.7/4.0；专业排名：12/180（如真实且值得展示）
 
 <p id="f-doxcnPwD0fbt4uWmD8k1yOiryae"><span> 1. 如果是说Agent的响应速度很慢，这个时候怎么办？</span></p>
 
-<p id="f-doxcnRm9PxODhcvOGeFuTvniCyc"><span>  （我一开始回答的是使用</span><span style="font-weight:bold">流式方法去</span><span>处理，后面面试官是说流式可能也很慢，我就回答了</span><span style="font-weight:bold">封装成一个异步</span><span>的方法</span><span style="font-weight:bold">不去阻塞</span><span>，我在回答这个题的时候，这么去讲的，面试官也是接受，所以问了1.1的问题。其实我的思维就是偏向于工程。但是我后面反思，其实如果真的是从大模型的行业出发，这个问题其实属于推理加速，从这个角度上出发回答会更好，特别是如果面试官背景是</span><span style="font-weight:bold">大模型算法工程</span><span>相关，他一定期待听到推理加速相关的回答。所以这个题又建议从推理加速部分回答：基本就是回答大模型常见推理加速方法，如何选择之类的，详细参考我的八股部分。）</span></p>
+<p id="f-doxcnRm9PxODhcvOGeFuTvniCyc">需要区分流式输出、异步处理与推理加速：流式方法改善输出体验，异步方法避免阻塞，而推理加速针对模型计算效率。可结合常见推理加速方法说明选型。</p>
 
 <p id="f-doxcnDLFBh03TkZS1UOs2AKTpTg"><span>参考笔记部分 1.</span><span><span><a href="/posts/agent-learning-18-training-inference/#f-doxcn5KkHUuA8BdvuO3bKvqCt1f"><span>常见的推理加速的方法。</span></a></span></span></p>
 
@@ -2253,7 +2244,7 @@ GPA：3.7/4.0；专业排名：12/180（如真实且值得展示）
 
 <p id="f-doxcnaOltagXyCFNT8GrsujKF9s"><span> 3.你是在哪些场景下会使用到A2A协议？</span></p>
 
-<p id="f-doxcngCGCP2tsXwntc48f0sLEnk"><span>（A2A这个协议感觉现在不火了，我感觉它是新出的协议，当时火过，但没火起来，现在出现概率已经挺低了。 我倾向于这里大家可以先不复习了，或者背一下概念得了。特别是如果你基本项目都没用过，面试基本不问。）</span></p>
+<p id="f-doxcngCGCP2tsXwntc48f0sLEnk">A2A 的基本概念与适用条件见相关章节。</p>
 
 <p id="f-doxcnZdqcZgtF0ohBCRH59aZdph"><span>A2A协议通常用于</span><span style="font-weight:bold">企业内部或跨系统的应用程序之间进行安全、自动化的数据交换和通信</span><span>。它的核心场景是</span><span style="font-weight:bold">系统集成</span><span>，尤其在需要</span><span style="font-weight:bold">高安全性和自动化</span><span>的环境中。比如说</span><span style="font-weight:bold">跨平台、多厂商智能体协作。</span><span>当企业需要整合来自不同技术栈或供应商的智能体（如 Microsoft Copilot 与 Google Workspace Agent），A2A协议提供标准化通信方式，解决互操作性问题。</span></p>
 
@@ -2291,7 +2282,7 @@ GPA：3.7/4.0；专业排名：12/180（如真实且值得展示）
 
 <p id="f-doxcnk6aC5dWquA7K1Bc640lZ5d"><span> 反思：</span></p>
 
-<p id="f-doxcnwaDQx2FFZW8h5n8u4lhM4f"><span>这个主管，如果我进去以后，他会是我的+2了，其实等级是比较高的。通常来说这么高的等级的领导，不会太懂细节，更关注的是一些综合方面的问题。其实从这次回答可以看出来，这个老板基本上就是在考察你的经历，问你Agent 能力，微调能力，有没有做过强化学习，然后再问几个算法题，从各个方面考察你是否有相关经验。</span></p>
+<p id="f-doxcnwaDQx2FFZW8h5n8u4lhM4f"></p>
 
 <p id="f-doxcnwfd3sDZ7rfI1UyJGZ6vK7d"><span> （主管面 + HR 面）</span></p>
 
@@ -2303,13 +2294,13 @@ GPA：3.7/4.0；专业排名：12/180（如真实且值得展示）
 
 <p id="f-doxcnBZycJBbsOTdwTPHkXSQCJf"><span> 4.你评价你的预约系统Agent好坏的标准是什么？</span></p>
 
-<p id="f-doxcnSKYWs8x4DqIGzSq4eP9Ghc"><span>   （这个问题必考，我也借这个机会重构了Agent性能评估的八股，有详细的参考资料，思路和问题，视频讲解里也有一些额外的技巧和感受，大家可以参考八股和我的视频）</span></p>
+<p id="f-doxcnSKYWs8x4DqIGzSq4eP9Ghc">相关评估方法与参考资料见 Agent 性能评估部分。</p>
 
 <p id="f-doxcnJsmFMz1l5VB3L6rS5cyyee"><span>    参考</span><span><span><a href="/posts/agent-learning-15-evaluation-observability/#f-doxcnqrKdVGPbNYY8Xm3Fr8NVkh"><span>  Agent 性能评估</span></a></span></span></p>
 
 <p id="f-doxcna2mbjsdhXXexuPWizHn70g"><span> 5.使用Langchain的时候有没有遇到一些不方便的地方？</span></p>
 
-<p id="f-doxcnbM6SexeKLinhVp3n8EW5Dc"><span>  （面试中问Langchain方便还是不方便的地方都考过，这里的八股我已经总结到了，算是有备而来）</span></p>
+<p id="f-doxcnbM6SexeKLinhVp3n8EW5Dc">可以结合 LangChain 的便利性与局限性进行分析。</p>
 
 <p id="f-doxcnXitX7FgQ1YQVfYsClckep5"><span>     参考</span><span><span><a href="/posts/agent-learning-12-langchain/#f-doxcnjnYm6Bzdm5u6zbDMFJrpyd"><span> 1.2.3 LangChain 不方便的地方</span></a></span></span></p>
 
@@ -2327,7 +2318,7 @@ GPA：3.7/4.0；专业排名：12/180（如真实且值得展示）
 
 <p id="f-doxcnWVbvrRlahEn3baW3NVEXOf"><span>8. 有没有使用一些RLHF 的技巧？</span></p>
 
-<p id="f-doxcnuFV3oKFwwhvxzw7KUADCLe"><span>  （强化学习，我一直说，让大家准备一套，把流程走通就行了，该学习案例中也做了，参考 8.</span><span><span><a href="/posts/agent-learning-18-training-inference/#f-doxcn0XskrHYWieZNIKvk88pjch"><span>你的项目是如何做推理加速的</span></a></span></span><span>？ 和 2.</span><span><span><a href="/posts/agent-learning-18-training-inference/#f-doxcnp8ApsPek72O2qwtTiD4ALc"><span>强化学习的方案有哪些</span></a></span></span><span>）</span></p>
+<p id="f-doxcnuFV3oKFwwhvxzw7KUADCLe">强化学习可以先运行完整流程，结合“你的项目是如何做推理加速的”和“强化学习的方案有哪些”学习。 <a href="/posts/agent-learning-18-training-inference/#f-doxcn0XskrHYWieZNIKvk88pjch"><span>你的项目是如何做推理加速的</span></a> <a href="/posts/agent-learning-18-training-inference/#f-doxcnp8ApsPek72O2qwtTiD4ALc"><span>强化学习的方案有哪些</span></a></p>
 
 <p id="f-doxcncS45GEy8vTPJQLqvqeeqZg"><span>9. 有没有使用一些知识问答的功能？</span></p>
 
@@ -2447,7 +2438,7 @@ GPA：3.7/4.0；专业排名：12/180（如真实且值得展示）
 
 <p id="f-doxcnDyd6vO4pAn1Anhd8p7IuCd"><span>     2.4你的系统中有没有一些做一些高级的召回或者分块的方案？</span></p>
 
-<p id="f-doxcnnjVmB7sZDPvQ0Yd2FUj5Hc"><span>      （说实话我复习了这个召回的优化方案，但其实我的系统里没有使用到。 不过根据这个问题，我私下里会思考我的系统中需要使用什么样的召回优化方案，我下次回答就不会说没有了）</span></p>
+<p id="f-doxcnnjVmB7sZDPvQ0Yd2FUj5Hc">可以根据当前系统需求选择召回优化方案，并通过实验验证。</p>
 
 <p id="f-doxcnEUJZkc5XEJLlHPqaPnwo4c"><span>     2.5你提到了多轮对话的中的召回查询改写，那么在你的项目是怎么做的实现呢？</span></p>
 
@@ -2461,11 +2452,11 @@ GPA：3.7/4.0；专业排名：12/180（如真实且值得展示）
 
 <p id="f-doxcnwlxvlWCCmcjuGYysqhzktc"><span>   4.1 项目里提到的使用Litellm对模型无缝切换，这个是怎么做的？</span></p>
 
-<p id="f-doxcnKGXNtxz7zWAxSVzoMw80vb"><span>其实我简历里写的那个是一个换模型是静态的切换， 简历里用的这个词 </span><span style="font-weight:bold">无缝切换 </span><span>让面试官以为是</span><span style="font-weight:bold">热切换。</span><span> 最后和面试官澄清了这一事实，感觉还怪不好意思的）</span></p>
+<p id="f-doxcnKGXNtxz7zWAxSVzoMw80vb">需要区分静态模型切换与运行时热切换，明确配置生效时间和实现机制。</p>
 
 <p id="f-doxcnBOXrJoOCGWU6foB5Aervsg"><span>5.你平时会有用一些AI coding的工具吗？分享你的一些使用心得。</span></p>
 
-<p id="f-doxcnQJQfuXhu77PSj1GmJqHoMd"><span>（这块真是撞上了，之前我在公司做了vibe coding 的技术经验分享，刚好直接用来回答这个题目）</span></p>
+<p id="f-doxcnQJQfuXhu77PSj1GmJqHoMd"></p>
 
 <p id="f-doxcnD5RU7bS82beOMx20FxQPNc"><span>  5.1 Github copilot 这个平台你有和其它的coding 平台做些对比吗？</span></p>
 
@@ -2529,11 +2520,11 @@ GPA：3.7/4.0；专业排名：12/180（如真实且值得展示）
 
 <p id="f-doxcn77RzeTVEpUEWAztn8YgwSh"><span>1. 自我介绍</span></p>
 
-<p id="f-doxcnVlsmvRWP8EpTeXZQkEQiGe"><span>（其实做面试复盘这么长时间了，之前都忽略了自我介绍的重要性，好像从来没有对自我介绍复盘。今天对自我介绍做了总结和反思后，发现其实我自己我介绍这么长时间，其实介绍得都不好，虽然其实取得了很多offer，但是仍然是觉得有大的改进空间，所以进步的道路是无穷的啊。 回到自我介绍，我发现介绍时间都过长了，有时候说了4分钟，也犯了一些自我介绍的坑：比如说流水账。 本节中加入了一个</span><span> 面试技巧</span><span>章节：包含</span><span style="font-weight:bold">自我介绍和反问</span><span>两个小节的注意事项）</span></p>
+<p id="f-doxcnVlsmvRWP8EpTeXZQkEQiGe"></p>
 
 <p id="f-doxcnVHPxbHcHLDvjMcDLV9jMqn"><span>      2. 你能介绍一下你的智能日历系统中，你是怎么做的冲突检测的吗？有没有用一些内容分析，或者标签抽取之类的技巧呢？</span></p>
 
-<p id="f-doxcnEk6cH47xgk1QVhJax6jORd"><span>（这个问题和业务强相关，我就不展示答案了。 但是其实从这个问题我们可以看出来，给我们的启发是：你可以通过面试知道面试官其实可能关注哪些细节，比如这个冲突检测策略，就是面试官经常问的。 你面试几场后，多少能够找到一些重点。然后着重去准备复习。 比如以这次为例，面试官问了这个问题，但是我目前冲突检测 就是用提示词去让AI做的，那么这样是不是一聊，就会让面试官感觉浅。所以在我们得到 "浅" 这个反馈的时候，可以分析出来为什么浅，哪里浅了，也就知道了如何再去深入做和改进了的）</span></p>
+<p id="f-doxcnEk6cH47xgk1QVhJax6jORd">冲突检测策略需要结合业务分析。例如，仅通过提示词判断冲突时，可以进一步研究规则、状态与验证机制。</p>
 
 <p id="f-doxcnmg2qOlLl0vorbz4TOjoPkc"><span>3. 你们有对这个模型参数，超参数做一些调试吗？做一些优化，比如说针对你不同的啊分析情况，对</span><span style="font-weight:bold">温度</span><span>啊，然后</span><span style="font-weight:bold">惩罚度</span><span>啊，做一些，这些参数做设置用的</span></p>
 
@@ -2545,25 +2536,25 @@ GPA：3.7/4.0；专业排名：12/180（如真实且值得展示）
 
 <p id="f-doxcnGo6CULiNOJRtpvuDrJbO1p"><span>5. 可以详细介绍一下微调相关的事吗？对哪个模型做个微调？然后Lora是怎么调的？你设置哪些参数啊，比如rank这些值，你是怎么设置的？学习率啊、步长啊、这些都是怎么设置的？然后你的语料是怎么来的？怎么做标注的？</span></p>
 
-<p id="f-doxcnFbpw3OuOOvPqnbNtXGWCGg"><span>（这其实就是你是如何做LoRa的？ 我们在八股部分 </span><span>1.4 你是怎么做的微调 </span><span>有专门的总结。一般面试官都是直接问你是怎么做的微调，但是这个面试官问得很细，给了各个方面的问题。 其实当时针对于这个问题就有专门的迭代和优化，还给上了LoRa 实验的方法论。我专门去检查了我们的参考答案，我们的答案完全覆盖了他说的对应的细节，答案无需调整，这也验证了我们当前这一版的答案和思路都是还不错的。大家直接参考八股笔记。）</span></p>
+<p id="f-doxcnFbpw3OuOOvPqnbNtXGWCGg">LoRA 相关问题可以结合“你是怎么做的微调”及实验方法论，逐项说明实现细节。</p>
 
 <p id="f-doxcnDgCTDgMchmfa0wEmwHdSom"><span>6. 就刚才你提到MCP能力，微软那边应该这方面应该蛮专业的，能详细介绍一下吗？你们的MCP是怎么怎么做的？然后怎么利用function call怎么做集成的呀？你们用没用到这里面有没有用用到啊react这种模式？然后在你比如在你的实际的呃项目中，比如说遇到了function call或者是react这种这种思考反思这种模式，你去怎么选择这两种模式呢？</span></p>
 
-<p id="f-doxcnqY49334E0WivzoYyqRLwDh"><span>（这个问题涉及一个是MCP 是怎么做的？ 另外Function call 和react模式。 我在这期视频里给大家讲一下吧？因为这个问题到底面试官想问什么，可能不是特别清楚。我们在视频里讲解一下大概面试官想问啥，对应的思路是啥。）</span></p>
+<p id="f-doxcnqY49334E0WivzoYyqRLwDh">本题涉及 MCP 的实现、Function Calling 与 ReAct 模式。</p>
 
 <p id="f-doxcn7JRStkLeXJXOIqr1RMFUpb"><span>7.RAG方面的内容你能介绍一下吗？就是你怎么使用它去构建知识库的？比如你这个就是内容是哪怎么怎么来的呀？比如你刚才提到了技师的信息啊怎么怎么进入的呀？然后比如门店地点这些信息怎么维护的呀？</span></p>
 
 <p id="f-doxcnZaXvNyHBB9kMykWfaa7jub"><span>（其实这个就是RAG 相关的最常考的问题。 你的RAG怎么做的，RAG的知识库如何构建，如何检索，如何优化等等，需要了解的很细。给大家的启示是，你如果有RAG项目，你需要理解/弄透里面每一个细节。 比如我问你，你的数据库是如何构建的？用的什么数据库？存了哪些字段？为什么不选择其它数据库呢？等等，这些是你要掌握的。 划重点：对于RAG来说，这是很重要的高频考点，其实也就是RAG的核心。</span></p>
 
-<p id="f-doxcn0iBLRpByzPy9FSTO8pAJrc"><span>回到我自己来说，该学习案例其实比较简单，这是一个Agent项目，我为了知识的完整性，强行加了一个最简单的RAG，我还写上在简历介绍了，这也是面试官为什么会问。但是很明显，我的RAG系统目前过于简单，所以面试问到了，就会觉得你做得浅。 所以我自己也会专门再做一个RAG系统，里面有详细的RAG的所有核心步骤，这样面试官再问RAG，就比较深入了。 我想表达的是在面试中，面试官说你项目浅，你肯定是可以分析出来到底哪里浅的。然后针对性加强。）</span></p>
+<p id="f-doxcn0iBLRpByzPy9FSTO8pAJrc">该学习案例的 RAG 较简单，可以进一步完善核心环节，包括数据处理、切块、检索、排序与评估。</p>
 
 <p id="f-doxcno8xu3dPPif4QXDzEx5YHUy"><span>7.1 （追问）比如你这个向量化模型有做优化吗？因为你去你说你要支持他客户咨询的问题嘛，一般客户的问题都很短，就是有没有对这个embedding模型做一个调整啊？或者怎么样选取的时候你是怎么怎么考虑的？</span></p>
 
-<p id="f-doxcnNfCqQWQgZEJbchDnRCVA6b"><span>其实是RAG系统对于查询侧的 问题优化。也是属于RAG的核心优化环节。该学习案例没做，我就不展示答案了。但是我想告诉大家的是重点，这个属于重点，就是查询改写嘛，常见的RAG策略。该学习案例没做，但是在八股笔记中其实理论都总结了。 参考RAG 八股部分 </span><span>4.3 召回优化策略。</span></p>
+<p id="f-doxcnNfCqQWQgZEJbchDnRCVA6b">本题涉及 RAG 查询侧优化，可参考召回优化策略中的查询改写。</p>
 
 <p id="f-doxcnpaywR8dJ77QXy5iDth12Dh"><span>8.你对千问2.5做了微调，那今年千问3也发布了，千问3对比前一代有哪些提升？你有了解吗？你们使用起来OpenAI的模型跟国内的一些GPT呀或者千问3这些模型，使用起来的感觉怎么样？</span></p>
 
-<p id="f-doxcnTYbv1fgPm3uTtGidsh0Tud"><span>（这个问题其实要真的答得很好的话，要吃点真实经验。就是你确实做模型评估的时候，你对比了不同模型，做了一些评测，然后有一些什么样的感受。给到一些有用的反馈会比较好。 模型评测其实是专门的工作，在正式的项目中，是有这个环节和代码的。 但是确实很多人转行的话，其实你自己做项目，可能做的不会有那么全面，所以可能没做到，这样也能理解。 如果真的没有类似的经验（我自己也没有），那么这个点其实还是可以去回答的，大概就是答对应的基础知识： </span><span>千问2.5-&gt;3的升级</span><span>（如果你在国内，应该要了解千问，这里看一下八股总结）， 然后</span><span>模型对比</span><span>（其实在八股部分表格中也有）。 所以如果你没有实践经验，你根据八股总结的这两个知识点，也是可以回答的。）</span></p>
+<p id="f-doxcnTYbv1fgPm3uTtGidsh0Tud">模型评估需要对比不同模型并记录结果。可以结合 Qwen 2.5 到 Qwen 3 的版本变化、模型能力差异与任务表现，分析选型依据。</p>
 
 <p id="f-doxcnl13d80A619nQ4C99af6WZb"><span>千问的提升： 看八股  </span><span>千问2.5到3的升级</span></p>
 
@@ -2583,15 +2574,15 @@ GPA：3.7/4.0；专业排名：12/180（如真实且值得展示）
 
 <p id="f-doxcnM2PFIztRvPkpHPV8WbCDIf"><span>1.你在xx，这一年多的时间，做的就是这个日历助手项目是吗？对于AI应用或者大模型这一块的实际经验，就是这个日历助手对吗？</span></p>
 
-<p id="f-doxcn3cf1cnWgPTbtZmFuHzacbc"><span>（毕竟这一面是主管面了，而且还是证券公司的主管，所以通常来说预期他并不会非常懂技术，甚至是不太懂技术，相比传统的互联网大厂的主管，一定在技术上是比较少的。通常他是不会问具体技术问题的。 面试官问这个问题，其实就是想看你有什么经验，你经验丰富不？最好还做一个和银行业务相关的大模型应用那就更好了。 所以这个问题面试官的侧重点更多是要的是你经验丰富，做的项目多。至于你的深度，估计他在这里也把控不了。这里其实可以看出做一个其实有点少了，如果我们只做了一个，那么这个问题就不好回答了。之前我回答这个问题时候，我只能说我有两个Agent项目，但是现在，我自己不是又在弄一个RAG项目，现在我再去回答，</span></p>
+<p id="f-doxcn3cf1cnWgPTbtZmFuHzacbc"></p>
 
-<p id="f-doxcnwgM86NKPRArdsy8jmdAvyg"><span>      我在AI领域有比较全面的落地经验，涵盖了从应用层Agent开发到底层RAG框架构建，以及模型微调等算法工作。具体来说，我有三个代表性项目：</span></p>
+<p id="f-doxcnwgM86NKPRArdsy8jmdAvyg"></p>
 
 <p id="f-doxcnFINaxNj6bDmdKNzWrMTH1b"><span>第一是</span><span style="font-weight:bold">端侧Agent落地</span><span>。在微软，我基于 </span><span style="font-weight:bold">Semantic Kernel</span><span> 框架开发了智能预约Agent，深度集成了Windows/M365生态。我不止做Prompt Engineering，还负责了本地模型的</span><span style="font-weight:bold">微调、压缩和推理加速</span><span>，让模型在边缘设备上跑得更快更准。</span></p>
 
 <p id="f-doxcnekrGQ8rXxfNPfvgcvyzDJe"><span>第二是</span><span style="font-weight:bold">复杂多智能体系统</span><span>。本案例使用 </span><span style="font-weight:bold">LangChain</span><span> 的监管者架构设计了一个多Agent预约系统，包含反思机器人和监管者角色，利用RAG实现用户喜好与专长的智能匹配，并引入</span><span style="font-weight:bold">反思机制</span><span>持续优化行为。</span></p>
 
-<p id="f-doxcnCNV5RDBhXb5CzfHTbOK7Zg"><span>第三是</span><span style="font-weight:bold">底层RAG设施</span><span>。为了追求极致效果，我没有依赖现成库，而是</span><span style="font-weight:bold">自定义了一套RAG-MCP框架</span><span>，手动实现了分块、粗排、精排的全流程。这套系统是高度可插拔的，直接提升了我们业务的查询准确率。</span></p>
+<p id="f-doxcnCNV5RDBhXb5CzfHTbOK7Zg">第三是底层 RAG 设施：自定义 RAG-MCP 框架，实现分块、粗排与精排全流程，并设计可插拔接口。查询准确率需要通过任务数据集验证。</p>
 
 <p id="f-doxcnm053riNbQ4DZIkFzrnZOTc"><span>此外，我有扎实的</span><span style="font-weight:bold">传统工程背景</span><span>，我有Windows日历全球上线客户端经验，以及注册表安全攻防这类底层安全算法工作。"</span></p>
 
@@ -2599,7 +2590,7 @@ GPA：3.7/4.0；专业排名：12/180（如真实且值得展示）
 
 <p id="f-doxcn201KqRXLjWkmWzQogdRQ5H"><span>3. 现在用的这个模型是哪一个？</span></p>
 
-<p id="f-doxcniL81zeOqmkSlwYOHdOEUsb"><span>（我聊了挺多公司感觉很多国内公司更倾向于用 千问系列？ 倒是Deepseek好像没听到有公司说他们用，但是我听说政府好像更倾向于DeepSeek? 总之这个问题我倒是觉得言之有理即可。估计面试官可能比较感兴趣的是千问，为什么不用千问，千问和你用的GPT的对比？ 这些咱们都总结过，因为之前面试出现过，大家可以一起参考着复习）</span></p>
+<p id="f-doxcniL81zeOqmkSlwYOHdOEUsb">模型选择需要结合业务约束比较 Qwen、DeepSeek、GPT 等模型。</p>
 
 <p id="f-doxcnfCjnSc7z8EVZgXu5YSYTle"><span>参考八股：</span><span style="font-weight:bold">7.4 千问2.5到3的升级</span></p>
 
@@ -2609,9 +2600,9 @@ GPA：3.7/4.0；专业排名：12/180（如真实且值得展示）
 
 <p id="f-doxcn8KJiR5i4ahgcIpr64TFQRc"><span>（是一个好问题，最好你是有一些自己的思考，比如看一些行业大会，行业报告，都能有灵感，结合自己想法讲出来。另外答案最好是积极的，看好AI的，本身就是AI的岗，如果企业不看好AI，他也不会设置这个岗位对吧，你不看好AI，你也不会面试这个岗位，所以如果谈一些唱衰AI的论调，就显得不合时宜。</span></p>
 
-<p id="f-doxcndsnrinU4Z7I904HYRRf57D"><span>如果你确实没啥思考，那么不妨背背总结的答案吧。 以下内容关于AI的方向，我也是从我们一直说的参考资料。&lt;&lt;Agentic Design Pattern&gt;&gt; 里面总结的，看一下这个笔记里：</span><span><span><a href="https://github.com/fzy2012/rhzl-Agentic-Design-Patterns-cn/blob/feature/interactive-website/06-What-Makes-Agent.md"><span>https://github.com/fzy2012/rhzl-Agentic-Design-Patterns-cn/blob/feature/interactive-website/06-What-Makes-Agent.md</span></a></span></span><span>，里面写了 Agent未来的5大设想，那不就是这个问题最好的回答吗？</span></p>
+<p id="f-doxcndsnrinU4Z7I904HYRRf57D">相关讨论可参考《Agentic Design Patterns》中关于 Agent 未来方向的内容。 <a href="https://github.com/fzy2012/rhzl-Agentic-Design-Patterns-cn/blob/feature/interactive-website/06-What-Makes-Agent.md"><span>https://github.com/fzy2012/rhzl-Agentic-Design-Patterns-cn/blob/feature/interactive-website/06-What-Makes-Agent.md</span></a></p>
 
-<p id="f-doxcnsL4ufL0slE0orO7aB3FMpb"><span>我的参考答案，首先先谈了这个AI 浪潮持续多久的例子。然后未来的方向，我从以上参考书籍中抽取了5个方向回答，因为这是一个证券公司，对于第四个方向，AI 会成为独立经济体这一小节进行展开解释，因为我相信面试官可能会比较感兴趣。）</span></p>
+<p id="f-doxcnsL4ufL0slE0orO7aB3FMpb">参考答案可以先讨论 AI 技术的发展，再结合参考书籍中的方向展开。</p>
 
 <p id="f-doxcncbFYsFotfImvokwCTiQ2nf"><span>首先先说，AI浪潮会持续多久，我的看法是在未来10年都会继续快速发展。有些人说AI 被高估了，很多公司估值都有泡沫，我的看法是在1年的角度来说，有的公司特别是美国公司，确实因为AI被高估了，可能会逐渐回调。但是从10年的角度来看，AI才刚刚发展，我们看到就近一年AI在物理世界智能眼镜，机器人，驾驶进步是肉眼可见的。在互联网软件方向，以Agent为例，从Agent RAG, MCP, A2A,SKills, 技术发展很快，效果变得越来越好，未来还有非常大的发展空间。</span></p>
 
@@ -2631,7 +2622,7 @@ GPA：3.7/4.0；专业排名：12/180（如真实且值得展示）
 
 <p id="f-doxcnIInVwfwwti6Ucox6DghROb"><span style="font-weight:bold">     交易与经营</span><span>：利用AI辅助交易决策和提升运营效率。</span></p>
 
-<p id="f-doxcnuQWwnkxnK6bt06bqQYgzQh"><span>我之所以想加入，就是希望利用我在Agent和RAG方面的经验，深入到这些具体场景中，用技术真正赋能这些高价值业务。</span></p>
+<p id="f-doxcnuQWwnkxnK6bt06bqQYgzQh"></p>
 
 <p id="f-doxcnnDWt6MxoT9LhbFPWqpCXub"><span>    6. 个人情况</span></p>
 
@@ -2639,7 +2630,7 @@ GPA：3.7/4.0；专业排名：12/180（如真实且值得展示）
 
 <p id="f-doxcn6p9MVUa525p5zVjyDoxztf"><span>    7. 反问</span></p>
 
-<p id="f-doxcn8VKPoVVoaG1Oz0memJUypc"><span>      在 笔记 </span><span>面试技巧 </span><span>我写了具体事项。</span></p>
+<p id="f-doxcn8VKPoVVoaG1Oz0memJUypc"></p>
 
 <a id="f-doxcnZXPAV2djysLv4QCiuLHZch"></a>
 
@@ -2669,7 +2660,7 @@ GPA：3.7/4.0；专业排名：12/180（如真实且值得展示）
 
 <p id="f-doxcnRCudVGV25rD3G1gwlAzsmg"><span>3. MCP有本地模式和远程模式，他们有一些什么区别，开发的时候如何选择？</span></p>
 
-<p id="f-doxcnQONj3ZYLUGJfJtwY1iHe3g"><span>  (这个视频专门讲MCP 本地和远端模式的：</span><span><span><a href="https://www.youtube.com/watch?v=wlerSyHzoCI"><span>https://www.youtube.com/watch?v=wlerSyHzoCI</span></a></span></span><span>。在看了这个视频后，我补充了MCP相关的八股知识，这个里面涉及两个重要的点，一个是本地Server和远端Server的区别， 第二个是MCP协议的传输协议的更新。 这两个都是面试出现过的考点，大家可以看上面笔记部分复习。）</span></p>
+<p id="f-doxcnQONj3ZYLUGJfJtwY1iHe3g">相关视频介绍 MCP 本地与远端 Server 的区别，以及传输协议的演进。 <a href="https://www.youtube.com/watch?v=wlerSyHzoCI"><span>https://www.youtube.com/watch?v=wlerSyHzoCI</span></a></p>
 
 <p id="f-doxcnNxSlnpiODKbkIGnoVdkcub"><span style="font-weight:bold"> 参考笔记 4.2 </span><span><span style="font-weight:bold"><a href="/posts/agent-learning-06-mcp-integrations/#f-doxcnoZB0nssSxLNj66LMo0N7df"><span>MCP 本地Server和远端Server的对比</span></a></span></span></p>
 
@@ -2677,7 +2668,7 @@ GPA：3.7/4.0；专业排名：12/180（如真实且值得展示）
 
 <p id="f-doxcnY4OSmOprBvni4ONn21clLe"><span>   3.2还有其它的吗？</span></p>
 
-<p id="f-doxcn5ALNXBCy8riRs9beHAZCUe"><span>    （应该是没答全，我答了本地隐私更安全，延迟性低，然后3.1用户提示了资源相关问题，面试官问还有吗？显示然他还想听到更多，这个点我又答了一下远端的灵活性和解耦性更好，我感觉还是没达到他想要的，然是全程我感觉自己还是说了挺多东西的。根据我最新的总结，笔记4.2中的对比表格是包含了面试官想问的点。）</span></p>
+<p id="f-doxcn5ALNXBCy8riRs9beHAZCUe">MCP 本地与远端模式可以从隐私、延迟、资源约束、部署灵活性与解耦等方面比较。</p>
 
 <p id="f-doxcnhOmphNH7qJcvCqZLqLevzd"><span>4.再问一个MCP的问题，我们如果使用了MCP Client + 远程的Server，本地的Client 和远端Server 会有交互，如何解决他们之间协议不兼容的问题。具体是什么意思呢？比如你用了微软的开发框架，开发了一个智能体，它里面的MCP的实现未必是最新版本的MCP 实现，也有可能是自己的MCP实现就不完整，那么server和client之间可能会有一些不兼容的问题，你是如何考虑这个问题以及如何避免的？</span></p>
 
@@ -2713,13 +2704,13 @@ GPA：3.7/4.0；专业排名：12/180（如真实且值得展示）
 
 <p id="f-doxcnuEmIZlDeuXdP02QmX4iTyc"><span>5 MCP 和 A2A之间有一些什么样的异同，各自适用于什么样的场景。</span></p>
 
-<div style="margin-left:25px"><p id="f-doxcnDF5LtsjactbwBuYcmJuyWb"><span>(A2A 协议目前有两个面试中出现了，之前认为不怎么考，现在还是会考的，所以我把A2A的概念补充在上面笔记Agent 部分MCP下面了。 A2A的基本概念大家还是需要知道的，另外针对于这个MCP 和 A2A的异同，复习了笔记的A2A和MCP的概念，相信此题应该很好回答）</span></p><p id="f-doxcn539O9cRAR993AqeVK0b6De"><span>MCP</span><span style="font-weight:bold">解决的是 "</span><span>Agent ↔ 工具/数据" 的标准化连接问题：让 Agent 以统一的方式发现、鉴权并调用外部工具、API、数据库、文件系统等能力。就像给 AI 装一个“USB‑C 工具口”。</span></p><p id="f-doxcn6rmzjeDnpgn0ngd8xo4HRe"><span>A2A</span><span style="font-weight:bold">解决的是 "</span><span>Agent ↔ Agent" 的互操作与协作问题：</span><span style="font-weight:bold">不同厂商、不同框架下实现</span><span>的多个智能体之间，如何发现彼此、交换消息/任务、长时协作并保持内部实现不透明。</span></p></div>
+<div style="margin-left:25px"><p id="f-doxcnDF5LtsjactbwBuYcmJuyWb">需要理解 A2A 的基本概念，并比较它与 MCP 的异同。</p><p id="f-doxcn539O9cRAR993AqeVK0b6De"><span>MCP</span><span style="font-weight:bold">解决的是 "</span><span>Agent ↔ 工具/数据" 的标准化连接问题：让 Agent 以统一的方式发现、鉴权并调用外部工具、API、数据库、文件系统等能力。就像给 AI 装一个“USB‑C 工具口”。</span></p><p id="f-doxcn6rmzjeDnpgn0ngd8xo4HRe"><span>A2A</span><span style="font-weight:bold">解决的是 "</span><span>Agent ↔ Agent" 的互操作与协作问题：</span><span style="font-weight:bold">不同厂商、不同框架下实现</span><span>的多个智能体之间，如何发现彼此、交换消息/任务、长时协作并保持内部实现不透明。</span></p></div>
 
 <p id="f-doxcnHsV1RKjSTbJ0rNwe2WUBth"><span>5.1 我现在有一个Agent，他对外既可以使用A2A这种方式提供服务，也可以使用MCP Server的能力提供服务，这个时候怎么选？</span></p>
 
 <p id="f-doxcn4ZEszrECHzoUVfdG2rhtXV"><span>5.2 是这样的，Agent自身内部是怎么思考如何实现你的服务的，比如你是一个天气服务，对于使用者来说，我不care你内部是如何实现的，我就是让你去查询过去几天的天气，你可以使用工具去调用，也可以使用Agent的方法去获取这个天气，这个时候呢，MCP还是A2A?</span></p>
 
-<p id="f-doxcn7JNT1VHn1RdgrDOlvhFmp3"><span>   （5.1 和5.2这个题可以认为怪怪的，把MCP和A2A去对比, 我先问一下其他人意见，晚点总结答案）</span></p>
+<p id="f-doxcn7JNT1VHn1RdgrDOlvhFmp3"></p>
 
 <p id="f-doxcnWT6R2Ru6XJzFCvnBDGdlqb"><span>6.你做这个日历的项目，你做了时空冲突检测，你使用了模型推理，你是怎么解决模型有幻觉的情况？</span></p>
 
@@ -2773,7 +2764,7 @@ GPA：3.7/4.0；专业排名：12/180（如真实且值得展示）
 
 <p id="f-doxcno2RHop5UZ1ZiZxyUy9BQhc"><span>     3.3 做这个项目的过程中，你遇到了哪些问题，怎么解决的？</span></p>
 
-<p id="f-doxcnPDuhLklE3RiWFlHGWwpKqf"><span>    （其实这个问题也算是必考的问题，因为非常具有通用性，我将这个问题整理，总结到八股内容-其它模块，那里写了对应的技巧和准备，请大家参考）</span></p>
+<p id="f-doxcnPDuhLklE3RiWFlHGWwpKqf">相关问题与准备思路见对应章节。</p>
 
 <p id="f-doxcnwrky8QcWdd7sc0AyxJiPPd"><span>参考八股笔记 </span><span><span><a href="#f-doxcn8STRFyFTu85T5fdX20hkfg"><span>你在项目中遇到的最大的困难是什么，怎么解决的</span></a></span></span><span>？</span></p>
 
@@ -2781,7 +2772,7 @@ GPA：3.7/4.0；专业排名：12/180（如真实且值得展示）
 
 <p id="f-doxcn5gYO9Ya936kJ11sWCrFUqg"><span>     3.5 当你在代码中询问 "周杰伦的演唱会是什么时候"，这时llm发生了几轮的交互？</span></p>
 
-<div style="margin-left:25px"><p id="f-doxcn8YR4ka1q2KLbJJ7EfP0Ujc"><span>（其实3.4和3.5 是在考察你理不理解这个Agent框架和LLM之间交互的过程发生了什么？以下是答案。如果大家不理解，我总结了具体的例子和代码，大家可参考，如果还是不明白，可以看一下我的</span><span><span><a href="#f-doxcn3mq2uFHc14HV66lN3lBrHc"><span>讲解视频</span></a></span></span><span>，这期视频我有对这个问题进行讲解）</span></p><p id="f-doxcnE7YrLFM6kt8Fcud9sSz2te"><span>针对‘周杰伦演唱会’这个例子，如果 Function Call 正常工作，</span><span style="font-weight:bold">一共发生了两轮完整的 HTTP 交互</span><span>。</span></p><div id="f-doxcnqHUFxfFm6yqFcRsOP9Lf6b" style="display:flex;gap:0.5em"><span style="min-width:1.5em">◦</span><div><span style="font-weight:bold">第一轮交互（意图识别）</span><span>：Semantic Kernel 把用户问题发给 LLM。LLM 分析后，返回了一个 </span><span><span><span>tool_calls</span></span></span><span> 指令，告诉框架‘我要调用 </span><span><span><span>search_concert</span></span></span><span> 工具，参数是周杰伦’。此时 LLM 并没有生成最终答案，而是处于挂起状态。</span></div></div><div id="f-doxcnsji1xnfALsKFBfCYR54RCg" style="display:flex;gap:0.5em"><span style="min-width:1.5em">◦</span><div><span style="font-weight:bold">中间处理（本地执行）</span><span>：框架拦截到这个指令，在本地运行了搜索代码，拿到了‘2025年3月2日海口站’这个结果。</span></div></div><div id="f-doxcnXaZpmLa4kuRv7YHQYsFvYc" style="display:flex;gap:0.5em"><span style="min-width:1.5em">◦</span><div><span style="font-weight:bold">第二轮交互（结果生成）</span><span>：框架把‘用户问题’、‘模型的调用请求’以及‘工具的运行结果’打包在一起，再次发给 LLM。LLM 看到工具返回的具体时间后，才生成了最终的自然语言回复：‘周杰伦的演唱会是在2025年3月2日’。</span></div></div></div>
+<div style="margin-left:25px"><p id="f-doxcn8YR4ka1q2KLbJJ7EfP0Ujc">针对“周杰伦演唱会”这个例子，如果 Function Call 正常工作，一共发生两轮完整的 HTTP 交互。第一轮：Semantic Kernel 将用户问题发给 LLM，LLM 返回 tool_calls 指令，要求调用 search_concert，参数为周杰伦。中间处理：框架在本地执行搜索，获得“2025 年 3 月 2 日海口站”。第二轮：框架将用户问题、模型调用请求与工具运行结果一起发给 LLM，模型再生成自然语言回复。 <a href="#f-doxcn3mq2uFHc14HV66lN3lBrHc"><span>讲解视频</span></a></p><p id="f-doxcnE7YrLFM6kt8Fcud9sSz2te"><span>针对‘周杰伦演唱会’这个例子，如果 Function Call 正常工作，</span><span style="font-weight:bold">一共发生了两轮完整的 HTTP 交互</span><span>。</span></p><div id="f-doxcnqHUFxfFm6yqFcRsOP9Lf6b" style="display:flex;gap:0.5em"><span style="min-width:1.5em">◦</span><div><span style="font-weight:bold">第一轮交互（意图识别）</span><span>：Semantic Kernel 把用户问题发给 LLM。LLM 分析后，返回了一个 </span><span><span><span>tool_calls</span></span></span><span> 指令，告诉框架‘我要调用 </span><span><span><span>search_concert</span></span></span><span> 工具，参数是周杰伦’。此时 LLM 并没有生成最终答案，而是处于挂起状态。</span></div></div><div id="f-doxcnsji1xnfALsKFBfCYR54RCg" style="display:flex;gap:0.5em"><span style="min-width:1.5em">◦</span><div><span style="font-weight:bold">中间处理（本地执行）</span><span>：框架拦截到这个指令，在本地运行了搜索代码，拿到了‘2025年3月2日海口站’这个结果。</span></div></div><div id="f-doxcnXaZpmLa4kuRv7YHQYsFvYc" style="display:flex;gap:0.5em"><span style="min-width:1.5em">◦</span><div><span style="font-weight:bold">第二轮交互（结果生成）</span><span>：框架把‘用户问题’、‘模型的调用请求’以及‘工具的运行结果’打包在一起，再次发给 LLM。LLM 看到工具返回的具体时间后，才生成了最终的自然语言回复：‘周杰伦的演唱会是在2025年3月2日’。</span></div></div></div>
 
 <p id="f-doxcnx3yYmT2CYBkQhCVcWvw0jf"><span>    （如果你弄不明白上面的过程，请看这个更详细的解析）</span></p>
 
@@ -2789,7 +2780,7 @@ GPA：3.7/4.0；专业排名：12/180（如真实且值得展示）
 
 <p id="f-doxcnYHAsDpe0vALjIfr9wfyqvh"><span> 4. GPT在2025年出了一个叫Response的API，你大概了解吗？</span></p>
 
-<p id="f-doxcn2vuqor4dyuiVzbYSikJSK1"><span>  （关于GPT 的Response API, 其实是在25年3月份OPENAI 就提出了，希望将llm的工具调用，多轮对话等功能整合到api 中，减少Agent开发者的负担。 网上资料不多，面试也几乎从未出现。他都推出了大半年了，但是看上去这个思想没有火起来，估计可能也不会火起来了。我是第一次被问到。所以针对于这个知识点，我的建议是：大致了解下，不用花太多功夫。 所以我尝试用下面的回答大概简单概括下它的思想，理解这个回答，下次万一真被问到，能说道几句就好了，并且我严重怀疑这个基本面试不会问到）</span></p>
+<p id="f-doxcn2vuqor4dyuiVzbYSikJSK1"></p>
 
 <p id="f-doxcniXTDg3Q6HBdbskKt6EEHJf"><span>Response API 是Openai设计LLM调用接口的</span><span style="font-weight:bold">从 Completions → Chat Completions → Responses 的过渡</span><span>：早期的 </span><span style="font-style:italic">Completions</span><span> 只面向纯文本续写；随后 </span><span style="font-style:italic">Chat Completions</span><span> 围绕 </span><span><span><span>messages</span></span></span><span> 支持对话与函数调用，但状态与工具编排仍主要在客户端；如今 </span><span style="font-weight:bold">Responses</span><span> 用一个 </span><span style="font-weight:bold">有状态的统一端点</span><span>把多轮上下文与多步工具调用纳入服务端协议。</span></p>
 
@@ -2797,13 +2788,13 @@ GPA：3.7/4.0；专业排名：12/180（如真实且值得展示）
 
 <p id="f-doxcnHqwDXGqiN01SjT9II5de1b"><span> 5. 你用LoRa做了本地微调，这里面你是怎么做的？</span></p>
 
-<p id="f-doxcn7iyOoPVFdPIEJPYr5elGSy"><span>    （LoRa怎么做的，是我们精心准备的答案，包括怎么回答这个答案，对应的方法论和参考资料，我总结的都有，直接看笔记）</span></p>
+<p id="f-doxcn7iyOoPVFdPIEJPYr5elGSy">LoRA 的实践方法与参考资料见相关章节。</p>
 
 <p id="f-doxcnauUElo8UKQtaH0hu552fcf"><span>参考笔记 </span><span> 1.4 你是怎么做的微调</span></p>
 
 <p id="f-doxcn4JVeHFQ0XRedGJgkN5MdLj"><span> 6.  你里面提到的对性能做测评，里面有一些bool类型指标，也有一些过程指标，这分别是怎么评判的？</span></p>
 
-<p id="f-doxcnjiEi8aEQbKEdDD6vVKQwLd"><span>     （同学们，这个问题不清楚的话，会去看一下八股部分：</span><span><span><a href="/posts/agent-learning-12-langchain/#f-doxcnKJebU5ZkdNWAfEItAhCQOf"><span>Agent开发框架</span></a></span></span><span>，我给大家推荐的这一章的参考资料Agentic Design Pattern，里面就讲了这个问题，Agent评估问题，我推荐的两个资料，都是很有用的哈，这里也验证了，希望你能回到八股部分，看看本节和推荐的资料，以下回答几乎来自于我的参考资料。）</span></p>
+<p id="f-doxcnjiEi8aEQbKEdDD6vVKQwLd">相关框架与评估方法可参考 Agent 开发框架章节和《Agentic Design Patterns》。 <a href="/posts/agent-learning-12-langchain/#f-doxcnKJebU5ZkdNWAfEItAhCQOf"><span>Agent开发框架</span></a></p>
 
 <p id="f-doxcntW8lZyLyB5MuRx6bDnCZRh"><span>对于bool类型的结果评估，我们可以使用直接比较，要求智能体响应</span><span style="font-weight:bold">完全匹配预期输出</span><span>时才会成功。</span></p>
 
@@ -2835,15 +2826,15 @@ GPA：3.7/4.0；专业排名：12/180（如真实且值得展示）
 
 <p id="f-doxcnJhDKejZJ1fErJWmbOTJ4Pb"><span> 7. 你认为多Agent系统和单Agent系统最大的区别是什么？彼此有什么优势？</span></p>
 
-<p id="f-doxcn4eGE1Uu43ZIORamaGZw0Fd"><span> （朋友们，问题7和问题8其实也都是在我给大家总结的Multi-agent的架构的 1个论文 + 书本的某一章中，这两个参考资料很有用，请大家仔细阅读另外这个问题看上去也是比较有通用性的，因此我直接将这一问题收录到八股Multi-Agent部分。）</span></p>
+<p id="f-doxcn4eGE1Uu43ZIORamaGZw0Fd">相关问题可参考 Multi-Agent 的架构论文与书籍章节。</p>
 
 <p id="f-doxcn6HLLlNbDhqyOTqpxOvuMYg"><span>参考八股 </span><span>6.3 单Agent和多Agent对比</span></p>
 
 <p id="f-doxcnj5nr0eZwpJheOr7delPpfe"><span> 8. 你讲到的你这两个项目，两个项目最大的区别是啥？你刚才只是结合了一些概念上的东西讲的，你能否具体结合你的项目讲？</span></p>
 
-<p id="f-doxcnqfG2W57OjTXi5OTSswdzSe"><span>（在你理解了我整理的参考资料后，这个问题其实很好回答。我给出的参考论文列举了不同任务 使用不同Agent框架的效果和性能，并总结了什么项目适合什么Agent框架，如果你能理解的话，这个题其实是把这个相关的内容，运用到你自己的实际项目中，针对你的项目谈谈回答。还是这句话： </span><span style="font-weight:bold">笔记八股Multi-agent部分的内容值得大家好好会去阅读</span><span>。以下的答案其实基本就是可以套用我给大家总结的参考资料部分，</span><span style="font-weight:bold">金融分析适合用中心化架构</span><span>，</span><span style="font-weight:bold">网页导航适合去中心化， 工作流适合单Agent的架构的原因</span><span>，然后往你的项目一套，就完了）</span></p>
+<p id="f-doxcnqfG2W57OjTXi5OTSswdzSe">可以结合参考资料比较不同任务下的架构效果：金融分析、网页导航与工作流任务分别有哪些特点，为什么选择中心化、去中心化或单 Agent 架构。</p>
 
-<p id="f-doxcn2K63BWtYRHYYWWaFgjq0bf"><span>在我的邮箱项目中，因为本身它是</span><span style="font-weight:bold">严格线性进行的，每一步依赖于上一步状态，无法并行，并且任务不复杂，单Agent的基线收益已经很高</span><span>，所以天然适合使用单Agent项目，使用任何一个多Agent架构都会导致性能下降。</span></p>
+<p id="f-doxcn2K63BWtYRHYYWWaFgjq0bf"><span>在邮箱案例中，因为本身它是</span><span style="font-weight:bold">严格线性进行的，每一步依赖于上一步状态，无法并行，并且任务不复杂，单Agent的基线收益已经很高</span><span>，所以天然适合使用单Agent项目，使用任何一个多Agent架构都会导致性能下降。</span></p>
 
 <p id="f-doxcnjs0Hyb57EdFcl1CussU6dg"><span>而在按摩房预约系统中，任务天然具有"分而治之"的特性，</span><span style="font-weight:bold">中心化架构让编排者将任务拆解成"预约", "支付","咨询"的子任务</span><span>，分配给不同Agent并行处理，最终整合。在此种场景下，使用中心化架构是最好的选择。</span></p>
 
@@ -2887,17 +2878,17 @@ GPA：3.7/4.0；专业排名：12/180（如真实且值得展示）
 
 <p id="f-doxcnwY0LZ15U1gXn7D8NjuRctd"><span>   2.1 模型也是跑在本地吗？模型能跑起来吗？用的多大的规格和尺寸？</span></p>
 
-<p id="f-doxcnd4Mx39bCn2lYcHc6VTWrfg"><span>（这个问题夸克千问一面也有对吧。 为什么会问，想让大家知道的是如果你用本地模型，甚至是cpu，就是会问啊，面试官会有疑问。 所以如果是说你的模型是远端的，其实一般应用岗这个问题倒是不会太问到，但是你用了本地模型，那么你需要知道这个问题。这个问题我也在八股部分 </span><span>模型和硬件</span><span>，总结了模型能不能跑，跑得多快，我相信这一节我讲清楚了，</span><span style="font-weight:bold">大家去看一下</span><span>，有了这个基础，这个问题其实非常好回答，结合你具体的模型，硬件和公式，给面试官算就好啦！）</span></p>
+<p id="f-doxcnd4Mx39bCn2lYcHc6VTWrfg">使用本地模型时，需要结合参数量、量化精度、硬件与公式分析能否运行以及推理速度，相关内容见模型与硬件章节。</p>
 
-<p id="f-doxcnkjZO14ULsJ0wZqU7Y8zbyb"><span>完全可以跑起来。我的电脑是64GB内存。</span></p>
+<p id="f-doxcnkjZO14ULsJ0wZqU7Y8zbyb">该案例的实验环境为 64 GB 内存。</p>
 
 <p id="f-doxcnNHocX0RsYAz2aRitCFltGg"><span>      qwen7b-INT4 的要求是： 7B * 1字节   =  7,000,000,000 字节 - 7GB。 </span></p>
 
-<p id="f-doxcn83C3ynQSoQTRiaa0og57Lg"><span>      加上一些额外的开销，大概需要多1.2~1.3倍的空间，所以内存要求是8~9GB，所以我的电脑完全能跑。</span></p>
+<p id="f-doxcn83C3ynQSoQTRiaa0og57Lg">加上约 1.2～1.3 倍的额外开销，内存需求约为 8～9 GB。</p>
 
-<p id="f-doxcnkVarW2qr7xpDBzPx5Os8ld"><span>结合我的从工程/任务层面的优化 + 选择专门的推理框架最大利用cpu的并行计算能力，也可以调推理速度。</span></p>
+<p id="f-doxcnkVarW2qr7xpDBzPx5Os8ld">结合工程与任务层面的优化，以及能够利用 CPU 并行计算能力的推理框架，可以进一步调整推理速度。</p>
 
-<p id="f-doxcnK6Ucab7EAjdMZNRNXbZgIe"><span>（上面回答应该是很具体和专业，具体公式计算，怎么来的，原理，请看我的八股 部分 </span><span>模型与硬件）</span></p>
+<p id="f-doxcnK6Ucab7EAjdMZNRNXbZgIe">具体公式、计算方式与原理见模型与硬件章节。</p>
 
 <p id="f-doxcnS3QNG7bxFhOSpwYwKLogjg"><span>   2.2 他具体做了哪些功能？</span></p>
 
@@ -2915,9 +2906,9 @@ GPA：3.7/4.0；专业排名：12/180（如真实且值得展示）
 
 <p id="f-doxcnhuAHvcteFQ1O19qlt095gg"><span>   3.2 你提到会存储一些数据，会存储一些什么数据呢？</span></p>
 
-<p id="f-doxcnZ2lAlBnSkqOcqZeYfhyePG"><span>（这个问题，我在 八股 </span><span>长期记忆的常见应用场景 </span><span>中总结了常见的一些场景会要存储的长期记忆。包括这个例子，也是根据我的业务场景下长期记忆的一个参考。 整个回答和你的业务相关，整个东西也不难，但是要能说出来，展示你的一些思维的发散性。 比如夸克千问2面面试官就追着我扩展，天马行空问，你的场景下要存一些什么？为啥，大家根据这些例子做参考，然后想想你的Agent项目要存点啥）</span></p>
+<p id="f-doxcnZ2lAlBnSkqOcqZeYfhyePG">长期记忆需要结合业务场景选择，例如用户偏好、历史行为与任务状态。可以参考长期记忆的常见应用场景。</p>
 
-<p id="f-doxcnzO4tCUt2PQeK1JZwytQV8u"><span>    在我的智能日历助手中，我们需要根据用户喜好，来智能调整规划冲突的策略，这时我们会存:</span></p>
+<p id="f-doxcnzO4tCUt2PQeK1JZwytQV8u"><span>    在智能日历助手案例中，我们需要根据用户喜好，来智能调整规划冲突的策略，这时我们会存:</span></p>
 
 <p id="f-doxcnW6Y0WUCa18DIgDKX7g5KKe"><span>    1.用户偏好相关：时间偏好：喜欢早睡/晚睡？工作&gt;个人？ 家庭&gt;社交？等方面喜好</span></p>
 
@@ -2927,9 +2918,9 @@ GPA：3.7/4.0；专业排名：12/180（如真实且值得展示）
 
 <p id="f-doxcnCpe4FjZU5gVUIkgvZRcsZe"><span>4. 你的项目整体使用了一个什么架构？</span></p>
 
-<p id="f-doxcn9YduarjtaZHkuGTb6f3DYf"><span>（架构这里其实讲了挺多的，包括很多面经有一些深入架构的讨论，我们的八股也总结得很多了，这里的面试其实就是问了最基本的问题。 那么大家回答的时候，就是结合我们八股部分总结的那几种架构，看看你的架构是属于多Agent的哪一个，结合着讲一讲，以及为什么选这个架构等等，大概讲一下。以下我的回答其实理论知识都来自于我们八股部分架构的相关内容。单Agent vs 多Agent，如何选型，八股部分都总结得很好了。）</span></p>
+<p id="f-doxcn9YduarjtaZHkuGTb6f3DYf">架构选择需要结合单 Agent 与多 Agent 的特点、任务约束、通信方式及性能开销说明。</p>
 
-<p id="f-doxcniqQDO8PMUJLkaDQd2Tbk6g"><span>我的系统采用的是一个典型的单Agent 的Prompt chaining的架构，具体来讲就是将任务分为多个阶段，然后单个Agent在这个Chaining的流程中去填空，完成子步骤。选择这个架构的原因是因为，我的任务并不支持子任务的并行，而且单Agent的基线收益比较高。这种情况下使用多Agent，反而会引入协调税，分散token，引入沟通开销，性能反而下降。所以在这种情况下，单Agent的效果是最好的。</span></p>
+<p id="f-doxcniqQDO8PMUJLkaDQd2Tbk6g"><span>该系统采用的是一个典型的单Agent 的Prompt chaining的架构，具体来讲就是将任务分为多个阶段，然后单个Agent在这个Chaining的流程中去填空，完成子步骤。选择这个架构的原因是因为，该任务并不支持子任务的并行，而且单Agent的基线收益比较高。这种情况下使用多Agent，反而会引入协调税，分散token，引入沟通开销，性能反而下降。所以在这种情况下，单Agent的效果是最好的。</span></p>
 
 <p id="f-doxcn1sepapVh6yEnqRzLtKmDDh"><span>5. 你的Agent是如何进行效果评估的？</span></p>
 
@@ -2941,13 +2932,13 @@ GPA：3.7/4.0；专业排名：12/180（如真实且值得展示）
 
 <p id="f-doxcnsdwktPXYCvqSgLiqZTcWne"><span>  看本节吧： 8. </span><span><span><a href="/posts/agent-learning-18-training-inference/#f-doxcn0XskrHYWieZNIKvk88pjch"><span>你的项目是如何做推理加速的</span></a></span></span><span>？</span></p>
 
-<p id="f-doxcnKf92SiLBG1NFoZzKAytqYe"><span>这块我是专门总结了量化，微调，推理加速的知识，结合项目讲了怎么做，有具体的方法。我的理论依然是，对于应用，我们把流程走一遍，我这个方法我是让AI写了脚本跑了一遍，确定是可行。然后记录下来大概的结果，用的什么库，怎么完成的，总结好，整理好。 量化，推理，加速就到这里。因为算法不是应用的主战场，我没有深入去做（不过确实应用岗也不会深入问），所以做到我八股整理的这一步，就够了。我没有再深入，面试也没深入问过。</span></p>
+<p id="f-doxcnKf92SiLBG1NFoZzKAytqYe">量化、推理与加速可以通过运行完整流程进行学习，并记录使用的库、实现步骤与实验结果。</p>
 
 <p id="f-doxcn3xxPcSaQyZdfW6rrXmI84f"><span>7. 你这边也会做LoRa微调吗？数据怎么来的？什么是DPO啊？</span></p>
 
-<p id="f-doxcnNL8wYBte4dkYoHVjC8zlFh"><span> 一样的，都是我们八股总结过了的。 LoRA怎么做的，这个问题我专门总结了，也有一套方法论：如何以科学实验方式做LoRA。 相信这里总结得很好了，包括数据怎么来的。以及什么是DPO，这都概念，我们八股都总结了。参考笔记1.3 </span><span><span><a href="/posts/agent-learning-18-training-inference/#f-doxcngja5X6wbMkrcNzZLrPwk2g"><span>你是怎么做的微调的</span></a></span></span><span>?</span></p>
+<p id="f-doxcnNL8wYBte4dkYoHVjC8zlFh">LoRA 可以结合科学实验方法说明数据准备、训练与评估；DPO 的基本概念见对应章节。 <a href="/posts/agent-learning-18-training-inference/#f-doxcngja5X6wbMkrcNzZLrPwk2g"><span>你是怎么做的微调的</span></a></p>
 
-<p id="f-doxcnODmqavs2VN1XebOxGS0UV3"><span>所以大家虽然是应用岗，但是不要怕算法，我们都准备了。 而且算法岗问多深，我们就准备得多深。我没有深入总结什么公式啊，就是因为现在面试官不会深入问。万一有一天他深入问的多了，本节也会相应深入总结的，我帮大家兜着底呢。</span></p>
+<p id="f-doxcnODmqavs2VN1XebOxGS0UV3"></p>
 
 <p id="f-doxcnKxvgvMxwJWmKVJW70ozbIb"><span>8. 大模型肯定要组装一堆Prompt，你这个Prompt是提前备好固化然后直接打包在电脑中吗？有没有什么Prompt优化方法？</span></p>
 
@@ -2963,11 +2954,11 @@ GPA：3.7/4.0；专业排名：12/180（如真实且值得展示）
 
 <p id="f-doxcnrTVLCjsxV6Cmr7hsZRREue"><span>9 你最近有使用过哪些AI工具，你觉得哪个模型使用得比较顺手？</span></p>
 
-<p id="f-doxcnoiZpKEMzBGGpPKJHJF6IVi"><span>（其实吧，这个问题看似是个闲聊问题，但是当我真正复盘的时候，这个问题背后其实体现着企业是否对你跟上这个AI潮流的考察。 因为现在这个时代，其实很多企业问你如何Vibe coding，有没有啥技巧，用那些vibe coding工具，用什么AI产品，这些都是看你是否跟上潮流，有一些思考。 所以其实这些题目最好也是能反思一下，总结几个常用的比较新的AI工具，比如Skills出来以后，可以说使用</span><span style="font-weight:bold">Skills Creator</span><span> 来生成Skill等。体现自己对最新产品的使用和思考）</span></p>
+<p id="f-doxcnoiZpKEMzBGGpPKJHJF6IVi">Vibe Coding 工具与实践可结合具体流程分析，例如使用 Skill Creator 生成 Skill。</p>
 
 <p id="f-doxcn7Lw14VGE4ihtzgdUA5e06e"><span>10. 你怎么去了解一些新的技术？</span></p>
 
-<p id="f-doxcnQGjYqnNN0AyjmyjkJmirke"><span>同样和上面一个问题一样，看着是闲聊，其实背后在考察你是否在主动学习，学习方法聪明吗？我以后给一些答案供大家参考</span></p>
+<p id="f-doxcnQGjYqnNN0AyjmyjkJmirke"></p>
 
 <p id="f-doxcnuI7awFAwnRVb4dVjsDR6td"><span>11. 在该案例中干的好好的，为什么要出来干这个？</span></p>
 
@@ -3019,11 +3010,11 @@ GPA：3.7/4.0；专业排名：12/180（如真实且值得展示）
 
 <p id="f-doxcnycKE6jh5hvuBHYnBOtWTYd"><span>面评：对量化模型和结构有一定了解，但应用比较简单，技术和方案设计能力单薄了些。</span></p>
 
-<p id="f-doxcn4jaLyzgolHKquZfzDktIdf"><span>其实面试官说的也没有问题，不过对于方案设计的题，我没有答出最优解，好歹也和面试官在讨论，说了一些解决思路，但是面试官还是无情挂了我，甚至是写题的机会都不给（小红书的面试，写题的界面都准备好了，但是最后他不让我写），挂得很坚定，可以看出小红书的要求还是挺严格的。</span></p>
+<p id="f-doxcn4jaLyzgolHKquZfzDktIdf"></p>
 
 <p id="f-doxcnTmLXHQ0VG4iw5t4VwUHNFg"><span>反思：</span></p>
 
-<p id="f-doxcnxqvvj6btItWCOXMZJroh8c"><span>1.我一直和大家说的是，做RAG系统的时候，你就要把你的文档弄得复杂一些，用上专业的数据，而不是像我一样，用了一个简单的文档，没有啥复杂的召回策略，都没有专业数据库，这也是面试官觉得该学习案例很简单的原因，大家在设计项目上就应该避免。</span></p>
+<p id="f-doxcnxqvvj6btItWCOXMZJroh8c">RAG 项目可使用复杂文档与专业数据，研究向量数据库、切块与召回优化策略。</p>
 
 <a id="f-doxcn3ukGgmpSlw4JPCFW4rW0Bg"></a>
 
@@ -3045,13 +3036,13 @@ GPA：3.7/4.0；专业排名：12/180（如真实且值得展示）
 
 <p id="f-doxcnCDiSntaQf3WFauPy0SkI4g"><span>7.你是怎么做的量化的？</span></p>
 
-<p id="f-doxcnYWleoq5ReLZ9q2GZyQ2LSh"><span>（说实话，我不能说对量化精通，这里我就是准备了自己做推理加速的一套方案，把这里的东西搞懂，去讲就好了，比如我总结的方案，</span><span style="font-weight:bold">采用Q4_K_M,Attention层保持5-bit精度，FFN层压缩到4-bit，输出层用6-bit确保质量 </span><span>这几个关键地方弄清楚，一般其实应用的岗位面试官也不深入懂量化的，你回答到这里就差不多了，他也不会深入问和你问细节）</span></p>
+<p id="f-doxcnYWleoq5ReLZ9q2GZyQ2LSh">可结合 Q4_K_M 分析量化方案：Attention 层保持 5-bit 精度，FFN 层压缩到 4-bit，输出层用 6-bit，以权衡质量与资源开销。</p>
 
 <p id="f-doxcnJJ4YZWgcu39qWsQTRq9Se0"><span>笔记部分 </span><span> 你的项目是如何做推理加速的？</span></p>
 
 <p id="f-doxcnP7lJIOf5CYqtSeN98YQeqe"><span>8.量化的好处是什么，优缺点是什么？</span></p>
 
-<p id="f-doxcne6N5PBbSpYx9upbtTV7GBH"><span>（这个算是一个八股内容了，我总结在八股笔记量化部分。自己当时答确实可以答出来一些推理精度下降的问题，但是还是没有事后总结的答案好，因为现在我总结的答案，可以从</span><span style="font-weight:bold">模型的结构，网络上深层次</span><span>地指出量化带来问题的原因，对于好处的总结也完整。所以有时问题虽然回答出来了，但是确实需要事后总结，反思，迭代出更好的答案，下次回答得更专业。）</span></p>
+<p id="f-doxcne6N5PBbSpYx9upbtTV7GBH">可以从模型结构与网络计算角度分析量化带来的收益，以及精度下降的原因。</p>
 
 <p id="f-doxcnx4LZzNoRGGhu1aviAKJYuh"><span>  8.1 你说到量化会降低精度，那么降低精度会有什么问题吗？</span></p>
 
@@ -3079,7 +3070,7 @@ GPA：3.7/4.0；专业排名：12/180（如真实且值得展示）
 
 <p id="f-doxcnlRnX34WVm0mF1m6OJSehRd"><span>13.如果说你的子Agent膨胀变成20个，或者说是50个，你应该怎么去优化呢？</span></p>
 
-<p id="f-doxcnJRqYWQP6QuyVbHBbZd2kKf"><span>  （这个问题我不太确定面试官想要的最终的答案是什么？这个问题其实就是在 多Agent的主管模式下，如果子Agent不断膨胀，那么这个Supervisor的压力可能会很大，这时如何解决，如果不知道什么是多Agent的Supervisor模式，请看这里：</span><span><span><a href="https://github.com/fzy2012/rhzl-Agentic-Design-Patterns-cn/blob/feature/interactive-website/13-Chapter-07-Multi-Agent-Collaboration.md"><span>https://github.com/fzy2012/rhzl-Agentic-Design-Patterns-cn/blob/feature/interactive-website/13-Chapter-07-Multi-Agent-Collaboration.md</span></a></span></span><span>。我的回答中，提出了使用Hierarchical的模式，但是面试官继续挑战这种模式如果一个分类错误，会导致后面都出错，然后我说可以分类的时候采用多Agent投票决策分类，加强分类准确性，面试官又挑战这样性能开销大，于是我说这个投票的策略可以是多个Agent并行的，但是面试官还是不满意，总之这题大家看到其实是面试官会不断和你探讨架构设计上的问题，需要有一些知识储备，才能像最优解靠近，我这个回答显然面试官并没有觉得最终探讨到了他最满意的解决方案。复习这个题请先掌握好八股部分多Agent相关资料，这是你回答这个问题的知识来源和储备。）</span></p>
+<p id="f-doxcnJRqYWQP6QuyVbHBbZd2kKf">Supervisor 模式中，子 Agent 数量增加会加重主管负担。可研究 Hierarchical 分层架构；但分类错误可能向下游传播，多 Agent 投票有助于提高分类准确性，也会增加成本，即使并行执行仍需要权衡开销。相关架构见参考资料。 <a href="https://github.com/fzy2012/rhzl-Agentic-Design-Patterns-cn/blob/feature/interactive-website/13-Chapter-07-Multi-Agent-Collaboration.md"><span>https://github.com/fzy2012/rhzl-Agentic-Design-Patterns-cn/blob/feature/interactive-website/13-Chapter-07-Multi-Agent-Collaboration.md</span></a></p>
 
 <p id="f-doxcnJLBsANNwUV7xhe1G6WEdTe"><span>   13.1如果说这个分类Agent，子Agent膨胀成20个，那么分类Agent需要分成20个，那么它的压力就会比较大了，这时该怎么办呢？</span></p>
 
@@ -3101,9 +3092,9 @@ GPA：3.7/4.0；专业排名：12/180（如真实且值得展示）
 
 <p id="f-doxcnTkleoQtcVJSXnrhn4cWiuf"><span>（这个问题答案我不具体讲了，因为和该学习案例强相关，这个题主要有两个启示：</span></p>
 
-<ol start="1"><li id="f-doxcnSmsuJ77VpxXtmOP52l6jme"><span>该学习案例用的sqlite做存储，因为我的文本简单。但是如我之前和大家说的，自己项目建议还是专门用专业向量数据库，做切块，用专业的召回策略去召回。 </span></li></ol>
+<ol start="1"><li id="f-doxcnSmsuJ77VpxXtmOP52l6jme">该学习案例使用 SQLite 存储简单文本。进一步扩展时，可以选择专业向量数据库，并结合切块与召回策略设计检索流程。</li></ol>
 
-<ol start="2"><li id="f-doxcneGisuQile9cuOg7MNqzm8c"><span>面试官其实问得非常的细致。之前很少面试官问这么细的，包括你存，存了什么表头，怎么query的，因为我写的代码我都有点忘了，我自己都没那么细致，答的不是很好。这块告诉大家你需要在这个RAG存储的地方，了解得非常非常细致，包括你如何存的，表头是啥，甚至是向量模型的参数（14.3），这些都要弄清楚）</span></li></ol>
+<ol start="2"><li id="f-doxcneGisuQile9cuOg7MNqzm8c">RAG 存储需要明确表结构、字段、查询方式以及向量模型参数。</li></ol>
 
 <p id="f-doxcnG6mQqxUhlTAQeHK9A9RNPd"><span>14.1 你当前的数据是怎样的？</span></p>
 
@@ -3119,7 +3110,7 @@ GPA：3.7/4.0；专业排名：12/180（如真实且值得展示）
 
 <p id="f-doxcnsrDgTnEuV2GDHij2GSYl1e"><span>15.1你现在觉得你在这个过程中你应该选择什么模型？有更新的为啥不用更新的，而且mini的消耗还是比较低的？</span></p>
 
-<p id="f-doxcnPN9TZXcwN3r0FvO1Clim8f"><span>  （这个问题我总结在了笔记 </span><span><span style="font-weight:bold"><a href="/posts/agent-learning-18-training-inference/#f-doxcnXzgzhmewA200Q5faoSZrGd"><span>不同模型的对比和选择</span></a></span></span><span style="font-weight:bold">，</span><span>对应的笔记和复习思路请参考笔记。 这里我回答得不好，因为在该学习案例中其实没有专门做模型对比然后选型，相信大家自己做项目，可能前期也不会有专门的选型，但是即使你的项目选模型没有精心考虑，但是在回答这个问题的时候，还是需要你对主要的模型有一个对比，不同模型能力区别有一个了解，然后结合你的项目自圆其说）</span></p>
+<p id="f-doxcnPN9TZXcwN3r0FvO1Clim8f">不同模型的对比与选择，应结合主要模型的能力差异和项目需求，并通过任务评估形成依据。 <a href="/posts/agent-learning-18-training-inference/#f-doxcnXzgzhmewA200Q5faoSZrGd"><span>不同模型的对比和选择</span></a></p>
 
 <p id="f-doxcnn7Ta9R5k9LpU9N7dgM4rKc"><span>     具体请参考笔记：</span><span><span><a href="/posts/agent-learning-18-training-inference/#f-doxcnXzgzhmewA200Q5faoSZrGd"><span>不同模型的对比和选择</span></a></span></span></p>
 
@@ -3153,17 +3144,17 @@ GPA：3.7/4.0；专业排名：12/180（如真实且值得展示）
 
 ##### 反思
 
-<p id="f-doxcn9ZTzmVPaRDupSDclqY3y8g"><span>一面：整体来说其实很简单，算法题很简单，当然我完成的也很快，但是阿里的面试官还是给了这个算法题30分钟时间，相比字节的算法题目，真的显得非常的友好了。整个一面其实涉及到知识考察的部分几乎没有，甚至可以感觉有点像是一个电话面。基本是和面试官在聊项目（并且停在功能层面，没有深入到技术层面）。面试官人也很好，他一直在肯定我，我回答完他经常说，挺好的这种话给我鼓励。整个时长也就44分钟（并且包括了写题和反问），在这次面试中其实确实没有一些特别干的知识方面的东西和大家总结。另外可以认为背景可能加了分，因为这个岗虽然是Agent开发，但是使用C++，面试官提到了C++国内就是你们公司的最好，所以我估计这点也加了分。因为本期几乎都是一些项目相关的问题，比较碎，文字不太好总结，要想更细致知道当时发生了啥，可以参考笔记后面的视频讲解链接。</span><span style="font-weight:bold">可以认为唯一可以抽取出来的一个知识点是第3个问题</span><span>，如果项目使用了本地模型，可以了解一下不同参数量的模型在不同的硬件上的使用情况。</span></p>
+<p id="f-doxcn9ZTzmVPaRDupSDclqY3y8g">可以进一步研究不同参数量的本地模型在不同硬件上的运行情况。</p>
 
-<p id="f-doxcnmLpUFfv2vhlGHi88lnBiuc"><span>二面：二面其实还是挺有价值的。面试官对我说了一句话是你来了这里，会把工程做到极致。 回看面试官的问题，确实是从工程的角度上提出了挺多有价值的问题。虽然看上去这些问题是针对于我的具体的项目展开的，但其实这个</span><span style="font-weight:bold">讨论是有通用性</span><span>的，具体的问题不重要，重要的是</span><span style="font-weight:bold">这些工程的问题和思维</span><span>，在不同的项目上都会遇到。想要把这些问题回答得很好，需要：</span></p>
+<p id="f-doxcnmLpUFfv2vhlGHi88lnBiuc">下面的工程问题具有通用性，可结合知识积累和实践进行分析。</p>
 
-<p id="f-doxcnNF8g1rwmmxjpxF8gqrBMwb"><span>1.一</span><span style="font-weight:bold">些知识的积累</span><span>，比如我准备的Agent架构相关论文，相关书籍，需要你看进去了，并且真正理解了，会灵活运用。大家看后面的回答可以看出来，基本我的回答还是从我的八股里总结的参考资料下手去谈的，所以我们不光要记住总的最高频的八股，也需要看对应的参考资料，去理解，这样遇到这种发散性讨论的问题才可以侃侃而谈。</span></p>
+<p id="f-doxcnNF8g1rwmmxjpxF8gqrBMwb">1. 积累并理解 Agent 架构相关论文与书籍，结合具体问题灵活运用。</p>
 
 <p id="f-doxcn4lY6SQyU0ih1iMD9HGwyYc"><span>2.一些自己的思考，这个可以结合一些具体的面试问题，自己去思考，运用你的一些知识，比如面经部分包括</span><span style="font-weight:bold">小红书，华林证券，字节豆包，</span><span>都有相关架构的设计，大家结合笔记和讲解，通过这些题目思考和复盘，也可以提升这块的能力。</span></p>
 
-<p id="f-doxcn1JefsaH1DLgwaf1BRhADFh"><span>最近也确实有一些公司喜欢考架构，考一些具体问题的探讨，这些东西稍微比纯八股，纯知识难一些，但是其实经过一些相关面经和相关资料，面试几次，这块也不会很难，并且这些问题通常也不会有完全标准的答案，有一些自己的思考，能够回答上来也不至于太差。这里可以认为还挺有价值的，我在讲解视频也会谈一下更多自己针对于这些问题的准备方法和思路，和技巧，笔记也会尽量写出思路，希望对大家有帮助。</span></p>
+<p id="f-doxcn1JefsaH1DLgwaf1BRhADFh">架构场景题可以结合参考资料与案例练习，重点分析设计理由、约束与取舍。</p>
 
-<p id="f-doxcnmQEjn2CCfnxFznNYK42oxd"><span>HR面：HR面个人感觉没什么特别好总结复盘的。 面试之前有人提醒我说阿里的HR喜欢压力面试，我还专门咨询了一些阿里的朋友。不过后来觉得又不考技术，压力能压力到哪里去呢？自信表达，不踩阿里的红线就好。唯一一点我想说的是，别把姿态放太低了，这样HR觉得你接的意向大，就会压你工资。具体问题我还是整理出来大家看着参考一下就好。</span></p>
+<p id="f-doxcnmQEjn2CCfnxFznNYK42oxd"></p>
 
 <a id="f-doxcnYZ9H9T5AKWQanvKt42LJih"></a>
 
@@ -3179,7 +3170,7 @@ GPA：3.7/4.0；专业排名：12/180（如真实且值得展示）
 
 <p id="f-doxcnuEPo45EifeIjXMswxxqQah"><span>2. 按摩房预约系统是你现在在做的吗？</span></p>
 
-<p id="f-doxcneUS7S9SGaF4n3Pr28pYn6d"><span>（这个面试官就是单纯的好奇，为啥的项目中会有一个很奇怪的和按摩房相关的项目，看上去就很奇怪，这也就是我在这个笔记第一章项目思路设计的时候就和大家说的，设计项目的时候就要尽可能往工作上靠，像我这个项目一开始设计就看着和工作无关。但无论如何，这就是走过的坑，希望大家尽量避免，话说回来，即使我这个项目立意就不好，但是这次面试还是挺尴尬的，但是如果现在让我重新再来一次，我不会设计一个这么奇怪的按摩房项目）</span></p>
+<p id="f-doxcneUS7S9SGaF4n3Pr28pYn6d"></p>
 
 <p id="f-doxcniRVbvDaFXBXlla4kFnWvFc"><span>3. 你这个智能日历系统是在本地运行的吗？那你们本地用的是哪个模型呀？</span></p>
 
@@ -3217,7 +3208,7 @@ GPA：3.7/4.0；专业排名：12/180（如真实且值得展示）
 
 <p id="f-doxcnTX4DE9cIm9IQ2B4ssA06Vb"><span>5.讲一个你在项目中遇到的最困难的问题，以及你是如何解决的？</span></p>
 
-<p id="f-doxcnqMyp0WNmWpbYEkdfRXUvge"><span>可以认为大家需要针对这个问题，整理一个自己的答案，然后把这个问题解决的过程讲清楚，讲出深度，我暂时会讲我解决模型工具调用失败的这个问题，大家可以参考笔记）</span></p>
+<p id="f-doxcnqMyp0WNmWpbYEkdfRXUvge">可以参考模型工具调用失败案例，理解问题定位与解决过程。</p>
 
 <p id="f-doxcnf85ojyNLchd4YWbLr2VYdb"><span>    参考 4.</span><span><span><a href="#f-doxcn8STRFyFTu85T5fdX20hkfg"><span>你在项目中遇到的最难的问题，如何解决的</span></a></span></span><span>？</span></p>
 
@@ -3225,9 +3216,9 @@ GPA：3.7/4.0；专业排名：12/180（如真实且值得展示）
 
 <p id="f-doxcnAAUcgpQo4MAiqSdoVde6Ie"><span>7. 如果你在cpu上跑，选一个很小的模型，模型可能做不了很多事，这个怎么办？</span></p>
 
-<p id="f-doxcntcCweokcl7M7GnxbB8W98y"><span>  （这个问题的回答涉及：Infra层比如微调知识，工程学相关知识。我的回答更侧重于工程角度，因为这是一个工程岗。不过值得一提的是，如果是Infra背景的面试官，可能会更注重听Infra的优化的知识，这个还是视情况而定。</span></p>
+<p id="f-doxcntcCweokcl7M7GnxbB8W98y">回答可以涉及 Infra 层、微调知识与工程优化，并结合具体问题确定分析重点。</p>
 
-<div style="margin-left:25px"><p id="f-doxcnGi5XQzW6qN4u2v4WVWXULj"><span>我的回答，第一个模型推理的难度，这个其实是在美团龙猫的论文中总结的，我们拿来用这个思想，这一个论文其实在整个笔记中涉及多次了，我就不赘述。</span></p><p id="f-doxcnaDryzQgrLLm1c6OKia4JXc"><span>最后的总结部分，我也引用了UC Berkeley的论文做总结，丰富了回答，也侧面像面试官展示了我们在关注前沿知识/论文的能力，关于这个论文，可以参考：</span></p><p id="f-doxcn3gLYQDynhDLDOyiA1wzUDf"><span><span><a href="https://36kr.com/p/3608851367871752"><span>https://36kr.com/p/3608851367871752</span></a></span></span><span>）</span></p></div>
+<div style="margin-left:25px"><p id="f-doxcnGi5XQzW6qN4u2v4WVWXULj">模型推理相关思路可以参考美团龙猫论文，并结合 UC Berkeley 的研究进行分析。</p><p id="f-doxcnaDryzQgrLLm1c6OKia4JXc">进一步的研究可参考 UC Berkeley 相关论文。</p><p id="f-doxcn3gLYQDynhDLDOyiA1wzUDf"><span><span><a href="https://36kr.com/p/3608851367871752"><span>https://36kr.com/p/3608851367871752</span></a></span></span><span>）</span></p></div>
 
 <p id="f-doxcnBrvNXhex5Nl7MNB4EQtCjd"><span>对于这个问题，核心的思想是有两个：提升</span><span style="font-weight:bold">模型的能力，</span><span>和</span><span style="font-weight:bold">降低任务的难度。</span></p>
 
@@ -3273,15 +3264,15 @@ GPA：3.7/4.0；专业排名：12/180（如真实且值得展示）
 
 <p id="f-doxcneZQMt8iLJLOUc6QkaisxKf"><span> （这又是一个经典问题了，最近其实面试被问到了很多，具体问法就是针对于某一个case，你如何设计这个单/多Agent架构。这块复习策略：</span></p>
 
-<p id="f-doxcnkATGYy9z4LCU7g4yQiuAJd"><span>1.去看我的多Agent笔记的论文和问题，论文里讲了设计原则，思想，给了例子，在金融/网页规划等例子下用什么架构，为啥，这个就是现成的例子，把这篇论文和本节弄透，包括在笔记中我也直接汇总了架构设计的典型例子，大家都能参考。</span></p>
+<p id="f-doxcnkATGYy9z4LCU7g4yQiuAJd">1. 阅读多 Agent 相关论文与问题，理解设计原则、金融与网页规划等案例中的架构选择及原因。</p>
 
 <p id="f-doxcnGO66Rn169jZE02MC09Cmjb"><span>2. 结合面经有更具体的问题，用这些问题再巩固，比如这个问题，小红书，华林的面试都有类似的架构设计，自己先别看答案，想一想怎么设计，然后再结合你自己的例子和场景，给自己出个题，看你会不会架构设计）</span></p>
 
-<p id="f-doxcnI6z7kASNezLp95OsbRGxAN"><span>     我已经将这个问题抽离到了八股的 架构设计小节，请参考：</span><span><span><a href="/posts/agent-learning-11-multi-agent/#f-doxcn5diwoCcGQNYY942oXxxtsg"><span>时空冲突检测任务</span></a></span></span></p>
+<p id="f-doxcnI6z7kASNezLp95OsbRGxAN">相关架构设计见“时空冲突检测任务”。 <a href="/posts/agent-learning-11-multi-agent/#f-doxcn5diwoCcGQNYY942oXxxtsg"><span>时空冲突检测任务</span></a></p>
 
 <p id="f-doxcn1nrywiDE69OipsHXBWvlzf"><span>  8.4 那什么时候用多Agent去做，什么时候用一个Agent去完成？举具体例子说明。</span></p>
 
-<p id="f-doxcnDaN7tFFbkYdrfPQpt4x1Hd"><span>   （这题在八股部分多Agent地方已经总结得很好了，甚至是很多次，我下面回答基于八股部分的知识，我这块不用参考任何资料就能直接回答，如果你觉得这个问题还回答不上来，那就是对应的八股笔记部分的多Agent部分和参考资料没理解好。以下这个回答都是基于我八股的笔记和参考资料。）</span></p>
+<p id="f-doxcnDaN7tFFbkYdrfPQpt4x1Hd">下面的参考回答结合多 Agent 基础知识与相关资料展开。</p>
 
 <p id="f-doxcnAFHmpxlqbMHLu8RCKp4yqh"><span>单Agent的优势在于</span><span style="font-weight:bold">不需要承担Agent之间的协调</span><span>，通信开销和拓扑带来的误差传播，在</span><span style="font-weight:bold">顺序调用，工具密集，单Agent的基线收益已经较高</span><span>（达到45%的时候）使用单Agent效果会更好，比如说典型的工作流的例子，这种情况下使用多Agent性能反而会下降。</span></p>
 
@@ -3289,7 +3280,7 @@ GPA：3.7/4.0；专业排名：12/180（如真实且值得展示）
 
 <p id="f-doxcn6KNmbRbyqruWzvHGMopxBg"><span> 8.5 单Agent有什么局限性吗？什么解决不了吗？</span></p>
 
-<p id="f-doxcnlLajYAzA9QjylK7BkRLrXc"><span>(聊着聊着也会聊到一些八股内容，参考这个笔记，虽然问题不是一模一样，但是这个笔记中多Agent的优势不就是单Agent解决不了的吗？另外我相信大家在八股笔记我总结了很多，这个最基本的问题应该是可以回答上来的。）</span></p>
+<p id="f-doxcnlLajYAzA9QjylK7BkRLrXc">可以对照单 Agent 的局限与多 Agent 的优势，分析多 Agent 在具体任务中解决什么问题。</p>
 
 <p id="f-doxcn2S0KmLfFy51fB8ZtRRW1d7"><span> 参考笔记</span><span><span><a href="/posts/agent-learning-11-multi-agent/#f-doxcn4B12lzSq10dtyq6p9WDKL4"><span> 单Agent和多Agent的对比</span></a></span></span></p>
 
@@ -3303,7 +3294,7 @@ GPA：3.7/4.0；专业排名：12/180（如真实且值得展示）
 
 <p id="f-doxcn9cJjt6wXzN9PYKOIn3qkWe"><span>8.8 怎么避免一些极端不合理输出的corner case？</span></p>
 
-<p id="f-doxcnjbvHLDd7TO0lSW012w34qe"><span>(我不能说这个是标准答案，这个答案是根据学习笔记中llm的参数 和 如何避免Agent出现幻觉  这两章内容总结的。我想说的是理解了这个笔记的很多内容，在遇到一些新问题时我们也能灵活应对）</span></p>
+<p id="f-doxcnjbvHLDd7TO0lSW012w34qe">本题可结合 LLM 参数与避免幻觉的方法分析。</p>
 
 <p id="f-doxcntRppj4V8v5cA8KYyyqkUQd"><span>模型的不合理输出，通常是因为模型生成的回答置信度比较低导致的。我们可以通过强化学习的方法，让模型在对于低置信度的时候来进行一个兜底的回答，而不是一个不靠谱的回答，或者是通过修改模型的生成参数，降低温度收紧topK, 减少模型输出极端Case的情况。</span></p>
 
@@ -3311,7 +3302,7 @@ GPA：3.7/4.0；专业排名：12/180（如真实且值得展示）
 
 <p id="f-doxcnTavEPItc5l9HToecjJW29b"><span>9. 在项目过程中，怎么去做提示词的压缩和裁剪？</span></p>
 
-<p id="f-doxcnfIpGhzMMg1xCfkWj5Ty4Ee"><span>（这个可以认为挺好的，有哪一些工程手段减少提示词，有点像提示词工程，但基本上提示词工程都是讲如何写更有效的提示词而不是怎么压缩。 但这个问题说实话还是第一次见到，答案也不难，所以可以认为没有很具备典型性，我就不把它抽象到八股笔记中，就把答案放在这里，大家阅读，理解一下就好）</span></p>
+<p id="f-doxcnfIpGhzMMg1xCfkWj5Ty4Ee">本题讨论减少提示词与上下文开销的工程手段。</p>
 
 <p id="f-doxcnXARXoIxnL983CdJXwhS1kb"><span>从工程的角度来说，我们需要保持在描述清楚问题的前提下，尽量减少提示词/输入Token的消耗，可以使用以下策略：</span></p>
 
@@ -3333,11 +3324,11 @@ GPA：3.7/4.0；专业排名：12/180（如真实且值得展示）
 
 <p id="f-doxcnipxYmdD9UzolUQF2cZMB8c"><span>10 Langsmith的基本原理。</span></p>
 
-<p id="f-doxcnOhlHTOaDFSCqzy1zk1QLBd"><span>（第一次被问，我先不总结了，大概就是问Langsmith的原理，模块，设计思路等，大家问一下AI都有答案，而且截至目前为止，也是第一次被问到，应该算比较低频）</span></p>
+<p id="f-doxcnOhlHTOaDFSCqzy1zk1QLBd">本题涉及 LangSmith 的原理、模块与设计思路。</p>
 
 <p id="f-doxcnrLC2ICZHEtE6ECFq5fDLdd"><span>11. 你的Agent的性能评估是怎么做的？</span></p>
 
-<p id="f-doxcnxzKdHxwkkEY3xuJ42sI7Wg"><span>（必考问题了，在Agent评估笔记中，我不但总结了相关理论知识，也结合该学习案例告诉大家如何去准备，大家直接参考笔记就好了）</span></p>
+<p id="f-doxcnxzKdHxwkkEY3xuJ42sI7Wg">相关理论与项目实践见 Agent 评估章节。</p>
 
 <p id="f-doxcnjrg677vsafE5J5KIUZtJBh"><span>参考笔记 </span><span><span><a href="/posts/agent-learning-15-evaluation-observability/#f-doxcnqrKdVGPbNYY8Xm3Fr8NVkh"><span>Agent性能评估</span></a></span></span></p>
 
@@ -3379,7 +3370,7 @@ GPA：3.7/4.0；专业排名：12/180（如真实且值得展示）
 
 <a id="f-doxcnH4JIaeMUyjMhONcsacIukg"></a>
 
-<p id="f-doxcnglTKMDH3Mah8QnARahWdBA"><span>一共四面，没有HR面。4面应该是加了一面，因为我要的工资比较高，HR得专门申请。如果不是我这样的话，估计没有4面。1面是业务技术，2面是主管，3面是他们合作的博士导师，  4面是交叉面，找了做算法的同事来面。岗位Title叫：大模型应用工程师（智能体方向）</span></p>
+<p id="f-doxcnglTKMDH3Mah8QnARahWdBA"></p>
 
 <a id="f-doxcnqzzH0xS47tQFakTsLusYwc"></a>
 
@@ -3389,7 +3380,7 @@ GPA：3.7/4.0；专业排名：12/180（如真实且值得展示）
 
 <p id="f-doxcnWQOyTn7AAAihaAm9GWfyMc"><span>二面主管面：证券类的公司，最喜欢问的就是你能给证券行业带来什么？你了解证券行业的业务？你的技术如何用在我们的业务？一个建议是，你可以在技术面中好好询问清楚这个岗位的业务是做什么的，了解清楚以后想一下你在这个业务中有什么优势，可以给他们带来什么，想一想话术。</span></p>
 
-<p id="f-doxcn5d6OBXgZGgHwUwJH1er2ee"><span>三面是个博士生导师吧：其实就是问了2个Agent场景设计题，这个可以笔记总结的：</span><span> 多Agent架构的论文 </span><span>我会整理在论文章节，其实在多Agent架构八股部分也提到了。通过这些前置知识结合三面的场景设计题来复习。</span></p>
+<p id="f-doxcn5d6OBXgZGgHwUwJH1er2ee">Agent 场景设计可结合多 Agent 架构论文与相关案例学习。</p>
 
 <a id="f-doxcnm2Qtv7D0mPrF12PUFPdwjc"></a>
 
@@ -3403,7 +3394,7 @@ GPA：3.7/4.0；专业排名：12/180（如真实且值得展示）
 
 <p id="f-doxcnVhiNqcKCmQkkpnWNLOok0B"><span>3. （追问）你觉得Unity WebGL的核心是啥？</span></p>
 
-<p id="f-doxcnYvZkTJ4xxhPKZxjLKwEGQb"><span> （大家可以忽略，我上一段工作相关的内容）</span></p>
+<p id="f-doxcnYvZkTJ4xxhPKZxjLKwEGQb"></p>
 
 <p id="f-doxcnVieBQqXb7F2cMOKhUXVtJb"><span>4. 你可以讲一下音频sdk的原理吗？</span></p>
 
@@ -3453,9 +3444,9 @@ GPA：3.7/4.0；专业排名：12/180（如真实且值得展示）
 
 <p id="f-doxcnTmHgm4agPq5CFoValWTlOe"><span>13. 端对端的延迟是多少？</span></p>
 
-<p id="f-doxcnfmHzvlMCuoQjnJ84piBrac"><span>包括我刚总结的RAG项目面试真题。这里指的是你的Agent从输入，到第一个输出的延迟。正是因为面试官喜欢问，所以我在rag项目才设计了详细的延时的记录。</span></p>
+<p id="f-doxcnfmHzvlMCuoQjnJ84piBrac">这里指从 Agent 接收输入到产生第一个输出的延迟，需要在链路中记录耗时。</p>
 
-<p id="f-doxcnhFb3SHTnpWLIGAHr8rm5Ue"><span>14 薪资和职级讨论</span></p>
+<p id="f-doxcnhFb3SHTnpWLIGAHr8rm5Ue"></p>
 
 <p id="f-doxcnFy1yZMYzR6h1XANC9hRsle"><span>15 算法题：</span><span style="font-weight:bold">复制带随机指针的链表</span></p>
 
@@ -3484,59 +3475,59 @@ GPA：3.7/4.0；专业排名：12/180（如真实且值得展示）
 
 <p id="f-doxcnNenzDuDq0Uk681Lry8RWCd"><span>   2.1 框架选择</span></p>
 
-<blockquote id="f-doxcn3Ci1GsvTRzJQOwP1oNhPkc"><p id="f-doxcnWKEAp7GijfpJSRTG9IupUb"><span>也是一个常考的问题了。主要是考察你为什么选这个框架，为什么不选xx框架。因为我的两个项目，一个用的langchain,一个用的semantic kernel。 所以经常被问这二者的对比。这些框架的特性笔记里已经有了，大家去看。Semantic Kernel对大家无参考价值，请大家忽略，我司自己研究的没什么人用的框架。</span></p>
+<blockquote id="f-doxcn3Ci1GsvTRzJQOwP1oNhPkc"><p id="f-doxcnWKEAp7GijfpJSRTG9IupUb">框架选型需要比较特性与适用场景，例如 LangChain 与 Semantic Kernel，并说明选择当前框架的依据。</p>
 <p id="f-doxcnKGsaFbUFr3ITW8YDklwfoe"><span>大家准备找个问题，就是准备主流的框架的特性，然后对比，说清楚自己的选型。有些人说Langchain怎么学，可以认为从面试的角度，你会用就行了，然后就是理解Langchain的特性，特点，结构，优缺点，组成模块，选型，面试基本问这些，笔记里总结的都有。倒是没有特别的必要去专门学什么langchain的语法啊之类的，因为问的少，而且框架的这个东西，很多公司都是用自己的框架，你把langchain学那么深，人家公司根本不用langchain，他也问不深啊。</span></p></blockquote>
 
 <p id="f-doxcn4C6MpyAZZaPqsnxf5Rwlvc"><span>   2.2 这两个框架在多智能体协同的之间怎么选？</span></p>
 
-<blockquote id="f-doxcn0PUklIS8k0n77qwmPmdvzc"><p id="f-doxcntYo0754oCQ2QNKqq2Y3clb"><span>其实可以认为面试官可能本身也不是特别懂，也不会问深。我回答的就是langgraph 以图的状态机的形式，langgraph多Agent之间通信方式。这些都是常见八股了笔记里总结的有，而且langgraph本身就是来做multiagent的嘛，所以我就说langgraph这块的优势，其实是很常规的回答了。面试官也不追问。</span></p></blockquote>
+<blockquote id="f-doxcn0PUklIS8k0n77qwmPmdvzc"><p id="f-doxcntYo0754oCQ2QNKqq2Y3clb">可以从 LangGraph 的图状态机、多 Agent 通信与状态传递方式说明其优势。</p></blockquote>
 
 <p id="f-doxcnkWmkIueeAFbJhEGr53pkYb"><span>3. 讲一个你做项目遇到的最难的问题？</span></p>
 
-<blockquote id="f-doxcnKj3T0TcldZfjk1FCIz6hVh"><p id="f-doxcnvCxROVKjbw3JZtmvHDlHUd"><span>我之前就说，这个问题就是一个必须准备的问题，所有人，不同背景都要准备。这个题上限高，下限低。你要说得很出彩，面试官还要请教你，那你就稳了。我的建议是所有人都得准备找个答案。另外本节的： 其他问题- 你在项目中遇到的最难的问题，如何解决的？里面总结了两个问题，一个是agent模型调用，一个是rag - mcp的问题，这两个比较通用的问题，你都可以拿去回答。当然你自己总结，总结得更深入更好，但这个问题都得事先准备，因为深度和描述是靠挖掘的，别想着现场发挥。</span></p></blockquote>
+<blockquote id="f-doxcnKj3T0TcldZfjk1FCIz6hVh"><p id="f-doxcnvCxROVKjbw3JZtmvHDlHUd">可以参考“你在项目中遇到的最难的问题，如何解决的”中关于 Agent 模型调用与 RAG-MCP 的技术案例，并结合具体排查过程分析。</p></blockquote>
 
 <p id="f-doxcnhi7Rh5bJ66VJ31hk7beYld"><span>4. 你们怎么做监控的？</span></p>
 
-<blockquote id="f-doxcn9JzgkNe1ZeCCGN4qG5R5Ng"><p id="f-doxcntExlNqVnWa0dyOeqwMQvbc"><span>常考的问题，自己也要准备好答案。讲Agent评估的理论 笔记里有，包括还推荐了论文（美团龙猫的）。 监控有线上监控，线下使用测试集评估。测试集评估如何设计，设计那些方面（性能，轨迹，推理）等方面讲清楚，我经常就用美团龙猫那个方法，从三个维度：推理，工具调用，规划维度上 构建标准和面试官讲。这部分检测的部分，笔记里面有，并且面试真题也有，答案很多，大家可以自己看看笔记。</span></p></blockquote>
+<blockquote id="f-doxcn9JzgkNe1ZeCCGN4qG5R5Ng"><p id="f-doxcntExlNqVnWa0dyOeqwMQvbc">Agent 评估可以分线上监控与离线测试集评估，结合性能、轨迹、推理、工具调用和规划等维度设计。可参考美团龙猫的方法。</p></blockquote>
 
 <p id="f-doxcn0cf7tk0qCKbjCcBA2pdG2d"><span>5. 智能体的就怎么去做优化以及说你们做了哪些优化？</span></p>
 
-<blockquote id="f-doxcnRGI2Z8LKuVAOS8VRtPf8xh"><p id="f-doxcniUMxdxj0RwTvuvlcl5OVxf"><span>其实可以认为面试官也不太懂，因为所有的问题都是在问我，我也不知道他是不是都听懂了？所以完全是单向输出。单向输出的好处是不会被拷打，只要问题你准备了，面试不就那些常见问题吗？我们整理的都有。那你回答就完了，有点像背答案。</span></p>
-<p id="f-doxcnXvkoD5fUKjQlHseswl1Gvh"><span>这个问题就是我回答的就是三点：1.架构选型。如何选Agent架构，为啥（依据是我给大家推荐的架构的论文，八股都有），讲清楚理论。</span></p>
+<blockquote id="f-doxcnRGI2Z8LKuVAOS8VRtPf8xh"><p id="f-doxcniUMxdxj0RwTvuvlcl5OVxf"></p>
+<p id="f-doxcnXvkoD5fUKjQlHseswl1Gvh">可以参考“你在项目中遇到的最难的问题，如何解决的”中 Agent 模型调用与 RAG-MCP 的案例，结合排查和验证过程分析。</p>
 <p id="f-doxcnXvbSCAhRr98gdtgcuwm4jh"><span> 2. 做微调，强化学习，量化。这一点在笔记部分你是怎么做微调，推理加速的总结的都有。</span></p>
 <p id="f-doxcni43JBzyt1FgchXnaorxOJc"><span>3. 上线迭代，数据回收，监控，再训练（数据飞轮）</span></p>
-<p id="f-doxcnXATwSAT9NsVE0mCRUMUWNb"><span> 这些内容笔记里都有，这里回答也是把他们串起来。其实我没有说我做第三步迭代，因为该学习案例没上线嘛，自己做的，我实话说，该学习案例没上线，但是上线后应该这么做。 反正最后面试官对我评价也非常正向，甚至是优秀地加了一面，我想说的是别太担心了项目没上线吧，当然有落地经验一定是好事，可是大家都是转行，怎么办呢？</span></p>
-<p id="f-doxcnRmy7Lllf7y7zYscqK4glUe"><span>这块上线这块，理论你也可以吹，自圆其说。但是我是偏保守的，我怕说漏了。但其实真的可以吹牛，我就说上线了咋了，只要能说清楚，我认识很多人其实比我大胆很多。</span></p></blockquote>
+<p id="f-doxcnXATwSAT9NsVE0mCRUMUWNb">需要区分已实现、已上线与后续迭代的内容，结合评估与监控说明计划中的改进。</p>
+<p id="f-doxcnRmy7Lllf7y7zYscqK4glUe"></p></blockquote>
 
 <p id="f-doxcnRoUdmOaQ0Qi6LuVwyYESiy"><span>6. 怎么去测评你上线的数据?</span></p>
 
 <blockquote id="f-doxcnL9fak6b9NQNsv1Kve3NpZd"><p id="f-doxcn6BqeRRsgWraOoWhQymThQf"><span>从几个维度:</span></p>
-<p id="f-doxcnseQEVHEkRXd39gyqhbc0lf"><span>1.比如有rag系统，可以统计ragas对吧，后台维护一个库，每次query都可以算ragas指标，ragas我们八股，项目都有。</span></p>
+<p id="f-doxcnseQEVHEkRXd39gyqhbc0lf">1. 架构选型：说明如何选择 Agent 架构，以及对应的理论依据和任务约束。</p>
 <p id="f-doxcnvM89yMBmVdDVf4vZ3CMrSc"><span>2. 各种指标，比如工具调用，任务完成率，轨迹正确性，延迟，成本，想好这些针对于你的项目是怎么衡量的，比如你让AI写一下衡量这些指标的方法，知道怎么实现的。然后你就说，实现后把它们打点传到云端监控。</span></p>
 <p id="f-doxcnH1noJlq6tZYCZfmxUqRE6d"><span>3. 可以设置一些具体的业务指标。这点是对于社招的同学，项目上线以后。校招可以就算了。校招项目你能做前两点都不错了。 这一点是你的业务增长，比如你做了Agent客服，那么上线后你的用户满意率增多了，用户日活等这些业务指标，也需要统计。</span></p>
 <p id="f-doxcnWyoIDYOsYmRqQ3teNGFXrc"><span>想好这些维度，怎么做的，准备好一个答案。</span></p></blockquote>
 
 <p id="f-doxcnjVBqB7dLuwu4th56DAgIT0"><span>7 你这个微调主要为了解决啥问题啊？</span></p>
 
-<blockquote id="f-doxcnx7r7n9tnTZPstbr5lst87e"><p id="f-doxcnb8n3ew0DmV7j2rI859eFyg"><span>都是总结过的啊。其实这里也反映一个点就是，这个是我去年12月份的面经了，那时候我还没系统学算法，我一直在笔记里写的就是知道自己微调怎么做的，知道概念，让AI写个代码看看，实际我也真的微调。然后我准备了我是怎么做的微调，总结很好（在笔记中大家自己看）我就去面试，我就说本案例做了微调。其实你看面试官很多他问不深入，甚至可以认为他可能也不是很懂微调。我说的意思是对于应用岗，大部分人来说没太多时间学算法，包括面试官也是做应用他可能也不太懂，所以你时间也没那么充足，你就少学点算法。 对于懂算法，真的做了微调的人，肯定会问得更深的。有时间深入学，我系统学习算法的时候其实都已经复习了8个多月了，不是每个人都有这么多时间的。没时间的话，微调就按本节策略准备就行。</span></p>
+<blockquote id="f-doxcnx7r7n9tnTZPstbr5lst87e"><p id="f-doxcnb8n3ew0DmV7j2rI859eFyg"></p>
 <p id="f-doxcnbsmZc4CtMeqIn2E7dmZtUb"><span>回到问题本身。微调本身解决啥问题，这是八股，结合自己业务再说一下，比如精度下降，分类成功率降低就好了。</span></p></blockquote>
 
 <p id="f-doxcnUhUlzzTqMWbcbHxaerxGBF"><span>8. 我现在还没有听到你提rag项目，是没有吗？</span></p>
 
 <p id="f-doxcnN3AFKAbcdljvXQt5Cel3Yd"><span> 8.1 RAG优化策略</span></p>
 
-<blockquote id="f-doxcnP78QuOtdI2DiGcmwEdqm8c"><p id="f-doxcnYCkpx88amWRGOT7i9ysUEg"><span>虽然我当时没做rag，但这题我会啊，这八股笔记总结的有。我可以答出来这个问题，但当时我没做项目，我底气不足，现在有了这个rag项目，我再回答这些问题，肯定答得更好，底气也更足。这个问题就看八股吧和该学习案例吧，做了我们RAG项目，这个问题算啥呀，小case</span></p></blockquote>
+<blockquote id="f-doxcnP78QuOtdI2DiGcmwEdqm8c"><p id="f-doxcnYCkpx88amWRGOT7i9ysUEg">RAG 问题可以结合相关基础知识与学习案例进行分析。</p></blockquote>
 
 <p id="f-doxcn0yjMoTwX1UtWCUh6Zisz7c"><span>9 基模选什么？有研究开源Deepseek吗？GPU用的啥？</span></p>
 
-<blockquote id="f-doxcnTEEXiDWv56Bk2gY3VOL4dZ"><p id="f-doxcnre1EVRxy3E24ZxROL8eQsb"><span>基模选择什么，要了解笔记八股部分不同模型对比，从性能，公司立场，消耗，业务场景等方面说明选择原因，自圆其说。</span></p>
-<p id="f-doxcnQDIrt0NEEuybnYIqExWBVf"><span>开源模型学习，倒是我确实没有看，到时候带大家看看，不过这个有点偏算法了，我要准备一个相关的给不会算法的人也能照着回答的版本。</span></p>
-<p id="f-doxcn7C1L56uTsCHmU0rzVbM7Xg"><span>GPU用的啥。因为我的场景使用cpu推理的嘛，所以我没GPU，直接回答了。我是建议这些问题，即使你不做算法，推理，都去了解一下，然后像我一样做一下，能说上这些问题。因为有时候面试官真的问不深，他只能问出来你做没做。所以你是算法高手和你做了一下算法是不一样的，我们掌握后者很容易，但是却可以cover掉很多面试场景。</span></p></blockquote>
+<blockquote id="f-doxcnTEEXiDWv56Bk2gY3VOL4dZ"><p id="f-doxcnre1EVRxy3E24ZxROL8eQsb">基模选择需要结合性能、成本、业务场景与部署约束，并给出依据。</p>
+<p id="f-doxcnQDIrt0NEEuybnYIqExWBVf"></p>
+<p id="f-doxcn7C1L56uTsCHmU0rzVbM7Xg">本案例使用 CPU 推理。也可以进一步了解 GPU、量化与推理加速，并通过实验记录运行条件和效果。</p></blockquote>
 
 <p id="f-doxcnJmqiIiJJmp2dDIuq5ouDGc"><span>10 换工作原因</span></p>
 
-<blockquote id="f-doxcnFu5NuzelFYfMIpCLlrLoKd"><p id="f-doxcnrSMUARXiRDS8XN7EzO7SKg"><span>一般问到那几个offer就比较稳了。</span></p>
-<p id="f-doxcn0waEr4nA3urJmjODcB7I9d"><span>问想做什么方向，笔记面试技巧我讲过，意向度很重要。如果真是应用岗位，你得说你要做应用。要顺着业务说。之前同事面试英伟达，人家是应用岗，他是想做算法，还坦诚和人家说，让对面觉得他大概率不会去，offer发给别人了。</span></p></blockquote>
+<blockquote id="f-doxcnFu5NuzelFYfMIpCLlrLoKd"><p id="f-doxcnrSMUARXiRDS8XN7EzO7SKg"></p>
+<p id="f-doxcn0waEr4nA3urJmjODcB7I9d"></p></blockquote>
 
 <p id="f-doxcnCPdm82ofnv6ujNaK9icewg"><span>12 反问环节</span></p>
 
@@ -3544,7 +3535,7 @@ GPA：3.7/4.0；专业排名：12/180（如真实且值得展示）
 
 ##### 三面
 
-<p id="f-doxcnqrX0ZlnqLdfMndnwwq16y4"><span>三面主要是一个博士来考察。整个时间30分钟，卡得很严格，而且面试官还迟到了几分钟，所以导致实际面试时间只有20多分钟。三面的考察内容其实很清晰，就是摸底 + 一个架构设计题。借助这个机会我最想讲一下的是架构设计这个面试问题怎么去做？通常这是个比较难的问题，要结合具体的应用场景设计一个架构。这里给到一个模板供大家参考，大家可以套用。</span></p>
+<p id="f-doxcnqrX0ZlnqLdfMndnwwq16y4">本组问题包含技术基础与架构场景设计，下面给出参考模板。</p>
 
 <p id="f-doxcnK5ifaMRnFFCqZHMV2YVrbf"><span>1. 自我介绍</span></p>
 
@@ -3556,11 +3547,11 @@ GPA：3.7/4.0；专业排名：12/180（如真实且值得展示）
 
 <blockquote id="f-doxcnjKUjZY9OazronmiLxWLHed"><p id="f-doxcnzvOm4AcHCCoRQxClLQzmEe"><span>我最开始分析这个问题表面上看很奇怪——我刚介绍完agent/RAG/reschedule这些本身就是LLM相关的项目，面试官又问"有没有做LLM相关的东西"，他到底想问什么？但结合他后续的追问（"所以你基本上就是处理数据啊、微调一下模型啊、做一下RAG"）来看，</span><span style="font-weight:bold">他真正想问的是：你在LLM技术栈中做到了哪一层深度？</span><span> 是只在应用层调API搭Agent，还是也深入到了模型层（训练/微调/架构研究）？他的"偏大语言模型相关"重点在"偏"字——想了解你偏模型侧还是偏应用侧。所以这个问题其实在摸底，你做得多深入？（你的Agent就是API调用还是有一些深入的设计，比如手搓了一个Agent框架）你做得有多广？（有没有设计算法，对模型微调，提高参数，有没有做部署，你的技术栈到底是在哪一层）</span></p></blockquote>
 
-<blockquote id="f-doxcnhzqCwDpRcKjXdwo1Cn9U7d"><p id="f-doxcnniaPhFTKedBY9NkSgRrlMh"><span>所以我分析这个的时候，可以认为看似他是一个简单的问题，实际又是一个很难的问题。要想把这个问题答好，你必须做得比较深入，广度又有，或者恰好就是投其所好，比如面试官特别需要做过哪个方面，你恰好有这个技能点。这样面试官才会比较满意。不过大家压力也不用太大了，我们也不是神人，各个方面既广又深，我当时求职的是25年12月，对RAG做得不深，Agent项目比较浅，微调也就是理论走了一遍。不过我这个是一次通过的面经。我是按照100分的思路来给大家解析这个题目，但是不意味着大家必须做到100分才能通过面试。但是可以认为最好的一种方法是，即使你时间不够。你没有深入地做一遍，但是Agent，Rag,微调，强化学习，部署最少面试官问你的时候，你要说你会，你做过，然后准备一些你准备好的答案，如何做的部署，微调（参考上面笔记）。要是面试官不深入问就过去了，深入了问答不上来再承认做得不深。</span></p></blockquote>
+<blockquote id="f-doxcnhzqCwDpRcKjXdwo1Cn9U7d"><p id="f-doxcnniaPhFTKedBY9NkSgRrlMh"></p></blockquote>
 
-<p id="f-doxcnfYKtugB3C0af9IQ6fAAd4c"><span style="font-weight:bold">我的回答</span><span>：</span></p>
+<p id="f-doxcnfYKtugB3C0af9IQ6fAAd4c">参考回答：</p>
 
-<p id="f-doxcnO1CFD5LI3KxzLWZnnoDX0b"><span>这里当时的回答就是澄清了我的技术栈。Agent做了什么，做得多深，RAG做了什么，算法了解多少，对于微调和强化学习也做了一遍（具体可以参考我上面的笔记（</span><span><span><a href="/posts/agent-learning-18-training-inference/#f-doxcngja5X6wbMkrcNzZLrPwk2g"><span>如何做的微调</span></a></span></span><span><span><a href="/posts/agent-learning-18-training-inference/#f-doxcn0XskrHYWieZNIKvk88pjch"><span>如何做的推理加速</span></a></span></span><span>））</span></p>
+<p id="f-doxcnO1CFD5LI3KxzLWZnnoDX0b">可以按 Agent、RAG、微调、强化学习与部署分别说明技术方法及验证情况。 <a href="/posts/agent-learning-18-training-inference/#f-doxcngja5X6wbMkrcNzZLrPwk2g"><span>如何做的微调</span></a> <a href="/posts/agent-learning-18-training-inference/#f-doxcn0XskrHYWieZNIKvk88pjch"><span>如何做的推理加速</span></a></p>
 
 <p id="f-doxcnlxCf8Br2C5Np8UcaeHGLEe"><span style="font-weight:bold">追问：使用过什么模型</span></p>
 
@@ -3580,7 +3571,7 @@ GPA：3.7/4.0；专业排名：12/180（如真实且值得展示）
 
 <p id="f-doxcnMyCDDN4OJh9pZtc6ZBIMWf"><span style="font-weight:bold">参考答案</span></p>
 
-<p id="f-doxcnq8fyASwQeuonCagBCgBRze"><span style="font-weight:bold">第二，Agent和RAG应用方向，这是我最深入的。</span><span> 我做过多个Agent项目，看过很多论文，深入理解目前主流的Agent开源项目，比如Openclaw, Hermes,ClaudeCode。对Agent的设计范式，架构，任务拆解都有深入理解。同时自己自研了RAG项目，实现RAG系统整个环节。对大模型开发的前沿技术保持持续学习。</span></p>
+<p id="f-doxcnq8fyASwQeuonCagBCgBRze">Agent 与 RAG 应用方向可以结合 OpenClaw、Hermes、Claude Code 等开源项目，学习设计范式、架构、任务拆解与 RAG 系统各环节。</p>
 
 <p id="f-doxcn80oFVmiQQ2dQLY9cGp755f"><span style="font-weight:bold">第三</span><span>， 我对Vibecoding的技巧有深入的理解，包括ClaudeCode的各种高级使用功能，可以使用CC完成整个工作自动化的编排，比如代码-编译-测试的闭环。熟练使用各种模型，理解模型的边界，对于Harness工程，比如如何约束Agent的行为，沙箱机制等技巧都有实践和理解。</span></p>
 
@@ -3602,7 +3593,7 @@ GPA：3.7/4.0；专业排名：12/180（如真实且值得展示）
 
 <p id="f-doxcn6dk0dk1Guv9WZuuhz6Xfsg"><span style="font-weight:bold">思路: </span></p>
 
-<p id="f-doxcnlH7Cix1yiFxaM18hCtnDKh"><span>我想借着这个题展开讲一下，因为这个题其实代表着一种题目类型。叫做针对具体场景设计Agent系统。设计一个系统本来就比较难，而且包含的东西太多了，你看我们分析ClaudeCode， Openclaw的源码，整个系统有那么多内容。想要现场设计一个，又结合具体的任务，本身就是个挺难的事。 这类题本身也没有标准答案，我在复盘的时候，觉得我们可以设计一个模板，在真正现场设计的时候就使用这个模板往里套，我们只用想清楚和业务相匹配的地方，然后进行修改。这样在极短的时间，我们可以设计一个复杂的成熟的架构。不过为了熟练使用这模板，也需要我们掌握清楚笔记的前置的一些知识：多Agent架构的八股，以及Openclaw, ClaudeCode笔记讲的开源项目的设计思想。</span></p>
+<p id="f-doxcnlH7Cix1yiFxaM18hCtnDKh">具体场景的 Agent 设计需要结合业务调整架构模板，并理解多 Agent 架构和 OpenClaw、Claude Code 等开源案例的设计方法。</p>
 
 <p id="f-doxcnOdsYRoJ49s89MYVy0wv5Ud"><span style="font-weight:bold">答题思路：骨架 + 定制（方法论）</span></p>
 
@@ -3698,13 +3689,13 @@ Agent层：Think（递归中心化，spawn 子 Agent）+ Act（工具执行）+ 
 
 <a id="f-doxcnkIwGXX4oLgfI8HbjNtyzzb"></a>
 
-<p id="f-doxcnDiPNs5FBa8qlCE9b7MzgVg"><span>具体岗位信息我是记不太清了，不太确定是哪个猎头或者HR就帮我投递了，没有发给我jd。总体来讲，这是一个大模型 + windows的岗位.</span></p>
+<p id="f-doxcnDiPNs5FBa8qlCE9b7MzgVg"></p>
 
 <a id="f-doxcnyQ5ogQ0Tds3UlZKjY004lO"></a>
 
 ##### 一面
 
-<p id="f-doxcnWUN1PpKLlusitIxdcfwuop"><span>岗位介绍：具体岗位信息我是记不太清了，不太确定是哪个猎头或者HR就帮我投递了，没有发给我jd。总体来讲，这是一个大模型 + windows的岗位.</span></p>
+<p id="f-doxcnWUN1PpKLlusitIxdcfwuop"></p>
 
 <p id="f-doxcniCphR0Y8pUbd1WZ6OFHf4f"><span>1.请先简单做一个自我介绍，请尽量用英文，讲您擅长的，在公司里做的内容，大致介绍一下，几分钟就行。</span></p>
 
@@ -3714,13 +3705,13 @@ Agent层：Think（递归中心化，spawn 子 Agent）+ Act（工具执行）+ 
 
 <p id="f-doxcnc42oLQCMQWOScAoEZUb87g"><span>   3.1 你这个产品最终量化了吗？后面接的模型是啥？你们有评估过费用吗？有部门给你承担吗？</span></p>
 
-<p id="f-doxcnW43k7hzRPYjyGrFNsIoENm"><span>         （这几个问题，一下子就能看出你的产品落地了没有，做到了什么程度。即使有时候面试我会稍微包装，美化一下，不过对于那种特别实质的内容，我是不敢说谎的，这也确实是转行的人的一些弊端。很难去做一些真实的数据，落地经验。不过也不用特别悲观，一般这一点对于年限越高的同学要求越深。对年轻的应届生和刚工作几年的同学包容度都不错。</span></p>
+<p id="f-doxcnW43k7hzRPYjyGrFNsIoENm"></p>
 
 <p id="f-doxcnJG0vVxpZ9uPVXy9gJBndUe"><span>      3.2 案例中的MCP Server是作为客户端去调用还是服务端调用，里面用到了向量数据库吗？</span></p>
 
 <p id="f-doxcn4LjKs3h82eOVbVGcNlKhBg"><span>    3.3 我现在让你支持微信，你怎么去做，怎么分析这个问题，怎么检索，会有哪些风险？用过process manager吗？</span></p>
 
-<p id="f-doxcnescoIHutohBse4z2qfAVJe"><span>        （背景是项目使用了一套负责登录鉴权的MCP Server，他的问题是如果让这一套系统支持微信，要怎么设计。后面讲的process manager我都没听过）</span></p>
+<p id="f-doxcnescoIHutohBse4z2qfAVJe">背景：项目使用负责登录鉴权的 MCP Server，需要分析扩展到微信时的系统设计与风险。</p>
 
 <p id="f-doxcnxB0bFbHejVBLewpVdlkVXb"><span>4.你提到了使用ONNX 上做了优化，你们优化了些啥东西。</span></p>
 
@@ -3736,7 +3727,7 @@ Agent层：Think（递归中心化，spawn 子 Agent）+ Act（工具执行）+ 
 
 <p id="f-doxcnJ5Ty6QalQsUgZvbuhyYKMh"><span>       6.2 你用过teams哪个功能吗？你这个界面和它的差异大吗？</span></p>
 
-<p id="f-doxcntJeP7p57B9YQRXW32RWlnd"><span>   (具体这个是做啥的大家不用关注，和该学习案例相关的，对大家参考意义不大。从这一点可以看出面试官在challenge我的产品的意义了，而且思维特别灵活，开始从产品层面上要和我讨论了）</span></p>
+<p id="f-doxcntJeP7p57B9YQRXW32RWlnd"></p>
 
 <p id="f-doxcnPLsMEq9Nx3a4zzUljgkSUd"><span>7.RAG大数据量分表分库</span></p>
 
@@ -3752,7 +3743,7 @@ Agent层：Think（递归中心化，spawn 子 Agent）+ Act（工具执行）+ 
 
 <p id="f-doxcnPnKEWMC1zvj8v74LJPf3Qg"><span>10.RAG常见的优化手段和分块策略</span></p>
 
-<p id="f-doxcn6Q82xIwQtBSfCbUeTKHTCe"><span>（怎么突然又给我整个最基本的八股啊，是看我前面答得太差了吗？= =）</span></p>
+<p id="f-doxcn6Q82xIwQtBSfCbUeTKHTCe"></p>
 
 <p id="f-doxcnVs6CQ91DCP4wjJXnXJwTYc"><span>11.你的各个Agent之间杂通信的，如果出现了死锁或者循环调用，你咋解决，你有明确的终止条件吗？如果要做一个本地远程的LLM的无缝切换，你是会如何设计？</span></p>
 
@@ -3814,7 +3805,7 @@ Agent层：Think（递归中心化，spawn 子 Agent）+ Act（工具执行）+ 
 
 <p id="f-doxcnlKCh4qU9SK1vGueAIsVImh"><span>具体可以参考下面第10个问题。</span></p>
 
-<p id="f-doxcnIFueIQd1EDJx9CzjjOGf5e"><span>这是一个算法工程岗位，和那个京东算法工程一样。这次面试给我的启发是，有些岗位算法和工程分得不是那么紧密，所以这一套路线虽然是应用出发，但我一直也没有忽略算法，按照这套路线，我们不但可以去投递纯工程岗，也完全可以尝试投递一些算法工程，对算法和工程都有一些要求的岗位。</span></p>
+<p id="f-doxcnIFueIQd1EDJx9CzjjOGf5e">该案例涉及算法与工程，可同时关注模型方法和工程实现。</p>
 
 <a id="f-doxcnAIkscw54A9vuISzmtw3Nfc"></a>
 
@@ -3824,15 +3815,15 @@ Agent层：Think（递归中心化，spawn 子 Agent）+ Act（工具执行）+ 
 
 <p id="f-doxcn1AsJgLQ9IvPtEH7FXCQfMg"><span>2. 当时用的是哪个版本的Langchain？</span></p>
 
-<p id="f-doxcnW5B1WevcQ8fAs4Hi9GovEe"><span>   （这个问题真的还翻车了，有两次面试官问我Langchain版本，我之前没关注到，这里总结在八股部分，Langchain的版本号，以及Langchain最新的版本的特性，这里借助这个面试，把八股部分Langchain版本问题，新版本特性总结了，这也是围绕Langchain版本最常考的两个问题）</span></p>
+<p id="f-doxcnW5B1WevcQ8fAs4Hi9GovEe">LangChain 的版本号与新版本特性需要结合项目使用情况说明。</p>
 
 <p id="f-doxcnxIyZClwdimJXNkB24rXCCe"><span> 这题直接参考笔记： </span><span style="font-weight:bold">1.2.1</span><span><span style="font-weight:bold"><a href="/posts/agent-learning-12-langchain/#f-doxcnzqmUe0713eOJZJyZZxVzLg"><span> LangChain的版本</span></a></span></span><span style="font-weight:bold"> 和  1.2.2 </span><span><span style="font-weight:bold"><a href="/posts/agent-learning-12-langchain/#f-doxcnSKBJx41KegVGKbYTTl1v4g"><span>LangChain 1.0新版本</span></a></span></span></p>
 
 <p id="f-doxcnMonsXAIraGQ01VWgzpvDbf"><span>3. 你写的熟悉大模型微调，训练。这些是你项目实际做的还是了解的？</span></p>
 
-<p id="f-doxcnUZJCJM1UsBe7SJupnDa22c"><span> （这块根据我的思路，大家应该不会说是只了解的对吧。我一直的思路是虽然咱们面向应用岗，但是微调，训练，量化，我都建议大家走一遍，不求精通，但求会，没有微调的建议都在项目里走一遍，这里忌讳说我只是知道，了解没做过。做一个不难的，我是怎么做，怎么回答的，都在上面的笔记。可以参考思路，自己准备一套。或者直接照抄我的，你能自圆其说也行）</span></p>
+<p id="f-doxcnUZJCJM1UsBe7SJupnDa22c">应用方向也可以运行一次微调、训练与量化流程，通过实际实验掌握基本方法。</p>
 
-<p id="f-doxcnJqWZgK9lNIZCXNsppdeCHd"><span> （其实就是监控系统，AI帮我写的，其实就是讲一下该学习案例里的评估方法+监控方法。这个也建议大家掌握，就是Agent的性能评测和监控。这里说的一般是使用美团龙猫的测评方法 + 上传数据到远端实现监测的这一套逻辑。 所以具体我讲就是用美团龙猫论文这一套滑动窗口评测的方法，从xx维度评估，创建数据集 + 上传云端+监控。这是我的一套方法论哈，具体的知识在笔记里都有，大家看美团龙猫相关的笔记。 当然你这里可以使用你自己的方法，如果你没有更好的或者不会说，你找我这一套讲也行，前提是你要去看本节美团龙猫部分和那个论文以及对应的思路，这个总结在上面笔记了）</span></p>
+<p id="f-doxcnJqWZgK9lNIZCXNsppdeCHd">评估与监控可参考美团龙猫论文中的滑动窗口评测方法，按相关维度构建数据集，并上传数据进行监控。</p>
 
 <p id="f-doxcn8am4UFmt2HSkSahnHU5LIb"><span>参考 3.</span><span><span><a href="/posts/agent-learning-15-evaluation-observability/#f-doxcnqrKdVGPbNYY8Xm3Fr8NVkh"><span>Agent性能评估</span></a></span></span></p>
 
@@ -3842,7 +3833,7 @@ Agent层：Think（递归中心化，spawn 子 Agent）+ Act（工具执行）+ 
 
 <p id="f-doxcnvCE6XTPtxR5nWAYzmsu9kh"><span>    5.1 你讲到的这个主管Agent去调用另一个Agent, 是怎么调用的，通过MCP方法吗？</span></p>
 
-<p id="f-doxcnZ9BIUtpJbEXVft5elnpuGh"><span>   （这里不知道大家理解这个题意吗？在本节总结部分</span><span style="font-weight:bold">6.4 </span><span><span style="font-weight:bold"><a href="/posts/agent-learning-11-multi-agent/#f-doxcn1TzNz7iComMwOzkhLkwQ9d"><span>Agent之间通信和状态管理</span></a></span></span><span style="font-weight:bold">。 </span><span>讲到了Agent之间有2种通信方式：</span><span style="font-weight:bold">移交</span><span>和</span><span style="font-weight:bold">工具调用。</span><span>这里他这么问，其实他已经认为了我的系统Agent的交互是使用的工具调用的思想，其实我Agent通信是使用的移交方式。这里对于该学习案例，直接和他澄清这一事实和交互的方式就好。给大家的启发是，要去复习 6.4的笔记）</span></p>
+<p id="f-doxcnZ9BIUtpJbEXVft5elnpuGh">Agent 之间可通过移交或工具调用进行通信。需要明确当前系统采用哪一种方式，以及状态如何传递。 <a href="/posts/agent-learning-11-multi-agent/#f-doxcn1TzNz7iComMwOzkhLkwQ9d"><span>Agent之间通信和状态管理</span></a></p>
 
 <p id="f-doxcnLOxAMbX5Z9hH4v20nI7Hu8"><span>6. 你这里项目里写的MCP，你有了解过吗？</span></p>
 
@@ -3858,15 +3849,15 @@ Agent层：Think（递归中心化，spawn 子 Agent）+ Act（工具执行）+ 
 
 <p id="f-doxcnNOAkX8euoJz10ARHiGyG2f"><span>10.你案例中的本地远程模型切换怎么做的？</span></p>
 
-<p id="f-doxcnT4oZoNcR7bt5HVUBxWNb8e"><span>    （这里是一个本地设置在env里面的一个根据不同模型来做不同处理的一个逻辑，不是一个热切换，看上去挺高级，但面试官一问其实说白了就是个if else逻辑，说白了这里还不如不写或者修改下，这是给大家的启发，某个地方如果特别简单，你干脆别写简历上了，写上去别人一问，一讲是这么简单，反而减分）</span></p>
+<p id="f-doxcnT4oZoNcR7bt5HVUBxWNb8e">此处是根据本地 env 配置选择不同模型处理逻辑的静态分支，并非运行时热切换。</p>
 
 <p id="f-doxcn1pK7xejkcm6UxVDookvVzh"><span>11. 你这个预约系统，你这里有做模型的评估吗？</span></p>
 
-<p id="f-doxcnx8ruJsmQUrt5TXxOduv5Sd"><span>   （模型评估这块，我的思路还是说从美团龙猫的方法，结合 《Agentic design pattern》的原则（从轨迹，工具调用）上来整理的一套逻辑来给面试官讲，可以看我的讲解视频，视频里会说大概我怎么讲的）</span></p>
+<p id="f-doxcnx8ruJsmQUrt5TXxOduv5Sd">模型评估可以结合美团龙猫的方法，以及《Agentic Design Patterns》中关于轨迹和工具调用的原则。</p>
 
 <p id="f-doxcna9zRCm83eWm1ZHG9MiPnzc"><span>12.你有没有关心一些最新的论文？</span></p>
 
-<p id="f-doxcnkLEu1WnV3mDDlZHZYKw6Dy"><span>（这也是早已准备在八股之中的，我一直说要准备几个最新技术。 本节里整理了：</span><span style="font-weight:bold">美团龙猫对于Agent评估</span><span>的论文， </span><span style="font-weight:bold">Google的多Agent架构（</span><span>八股Multi-agent）部分，</span><span style="font-weight:bold"> Deepseek-R1训练的部分</span><span>，这几块都可以拿来讲，具体看上面八股）</span></p>
+<p id="f-doxcnkLEu1WnV3mDDlZHZYKw6Dy">可参考美团龙猫 Agent 评估、Google 多 Agent 架构与 DeepSeek-R1 训练方法等研究。</p>
 
 <p id="f-doxcnJ4h2bECKxDCKoDelhIWyOb"><span>13. 你认为的完整的智能体，需要有哪些核心的能力？</span></p>
 
@@ -3916,17 +3907,17 @@ Agent层：Think（递归中心化，spawn 子 Agent）+ Act（工具执行）+ 
 
 <p id="f-doxcndkYLaTn0XCUxU43WeU3TZc"><span>   4.1 在这个Agent项目当中，你觉得什么是比较难的？</span></p>
 
-<p id="f-doxcna0Iw85U6mtjXLAUqPD49hb"><span>（其实这个问题是非常常考的，而且是完全给你机会让你去总结的。 有的时候，其实做完一个项目，其实可以认为好像没什么难的，甚至有面试官问的时候，我好像说过类似的话 "其实整个项目也没啥特困难的"，闭着眼睛想，这就不是一个好的回答。 我不知道大家有没有类似的困惑，但是这个问题是需要挖掘和思考的。</span></p>
+<p id="f-doxcna0Iw85U6mtjXLAUqPD49hb"></p>
 
 <p id="f-doxcnPnVWtU1R7B5QNCd22kg6CC"><span>其他问题- 4你在项目中遇到的最难的问题</span></p>
 
-<p id="f-doxcn4N2wLaA8CBgZCHhL2i60pe"><span>     之前总结是工具调用失败问题的排查和解决。借助今天的机会，我再在第4部分再增加一个例子，就以本节中的这个RAG项目再总结一个例子。这个问题的回答请直接跳转到上面笔记部分。另外在本期视频的讲解中，我其实讲了一下我是如何挖掘项目深度，总结出的这个答案的，感兴趣的小伙伴可以看一下本期视频讲解）</span></p>
+<p id="f-doxcn4N2wLaA8CBgZCHhL2i60pe">相关例子包括工具调用失败与 RAG-MCP 的排查和解决过程。</p>
 
 <p id="f-doxcnNPWqXhQYfj3cqQG6uEpxue"><span>   4.2 你的项目中Agents对于工具的处理是怎样的？</span></p>
 
-<p id="f-doxcnHDaOlHgwTIBmab78bKwJYb"><span>（这里其实是在聊如何把工具塞入到LLM中。我提到的是根据业务规则，每一步过滤指定的和业务阶段相关的工具，然后输入到大模型中。 然后面试官接着总结，以下是他的原话："相当于也是没有完全是一个agent的自己决定的workflow，就是你也是有一些固定的流"。</span></p>
+<p id="f-doxcnHDaOlHgwTIBmab78bKwJYb">可以根据业务规则与任务阶段过滤工具，再向 LLM 提供当前可用工具。需要明确哪些流程固定，哪些由 Agent 决策。</p>
 
-<p id="f-doxcn72ly2C3olTz5nEbQVfbNed"><span>最开始我复盘的时候其实在想这是不是我做得太简单了，但是本案例做了一些调研，其实现在行业普遍没有说让AI达到一个完全自动筛选工具，自动定义生成工具的路径，特别是在生产项目中。这是我们的目标，是未来AI发展的趋势，但是在25年这个Agent元年生产项目并没有达到如此智能。所以如果有的面试官就想因为这个说你做得简单，其实你不妨和他深入聊一下下面我总结的行业现状，让他能够清醒一点。）</span></p>
+<p id="f-doxcn72ly2C3olTz5nEbQVfbNed">工具的自动选择、定义与生成需要结合实现条件分析，区分目前可实现的能力与进一步的研究方向。</p>
 
 <p id="f-doxcnShAW6IXSg6HVSOmc984Zac"><span>目前常见的大模型获取工具的方式有3种：</span></p>
 
@@ -3942,7 +3933,7 @@ Agent层：Think（递归中心化，spawn 子 Agent）+ Act（工具执行）+ 
 
 <p id="f-doxcnkAfJp3FObBJOMpO2rZDn0e"><span>感兴趣的同学可以参考论文原文：</span><span><span><a href="https://arxiv.org/abs/2512.04123"><span>https://arxiv.org/abs/2512.04123</span></a></span></span></p>
 
-<p id="f-doxcn14rJQAhK9uSRpa1TFwGuzB"><span>     （我说这么多是想要大家：</span></p>
+<p id="f-doxcn14rJQAhK9uSRpa1TFwGuzB"></p>
 
 <p id="f-doxcng2rb2MWR7DgcVJFpo2yjdd"><span>       1：了解行业现状和相关知识</span></p>
 
@@ -3950,15 +3941,15 @@ Agent层：Think（递归中心化，spawn 子 Agent）+ Act（工具执行）+ 
 
 <p id="f-doxcnkujeh4GdJLRJBrO6k6DIHc"><span>5 然后我看你还有写到一些推理加速的部分，那地方做的多吗？</span></p>
 
-<p id="f-doxcnvum4HOsuEhU0vI5gFlVnif"><span>（结合我们分析的这个岗位性质，面试官其实问推理加速这一块应该很符合预期，因为本身他们就是做训练的。我比较担心的是他问得很深，因为按照我们的学习路线，我们是把算法这里带着走一遍。 速度慢-&gt;量化-&gt;选择合适的推理框架-&gt;微调-&gt;强化学习讲了一遍。面试官也并没有追问，具体答案还是请看本节 </span><span>你的项目是如何做推理加速的？）</span></p>
+<p id="f-doxcnvum4HOsuEhU0vI5gFlVnif">推理加速可以沿速度问题、量化、推理框架、微调与强化学习等方向分析。具体参考答案见“你的项目是如何做推理加速的”。</p>
 
 <p id="f-doxcnnAwlIxuiX5nQ0okVOaasvd"><span>6. 现在我给你一个我们在做的开源项目，请你现场阅读，然后告诉我大概这个项目在讲啥？然后如果我要添加一个工具，怎么做？</span></p>
 
-<p id="f-doxcnYeIQWRNtbDyoX2rzMYd0br"><span>      （我还是第一次遇到这样考察的，这个问题完全是相当于把问题引入到面试官最熟悉，而你完全陌生的场景，需要你现场发挥，现场快速学习。大家可以自己打开这个链接，看一下这个项目，自己能不能用5~10分钟弄清楚这个问题的答案。另外咱们也不白学，针对这个问题，我总结出以下这个开源项目是在做啥的，感兴趣你可以深入学这个项目，到时候有其他面试官问你你最近看了什么开源项目，也可以把这个拿出来讲</span></p>
+<p id="f-doxcnYeIQWRNtbDyoX2rzMYd0br">可以将开源项目分析作为练习，在有限时间内理解其目标、模块与核心技术。</p>
 
 <p id="f-doxcnQKI2BPu4k8h5k0rablgrVc"><span>觉得也不用把他想的特别难，这个项目是一个deep research agent, 如果你了解deep research 的概念，结合它的readme,可以快速了解这是一个什么项目。 第二个问题如果添加一个工具，怎么做？结合现有的一些工程经验，比如我们RAG项目怎么增加一个新的模块，或者就是和这个类似的Git项目，如果有相关经验了，那么其实你也能很快回答。 借助这个机会，我们学一下开源项目，学一下deep research（其实deep research面试还是挺多人问的，可能很多公司他们研究这个，所以需要了解一下）， 学一下工程知识，可以认为这是一个很好的问题。</span></p>
 
-<p id="f-doxcnMMCFLKe4BBj0qwM6g15eWe"><span>另外，我惊喜地发现这个问题其实不是最有价值的，最有价值的是这个项目。包含了Agent框架的知识，包含了训练，公开了数据集，训练方法。整套项目也有7.6k 个stars。完全开源，如果我们学下来，相当于是一个从训练 到Agent 都覆盖了的一个最好的实践的例子。我有初步想法准备把它当成我们的素材，26年3月开始，用它作为基础来学习，往算法方面扩展。如果这个计划执行，我也会把相关经历都写在笔记中，大家一起学习。）</span></p>
+<p id="f-doxcnMMCFLKe4BBj0qwM6g15eWe">该开源项目包含 Agent 框架、训练方法与公开数据集，可以作为从训练到 Agent 的完整实践案例。</p>
 
 <p id="f-doxcnC4DuujY5JfqE4FhyQJDm1e"><span>项目地址：</span><span><span><a href="https://github.com/MiroMindAI/MiroThinker/tree/main"><span>https://github.com/MiroMindAI/MiroThinker/tree/main</span></a></span></span></p>
 
@@ -4000,7 +3991,7 @@ Agent层：Think（递归中心化，spawn 子 Agent）+ Act（工具执行）+ 
 
 <p id="f-doxcnHWKyjvD4QcrC4p1bb3uVuf"><span>1 多 Agent 协同遇到的问题？</span></p>
 
-<blockquote id="f-doxcnzb3huRYMdjMF2XiFccVyRg"><p id="f-doxcnCJcWJukph57gIxUbrtLhh7"><span>因为是同学直接反馈给我的问题，所以这个问题其实就很模糊，缺少上下文，不知道面试官到底在问哪个方面，不过本节中在多Agent部分，涉及了很多相关内容，可以从这些角度回答。总体而言，我们需要把笔记的</span><span><span><a href="/posts/agent-learning-11-multi-agent/#f-doxcntuQVjJ2aMEP4HF4qje1X9b"><span>第六部分 多Agent弄透</span></a></span></span><span>了，里面推荐论文，书籍的某一章，把下面这些问题理解了，对待这个问题才能应对自如。</span></p></blockquote>
+<blockquote id="f-doxcnzb3huRYMdjMF2XiFccVyRg"><p id="f-doxcnCJcWJukph57gIxUbrtLhh7">该问题缺少上下文，可以结合 Multi-Agent 的架构、通信和状态管理等知识分析。 <a href="/posts/agent-learning-11-multi-agent/#f-doxcntuQVjJ2aMEP4HF4qje1X9b"><span>第六部分 多Agent弄透</span></a></p></blockquote>
 
 <p id="f-doxcnuvFFtDHmqoyEEXEJkHG8Xc"><span style="font-weight:bold">架构选型问题，可以说成：</span></p>
 
@@ -4061,13 +4052,13 @@ Agent层：Think（递归中心化，spawn 子 Agent）+ Act（工具执行）+ 
 
 <p id="f-doxcnwDH0WtKMIpMx2C09Fp8gdg"><span>请先参考理论知识：</span><span><span><a href="/posts/agent-learning-09-rag-data-processing/#f-doxcntiIqLdB9yrHLtRNm1BaCrd"><span>RAG的精排。</span></a></span></span></p>
 
-<blockquote id="f-doxcnJaiGPkIb5rj9OCSeeU6prd"><p id="f-doxcnH7ZvucqyBPWKIZANAfNiyd"><span>我不知道同学具体的项目的数据库是什么，我假设他这个RAG系统，内部的文档是技术文档。给出一个参考回答。值得一提的是，下面的答案其实不用背，更多的是上面精排的不同策略值得我们学习，理解背诵。针对这个具体问题，我们要现场结合我们这个精排的知识基础，现场发挥的。下面这个答案仅供参考。</span></p></blockquote>
+<blockquote id="f-doxcnJaiGPkIb5rj9OCSeeU6prd"><p id="f-doxcnH7ZvucqyBPWKIZANAfNiyd">下面以内部技术文档知识库为场景，结合精排知识提供参考回答。</p></blockquote>
 
 <p id="f-doxcn5jVVsDPSyUmGOvVxYsCRdc"><span>如果面试的时候让我解释为什么当时做的是基于规则的精排，并且业务场景是内部技术文档，我会这样回答：</span></p>
 
 <p id="f-doxcnXQU9qisxQ3Lm4dbaN90GYd"><span>我们这个项目面向的是内部技术文档问答，比如接口文档、架构文档、排障手册、版本变更说明这些。召回阶段已经能把语义相关的候选片段找出来，所以精排阶段我更关注的不是 query 和 chunk 像不像，而是这段内容能不能真的支撑后续回答。内部技术文档里同一个服务名、接口名可能出现在很多地方，但是正式文档、旧版本文档、故障复盘、临时记录的可靠性是不一样的。</span></p>
 
-<p id="f-doxcnCOLv0tdwYhjv2Mdn0b2sIc"><span>所以我当时做规则精排，主要是把这些业务质量标准显式加进去。比如命中服务名、接口名、配置项的内容优先；包含参数表、错误码、操作步骤、结论的内容优先；来自正式文档库、接口平台、最新版本目录的内容优先；旧版本、临时记录、内容过短、重复或者缺少上下文的片段降权。</span></p>
+<p id="f-doxcnCOLv0tdwYhjv2Mdn0b2sIc"><span>所以该案例做规则精排，主要是把这些业务质量标准显式加进去。比如命中服务名、接口名、配置项的内容优先；包含参数表、错误码、操作步骤、结论的内容优先；来自正式文档库、接口平台、最新版本目录的内容优先；旧版本、临时记录、内容过短、重复或者缺少上下文的片段降权。</span></p>
 
 <p id="f-doxcnKdL1eLGoJgRQxseoA0SLTb"><span>举个例子，用户问某个服务的超时配置怎么改，召回结果里可能既有正式配置说明，也有故障复盘。Cross Encoder 可能会觉得故障复盘也很相关，因为里面有很多超时和服务名，但真正回答用户时，我更希望优先引用正式配置说明，因为它更权威，也更可执行。使用基于规则的精排方法，可解释性也更强。</span></p>
 
@@ -4075,7 +4066,7 @@ Agent层：Think（递归中心化，spawn 子 Agent）+ Act（工具执行）+ 
 
 <p id="f-doxcnvWTDlqRbqlP4X1i5Bp6Mjb"><span>5 你觉得怎么做能让召回内容尽量完整可用？</span></p>
 
-<blockquote id="f-doxcnkPn6EjL68rUE0TBUWNvl7f"><p id="f-doxcnbW9mQ6s5SREvZR260TDAfh"><span>这个问题虽然没有总结一模一样的答案，但是其实我个人理解，整个RAG项目的，分块，粗排，精排，评估，迭代这个过程，也就是整个RAG系统的目的就是让召回的内容正确，完整，可用。所以如果理解了各个环节，比如分块，尽量减少语义粗排，精排会修复错误，合并语义，评估观测效果，及时调整策略，从这些方向去答就好。所以光背是不行的，必须理解消化他。</span></p></blockquote>
+<blockquote id="f-doxcnkPn6EjL68rUE0TBUWNvl7f"><p id="f-doxcnbW9mQ6s5SREvZR260TDAfh">RAG 的分块、粗排、精排、评估与迭代共同影响召回内容的正确性、完整性与可用性。需要理解各环节的作用，并根据评估结果及时调整策略。</p></blockquote>
 
 <p id="f-doxcnAjGlKtpoaAWHKzxPZX9w1b"><span>而是整个 RAG 链路很多环节其实都在保证召回完整可用。结合该学习案例来说，可以从三个层面保证生成内容尽量完整可用。</span></p>
 
@@ -4089,7 +4080,7 @@ Agent层：Think（递归中心化，spawn 子 Agent）+ Act（工具执行）+ 
 
 <p id="f-doxcnS2JSIS7IDOT4ihMjC1Fdlg"><span>6 怎么减少幻觉？</span></p>
 
-<blockquote id="f-doxcn32sZF0KBydxDYV99CuGTxd"><p id="f-doxcnCpiBzfFIer3MYoLfTx1sLb"><span>总结这个问题的时候，我专门重构了笔记幻觉部分。幻觉问题围绕，幻觉是什么，为什么有幻觉，如何解决。这三个问题，我查阅了很多资料，力争对三个问题的解析是完整的。另外也参考了前言论文，增加了一个回答的亮点，进入最前沿的知识，让你回答与众不同。 这个视频的讲解，也会稍微讲解一下幻觉问题。看了笔记和视频，这两问题很好回答。</span></p></blockquote>
+<blockquote id="f-doxcn32sZF0KBydxDYV99CuGTxd"><p id="f-doxcnCpiBzfFIer3MYoLfTx1sLb">幻觉相关问题可以围绕定义、成因与解决方法展开，结合技术资料与论文分析。</p></blockquote>
 
 <p id="f-doxcnRT2tZtEOjyy9Dk1WLTYcxd"><span>参考这里 </span><span><span><a href="/posts/agent-learning-16-safety-reliability/#f-doxcnXBmCcGQG447VHmV4VW65Tb"><span>大模型幻觉</span></a></span></span><span>。 看懂了这个问题游刃有余。</span></p>
 
@@ -4099,11 +4090,11 @@ Agent层：Think（递归中心化，spawn 子 Agent）+ Act（工具执行）+ 
 
 <p id="f-doxcnsEScHcPL8gzPMYIsirNxjI"><span>7 整个项目消耗的 token 量是多少？</span></p>
 
-<blockquote id="f-doxcnjPaVQr02XHAsfh1BRgTylb"><p id="f-doxcnPFBCvh34BXKXdKUyDDoc3e"><span>其实我在总结</span><span><span><a href="/posts/agent-learning-21-open-source-architectures/#f-doxcnkaFwIVwpBjWdFmhfArmEgb"><span>CC的成本控制</span></a></span></span><span>的时候有聊过这个问题。我们在做Agent的时候，最好能够设置一个Agent成本监控（Token使用量）统计。做自己项目的时候，比如使用Vibecoding，也可以大概关注一下自己用的什么模型，费了多少Token。我下一个Agent项目会注意这两点的。 至于已经做完了项目，也忽略了费了多少Token的同学，让AI帮你大概估一下吧，编造一下。</span></p></blockquote>
+<blockquote id="f-doxcnjPaVQr02XHAsfh1BRgTylb"><p id="f-doxcnPFBCvh34BXKXdKUyDDoc3e">Agent 成本监控需要记录实际 Token 使用量，并按模型、输入输出与缓存等维度统计，结合成本控制模块分析。 <a href="/posts/agent-learning-21-open-source-architectures/#f-doxcnkaFwIVwpBjWdFmhfArmEgb"><span>CC的成本控制</span></a></p></blockquote>
 
 <p id="f-doxcnQssVhQqZUNGOw0sqoR3vnc"><span>7-1 你用了哪个模型？</span></p>
 
-<blockquote id="f-doxcniz0DriYWQ7MbeIxHG0rWFc"><p id="f-doxcnTUBnribSgwtu4vJgNrI9Je"><span>这个问题我已经总结过了，关于模型的选择。模型选择，我们整理了三段论去选择。这个回答怎么选模型，为什么选这个模型。 以及在这个章节，我就谈过，最好的方法还是做一些小型的实验，刚好印证了7-3这个问题。 对于所有没开始做项目的同学，我的建议是你参考笔记和思路，这么选择模型和实验。 对于所有项目已经完成了，或者来不及做项目的同学，那么就是按照这个思路去包装。提前按这个模板想好你的回答。</span></p></blockquote>
+<blockquote id="f-doxcniz0DriYWQ7MbeIxHG0rWFc"><p id="f-doxcnTUBnribSgwtu4vJgNrI9Je">模型选型可以按照需求分析、模型对比与小规模实验三步展开，通过实际测试验证方案。</p></blockquote>
 
 <p id="f-doxcnU8nOsRODhfqevRS7qG7j3d"><span>7-1 7-2 7-3 参考这里： </span><span><span><a href="/posts/agent-learning-18-training-inference/#f-doxcnYko85EDnhmPBvF8uQJYvPb"><span>模型的选择</span></a></span></span></p>
 
@@ -4113,11 +4104,11 @@ Agent层：Think（递归中心化，spawn 子 Agent）+ Act（工具执行）+ 
 
 <p id="f-doxcnk7Vpusj21HsVWqWeFCB9ig"><span>8 偏大模型 / 八股</span></p>
 
-<blockquote id="f-doxcnvfLTRLS0Yn7VufhH18wUBg"><p id="f-doxcntvRYRRwMad0G4Iqsm6ldAg"><span>八股也没啥好说的，而且问的都是概念，问AI都有。笔记里也有，我给大家找到参考地方。不做解析了。</span></p></blockquote>
+<blockquote id="f-doxcnvfLTRLS0Yn7VufhH18wUBg"><p id="f-doxcntvRYRRwMad0G4Iqsm6ldAg">相关基础概念见对应章节。</p></blockquote>
 
 <p id="f-doxcnPdxau1hg3Z4VALDo8a7XEd"><span>8-1 对微调的理解，SFT 和 RLHF 有什么区别？</span></p>
 
-<blockquote id="f-doxcnvJpuv7B6T4jVEh7dWOSTjf"><p id="f-doxcnRegEr2cXlNkZTfZ2Q8amJf"><span>这里有个小经验。我看到同学给我反馈问题的时候，他说面试官问这个微调，他说理解得不深。不过我的建议是，不主动说不深入。面试官问你会不会，你就说会，大概率会继续问你概念，你就答。问到不会了再说。他自己会根据你回答情况判断你的深浅，不要主动坦白。</span></p></blockquote>
+<blockquote id="f-doxcnvJpuv7B6T4jVEh7dWOSTjf"><p id="f-doxcnRegEr2cXlNkZTfZ2Q8amJf"></p></blockquote>
 
 <p id="f-doxcntE5K3eKTrSacYMQhw6NgSd"><span><span><a href="/posts/agent-learning-18-training-inference/#f-doxcn1S1Djanq6UHTVV7ow1Fu1d"><span>SFT</span></a></span></span></p>
 
@@ -4133,7 +4124,7 @@ Agent层：Think（递归中心化，spawn 子 Agent）+ Act（工具执行）+ 
 
 <p id="f-doxcnCEFt4rTlEVcxXG0t0vmf7g"><span>8-4 如果让你用 harness 完成你的工程，你会怎么做？</span></p>
 
-<blockquote id="f-doxcnZRsytTFJqDBEKB0JHetSPb"><p id="f-doxcnC5jXCvhXBbStDE5VEHQlWd"><span>8-4.8-5.8-6的那问题特别好。我们总结了很多Harness,ClaudeCode的原理，概念。但是其实这三个问题想问，这些理论如何实践，对你的工作有什么迁移。这个问题其实需要你真的有一些思考，理解，实践，可以认为很好的问题。如果理解浅尝辄止，可能这个问题不好回答。我马上会总结一个关于Claudecode,Harness 更加偏工程落地的文档，足够回答这三个问题，先占个位，那个问题总结好了，我来补上。</span></p></blockquote>
+<blockquote id="f-doxcnZRsytTFJqDBEKB0JHetSPb"><p id="f-doxcnC5jXCvhXBbStDE5VEHQlWd">本组问题讨论 Harness 与 Claude Code 的理论如何应用到实际工作，可结合工程实践分析。</p></blockquote>
 
 <p id="f-doxcnJqn8G4m7xcQxWvaKiAKrnh"><span>8-4 8-5 8-6 答案参考</span><span><span><a href="/posts/agent-learning-20-skills-harness/#f-doxcntfh81v9NzcQ1AtOLPMdhfd"><span>这里</span></a></span></span></p>
 
@@ -4157,7 +4148,7 @@ Agent层：Think（递归中心化，spawn 子 Agent）+ Act（工具执行）+ 
 
 <p id="f-doxcnzlvQZmx4tg5kQMD7NGTugA"><span>9 传统八股</span></p>
 
-<blockquote id="f-doxcnah7yYLuAwl3iPL2oEnTNuh"><p id="f-doxcnN7Jqi2EZy2go3a9XBCXe3A"><span>传统八股，不讲。传统八股是我们在没有Agent之前，高频考点。现在面试大模型这个岗位，它的地位其实就放在大模型知识之后了。面试可能零星有的面试官问你并发，锁，操作系统。你要去学深入，又很费功夫，它的出现频率又不高。 可以认为做法就是大概背概念吧，出现一个补一个，因为说实话确实也没时间深入了。所以如果是只背概念，大家这些问题百度,AI都有答案，我就不总结了。</span></p></blockquote>
+<blockquote id="f-doxcnah7yYLuAwl3iPL2oEnTNuh"><p id="f-doxcnN7Jqi2EZy2go3a9XBCXe3A">并发、锁与操作系统等基础问题可结合对应资料学习。</p></blockquote>
 
 <p id="f-doxcnmRISENDTsHkYA8868eLqGc"><span>9-1 了解计算机网络吗？</span></p>
 
@@ -4203,7 +4194,7 @@ Agent层：Think（递归中心化，spawn 子 Agent）+ Act（工具执行）+ 
 
 <div style="margin-left:25px"><p id="f-doxcnlQafO6Yd1m42B3GxojHt4e"><span> 2. </span><span style="font-weight:bold">广度上。 </span><span>这个面经考察了Agent , RAG, 微调，部署。可以说各个方面都考了。考的最多的是Agent和RAG。 除了Agent部分，其它部分不难，主要像八股。虽然考了微调，部署，但是你去看面试问题，其实是一些基本的理论知识，我们叫八股，大概了解，背背就可以回答。</span></p></div>
 
-<p id="f-doxcnm4VVhRBVyBbipGsfBDxCIf"><span>我整理笔记的时候，把大量面试真题和上面的笔记内容合并归档。添加很多跳转链接，让大家更容易阅读，在学习笔记的时候，也能够实时用面试真题检验自己。</span></p>
+<p id="f-doxcnm4VVhRBVyBbipGsfBDxCIf">相关问题可以结合前面的知识点与案例复习。</p>
 
 <a id="f-doxcnntkTDZPQeONCWHMSOoC97Y"></a>
 
@@ -4228,7 +4219,7 @@ Agent层：Think（递归中心化，spawn 子 Agent）+ Act（工具执行）+ 
 
 <p id="f-doxcnlRQS6qt9TgNr9dtWNgcUce"><span>3. 如果把一个普通问答项目升级成虚拟对话系统，架构上要改哪些东西？</span></p>
 
-<p id="f-doxcn856JTEwbVIBezLuutgKyoc"><span>可以认为这个题好难解析。首先什么是虚拟对话系统，我没有上下文，是不是说对话是一个虚拟人？如果是这样，业界上好像也没有什么我能想到的产品，你像豆包，千问，也是一个对话系统啊。如果是说虚拟系统是虚拟人的话，我能想到的区别可能是输出形式，你需要把文字渲染成虚拟人，表示脸部特征，输出是有语音的。所以可以从输出的角度来谈一下区别？</span><span style="font-weight:bold">这个就不做深入解析了</span><span>。问题不太明确，另外我也缺少这方面经验，其次面试出现频率还挺小众的。</span></p>
+<p id="f-doxcn856JTEwbVIBezLuutgKyoc">可以根据问题的语境，分析虚拟对话或虚拟人的输出形式与实现方式。</p>
 
 <p id="f-doxcnY33B8MgNeUFvbod3MZ7dUg"><span>4. RAG在这类Agent项目里到底用来解决什么问题？</span></p>
 
@@ -4261,13 +4252,13 @@ Agent层：Think（递归中心化，spawn 子 Agent）+ Act（工具执行）+ 
 <p id="f-doxcnC96w1ELS4GpbT8rRcN3Qcc"><span>6. Embedding模型在项目中应该怎么选，选错会出现什么现象？</span></p>
 
 <blockquote id="f-doxcnfee8UeFihFgMpSIJxT2rid"><p id="f-doxcn8Et32cdaPzcWhr2MbTSd9g"><span>这个其实就是八股了，没啥好讲的。有点像Agent，喜欢问你怎么选模型的，我们总结在了：</span><span><span><a href="/posts/agent-learning-18-training-inference/#f-doxcnYko85EDnhmPBvF8uQJYvPb"><span>模型选择策略</span></a></span></span></p>
-<p id="f-doxcnWxZYsaPBjV0G9LwRoJCAEd"><span>RAG 问你如何选择Embedding模型。我总结在了RAG部分笔记这里。</span><span><span><a href="/posts/agent-learning-10-retrieval-advanced-rag/#f-doxcnx7ckpsZwM5qMqdu9ZAiu2y"><span>RAG 嵌入向量</span></a></span></span><span>部分</span></p></blockquote>
+<p id="f-doxcnWxZYsaPBjV0G9LwRoJCAEd">Embedding 相关知识与参考资料见 RAG 章节。 <a href="/posts/agent-learning-10-retrieval-advanced-rag/#f-doxcnx7ckpsZwM5qMqdu9ZAiu2y"><span>RAG 嵌入向量</span></a></p></blockquote>
 
 <p id="f-doxcnwH6grhak415nVgqaT5bB9b"><span>答案直接参考笔记 </span><span><span><a href="/posts/agent-learning-10-retrieval-advanced-rag/#f-doxcnx7ckpsZwM5qMqdu9ZAiu2y"><span>RAG 嵌入向量</span></a></span></span></p>
 
 <p id="f-doxcnyGayOTxE95qacZWhckJkBg"><span>7. Embedding切Chunk应该怎么做，为什么固定长度切分经常不够？</span></p>
 
-<blockquote id="f-doxcnF5VQ6J0CyJijLhIgVoAjqf"><p id="f-doxcngohOiTS2tK3P4ZDoTpz6if"><span>7,8 是RAG的八股文，已经汇总到知识专题。我自己策略是背一背。</span></p></blockquote>
+<blockquote id="f-doxcnF5VQ6J0CyJijLhIgVoAjqf"><p id="f-doxcngohOiTS2tK3P4ZDoTpz6if"></p></blockquote>
 
 <p id="f-doxcnCN7wrtlRnE4Q1fZ3Xyhlzb"><span>参考 RAG专题 </span><span><span><a href="/posts/agent-learning-09-rag-data-processing/#f-doxcnVVrS9bv6v3EVscTXnUC8bh"><span>4.5.1 Embedding切Chunk应该怎么做，为什么固定长度切分经常不够？</span></a></span></span></p>
 
@@ -4290,7 +4281,7 @@ Agent层：Think（递归中心化，spawn 子 Agent）+ Act（工具执行）+ 
 
 <p id="f-doxcnfBAxTty0Gdeun4iaCkOBVb"><span>10 什么样的项目更适合继续做模型重训练，什么样的项目更适合只做RAG或规则增强？</span></p>
 
-<blockquote id="f-doxcn85Hv8RbCOlBHyTz0MsAzve"><p id="f-doxcnjxBkh4ZFXMGEtUA4JQM3ii"><span>也有点像是八股。我看RAG的书上，有一小节是微调 vs RAG.所以可以从这个角度回答。所以我也整理到RAG八股知识里：</span></p></blockquote>
+<blockquote id="f-doxcn85Hv8RbCOlBHyTz0MsAzve"><p id="f-doxcnjxBkh4ZFXMGEtUA4JQM3ii">本题可以结合微调与 RAG 的区别分析。</p></blockquote>
 
 <p id="f-doxcnJNC7YCXcxvsBTcc78Cc7Tg"><span>参考 </span><span><span><a href="/posts/agent-learning-09-rag-data-processing/#f-doxcn9BdqwnSKuvdseD5V7yKkmf"><span>RAG专题 微调 vs RAG </span></a></span></span></p>
 
@@ -4344,17 +4335,17 @@ Agent层：Think（递归中心化，spawn 子 Agent）+ Act（工具执行）+ 
 
 ##### 点评
 
-<ol start="1"><li id="f-doxcn8JK2hySaxD3huTp7V1H4Nf"><span>这个同学在自己讲解的时候，介绍项目讲了自己的Agent的记忆设计模块。长短记忆如何设计，如何写入的，如何整理的记忆。 讲到这一点，其实相对于很多人的项目已经比较深入了。很多同学的项目设计是不是没有一个精心编排的设计模块？所以我的第一印象是，这个同学的项目做的还是不错的，虽然就听到这一点。</span></li></ol>
+<ol start="1"><li id="f-doxcn8JK2hySaxD3huTp7V1H4Nf">记忆设计可以考虑长期与短期记忆、会话恢复，以及历史任务状态。</li></ol>
 
 <ol start="2"><li id="f-doxcn3xS8ZkJqutmGLiqWJsNAXd"><span>面试官很懂细节，你可以看到，前面很多问题都是围绕记忆模块的设计来谈的。面试官可以很快抓住里面的细节冲突：比如同学讲完他的系统的存储模块后，面试官发现漏洞，这样是不是无法恢复？比如同学讲到了他的记忆模块的整理的时候，面试官挑战这样会不会存在并发压缩导致数据竞争的问题。面试对于细节的深入以及面试官能够快速抓住细节提问，是比较少见的。</span></li></ol>
 
 <p id="f-doxcnSvkEHtDihH91LDLC0rksRh"><span>基于此，我也是觉得这个同学面试准备的应该是不错的，而且他为啥专门投递这个面经，可以认为也是因为这一次的面试比较难，与众不同，比较难分析。</span></p>
 
-<p id="f-doxcnFH7XS83DUeSQDqG8tEKt3g"><span>那么，问这么深入，对于大家是不是借鉴意义不大？可以认为不是。分析本期面经：</span></p>
+<p id="f-doxcnFH7XS83DUeSQDqG8tEKt3g">下面结合具体问题分析其通用技术要点。</p>
 
 <p id="f-doxcnmfA873a1isqwGU2Nn22r60"><span>1. </span><span style="font-weight:bold">可以加深我们对于ClaudeCode记忆系统的理解。</span><span> 虽然面试官是针对于这个同学的项目问的，但这个同学的设计，或者整体行业对于记忆模块的设计是类似的，后面的问题，我们不妨从CC的角度来想？比如面试官问：你的Agent存了哪些东西（你就想CC存了哪些东西），你的系统如何重建会话（CC如何重建会话）。通过这些帮我们检验是否对于CC记忆模块深入掌握。</span></p>
 
-<p id="f-doxcnKt1vfOBPlk26Z2cL0UFEnc"><span>2. </span><span style="font-weight:bold">从包装的角度。</span><span>如果你的Agent没有亮点可以写，你不妨和这个同学一样加这么一句</span><span style="font-weight:bold">：负责 Agent 记忆与会话恢复模块设计，实现长短期记忆管理、会话 Transcript 持久化、上下文重建与运行状态恢复能力。</span><span>写上去了，对于今天面试的具体问题，你就必须想清楚，包括ClaudeCode的章节的笔记和参考资料。</span></p>
+<p id="f-doxcnKt1vfOBPlk26Z2cL0UFEnc">可以从历史对话中恢复会话状态，结合记忆内容与任务上下文设计恢复流程，并通过实验验证。</p>
 
 <p id="f-doxcnimARZ1WMB5CAT8qv1Q7HLY"><span>3. 其他的角度，也有一些启发，大家可以看面经和讲解视频。</span></p>
 
@@ -4418,7 +4409,7 @@ Agent层：Think（递归中心化，spawn 子 Agent）+ Act（工具执行）+ 
 
 <p id="f-doxcnbtczg2UTkTGUmJ26ELPpKb"><span style="font-weight:bold">3. 你的记忆的功能的实现，会话重现，回调的能力，都是怎么实现的？是自己单独存的吗？没有用Langgraph的结构化能力吗？</span></p>
 
-<p id="f-doxcnGlZghoVTYGMRYmXCDswDCc"><span>这个题给我们的启发就是在我们做项目实现的时候，去了解一下框架，是否有类似的功能，</span><span style="font-weight:bold">能否复用。当然我不是说一定要复用。 </span><span>比如我看有很多团队，他们写Agent项目就是手搓的，他们其实有他们的考虑，比如稳定性啊，效率等。但是大家实现的时候，最少要做技术选型，xx框架有整个功能，</span><span style="font-weight:bold">你为啥不用？你不用的理由是啥？</span><span>这里同学比如在整个会话重建功能这里答的没有很好，但是langgraph又提供了相关功能，所以就被挑战。</span></p>
+<p id="f-doxcnGlZghoVTYGMRYmXCDswDCc">LangGraph 等框架的记忆与恢复能力，需要结合项目的状态管理需求进行比较。</p>
 
 <p id="f-doxcnqeEFddD0V9lKAE1DFIbuaf"><span>这里，我们以Langgraph为例，他有提供具体的</span><span style="font-weight:bold">节点回退功能（Time Travel)。</span><span>本质来说，也是持久化存储了一份对话历史，这个历史不同于记忆模块，就和我们讲的ClaudeCode一样，分为两个层级。实现细节，比如如何重建的，存储的形式，存储的数据库可能不同，但思想是一样的。我就不深入讲解了，当你把这些能力（会话重建，你可以从</span><span style="font-weight:bold">CC也好，Langgraph也好</span><span>，看一下别人是如何实现的，把细节想清楚（最好的方法是自己做一遍），细节要经得起问。</span></p>
 
@@ -4434,7 +4425,7 @@ Agent层：Think（递归中心化，spawn 子 Agent）+ Act（工具执行）+ 
 
 <p id="f-doxcnEqbIqnpB517NXA9taNQgMe"><span style="font-weight:bold">5.RAG传统方案肯定有一些不足，比如语义分割，二维三维丢失，没有办法跨文档关联，有什么好的方案？</span></p>
 
-<p id="f-doxcnBbOmcMeyEv1FVJ2w3tXXpe"><span>我的看法是：rag传统方法得会，这是基础。对于新方案，比如Agentic RAG, GraphRAG, 要了解，知道行业痛点和趋势。但是你说要不要深入，只能说学有余力再深入吧，先把其他的做好，因为深入的方向其实不是每个岗位都会做的，面试官不做，自然问的也不会深入。所以可以先了解一下大概。</span></p>
+<p id="f-doxcnBbOmcMeyEv1FVJ2w3tXXpe">RAG 学习可以先掌握传统流程，再深入高级检索与生成方法。</p>
 
 <p id="f-doxcnlTgewduM3X0mLwJZb09M0f"><span>本节内容可以参考笔记： </span><span><span><a href="/posts/agent-learning-09-rag-data-processing/#f-doxcnC6s9cWRXdSpqjD7xTwklrg"><span>RAG新方向</span></a></span></span><span>，从Agentic RAG和GraphRAG两个维度来回答。</span></p>
 
@@ -4474,13 +4465,13 @@ Agent层：Think（递归中心化，spawn 子 Agent）+ Act（工具执行）+ 
 
 <p id="f-doxcnutYfVRWEtTBajEfvwF1bSb"><span><span><a href="#f-doxcnvTpkobzqSrgpPs897Ve2Yd"><span>2025.10 安克创新</span></a></span></span><span> 这次面试和上面的虾皮AIAgent暑期实习面经的特点都是特别细。因为问得太细致了，所以不太好回答。</span></p>
 
-<p id="f-doxcnqkcQ89AJXnFLvksT9Kmr2d"><span>本期视频和2605虾皮暑期实习面经一样，都是比较难的。难的点在于问的细节特别细致，两次面试也有一些重复的地方，比如对于Agent如何找到历史记录，这一点在</span><span><span><a href="#f-doxcnRnCE6nbvTaHent4MycJ8MT"><span>202605虾皮暑期实习面经</span></a></span></span><span> 是专门讲过，我也重复了笔记，包括压缩同步异步问题，也是重复的。有一些问题，相当于是压中的原题，比如说里面的你用什么VibeCoding工具？ClaudeCode和Codex 的区别，这个我之前就专门做了一期视频来讲解的，讲解内容中也给了这两个问题的回答。可以参考</span><span><span><a href="/posts/agent-learning-19-ai-coding/#f-doxcnalVMpbk9v5kWA1QNoeIijf"><span> Codex VS ClaudeCode</span></a></span></span><span>。</span></p>
+<p id="f-doxcnqkcQ89AJXnFLvksT9Kmr2d"></p>
 
-<p id="f-doxcnTr6y7zteZXL3NOYCaE3MXC"><span>这期同学给我的记录，是按照主问题+追问的方式组织的，可以认为这个方法也很好。大家复盘面试，可以录音，然后用使用文稿，结合我给的提示词：</span><span><span><a href="/posts/agent-learning-01-agent-foundations/#section-0009"><span>面试复盘小技巧</span></a></span></span><span>。 让AI通过这方法快速将面试录音txt转成问题总结。</span></p>
+<p id="f-doxcnTr6y7zteZXL3NOYCaE3MXC">复盘时可以结合问题记录与录音，核对回答细节并总结需要改进的技术内容。 <a href="/posts/agent-learning-01-agent-foundations/#section-0009"><span>面试复盘小技巧</span></a></p>
 
 <p id="f-doxcnIWPtVSOfxzclD6HVmlnEHd"><span>这样一个是不利于HR筛选，初筛容易过不了。</span></p>
 
-<p id="f-doxcnJuzmn43wzNemrlZe6IULPf"><span>ps:这个同学面试是通过了的，同时他反馈安克没有手撕代码，只有AI coding笔试题。这也给大家一个信息，这是其它专业（工科）转行AI的例子，他暑期实习也有几个offer,也有大厂的面试邀请（字节，阿里）</span></p>
+<p id="f-doxcnJuzmn43wzNemrlZe6IULPf"></p>
 
 <a id="f-doxcnMWQwNzSZdTiCuCnvVvOgCe"></a>
 
@@ -4488,7 +4479,7 @@ Agent层：Think（递归中心化，spawn 子 Agent）+ Act（工具执行）+ 
 
 <p id="f-doxcns7OAlYVKGJ8lMA2lEnnNdg"><span style="font-weight:bold"> 一、个人背景与转型动机</span></p>
 
-<blockquote id="f-doxcnJBAjPCvR4YjI3oP4ryuqmc"><p id="f-doxcnbxHAYRMmvluM3KvPBmoUib"><span>这个同学是从其它专业转到的大模型开发的岗位，所以大概率针对于他的背景，面试官会问这个问题。自我介绍，反问的技巧笔记记在了：</span><span><span><a href="#f-doxcn4Wm3DDBJn4i59xiOMw5Asc"><span>面试技巧</span></a></span></span><span> 这里。</span></p></blockquote>
+<blockquote id="f-doxcnJBAjPCvR4YjI3oP4ryuqmc"><p id="f-doxcnbxHAYRMmvluM3KvPBmoUib"></p></blockquote>
 
 <p id="f-doxcnkehWZ1QBOaFknbnKSW1ipc"><span>1. </span><span style="font-weight:bold">主问题：</span><span> 你的专业是车辆工程和机械工程，但学的却是AI相关的东西，这个跨度感觉有点大呀？</span></p>
 
@@ -4557,9 +4548,9 @@ Agent层：Think（递归中心化，spawn 子 Agent）+ Act（工具执行）+ 
 
 <p id="f-doxcnH4hyFhA5f0SbxVrF41azRg"><span>案例中的RAG项目没有做意图识别，没有被问到过，所以意图识别对我来说是第一次遇到，在这里不算常考的点。</span></p>
 
-<p id="f-doxcnt0S4Ij9yGK0vacDYrXOaQf"><span>借助这一次机会，我在RAG项目整理</span><span><span><a href="/posts/agent-learning-09-rag-data-processing/#f-doxcnhrP7JmcDSM0cUFbeOqfaxb"><span>RAG的全局总览</span></a></span></span><span>，里面可以清晰看出意图识别处于哪个部分。</span></p>
+<p id="f-doxcnt0S4Ij9yGK0vacDYrXOaQf">RAG 全局总览展示了意图识别在链路中的位置。 <a href="/posts/agent-learning-09-rag-data-processing/#f-doxcnhrP7JmcDSM0cUFbeOqfaxb"><span>RAG的全局总览</span></a></p>
 
-<p id="f-doxcnWlq5kuty754iphM4PA1OGd"><span>在笔记5.1的意图识别里面，总结了什么是</span><span><span><a href="/posts/agent-learning-09-rag-data-processing/#f-doxcnSE2sZbBp4rKiFKAthfloxf"><span>意图识别，意图识别怎么做，如何测试意图识别的准确度</span></a></span></span><span> 的理论部分。这些问题足够面试官问你相关意图识别的概念部分了？但是如果是说更偏工程实践的，比如当前追问1和追问2，意图识别准确率多少，这些其实是你项目做了，才会被问到，答案我就不总结了。如果你写的项目想做和有做，可以参考上面的理论，设计好方案。如果你不做，把上面理论部分弄好就行了。</span></p>
+<p id="f-doxcnWlq5kuty754iphM4PA1OGd">意图识别需要理解概念、实现与准确度测试。实际工程应结合项目设计方案、数据集和评估方法。 <a href="/posts/agent-learning-09-rag-data-processing/#f-doxcnSE2sZbBp4rKiFKAthfloxf"><span>意图识别，意图识别怎么做，如何测试意图识别的准确度</span></a></p>
 
 <p id="f-doxcnwthJ4PMwCBtna3BgWu7zYb"><span>   - </span><span style="font-weight:bold">追问2：</span><span> 八九十的准确率是怎么测出来的？怎么确定是这个数值的？</span></p>
 
@@ -4593,7 +4584,7 @@ Agent层：Think（递归中心化，spawn 子 Agent）+ Act（工具执行）+ 
 
 <p id="f-doxcnfERqOeXWILt28spKTxHQfd"><span style="font-weight:bold">七、记忆管理系统与上下文处理（深度考察区）</span></p>
 
-<blockquote id="f-doxcn3YraOw7rCTL003olj8pu3g"><p id="f-doxcnpBxSE46VcFRQMZVErBMMzc"><span>记忆和上下文管理，很常考的，和之前一样，我完全按照ClaudeCode的实现和它的思想来作答。我在写CC的笔记的思路也是这样，如果有面试相关问题，可以认为我从笔记里的CC的内容找不到回答的思路，那我就去重构笔记。大家看相关面试问题的时候，也是要结合笔记</span><span><span><a href="/posts/agent-learning-21-open-source-architectures/#f-doxcneK3qVfDjLnKOQFCdsbYDmf"><span>CC架构/源码解读</span></a></span></span><span>的内容来复习。</span></p></blockquote>
+<blockquote id="f-doxcn3YraOw7rCTL003olj8pu3g"><p id="f-doxcnpBxSE46VcFRQMZVErBMMzc">记忆与上下文管理可以结合 Claude Code 架构与源码分析学习。 <a href="/posts/agent-learning-21-open-source-architectures/#f-doxcneK3qVfDjLnKOQFCdsbYDmf"><span>CC架构/源码解读</span></a></p></blockquote>
 
 <p id="f-doxcnpzBTVdLsexPKoxGZoca0ob"><span>1. </span><span style="font-weight:bold">主问题：</span><span> 你们是怎么管理上下文和记忆的？记忆分几层？是否有 Session 的概念？</span></p>
 
@@ -4615,9 +4606,9 @@ Agent层：Think（递归中心化，spawn 子 Agent）+ Act（工具执行）+ 
 
 <p id="f-doxcnCtrm8MkGJH94hfJTvfBRNh"><span>   - </span><span style="font-weight:bold">追问2：</span><span> 到达上下文上限触发蒸馏长期记忆时，这个是同步的还是异步的？</span></p>
 
-<blockquote id="f-doxcnUk8ovMIDRFKOKuMQaG1bPb"><p id="f-doxcnIJuOopW0b0kAr8gBRYbsFh"><span>这次面试和上一期虾皮的面试，都聊到了压缩是同步异步的问题，我在复盘的时候，也特意重新去整理了整个CC的压缩部分，不管是重构的CC记忆的全局的图片也好，还是后面详解每一层压缩体系的描述，我多强调了同步和异步的问题，请大家自己看一下笔记： </span><span><span><a href="/posts/agent-learning-21-open-source-architectures/#f-doxcnQt5rfz0ry0UrIjAvJEtlOf"><span>CC 压缩</span></a></span></span><span> 部分。</span></p></blockquote>
+<blockquote id="f-doxcnUk8ovMIDRFKOKuMQaG1bPb"><p id="f-doxcnIJuOopW0b0kAr8gBRYbsFh">压缩的同步与异步处理可参考 Claude Code 压缩部分。 <a href="/posts/agent-learning-21-open-source-architectures/#f-doxcnQt5rfz0ry0UrIjAvJEtlOf"><span>CC 压缩</span></a></p></blockquote>
 
-<blockquote id="f-doxcnlZjCNsVrjiwkf4f5bN67Bd"><p id="f-doxcnw7GdZYNBF8Yh1INc3AiW6b"><span>CC的压缩，可以说都是同步压缩（异步处理中间状态），具体可以看一下笔记和我的讲解视频。但是这个同学设计说是异步的，然后后面追问3和4就矛盾了。可能是自己没有想清楚。我们的原则是：要么和CC一样，要么借鉴他，想清楚。不要自己没想清楚就设计一个比CC还复杂的异步压缩，最后答不上来。</span></p></blockquote>
+<blockquote id="f-doxcnlZjCNsVrjiwkf4f5bN67Bd"><p id="f-doxcnw7GdZYNBF8Yh1INc3AiW6b">Claude Code 的压缩可以结合同步与异步方案分析，重点关注执行时机与对任务的影响。</p></blockquote>
 
 <p id="f-doxcnejjZnMAXTxrkjxiJqQk93c"><span>参考：</span><span><span><a href="/posts/agent-learning-21-open-source-architectures/#f-doxcnRiRIxWYcqjI3m3AIUGy6eh"><span>你的项目怎么做的压缩的？</span></a></span></span></p>
 
@@ -4657,13 +4648,13 @@ Agent层：Think（递归中心化，spawn 子 Agent）+ Act（工具执行）+ 
 
 <p id="f-doxcnHaQDkafJDvp7pO3nQEwucb"><span>1. </span><span style="font-weight:bold">主问题：</span><span> 你们的记忆是怎么存储的？</span></p>
 
-<div style="margin-left:25px"><p id="f-doxcnRCOPO3vRBV6KzZ9mJvkbhI"><span>这里偏向于不是说长短记忆如何维护，而是如何存储的。我自认为笔记写的也很清楚，参考</span><span><span><a href="/posts/agent-learning-21-open-source-architectures/#f-doxcnYBSPc4kn6qHFK7z9g6dIrd"><span>CC记忆模块</span></a></span></span><span>。</span></p><p id="f-doxcn4cJpZGviy0T1zCiMwpS4Me"><span>最上面那种图，就是我重构的，很清楚展示了CC的模块存了啥，用的啥数据结构。（CC基本用的MD）。原理还是一样，要么照CC说，要么在它上面创新。</span></p></div>
+<div style="margin-left:25px"><p id="f-doxcnRCOPO3vRBV6KzZ9mJvkbhI">本题侧重长短期记忆的存储方式，可参考 Claude Code 记忆模块。 <a href="/posts/agent-learning-21-open-source-architectures/#f-doxcnYBSPc4kn6qHFK7z9g6dIrd"><span>CC记忆模块</span></a></p><p id="f-doxcn4cJpZGviy0T1zCiMwpS4Me"><span>最上面那种图，就是我重构的，很清楚展示了CC的模块存了啥，用的啥数据结构。（CC基本用的MD）。原理还是一样，要么照CC说，要么在它上面创新。</span></p></div>
 
 <p id="f-doxcn6BjPHR2ERzZyIfKSRlFTph"><span>   - </span><span style="font-weight:bold">追问1：</span><span> 为什么把短期记忆直接放在内存里面？是因为数据量小吗？什么原因？</span></p>
 
 <p id="f-doxcnegWIqYG7X6gvyLiAp6Paie"><span>   - </span><span style="font-weight:bold">追问2：</span><span> 用完之后想找历史记录找不到怎么办？</span></p>
 
-<p id="f-doxcnAqdCOxtDQRW3rD6qE4n1Vf"><span>这个可以认为笔记参考</span><span><span><a href="/posts/agent-learning-21-open-source-architectures/#f-doxcnYBSPc4kn6qHFK7z9g6dIrd"><span>CC记忆模块</span></a></span></span><span> 和 面经 </span><span><span><a href="#f-doxcnRnCE6nbvTaHent4MycJ8MT"><span>虾皮暑期实习</span></a></span></span><span>。 我总结的已经很清楚了。在总结虾皮这一期视频时，面试官专门讨论了很大章节：如何恢复历史？我专门总结这个面试的时候，重构了笔记，加入了对应的对应CC的Transcript的存储的讲解。</span></p>
+<p id="f-doxcnAqdCOxtDQRW3rD6qE4n1Vf">Transcript、记忆与恢复机制可以结合 Claude Code 相关章节进一步学习。 <a href="/posts/agent-learning-21-open-source-architectures/#f-doxcnYBSPc4kn6qHFK7z9g6dIrd"><span>CC记忆模块</span></a> <a href="#f-doxcnRnCE6nbvTaHent4MycJ8MT"><span>虾皮暑期实习</span></a></p>
 
 <p id="f-doxcnknOOG7tMjsD2xUeeTPHCg8"><span>所以这部分答案看</span><span><span><a href="/posts/agent-learning-21-open-source-architectures/#f-doxcnYBSPc4kn6qHFK7z9g6dIrd"><span>CC记忆模块</span></a></span></span><span> 和 面经 </span><span><span><a href="#f-doxcnRnCE6nbvTaHent4MycJ8MT"><span>虾皮暑期实习</span></a></span></span><span>。 虾皮暑期实习也有讲解视频，专门讲了历史会话的存储和恢复。</span></p>
 
@@ -4689,19 +4680,19 @@ Agent层：Think（递归中心化，spawn 子 Agent）+ Act（工具执行）+ 
 
 <p id="f-doxcnnxHGMW8o80zz991FcjGCwb"><span>整个面试轮次为：2技术（一个荣耀的Agent开发专家 + 一个荣耀的算法专家（这也是所谓的交叉面，让不同岗位，专业的人来考核你，这是面试常见手段了） + HR（可能是荣耀的HR） + 综合面（可能是研究所的HR+研究所主管）</span></p>
 
-<p id="f-doxcnjO1exdhGQuazTzedMOnbic"><span>同时配置笔试：传统代码题（给的牛客形式输入输出） + 性格测评（类似于华为那样的），后面我都会给大家参考。</span></p>
+<p id="f-doxcnjO1exdhGQuazTzedMOnbic"></p>
 
-<p id="f-doxcn7Vk2AqJd7IG2pg6W4gassh"><span>面试并不难，如果我所说，可以认为比前面解析的很多校招的题目都简单，大家自己去看也能发现。我暂时先没总结答案，我先把流程写好，对应的注意事项，我如何准备的，每个环节做了啥都写好。具体的答案后面有时间（或者必要）我再来总结，不总结我相信大家也能够处理，因为问的不难，笔记基本都涵盖了。</span></p>
+<p id="f-doxcn7Vk2AqJd7IG2pg6W4gassh"></p>
 
 <p id="f-doxcnNqdx6mJDGOZ3gyeLf2NfDh"><span style="font-weight:bold">一面的话，</span><span>基本围绕项目和具体基础知识 ，问的又不深入，基础知识也不难。</span></p>
 
-<p id="f-doxcnHNXPURlSWWO0iQ5OxuS3Ag"><span style="font-weight:bold">HR面很简单</span><span>，HR也很和蔼，可以认为挺好的，一点不为难人，全程很多地方都是让我在问。</span></p>
+<p id="f-doxcnHNXPURlSWWO0iQ5OxuS3Ag"></p>
 
 <p id="f-doxcnqFjQIYqneZMJk34bgRCyMh"><span style="font-weight:bold">综合面：</span><span>感觉就是把前面技术面和HR面都走了一遍，也是很多时候都在让我问问题，技术问的也没之前深入，HR问的更像是走流程。</span></p>
 
 <p id="f-doxcnJwOrv89BsPrYK4WZxXJ16d"><span style="font-weight:bold">笔试和综合测评以及注意事项后面会细讲。</span></p>
 
-<p id="f-doxcnbPDvxKBlhGpEnJXHro2Cwb"><span>我个人感受，我并没有觉得有什么坑。本身也是研究智能硬件，打造智能终端，研究方向N+2(N表示当前技术，+2表示领先当前技术两代），主要研究研究前沿的AI方向，涨幅能给10~30%, 强度最少不是变态互联网强度。 所以其实可以认为是一个可以考虑的工作。同时就算是去研究所，可以认为是不是有更好的研究所，也许可以试试，比如智源。我也没这个精力打听，也没有时间大量面试对比。仍然觉得留在当前公司并积累是更好的选择。</span></p>
+<p id="f-doxcnbPDvxKBlhGpEnJXHro2Cwb"></p>
 
 <p id="f-doxcnuoIUhlVCbjIaDvH981rIVb"><span>AI Agent工程师：</span></p>
 
@@ -4719,9 +4710,9 @@ Agent层：Think（递归中心化，spawn 子 Agent）+ Act（工具执行）+ 
 
 ##### 一面
 
-<p id="f-doxcnuwJfkQMLlyAqj1Pohj5bTe"><span>一面不难，主要是问项目，但是有几个问题，就是案例中的是一个类似于workflow形式的Agent，面试官挑战我说workflow形式是不是没有Agentic性质，包括项目可以用传统方法做，你用Agent去做，有没有必要。 这次面试可以认为最有价值的问题，是如何面对面试官对你项目的压力拷问，我也专门总结了 </span><span><span><a href="#f-doxcnYU6dmQAHzN02OoWnO5hGWd"><span>面试官压力项目应对方案</span></a></span></span><span>。这是这次面试我最想的理论部分，可以先看一下这个内容和讲解。</span></p>
+<p id="f-doxcnuwJfkQMLlyAqj1Pohj5bTe">本组问题讨论 Workflow 形式的 Agent、Agentic 性质，以及使用 Agent 相比传统方法的必要性。 <a href="#f-doxcnYU6dmQAHzN02OoWnO5hGWd"><span>面试官压力项目应对方案</span></a></p>
 
-<p id="f-doxcn73KJTTXSo1yoMJIbd2A9ef"><span>其他问题，我就点一下思路。如果是和该学习案例功能相关问题，对大家没有借鉴价值，我就直接不讲。</span></p>
+<p id="f-doxcn73KJTTXSo1yoMJIbd2A9ef"></p>
 
 <p id="f-doxcnqzq9jEfLjIYLcIbkZdtpVd"><span style="font-weight:bold">一、个人背景与既往AI项目经历梳理</span></p>
 
@@ -4805,7 +4796,7 @@ Agent层：Think（递归中心化，spawn 子 Agent）+ Act（工具执行）+ 
 
 <p id="f-doxcniTEjNabE1jJcraiQh74Gzh"><span>   - </span><span style="font-weight:bold">追问2：</span><span> 本质上，画像这块知识你们是用比较传统的方法去做的，对吗？</span></p>
 
-<p id="f-doxcnJ5VzJfWAbLU2STgIbx17Ff"><span style="font-weight:bold">我的回答思路：使用传统方法收集用户画像，然后总结成提示词加入模型上下文。</span></p>
+<p id="f-doxcnJ5VzJfWAbLU2STgIbx17Ff"><span style="font-weight:bold">参考回答思路：使用传统方法收集用户画像，然后总结成提示词加入模型上下文。</span></p>
 
 <p id="f-doxcnFceZed2iz9Giqviz2ykWoc"><span style="font-weight:bold">四、Agent输出的可控性与对齐保障</span></p>
 
@@ -4903,7 +4894,7 @@ Agent层：Think（递归中心化，spawn 子 Agent）+ Act（工具执行）+ 
 
 <p id="f-doxcnfCldGwXA3ILQmyxOwrO4hc"><span>   - </span><span style="font-weight:bold">追问3：</span><span> 用DPO的话，那你做强化的训练数据是什么？</span></p>
 
-<p id="f-doxcn7tKZEoqQDEZ5HjVq72Q13c"><span>   - </span><span style="font-weight:bold">追问4：</span><span>（简历核对）案例中的是INT8量化，跟你刚才讲的INT4不是一个模型吧？</span></p>
+<p id="f-doxcn7tKZEoqQDEZ5HjVq72Q13c"><span>   - </span><span style="font-weight:bold">追问4：</span><span>（方案核对）案例中的是INT8量化，跟你刚才讲的INT4不是一个模型吧？</span></p>
 
 <p id="f-doxcnLalmFFg2ElFKJjnB3L7BDd"><span style="font-weight:bold">六、Function Call / MCP / Skill 机制底层拷问（连环深挖）</span></p>
 
@@ -4921,7 +4912,7 @@ Agent层：Think（递归中心化，spawn 子 Agent）+ Act（工具执行）+ 
 
 <p id="f-doxcnTRaFcY3SvbouU8eimGY4hf"><span>   - </span><span style="font-weight:bold">追问6：</span><span> 那这个skill的执行是谁来做的？真正去执行的时候，是谁在执行？</span></p>
 
-<p id="f-doxcn0WoNNnrKjf0t5dd8TxO3Lh"><span>(HR面主要有一半篇幅都是让我在问问题）</span></p>
+<p id="f-doxcn0WoNNnrKjf0t5dd8TxO3Lh"></p>
 
 <p id="f-doxcnMYimcL4ck92FK7hXjUTL9g"><span style="font-weight:bold">一、岗位与研究院认知确认</span></p>
 
@@ -5117,7 +5108,7 @@ Agent层：Think（递归中心化，spawn 子 Agent）+ Act（工具执行）+ 
 
 <ol start="1"><li id="f-doxcnSIMEiUPL2meBv0keMR53Se"><span style="font-weight:bold">主问题： 我们只聊 AI 的项目——在该案例中有部分项目跟 AI 有关，涉及 MCP、RAG，主要是智能日历系统对吧？还有别的项目吗？</span></li></ol>
 
-<p id="f-doxcnfW16TPnDcsyB2pNJBbqqFh"><span>- 追问1： 你说的那个 RAG MCP Server，是属于组内的提效 / side project 去做 info 建设的，对吧？（这里我提了笔记里的RAG项目，多做项目真的有用）</span></p>
+<p id="f-doxcnfW16TPnDcsyB2pNJBbqqFh">追问1：RAG MCP Server 是用于组内提效或信息基础设施建设的项目吗？</p>
 
 <p id="f-doxcned80bHnXD7ZoyGg0BKiftc"><span>- 追问2： 所以真正会上到 Windows 业务里的核心还是智能日历，其它是你个人做的 side project 或参赛项目，对吗？</span></p>
 
@@ -5143,7 +5134,7 @@ Agent层：Think（递归中心化，spawn 子 Agent）+ Act（工具执行）+ 
 
 <p id="f-doxcn8RawDPGe8BPfaBPJ6xOOMc"><span style="font-weight:bold">五、本地模型选型与权衡</span></p>
 
-<ol start="1"><li id="f-doxcn6ZmKx4y4jJduFx9gJgyqXc"><span style="font-weight:bold">主问题： 你们最后没上线，但在开发调试调优的过程中，你觉得碰到的最大难点是什么？（这里碰到的最大的困难我提了架构选型这里，本节里总结说过，一定要总结几个类似的问题，你项目中遇到最困难的地方是如何解决的这样的问题，笔记里有总结在</span><span><span style="font-weight:bold"><a href="#f-doxcn8STRFyFTu85T5fdX20hkfg"><span>这里</span></a></span></span><span style="font-weight:bold">，大家可以参考</span><span>）</span></li></ol>
+<ol start="1"><li id="f-doxcn6ZmKx4y4jJduFx9gJgyqXc">主问题：在开发、调试与调优过程中遇到的最大难点是什么？可以结合架构选型、排查与解决过程分析。 <a href="#f-doxcn8STRFyFTu85T5fdX20hkfg"><span>这里</span></a></li></ol>
 
 <p id="f-doxcnCATl38AR5ARKl32iyzJXvg"><span>- 追问1： 你能具体说吗？当时怎么考虑的、最后怎么选型解决的？为什么你觉得这个方案是最优、最好的？</span></p>
 
@@ -5239,11 +5230,11 @@ Agent层：Think（递归中心化，spawn 子 Agent）+ Act（工具执行）+ 
 
 <a id="f-doxcnVZsQykjyWV7PdW0V7Ostez"></a>
 
-<p id="f-doxcnEtrNpDeBc89kTP8VI02Tgc"><span>这是粉丝朋友提供的素材，属于社招。朋友的背景是后端2年工作经验转行。滴滴这一次面试的内容，不考八股，甚至没考项目，而是问一个场景题，现场设计，讨论。这考察我们的综合能力。考题来说可以认为出的题都很好，整个场景题的题目设计，可以认为是面试官真的精心准备过的。里面涉及的很多内容，比如RAG是否应该被使用，场景题的设计方法，思路，以及后面一些和工程相关的一些讨论，都很值得我们学习。</span></p>
+<p id="f-doxcnEtrNpDeBc89kTP8VI02Tgc">本节以 RAG 架构与工程问题为学习案例。</p>
 
-<p id="f-doxcndnBCLGOL2rb6DxNODjGIKh"><span>本次面试真题中的</span><span><span><a href="/posts/agent-learning-23-learning-cases/#f-doxcnnL3zzXb1fMIntxbmi6Hice"><span>Agent场景设计题</span></a></span></span><span>以及</span><span><span><a href="/posts/agent-learning-09-rag-data-processing/#f-doxcn6O0mAp7YvxwJJSAG5fr1ue"><span>RAG是否被淘汰</span></a></span></span><span>，我是把它们两个问题抽离出来了，作为单独的专题，包含讲解视频。大家不妨先学习一下这个素材，再来看今天的面试问题。</span></p>
+<p id="f-doxcndnBCLGOL2rb6DxNODjGIKh">Agent 场景设计与 RAG 是否被淘汰，可以结合对应专题与讲解视频学习。 <a href="/posts/agent-learning-23-learning-cases/#f-doxcnnL3zzXb1fMIntxbmi6Hice"><span>Agent场景设计题</span></a> <a href="/posts/agent-learning-09-rag-data-processing/#f-doxcn6O0mAp7YvxwJJSAG5fr1ue"><span>RAG是否被淘汰</span></a></p>
 
-<p id="f-doxcnbjNi647clcOGAueix6FUtd"><span>我们可以发现，不同公司考察的内容都不一样。有的就侧重项目，考察项目。有的问八股，有的要写Leetcode题。今天的滴滴Agent开发岗位，甚至是没有问你的项目，考察你的综合能力，设计能力，现场和你探讨。今天的素材可以认为挺有价值的，我后面的讲解会有很多笔记内的跳转链接。因为问题不是目的，目的是这个问题从哪个角度去切入，去复习，去找到思路。本次面试问题都不是八股，不存在你说背一下就行，但是这些面试问题的思路又都在我们之前的笔记内容里，如果你笔记看得细致，你也可以对答如流。所以问题背后对应的笔记的知识和如何切入，是我们非常值得去学习的。</span></p>
+<p id="f-doxcnbjNi647clcOGAueix6FUtd">下面结合具体问题分析技术思路。</p>
 
 <a id="f-doxcnRSOsAJjNySjD3U0BKdm77d"></a>
 
@@ -5453,15 +5444,15 @@ Agent层：Think（递归中心化，spawn 子 Agent）+ Act（工具执行）+ 
 
 <a id="f-doxcnmUsJ0WrKtWb5gcvn5tBZTb"></a>
 
-<p id="f-doxcnBGDQcYzlbKeXzOiXaHr44d"><span>我之前有说p6以下的社招，以及校招，面试的内容其实差不多，可以互相参考的。从这次解析来看，</span><span style="font-weight:bold">p7的岗位也没有和我们之前的解析的那些面经差很多</span><span>，甚至可以说很多内容是差不多的。我来总体点评一下这次面试内容： </span><span style="font-weight:bold">vibecoding + SKILL ， Agent健壮性设计， Rag的优化策略，微调遇到的问题和解决方案，AgentTeam, Agent架构设计，Agent框架： 这几块校招也问，可以通用参考。</span></p>
+<p id="f-doxcnBGDQcYzlbKeXzOiXaHr44d">本组问题涉及 Vibe Coding、Skill、可靠性、RAG、微调、Agent Team、架构与框架选型。</p>
 
-<p id="f-doxcnba185gLka68ZTYwX4R5MRh"><span>另外一部分是本次面试问了好几个项目上线的问题，这块的我的建议是：</span></p>
+<p id="f-doxcnba185gLka68ZTYwX4R5MRh">以下为上线与工程实践相关建议。</p>
 
 <p id="f-doxcnhdJ26wPzOVQYP2mpxqllIz"><span style="font-weight:bold">校招同学</span><span>甚至级别低一点的同学不用强求项目上线，大概了解下项目上线的思路就好了。</span></p>
 
 <p id="f-doxcnAAxoIfNNisbyp2VbLA8uOh"><span>这里蕴含的思路是需要你关注的。</span></p>
 
-<p id="f-doxcnggCBpOEAvDX1G3KqFShBDc"><span>本次面试最值得我们关注的三个问题，</span><span><span><a href="/posts/agent-learning-12-langchain/#f-doxcnKJebU5ZkdNWAfEItAhCQOf"><span>Agent框架</span></a></span></span><span>， </span><span><span><a href="/posts/agent-learning-16-safety-reliability/#section-0079"><span>Agent健壮性</span></a></span></span><span>，</span><span><span><a href="/posts/agent-learning-17-production-engineering/#f-doxcnpxZpyskc95HNytUKb3dXTX"><span>项目上线问题</span></a></span></span><span>。我也都沉淀成专题笔记了。</span></p>
+<p id="f-doxcnggCBpOEAvDX1G3KqFShBDc">本组问题涉及 Agent 框架、健壮性与上线设计。 <a href="/posts/agent-learning-12-langchain/#f-doxcnKJebU5ZkdNWAfEItAhCQOf"><span>Agent框架</span></a> <a href="/posts/agent-learning-16-safety-reliability/#section-0079"><span>Agent健壮性</span></a> <a href="/posts/agent-learning-17-production-engineering/#f-doxcnpxZpyskc95HNytUKb3dXTX"><span>项目上线问题</span></a></p>
 
 <a id="f-doxcnUCMjAMo3C7ClOSmCdA0GUh"></a>
 
@@ -5551,13 +5542,13 @@ Agent层：Think（递归中心化，spawn 子 Agent）+ Act（工具执行）+ 
 
 <p id="f-doxcnmkJtQJtYGmvHadxlbi9o5g"><span style="font-weight:bold">💡 回答思路</span></p>
 
-<p id="f-doxcn5TTVWx2mzYAAgUiHwdBftd"><span>这个问题的回答就是要表示出来你的选型是有据可依的，是做了技术选型的。我专门重构了笔记</span><span><span><a href="/posts/agent-learning-12-langchain/#f-doxcnKJebU5ZkdNWAfEItAhCQOf"><span>2026 Agent开源框架部分</span></a></span></span><span>，在这一块的内容解析了这个问题。</span></p>
+<p id="f-doxcn5TTVWx2mzYAAgUiHwdBftd">框架选型需要有明确依据，可以结合 Agent 开源框架章节比较。 <a href="/posts/agent-learning-12-langchain/#f-doxcnKJebU5ZkdNWAfEItAhCQOf"><span>2026 Agent开源框架部分</span></a></p>
 
 <p id="f-doxcn7aBpj4C9aQazP7PHXwoWJg"><span style="font-weight:bold">7. 系统是如何做评估的，尤其是端到端的全链路评估？</span></p>
 
 <p id="f-doxcnXMM8yyqZ1ZEUMdjB45QDhg"><span style="font-weight:bold">💡 回答思路</span></p>
 
-<p id="f-doxcnJ9ubj1tUpSkO33OKIc6l3g"><span>这个题目的理论基础，就是</span><span><span><a href="/posts/agent-learning-15-evaluation-observability/#f-doxcnqrKdVGPbNYY8Xm3Fr8NVkh"><span>笔记Agent评估部分</span></a></span></span><span>，详细讲解了Agent评估的策略。请先看这一部分，理解理论基础。</span><br/><span>掌握理论基础以后，这个题目的回答，其实就是要把上面的理论基础，运用到自己的项目中，包装讲给面试官听。下面的内容是结合笔记里的Agent项目给出的参考答案，但实际上这个</span><span style="font-weight:bold">Agent评估的理论基础部分</span><span> 和 </span><span style="font-weight:bold">包装方法</span><span>是你更应该关注的。</span></p>
+<p id="f-doxcnJ9ubj1tUpSkO33OKIc6l3g">可以将 Agent 评估方法应用到具体项目，设计数据集、评估流程与验证方法。 <a href="/posts/agent-learning-15-evaluation-observability/#f-doxcnqrKdVGPbNYY8Xm3Fr8NVkh"><span>笔记Agent评估部分</span></a></p>
 
 <p id="f-doxcnQbQqfOZonzZGeuSc0FcQ6b"><span style="font-weight:bold">📘 详细回答</span></p>
 
@@ -5625,7 +5616,7 @@ Agent层：Think（递归中心化，spawn 子 Agent）+ Act（工具执行）+ 
 
 <p id="f-doxcn9Up37tfWZvXXwR96IJ5YAh"><span style="font-weight:bold">💡 回答思路</span></p>
 
-<p id="f-doxcn1M28QonQACNNdIY32uYOJd"><span>这个题目的理论基础，还是</span><span><span><a href="/posts/agent-learning-15-evaluation-observability/#f-doxcnqrKdVGPbNYY8Xm3Fr8NVkh"><span>笔记Agent评估部分</span></a></span></span><span>，在Agent评估阶段，我们讲了Agent评估的全生命周期，最后一个生命周期就是线上监控，我们先需要理解这个理论基础。</span><br/><span>这个问题是对于具体线上监控问题更加细节的询问，首先我们要知道一个概念：线下端对端的评估，我们可以准备评估集，跑预制的评估集打分，线上没法准备出数据集，线上监控的通常思路是：</span><br/><span style="font-weight:bold">建立检测手段（全链路日志，日志分析规则，指标聚合方法） + 告警</span><br/><span>有了思路以后，然后要结合这个思路，把这个思路融合到你自己的项目之中。以下答案也是以笔记里的Agent项目，假装它上线了，来组织一个参考答案。</span></p>
+<p id="f-doxcn1M28QonQACNNdIY32uYOJd">线下可以准备端到端评估集并打分。线上监控则需要全链路日志、日志分析规则、指标聚合与告警。下面以案例讨论一种上线监控设计方案，具体实现需要验证。 <a href="/posts/agent-learning-15-evaluation-observability/#f-doxcnqrKdVGPbNYY8Xm3Fr8NVkh"><span>笔记Agent评估部分</span></a></p>
 
 <p id="f-doxcnzqcQLygj2RnyDqH5JSAB5d"><span style="font-weight:bold">📘 详细回答</span></p>
 
@@ -5687,7 +5678,7 @@ Agent层：Think（递归中心化，spawn 子 Agent）+ Act（工具执行）+ 
 
 <p id="f-doxcnJaE2JUfsqWoEKkOnLXdTBd"><span style="font-weight:bold">💡 回答思路</span></p>
 
-<p id="f-doxcnNS3m1ksl7XZ356EcWN5BPb"><span>这个问题其实是上面那个问题的追问问题，上面这个问题我们回答了如何监测线上数据。这个小节面试官问的是，你具体线上检测的时候，你的业务指标是什么？具体来讲：你用哪些指标来定义的业务是否成功，比如哪些指标反映了你项目的影响（带来了多少收入，用户喜爱度多少，日活有没有增加？）以及这些指标是怎么被衡量的？（通过代码里记录的哪些指标聚合起来的？）。我们更重要的是掌握这里的思路，然后如果你的项目上线了，请好好思考（包装）这个问题。</span><br/><span>通常来说，这个指标的设计是需要精心考虑的，很多地方不光是要从技术角度分析，还需要产品的定义，从商业价值的角度去定义，真实的上线项目都是</span><span style="font-weight:bold">要精心设计，思考，讨论猜得到的</span><span>。所以你说你的项目上线了，这里请你也好好设计一下。</span></p>
+<p id="f-doxcnNS3m1ksl7XZ356EcWN5BPb"><span>这个问题其实是上面那个问题的追问问题，上面这个问题我们回答了如何监测线上数据。这个小节面试官问的是，你具体线上检测的时候，你的业务指标是什么？具体来讲：你用哪些指标来定义的业务是否成功，比如哪些指标反映了你项目的影响（带来了多少收入，用户喜爱度多少，日活有没有增加？）以及这些指标是怎么被衡量的？（通过代码里记录的哪些指标聚合起来的？）。我们更重要的是掌握这里的思路，然后如果你的项目上线了，请好好设计并验证这个问题。</span><br/><span>通常来说，这个指标的设计是需要精心考虑的，很多地方不光是要从技术角度分析，还需要产品的定义，从商业价值的角度去定义，真实的上线项目都是</span><span style="font-weight:bold">要精心设计，思考，讨论猜得到的</span><span>。所以你说你的项目上线了，这里请你也好好设计一下。</span></p>
 
 <p id="f-doxcnYbjaFkoOIhZ5qR10CUWhzd"><span style="font-weight:bold">📘 详细回答</span></p>
 
@@ -5787,7 +5778,7 @@ Agent层：Think（递归中心化，spawn 子 Agent）+ Act（工具执行）+ 
 
 <p id="f-doxcn1mz1k08hUiUw6racVTnhIb"><span style="font-weight:bold">💬 第一问：怎么看 Agent Teams？</span></p>
 
-<p id="f-doxcno5Lp4TDKq8uAIqjzpY6s0c"><span>我的观点是 </span><span style="font-weight:bold">不盲目使用 Agent Team，优先选择能解决问题的最简单架构</span><span>。Agent Team 相比 Subagent 多了一层“协调税”：每个 teammate 都维护独立上下文，token 成本更高；成员间通信、等待和结果汇总会增加延迟；同时还可能出现重复劳动、状态不一致和代码冲突。</span></p>
+<p id="f-doxcno5Lp4TDKq8uAIqjzpY6s0c"><span>实践适用范围是 </span><span style="font-weight:bold">不盲目使用 Agent Team，优先选择能解决问题的最简单架构</span><span>。Agent Team 相比 Subagent 多了一层“协调税”：每个 teammate 都维护独立上下文，token 成本更高；成员间通信、等待和结果汇总会增加延迟；同时还可能出现重复劳动、状态不一致和代码冲突。</span></p>
 
 <p id="f-doxcn7svzY3cCj4iUFG6eNxkgRf"><span>但在复杂任务中它有明显价值，比如任务能够拆成多个相对独立的部分并行执行，而且成员之间需要共享发现、互相质疑或动态接力，例如大型代码库分析、多模块开发、并行研究和多视角评审。</span></p>
 
@@ -5797,7 +5788,7 @@ Agent层：Think（递归中心化，spawn 子 Agent）+ Act（工具执行）+ 
 
 ###### 如果你来做系统设计，会如何保证 Agent 之间合理的分工协作？
 
-<p id="f-doxcn2naUynxlKzgqAaOHYczPif"><span>给一个思路，这个可以转换成</span><span><span><a href="/posts/agent-learning-11-multi-agent/#f-doxcntuQVjJ2aMEP4HF4qje1X9b"><span>Agent架构</span></a></span></span><span>的选择上，来谈Agent的选型策略，什么时候选多Agent/单Agent。 从我会精心考虑任务类型，不盲目选择多Agent，即使选择，也精心设计它的多Agent架构，从这个角度出发，就变成了我们背烂了的八股问题：MultiAgent的选型策略。</span></p>
+<p id="f-doxcn2naUynxlKzgqAaOHYczPif">本题可转换为 Agent 架构选型问题，结合任务类型分析何时选择单 Agent、多 Agent，以及采用哪一种多 Agent 架构。 <a href="/posts/agent-learning-11-multi-agent/#f-doxcntuQVjJ2aMEP4HF4qje1X9b"><span>Agent架构</span></a></p>
 
 <a id="f-doxcnoAheiQJIGfEp60fbisf5de"></a>
 
@@ -5821,7 +5812,7 @@ Agent层：Think（递归中心化，spawn 子 Agent）+ Act（工具执行）+ 
 
 <p id="f-doxcn7nWlp8qmJDtfmQgIAXCg4d"><span style="font-weight:bold">最后遇到了什么问题，是该学习案例报告里着重记录的</span><span>：该学习案例遇到了什么问题，如何解决提升的。</span></p>
 
-<p id="f-doxcntcrSEF7295ikveuJsQ4Uve"><span>所以问题答案我就不展开讲解了，直接看我们算法项目，总结的都有。</span></p>
+<p id="f-doxcntcrSEF7295ikveuJsQ4Uve">相关方法见算法学习案例。</p>
 
 <p id="f-doxcnNmCUWV6ZJHjqxlKZ7MGcLg"><span>给大家的启发也是，自己做算法项目的时候，这三个问题请你特别关注，注意记录。</span></p>
 
@@ -5843,11 +5834,11 @@ Agent层：Think（递归中心化，spawn 子 Agent）+ Act（工具执行）+ 
 
 <p id="f-doxcnJVfIV5XgKvCkaj97k0GQrc"><span style="font-weight:bold">前言</span></p>
 
-<p id="f-doxcnscenclA0wJVjYJCufpk9ze"><span>我知道的信息是这个面经是26年7月的面经，我看了一下，肯定是Agent开发岗，不会是算法岗。这里有一面，二面，三面，HR面的信息。 我先总结了一面，一面基本上都是八股，对于我们复习知识很有帮助，我接着这个一面，把相关的八股部分问题好好重构了，沉淀到了上面对应的知识讲解中。二面三面解析不解析再看吧，目前这里非常多面经，面经不是瓶颈，瓶颈是我每一期都是精讲，讲得比较慢。 反正我会尽量挑最新的，最有代表性的来讲解的。</span></p>
+<p id="f-doxcnscenclA0wJVjYJCufpk9ze"></p>
 
 <p id="f-doxcnX0ph9IGEmQDcdOEqruv6pd"><span style="font-weight:bold">一面点评：</span><span>一面整体难度不难，感觉问题都是八股题目。对于这些八股题目，即使我们没有专门背诵，我们也应该可以回答出来，也许不那么完美，不那么标准，但不至于回答不出来：比如Agent的长期/短期记忆，向量数据库和关系数据库区别等等。</span></p>
 
-<p id="f-doxcnDZ5JiHQus8re2MfK0qboHh"><span>对于八股，我的个人建议是：</span><span style="font-weight:bold">首先你别排斥它</span><span>，觉得听着这个八股这个词，你就觉得是贬义词。很多八股也是我们回答一些其他综合性问题的理论基础，可以认为还是挺有用的。</span></p>
+<p id="f-doxcnDZ5JiHQus8re2MfK0qboHh">基础知识可以为技术问题分析提供理论依据。</p>
 
 <p id="f-doxcnTkJJ0EhyUOA4l9DVnO5Uag"><span style="font-weight:bold">从学习的角度，八股我不建议是靠纯背的</span><span>，合理的做法是先理解，我们讲的每个八股对应都有知识点，你先去理解他，看讲解视频，包括我们面试真题讲解八股的时候，也有对八股问题的思路如何回答做讲解。 先理解，这样即使不背诵，你也能回答一二。面试前可以突击根据我们的这些八股的参考答案，背诵背诵，争取用最标准流畅的思路来回答。</span></p>
 
@@ -5855,7 +5846,7 @@ Agent层：Think（递归中心化，spawn 子 Agent）+ Act（工具执行）+ 
 
 ##### 一面
 
-<p id="f-doxcnNNsQGo6k4UY2r4kOEPQ06b"><span>一面的所有问题都是八股，八股特别适合收录至专题笔记，作为专题知识后面的面试真题参考。所以答案全部都是链接形式。同时这期面经对应的讲解视频，我有专门对这些八股，讲复习策略，学习思路，感兴趣的请看下面的讲解视频。</span></p>
+<p id="f-doxcnNNsQGo6k4UY2r4kOEPQ06b">本组基础问题通过链接指向对应知识专题与参考答案。</p>
 
 <a id="f-doxcnTJcec4XZpRP8wOhY5wBuKb"></a>
 
@@ -5883,7 +5874,7 @@ Agent层：Think（递归中心化，spawn 子 Agent）+ Act（工具执行）+ 
 
 ###### Agent 记忆的常见类型与作用？
 
-<p id="f-doxcnjdUf0mkJy3hSANXHAZVf1g"><span>经典必考问题，我把答案整理了一下，放在了Agent记忆模块专题，具体请参考：</span><span><span><a href="/posts/agent-learning-07-context-memory/#f-doxcnJVFtDv4a0fU60Asm8BFmeg"><span>Agent记忆面试真题</span></a></span></span><span>。</span></p>
+<p id="f-doxcnjdUf0mkJy3hSANXHAZVf1g">相关参考答案见 Agent 记忆面试真题。 <a href="/posts/agent-learning-07-context-memory/#f-doxcnJVFtDv4a0fU60Asm8BFmeg"><span>Agent记忆面试真题</span></a></p>
 
 <a id="f-doxcnXABUq16WID2SM7hviIIQMg"></a>
 
@@ -5933,7 +5924,7 @@ Agent层：Think（递归中心化，spawn 子 Agent）+ Act（工具执行）+ 
 
 <div style="margin-left:25px"><p id="f-doxcnNrPcBC4x2OZu5W1bXM3Fyc"><span>1. </span><span><span><a href="/posts/agent-learning-10-retrieval-advanced-rag/#f-doxcnTb4akf7iqpaAdqRewsSezh"><span>常见的向量数据库</span></a></span></span><span>。</span></p><p id="f-doxcnZKw0HJBhKT2WkxWBqtfVdf"><span>2. </span><span><span><a href="/posts/agent-learning-18-training-inference/#f-doxcnYko85EDnhmPBvF8uQJYvPb"><span>如何选择选择Agent项目中使用的模型</span></a></span></span><span>？</span></p><p id="f-doxcnHug1Qh8T6QJrgh0TmkxNRe"><span>3. </span><span><span><a href="/posts/agent-learning-12-langchain/#f-doxcnKJebU5ZkdNWAfEItAhCQOf"><span>Agent开发框架。</span></a></span></span></p></div>
 
-<p id="f-doxcnjoyVzumEBEp1PWPd54vTug"><span>后两个问题我是有专门的讲解视频的，也是比较高频的考点了，这里就不展开了。</span></p>
+<p id="f-doxcnjoyVzumEBEp1PWPd54vTug"></p>
 
 <p id="f-doxcnGrivYHll8v69ce5EfMeMwh"><span>对于第一个问题，选择什么向量数据库？ 这个问题相对来说没有那么高频，RAG本身就没有Agent问的多，但是如果你写了RAG项目，用了向量数据库，那么就是必须要准备的。思路就是，先去理解常见的向量数据库，然后根据特点来说明，你选择的向量数据库的原因。 </span></p>
 
@@ -6019,7 +6010,7 @@ Agent层：Think（递归中心化，spawn 子 Agent）+ Act（工具执行）+ 
 
 <a id="f-doxcnodHGJsC0koc1kMf45aMjGd"></a>
 
-<p id="f-doxcnZ6pSUPOZqbITFAj5r5KJdf"><span>今天这一期内容，是26年8月秋招阿里淘天校招一面的内容。一面内容，基本上是围绕项目展开提问的。只有一个问题，MCP 相关的技术，只面试官主动提问的。</span></p>
+<p id="f-doxcnZ6pSUPOZqbITFAj5r5KJdf"></p>
 
 <p id="f-doxcnLuSiTc6Qzd2p4LTrmbatje"><span>从这个角度来看，从八股，知识的角度上来分析，好像借鉴意义不大了。</span></p>
 
@@ -6029,13 +6020,13 @@ Agent层：Think（递归中心化，spawn 子 Agent）+ Act（工具执行）+ 
 
 <p id="f-doxcncBenvS39W1Aa1Iv3h8kFwd"><span>讲解知识之前，我们先说一下这个同学的背景：这个同学实习经历，本身的技术栈是和后端相关的，有比较丰富的后端实习经历，所以他的秋招一方面是投递： 后端 + AI的岗位，一方面是投递：纯AI(AI开发的岗位)。</span></p>
 
-<p id="f-doxcnS7sSKGrjAtUoTPLStZO4vh"><span style="font-weight:bold">本次面试的岗位，是纯AI的岗位。</span><span>（我写这个是给后面分析面试官为什么会问一些后端的内容，来做一些铺垫）。</span></p>
+<p id="f-doxcnS7sSKGrjAtUoTPLStZO4vh"></p>
 
-<p id="f-doxcncCiBYNTy3fnLbBLeDgAvXf"><span>同时，对于问题的解析，有一些问题其实是可以复用到笔记里已有的项目的，所以对于这些问题的解析，我会按照本节里的项目，来组织答案。</span></p>
+<p id="f-doxcncCiBYNTy3fnLbBLeDgAvXf">下面以本节学习案例组织技术问题的参考答案。</p>
 
-<p id="f-doxcnbtUE78zZGDqKBXpkz8WUEc"><span>有一些问题是和这个同学个人背景（后端项目） 相关的，提问就围绕了后端内容 + 传统技术，那么这一块内容我会不解析答案，只是带大家分析面试官为什么会这么问。</span></p>
+<p id="f-doxcnbtUE78zZGDqKBXpkz8WUEc"></p>
 
-<p id="f-doxcny2kYh5PNM7MqGtbwLT9oAb"><span>我在这一期面经，把下面的每一条，如果是面试前可以预测出来的，我都标出来，大家看看在一次面试之前，有多少面试内容是可以提前准备好的？</span></p>
+<p id="f-doxcny2kYh5PNM7MqGtbwLT9oAb"></p>
 
 <ol start="1"><li id="f-doxcnCIqQAD5t84jMvt5NJE9Tvd"><span>面向淘宝天猫真实业务，发现适合由 AI/Agent 解决的问题。</span></li></ol>
 
@@ -6085,7 +6076,7 @@ Agent层：Think（递归中心化，spawn 子 Agent）+ Act（工具执行）+ 
 
 ###### 商品内容评估的指标是怎么确定的？怎么衡量生成内容的好坏？
 
-<blockquote id="f-doxcnmdKL6lnsa6YBVrDMOIqaUg"><p id="f-doxcnRjr5Ppdq5WqNesjpINIwQb"><span style="font-weight:bold">【可预测】</span><span>很典型的问题，我在我们ForgePilot面试前突击，简历编写的原则，这两个小节，我们都说了，对于任何一条出现在简历上的数据：都要想清楚：</span><span style="font-weight:bold">你对于这个数据是怎么测的？测试方法是什么？Baseline是什么？数据量有多大？应该如何进一步提升？</span></p>
+<blockquote id="f-doxcnmdKL6lnsa6YBVrDMOIqaUg"><p id="f-doxcnRjr5Ppdq5WqNesjpINIwQb">业务指标需要说明基线、样本与测量方式，并核对实验条件和结果的有效性。</p>
 <p id="f-doxcnXVBGCFcZShrkt4FQEvWg9c"><span>按照这个思路去分析，可以说，这个问题的主问题，4.1 4.2 4.3 三个小节，我们都是可以去预测出来的。 4.4 这个问题不是那么好预测，这需要我们一些灵活应变的能力，现场发挥。</span></p></blockquote>
 
 <a id="f-doxcnSzmt98qkmda2CAofjPELUe"></a>
@@ -6102,24 +6093,24 @@ Agent层：Think（递归中心化，spawn 子 Agent）+ Act（工具执行）+ 
 
 ###### 距离满分还差将近 20 分，具体不足在哪里？怎样向 100 分改进？
 
-<p id="f-doxcn2Iyr1TCtXap5AAnmihEs4d"><span>     同样的，我还是把这个问题套用到了</span><span><span><a href="#f-doxcnXjWtC63PCKUVdWaZyVaaAc"><span>ForgePilot项目</span></a></span></span><span>中，你也用这个问题检验自己的项目是否做好准备了没吧！</span></p>
+<p id="f-doxcn2Iyr1TCtXap5AAnmihEs4d">可以结合 ForgePilot 案例检验对应方案。 <a href="#f-doxcnXjWtC63PCKUVdWaZyVaaAc"><span>ForgePilot项目</span></a></p>
 
 <a id="f-doxcnp82DmraCfp1u1M6JBHCPHe"></a>
 
 ###### 引入这套评估体系前后，整个产品链路最明显的变化是什么？
 
-<p id="f-doxcnJD9HRSJd9Y8Ef50nbNTxBe"><span>这个题不像上面三个题那么好面试前预测，需要一些灵活发挥的能力。这个题的解题思路和策略我还是套用到了</span><span><span><a href="#f-doxcnMFEdwGBw7pXEC9m7ZtDcH3"><span>ForgePilot项目</span></a></span></span><span>中。</span></p>
+<p id="f-doxcnJD9HRSJd9Y8Ef50nbNTxBe">本题的思路与策略可结合 ForgePilot 案例分析。 <a href="#f-doxcnMFEdwGBw7pXEC9m7ZtDcH3"><span>ForgePilot项目</span></a></p>
 
 <a id="f-doxcn4k7X07R3tgnS4m27mIVBRb"></a>
 
 ###### 把五条数据合在一个批次里交给 LLM 评估，为什么能节省调用量？
 
-<div style="margin-left:25px"><blockquote id="f-doxcnPgqrmeVsre0jt7DWJNnkux"><p id="f-doxcnoPjG1uDJ13uS3fpPOagXTL"><span style="font-weight:bold">【可预测】</span><span>这个也是高度可以预测的。背景是同学简历里写了，他项目里的一个优化策略，是之前数据是一条一条输入给大模型，然后输出的，现在采用了优化策略就是，5条一起输入，统一返回一个结果。接下来面试官其实就是针对这个具体细节来问，这么做的好处是什么，为什么选择5条，有没有实验。</span></p>
+<div style="margin-left:25px"><blockquote id="f-doxcnPgqrmeVsre0jt7DWJNnkux"><p id="f-doxcnoPjG1uDJ13uS3fpPOagXTL">Batch Size 取 5 的选择需要结合实验，分析吞吐、延迟和资源占用。</p>
 <p id="f-doxcnoSN3ju9XyL939jWOAcI7sg"><span>一直以来，我们都有一个经验就是，</span><span style="font-weight:bold">面试官特别喜欢问技术的选型，</span><span>选什么LLM模型，选什么向量数据库，选什么Agent框架。这些我们都应该想清楚，同时这些所有问题的答案，</span><span style="font-weight:bold">最好是有科学的理论指导+实验对比，因为实验数据的结论是证明选型有效最有力的证据</span><span>。 关于这一条的具体答案，我就不讲了，因为该学习案例没有相关问题，不具有参考性。</span></p></blockquote><div id="f-doxcn0bgjr4sZhPccNdFEnOiRAb" style="display:flex;gap:0.5em"><span style="min-width:1.5em">◦</span><div><span>5.1 为什么选择五条，而不是五十条或者五百条？</span></div></div><div id="f-doxcnTz1oIrsGGb3jyGMVHD0Jrf" style="display:flex;gap:0.5em"><span style="min-width:1.5em">◦</span><div><span>5.2 批处理有什么损失或者副作用？为什么不能一直增大批次？</span></div></div><div id="f-doxcnpiOyK0E8kHl7D6fST8DT6f" style="display:flex;gap:0.5em"><span style="min-width:1.5em">◦</span><div><span>5.3 选择五条有没有数据支撑？它是不是最优解？</span></div></div><div id="f-doxcnAJimcmSDcCctStOV28albg" style="display:flex;gap:0.5em"><span style="min-width:1.5em">◦</span><div><span>5.4 如果不是最优解，有没有探索过寻找最优解的路径？</span></div></div></div>
 
 <blockquote id="f-doxcnjvQHBq0YENBrBqWhdA8XLd"><p id="f-doxcnuD9Ov0LFwYP864wjXD0LQz"><span>【可预测】6.7 两个问题，我先讲一下背景。第六个问题的背景是，这个同学写了一个项目，是后端+大模型的，具体功能是类似于做了一个网关，去管理公司不同业务的调用大模型的预算管理之类的。</span></p>
 
-<p id="f-doxcnjeUprB333sEwZgVgKsWhWh"><span>第7个问题，是同学自己写简历的时候，写了多个业务同时访问，然后使用了悲观锁防止lost update的丢失，接下来的讨论基本围绕并发数据安全，锁怎么加，锁在哪里？如何释放等经典问题。</span></p>
+<p id="f-doxcnjeUprB333sEwZgVgKsWhWh">并发更新可能产生丢失更新，需要结合事务与悲观锁等机制分析。</p>
 <p id="f-doxcnXCnNX5VYjMeqKROij4azQe"><span>这两个问题，都是面试前可以预测出来的：你写上的东西，你就要知道是什么含义，以及写上的技术（比如这里同学写了锁，那么锁的安全问题，也是传统老八股了），也就必须弄清楚。</span></p>
 <p id="f-doxcnOQNSpHAU2vwTjvGTXfuhJh"><span>至于这两个问题的答案本身来说，可以认为就没有太大通用性了，所以这两个题的答案就不讲了。</span></p></blockquote>
 
@@ -6141,19 +6132,19 @@ Agent层：Think（递归中心化，spawn 子 Agent）+ Act（工具执行）+ 
 
 <div style="margin-left:25px"><blockquote id="f-doxcns09zQWrMSbH6tQCOVXaURe"><p id="f-doxcntvbdG72mAjL3ToPhBevcXb"><span>【可预测】这些问题仍然是可以预测的。</span></p>
 <p id="f-doxcnRQd33OcExZCfbV3sS4IOmf"><span>先讲一下背景，这个背景是同学做了一个类似和ClaudeCode 的Agent，会对代码仓库去检索，然后回答问题，更好的帮助人去理解代码。 下面这些问题，是围绕两个主问题：为什么用BM25 + pgvector 双路检索 和 对比ClaudeCode的工具效果对比。</span></p>
-<p id="f-doxcnYC2lpUIGHkh1iJeUqThXzh"><span>BM25 + PGVECTOR 双路检索，本身就是简历里写了的内容，同时作为RAG里面核心的内容，面试前不该没准备。 </span></p>
-<p id="f-doxcnMaIYujopvAo44rkUgFNbfd"><span>第二个问题，相比这些工具，你的优势是啥，这个基本上我看到他的简历我就会问，我们自己做的forgepilot项目，我最开始设计的时候，就准备了：为什么现在已经有cc这种平台，我还要做forgepilot， 面试经验丰富了，这个题基本上也是提前就预测出来了。</span></p>
-<p id="f-doxcnSmKlKLdIols4tNe2GeW5Hf"><span>这个题，我们就以简历里写的 </span><span><span><a href="#f-doxcnPZsjWREHnPIi28lXtrBQKe"><span>发布助手项目</span></a></span></span><span>为原型（这个项目就是笔记里RAG项目组装改造来的），来讲解。</span></p></blockquote><h6 id="f-doxcnuBQxQzyLbHVgG21KY9v7Zg"><span>为什么选择 BM25 和 pgvector 做双路召回？</span></h6></div>
+<p id="f-doxcnYC2lpUIGHkh1iJeUqThXzh">可以结合 BM25 与 pgvector 的混合检索分析召回方法。</p>
+<p id="f-doxcnMaIYujopvAo44rkUgFNbfd"></p>
+<p id="f-doxcnSmKlKLdIols4tNe2GeW5Hf">可以以 RAG 发布助手为例，分析检索与生成流程。 <a href="#f-doxcnPZsjWREHnPIi28lXtrBQKe"><span>发布助手项目</span></a></p></blockquote><h6 id="f-doxcnuBQxQzyLbHVgG21KY9v7Zg"><span>为什么选择 BM25 和 pgvector 做双路召回？</span></h6></div>
 
 <p id="f-doxcnQ0LXNshFV3WJRmy5ZSTHYd"><span>把这个问题套用到了</span><span><span><a href="#f-doxcnZTpwjixruBsJ3XdCa0pRtf"><span>智能发布助手（RAG项目改造）</span></a></span></span><span>中。</span></p>
 
-<div style="margin-left:25px"><h6 id="f-doxcnJiGPrwVJ1ITRzLCjBCwSkk"><span>是遇到了具体问题或 case 才选择这些技术，还是一开始就直接选用了？有没有技术选型过程？</span></h6><p id="f-doxcnDBDuH4W3Q672qgDhIPD8Hc"><span>问题套用到了 </span><span><span><a href="#f-doxcne0lQMn6TfqxTvN0L2RdVue"><span>智能发布助手相关面试题</span></a></span></span><span>中。</span></p><h6 id="f-doxcn2Ha9pGquYuoeRoizzkgTHg"><span>有没有用过 Codex、GPT、Claude Code 等通用工具本身的代码库探索能力？</span></h6><h6 id="f-doxcnjnXhXqjYR3rM82G18CHc5f"><span>有没有把你的方案和这些工具做过对比？它们是怎么实现的？</span></h6><h6 id="f-doxcnde9rO3H33di1URkAsXZnrr"><span>相比这些工具，你的项目优势主要在哪里？</span></h6><p id="f-doxcnVWyzYGKX1qiG1gMnChFQvd"><span style="font-weight:bold">💡 思路：</span></p><p id="f-doxcnLdh7VbOegc7ubgEmp7XeVb"><span>这个问题的背景就是这个同学做了双路检索（RAG）来处理代码仓库。因此面试官问了8.3, 8.4, 8.5 三个问题。我把这三个问题，总结成了一个：</span><span style="font-weight:bold">你有没有对比过claudecode，codex功能的检索模块，他们是怎么实现的，对比他们你的双路检索有什么优势吗？</span></p><p id="f-doxcn3olYQlWBFHiuS3LxZxr57d"><span>这里的回答思路，可以参考本节</span><span><span><a href="/posts/agent-learning-09-rag-data-processing/#f-doxcn6O0mAp7YvxwJJSAG5fr1ue"><span>RAG趋势探讨</span></a></span></span><span>的章节，第一个角度是虽然主流的coding 框架都放弃了RAG, 不代表用RAG的方案就不好，它仍然有它的优势。 </span></p><p id="f-doxcnqmG5EIUjsqJA8zRaqEVX8e"><span>如果还能够结合当前项目的特点，比如对RAG做了相应适配（比如我们forgepilot仓库，代码仓库大小超过300GB，主流coding agent都不能用） + 做了实验对比，说明效果更好，这个答案就更加丰满和有说服力。</span></p><p id="f-doxcn4153zMbsR5G9BxBb5yaE8e"><span>但是我不太知道这个同学的具体业务场景，所以咱们就只从第一个叫角度来回答一下。（因为缺少具体业务场景，下面这个回答可以认为有点单薄，我们就当借助这个问题，复习RAG是否被取代了的这个知识点吧）</span></p><p id="f-doxcn9iidYgjznTbxRTRW1if1vb"><span>📝 参考回答</span></p><p id="f-doxcnKHRmU5O2eZSyfvedoGdi3b"><span>Claude Code 和 Codex 的基础代码检索都可以概括为</span><span style="font-weight:bold"> Agentic Search + grep/ripgrep</span><span>：模型自己决定搜什么，读取命中的代码，再根据新线索继续搜索。Claude Code 主要通过专用搜索工具调用，Codex 的公开本地实现则通过命令执行工具运行 rg。这种方式灵活，能直接查看工作区的最新代码，很适合跨文件探索和问题排查。</span></p><p id="f-doxcng7mVlOc3twr5ZcgETtOhJz"><span>我们采用 </span><span style="font-weight:bold">关键词 + 向量双路检索，并不是认为这种方式不好，而是做了不同的取舍</span><span>：关键词检索匹配函数名、配置项等明确线索，向量检索补充自然语言描述与代码之间的 语义匹配，再把融合、筛选后的相关片段交给模型。</span></p><p id="f-doxcnxsEg20FlmW7cZzICDYwmxv"><span style="font-weight:bold">我们看重的是在线延迟和 Token预算的可控性。</span><span>通过预建索引，尽量在一次检索中找齐证据，减少模型反复“决定搜什么—调用工具—读取结果”的往返，也减少中间内容进入上下文。我们的代码相对来说比较稳定，修改不会特别频繁，更多的情况是基于代码仓库，进行理解和分析，这样在代码变动后，进行分块，向量维护的开销的成本会降低，在多轮对话中，检索速度更快，也会更省Token的好处会更明显。</span></p></div>
+<div style="margin-left:25px"><h6 id="f-doxcnJiGPrwVJ1ITRzLCjBCwSkk"><span>是遇到了具体问题或 case 才选择这些技术，还是一开始就直接选用了？有没有技术选型过程？</span></h6><p id="f-doxcnDBDuH4W3Q672qgDhIPD8Hc"><span>问题套用到了 </span><span><span><a href="#f-doxcne0lQMn6TfqxTvN0L2RdVue"><span>智能发布助手相关面试题</span></a></span></span><span>中。</span></p><h6 id="f-doxcn2Ha9pGquYuoeRoizzkgTHg"><span>有没有用过 Codex、GPT、Claude Code 等通用工具本身的代码库探索能力？</span></h6><h6 id="f-doxcnjnXhXqjYR3rM82G18CHc5f"><span>有没有把你的方案和这些工具做过对比？它们是怎么实现的？</span></h6><h6 id="f-doxcnde9rO3H33di1URkAsXZnrr"><span>相比这些工具，你的项目优势主要在哪里？</span></h6><p id="f-doxcnVWyzYGKX1qiG1gMnChFQvd"><span style="font-weight:bold">💡 思路：</span></p><p id="f-doxcnLdh7VbOegc7ubgEmp7XeVb">本题的背景是通过双路检索处理代码仓库，可比较 Claude Code、Codex 的检索模块，以及双路检索的适用条件与优势。</p><p id="f-doxcn3olYQlWBFHiuS3LxZxr57d"><span>这里的回答思路，可以参考本节</span><span><span><a href="/posts/agent-learning-09-rag-data-processing/#f-doxcn6O0mAp7YvxwJJSAG5fr1ue"><span>RAG趋势探讨</span></a></span></span><span>的章节，第一个角度是虽然主流的coding 框架都放弃了RAG, 不代表用RAG的方案就不好，它仍然有它的优势。 </span></p><p id="f-doxcnqmG5EIUjsqJA8zRaqEVX8e"><span>如果还能够结合当前项目的特点，比如对RAG做了相应适配（比如我们forgepilot仓库，代码仓库大小超过300GB，主流coding agent都不能用） + 做了实验对比，说明效果更好，这个答案就更加丰满和有说服力。</span></p><p id="f-doxcn4153zMbsR5G9BxBb5yaE8e"><span>但是我不太知道这个同学的具体业务场景，所以咱们就只从第一个叫角度来回答一下。（因为缺少具体业务场景，下面这个回答可以认为有点单薄，我们就当借助这个问题，复习RAG是否被取代了的这个知识点吧）</span></p><p id="f-doxcn9iidYgjznTbxRTRW1if1vb"><span>📝 参考回答</span></p><p id="f-doxcnKHRmU5O2eZSyfvedoGdi3b"><span>Claude Code 和 Codex 的基础代码检索都可以概括为</span><span style="font-weight:bold"> Agentic Search + grep/ripgrep</span><span>：模型自己决定搜什么，读取命中的代码，再根据新线索继续搜索。Claude Code 主要通过专用搜索工具调用，Codex 的公开本地实现则通过命令执行工具运行 rg。这种方式灵活，能直接查看工作区的最新代码，很适合跨文件探索和问题排查。</span></p><p id="f-doxcng7mVlOc3twr5ZcgETtOhJz"><span>我们采用 </span><span style="font-weight:bold">关键词 + 向量双路检索，并不是认为这种方式不好，而是做了不同的取舍</span><span>：关键词检索匹配函数名、配置项等明确线索，向量检索补充自然语言描述与代码之间的 语义匹配，再把融合、筛选后的相关片段交给模型。</span></p><p id="f-doxcnxsEg20FlmW7cZzICDYwmxv"><span style="font-weight:bold">我们看重的是在线延迟和 Token预算的可控性。</span><span>通过预建索引，尽量在一次检索中找齐证据，减少模型反复“决定搜什么—调用工具—读取结果”的往返，也减少中间内容进入上下文。我们的代码相对来说比较稳定，修改不会特别频繁，更多的情况是基于代码仓库，进行理解和分析，这样在代码变动后，进行分块，向量维护的开销的成本会降低，在多轮对话中，检索速度更快，也会更省Token的好处会更明显。</span></p></div>
 
 <a id="f-doxcnnpWxW48lfyRS5BpLeq4YPc"></a>
 
 ###### MCP 是为了解决什么问题而提出的？
 
-<p id="f-doxcnBnOS7rNB7SbdaeLN7yc1Ib"><span style="font-weight:bold">💡</span><span>这个问题是这一次面试，唯一一个脱离于项目之外，面试官主动问的问题。算是关于MCP的八股问题了，我把这个题专门总结到了MCP章节，请参考： </span><span><span><a href="/posts/agent-learning-06-mcp-integrations/#f-doxcne4ozLba2eMh2hpE3JsT1tc"><span>MCP的新结束&amp;趋势+面试真题</span></a></span></span></p>
+<p id="f-doxcnBnOS7rNB7SbdaeLN7yc1Ib">MCP 相关问题见对应章节。 <a href="/posts/agent-learning-06-mcp-integrations/#f-doxcne4ozLba2eMh2hpE3JsT1tc"><span>MCP的新结束&amp;趋势+面试真题</span></a></p>
 
 <div id="f-doxcniZ8hzGYXFJg7CMArmTAqof" style="margin-left:25px"><p id="f-doxcntK4cH6qTnW0ItbpAOjI2bc"><span>9.1 MCP 这种工具形式，给 Claude Code、Codex 等通用 Agent 带来了哪些问题？</span></p><div id="f-doxcnrAIWO63UmjTBMA2AlPz1Cf" style="display:flex;gap:0.5em"><span style="min-width:1.5em">◦</span><div><span>9.2 在大模型调用外部工具方面，目前业界更成熟、更倾向采用的做法是什么？</span></div></div><div id="f-doxcnPwvn7Jhm9S1oHPj9LsCT3f" style="display:flex;gap:0.5em"><span style="min-width:1.5em">◦</span><div><span>9.3 有没有了解过用什么方法替代传统的 MCP 调用形式？</span></div></div></div>
 
@@ -6173,9 +6164,9 @@ Agent层：Think（递归中心化，spawn 子 Agent）+ Act（工具执行）+ 
 
 <p id="f-doxcnV7CLJeayBkcT6jgmKE4jkb"><span><span style="font-weight:bold"><a href="/posts/agent-learning-15-evaluation-observability/#f-doxcnqrKdVGPbNYY8Xm3Fr8NVkh"><span>Agent评测理论</span></a></span></span><span>（</span><span style="font-weight:bold">黄金数据集的构建，基于评测驱动开发，评估方法的建立</span><span>），这些内容在本节里的Agent评测中都有。我们需要学习这一部分，</span><span style="font-weight:bold">补齐Agent评测的基础理论</span><span>，才能跟上面试官的节奏。</span></p>
 
-<p id="f-doxcnPx4h1fuUxLyEfe2v9wGE8b"><span style="font-weight:bold">⚠️ 注意：</span><span>评测的相关问题，我在讲解视频和答案，就会</span><span style="font-weight:bold">以我们的ForgePilot 为例</span><span>，来进行回答。大家如果使用自己的项目，也是这样，把这些问题</span><span style="font-weight:bold">换成你自己的项目的评测部分</span><span>，检验你能否回答的上来。不要因为是问的别人的项目就觉得这次面试参考意义不大。相反，</span><span style="font-weight:bold">Agent评测几乎是我们Agent项目都应该准备的部分</span><span>，这次面试的内容也很好的帮助了我们复习了评测的理论基础，并且检验我们对自己项目的Agent评测部分能否有一个很好的回答。</span></p>
+<p id="f-doxcnPx4h1fuUxLyEfe2v9wGE8b">评测问题以 ForgePilot 为学习案例，结合具体项目的数据集、流程与指标进行分析。</p>
 
-<p id="f-doxcn26Vv5bEJw3ZGiY4OdbqEZg"><span>如果这个岗位不是做后端的东西，或者简历上没有涉及后端，是一个纯大模型的岗，那面试官可能不会问后端内容。</span></p>
+<p id="f-doxcn26Vv5bEJw3ZGiY4OdbqEZg"></p>
 
 <p id="f-doxcnUvU8Ym2dHFPKGguwYimxpc"><span style="font-weight:bold">一、个人背景与重点经历选择</span></p>
 
@@ -6208,7 +6199,7 @@ Agent层：Think（递归中心化，spawn 子 Agent）+ Act（工具执行）+ 
 
 <p id="f-doxcnZsnoPxoF5clBMORGwI1dib"><span>↳ </span><span style="font-weight:bold">追问4：</span><span> 最后是怎么解决的？</span></p>
 
-<blockquote id="f-doxcnTPvNvyyuq97Z4lLocYsrag"><p id="f-doxcnUh1Frk8Ra1383szEx3Jxsg"><span style="font-weight:bold">💡 点评：</span><span>通常这类遇到什么问题，如何解决。 我是都建议大家</span><span style="font-weight:bold">提早准备</span><span>的。即使你真的做过了项目，不提前准备，面试突然遇到这个问题可能都不好回答，更不要说你是包装的，铁定答不出来。 其实我们在准备我们ForgePilot项目面试前突击，就准备了一下这个问题。当时准备的思路是</span><span style="font-weight:bold">线上遇到了问题，如何定位，然后如何解决</span><span>的。和这个面试官追问的2,3,4 基本同一个思路。 参考答案可以看</span><span><span><a href="#f-doxcntApcAXwmZ4B0gvCkgYGNje"><span>这里</span></a></span></span><span>。</span></p></blockquote>
+<blockquote id="f-doxcnTPvNvyyuq97Z4lLocYsrag"><p id="f-doxcnUh1Frk8Ra1383szEx3Jxsg">线上问题需要说明定位、修复与验证过程，可参考相关技术问答。 <a href="#f-doxcntApcAXwmZ4B0gvCkgYGNje"><span>这里</span></a></p></blockquote>
 
 <p id="f-doxcnyGpBEuhy6eYabPpft3Iqfc"><span style="font-weight:bold">四、确定性规则与大模型评测的分工</span></p>
 
@@ -6217,7 +6208,7 @@ Agent层：Think（递归中心化，spawn 子 Agent）+ Act（工具执行）+ 
 
 <p id="f-doxcnk7bd855rwodXpTWl7nGdWd"><span style="font-weight:bold">1. 主问题： 你说用规则结合大模型评测结果，具体哪些用规则？为什么不能全部用模型？</span></p>
 
-<p id="f-doxcnzcaPEuV4iz7NOyRF3jb9fs"><span>↳ </span><span style="font-weight:bold">追问1：</span><span> 你说的确定性规则，具体是什么？</span></p>
+<p id="f-doxcnzcaPEuV4iz7NOyRF3jb9fs">线上问题需要说明定位、修复与验证过程，相关参考答案见链接。</p>
 
 <p id="f-doxcn2Vw7TgxpW9GlGCqqLbp6Vg"><span>↳ </span><span style="font-weight:bold">追问2：</span><span> 生成描述有关键词要求？这些关键词从哪来？</span></p>
 
@@ -6244,7 +6235,7 @@ Agent层：Think（递归中心化，spawn 子 Agent）+ Act（工具执行）+ 
 
 <p id="f-doxcnmlE6YCUjpExYR3SIbY9JZd"><span style="font-weight:bold">六、评测体系本身的有效性、样本分布与边界覆盖</span></p>
 
-<blockquote id="f-doxcnrS0Ub6OJYGHZtsdPZWObf9"><p id="f-doxcnMjCroAM84WsbfOUjspXYfb"><span style="font-weight:bold">💡 点评：</span><span>这里其实就涉及了两个理论知识： </span><span><span style="font-weight:bold"><a href="/posts/agent-learning-15-evaluation-observability/#f-doxcnZYhnHY2GS6H9skqz2DVeLn"><span>如何判断你的评估方法是准确的</span></a></span></span><span style="font-weight:bold">？</span><span><span style="font-weight:bold"><a href="/posts/agent-learning-15-evaluation-observability/#f-doxcnjhkPqs3LFm1ApUComHDpRc"><span>如何构建标准的评估数据集</span></a></span></span><span style="font-weight:bold">?</span><span> 这两个理论部分。我把这两个理论点</span><span style="font-weight:bold">加入了Agent评测笔记之中</span><span>了。包括笔记这两处的笔记，也总结了对应的面试小卡片，对于这个问题大家把这两个笔记消化好就行了。</span></p></blockquote>
+<blockquote id="f-doxcnrS0Ub6OJYGHZtsdPZWObf9"><p id="f-doxcnMjCroAM84WsbfOUjspXYfb">本题涉及“如何判断评估方法准确”和“如何构建标准评估数据集”两个知识点，可结合 Agent 评测章节学习。 <a href="/posts/agent-learning-15-evaluation-observability/#f-doxcnZYhnHY2GS6H9skqz2DVeLn"><span>如何判断你的评估方法是准确的</span></a> <a href="/posts/agent-learning-15-evaluation-observability/#f-doxcnjhkPqs3LFm1ApUComHDpRc"><span>如何构建标准的评估数据集</span></a></p></blockquote>
 
 <p id="f-doxcnzwmDDIKlAU0KFufk7wXgsh"><span style="font-weight:bold">1. 主问题： 我指的是评测，不是生成。规则加 </span><span style="font-weight:bold"><span><span>LLM-as-a-Judge</span></span></span><span style="font-weight:bold"> 的架构出来以后，总要验证这套评测体系是好还是坏。尤其是 LLM 评价相关的部分，基准集合从哪来，有什么要求？</span></p>
 
@@ -6264,7 +6255,7 @@ Agent层：Think（递归中心化，spawn 子 Agent）+ Act（工具执行）+ 
 
 <p id="f-doxcnbwNXDwETL1vJ9htJyAKTne"><span>↳ </span><span style="font-weight:bold">追问3：</span><span> 你评测时只针对好的样本吗？</span></p>
 
-<p id="f-doxcnXr8cKVpY5PzV6Lnb48UP1b"><span style="font-weight:bold">💡 点评：第七点和第八点属于后端内容</span><span>，和同学简历项目强相关，和大模型岗位又弱相关，如我开头所说，</span><span style="font-weight:bold">这里就不具体解析了</span><span>。</span></p>
+<p id="f-doxcnXr8cKVpY5PzV6Lnb48UP1b">后端问题需要结合具体业务与系统设计分析。</p>
 
 <p id="f-doxcngF4r1InqITBeFh4B0aGXVc"><span style="font-weight:bold">七、并发配额扣减的方案选择与技术取舍</span></p>
 

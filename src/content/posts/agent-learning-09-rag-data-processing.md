@@ -151,7 +151,7 @@ verification: {"status": "not-run", "scope": "本次仅整理资料；示例代�
 
 <a id="f-doxcnHoc6I0zN4UumLdvp7ws6ib"></a>
 
-<p id="f-doxcnrCXrcHyAABQ0jebzmmPTQb"><span style="font-weight:bold">案例问题：</span><span>我现在做的项目是一个在网上搜索相关演员信息的项目，然后匹配准确度，目前我召回的文本和内容不相关，有一些什么优化方法啊，我需要从多个维度，比如名字+项目+身份 去联合搜索吗？分块本案例用什么好？用你的项目的递归分块吗？ 我需要使用数据库吗？怎么包装一下呢？我目前项目就是用Langgraph写的demo，能帮我做一下技术选型吗？</span></p>
+<p id="f-doxcnrCXrcHyAABQ0jebzmmPTQb"><span style="font-weight:bold">案例问题：</span><span>我现在做的项目是一个在网上搜索相关演员信息的项目，然后匹配准确度，目前我召回的文本和内容不相关，有一些什么优化方法啊，我需要从多个维度，比如名字+项目+身份 去联合搜索吗？分块本案例用什么好？用你的项目的递归分块吗？ 我需要使用数据库吗？如何扩展呢？我目前项目就是用Langgraph写的demo，能帮我做一下技术选型吗？</span></p>
 
 <p id="f-doxcnPGFR5vry83Qbv9cmVbP65f"><span style="font-weight:bold">回答：</span><span>1.分关键字检索思路是对的，但是你看是不是不是分开检索，而是把这些关键词合并。拆开反而会放大噪声。比如 张三，红楼梦，贾宝玉，你提取这三个关键字，然后组合搜索。</span></p>
 
@@ -171,7 +171,7 @@ verification: {"status": "not-run", "scope": "本次仅整理资料；示例代�
 
 <p id="f-doxcnPvP7PY2kGj1vxRIIBzu16e"><span>但飞书目录重构真的很麻烦，我没想到一个很好的方案去重构目录，如果我要改动目录，标号都得一个个改，而且文档内的很多链接索引可能都乱了。</span></p>
 
-<p id="f-doxcnZDqFoooMZN4wMbPmxLvvie"><span>大家可以先把所有的子章节都折叠，虽然一级目录可能没有特别有条例，但一级目录只有不到20个，不过你可以自己从这一级目录中找到你需要的，然后再阅读。后面我想到好方法重构目录，</span><span style="font-weight:bold">我会重构的</span><span>。）</span></p>
+<p id="f-doxcnZDqFoooMZN4wMbPmxLvvie"></p>
 
 
 <a id="section-0093"></a>
@@ -181,7 +181,7 @@ verification: {"status": "not-run", "scope": "本次仅整理资料；示例代�
 
 <p id="f-doxcnyfqw7jK8iPOGPk1cuFMFKc"><span>RAG的话，其实该学习案例就是一个最好的经典RAG的例子。所以建议了解RAG的八股知识后，可以去了解这个项目，这个项目把RAG最经典的环节都串起来了，并且这个项目配的模拟面试/项目复习的SKILL，就是去掌握项目，学习RAG各个环节的好方法。 该项目部分也会配一些该项目面试的真题，和前面的RAG理论相互补充。学好这个理论/项目，经典RAG就差不多了。</span></p>
 
-<p id="f-doxcn9GeD7l6BDlnz3lj9MDGtOg"><span>RAG进阶是：Graph RAG, Agentic RAG, 知识图谱这里。 本节总结了基本概念，我的策略是问到我就说会，讲述我的概念，但是我没有深入，因为这是RAG进阶技巧，对于那种对RAG要求比较高的岗位，专门做RAG的组可能会用。如果求职方向就是大模型应用，大模型算法，算法工程，没有指定RAG方向的话，没有余力的话，对于RAG的进阶部分，可以就只看一下笔记本节</span><span style="font-weight:bold">RAG进阶</span><span>的概念，了解基本概念就好。</span></p>
+<p id="f-doxcn9GeD7l6BDlnz3lj9MDGtOg">RAG 进阶方向包括 Graph RAG、Agentic RAG 和知识图谱。先了解基本概念，再根据具体任务和对 RAG 的要求决定是否深入。</p>
 
 <p id="f-doxcnOEflSoq7a54lakEyRLleYH"><span>看本节笔记也能够理解RAG大概的步骤。这里更像一个概念卡片，带大家理解具体步骤。</span><span style="font-weight:bold">不过更具体的，深入的，或者不理解的地方，大家要自己去网上搜一下资料</span><span>。因为这些东西其实都是比较现成的知识，基本上每本书都会讲，所以网上资料很多，大家要加强理解的就搜关键字，视频都行。</span></p>
 
@@ -363,7 +363,7 @@ verification: {"status": "not-run", "scope": "本次仅整理资料；示例代�
 
 ##### 输入文件处理
 
-<p id="f-doxcn8ghsXAYND1n1oFtWi3U2Mb"><span>在进行文档分割前，我们先要对输入的各种类型的文件进行处理，转换成文本内容，进行切块。这个地方倒是算不上是RAG里面的重要内容，属于传统方法的内容。不过该学习案例是以PDF作为输入，转换成Markdown的文本，进行后续切块的，根据粉丝朋友们反馈，</span><span style="font-weight:bold">这里面面试被问得很多</span><span>，所以我干脆把这里沉淀成专题笔记：PDF到MarkDown的处理，相关的面试真题可以参考这里：</span><span><span><a href="/posts/agent-learning-23-learning-cases/#f-doxcnnbMYD5vpjPBU2aHDrzevVi"><span>PDF处理问题</span></a></span></span><span>。 </span></p>
+<p id="f-doxcn8ghsXAYND1n1oFtWi3U2Mb">在文档分割前，需要将输入文件转换为文本，再进行切块。本案例以 PDF 为输入并转换为 Markdown，相关处理方法与问题见“PDF 处理问题”。 <a href="/posts/agent-learning-23-learning-cases/#f-doxcnnbMYD5vpjPBU2aHDrzevVi"><span>PDF处理问题</span></a></p>
 
 <p id="f-doxcnTB2M8U5uL6IrJk1XRqxmFg"><span>可以认为这个知识点</span><span style="font-weight:bold">纯粹是为了应付你使用本节RAG项目，面试官可能会问到的相关的问题。</span><span>如果你没有用该学习案例，可以认为你可以放一放这个问题，这个问题不算是RAG里面很重要的知识点。</span></p>
 
@@ -902,9 +902,9 @@ nodes = [
 
 <p id="f-doxcnvfRtjPAP1xSOg0WzcOw0Ig"><span>💡 </span><span style="font-weight:bold">答题思路</span></p>
 
-<p id="f-doxcnTidcJlN4vsfdog3gYyybCg"><span>这个问题并</span><span style="font-weight:bold">不是出自真实面试题</span><span>，而是我为了帮助大家掌握基础知识主动添加的。现实面试中通常不会直接这样问，因为这种问法比较固定，也比较偏向概念背诵。</span></p>
+<p id="f-doxcnTidcJlN4vsfdog3gYyybCg">下面的问题用于检验常见分块策略的基础知识。</p>
 
-<p id="f-doxcnucMpgattGGTcXX1TgYvoBn"><span>但我仍然把它放在这里，是希望大家能够有意识地记住常见分块策略，以及每种策略的基本原理、优缺点和适用场景。后面可以看到，真实面试中的问题通常会比这道题更深入，例如追问项目为什么选择某种策略、内容跨块怎么办、Chunk Size 如何确定，以及分块效果如何评测。</span></p>
+<p id="f-doxcnucMpgattGGTcXX1TgYvoBn">需要掌握常见分块策略的原理、优缺点和适用场景，并进一步分析选型理由、跨块内容、Chunk Size 与分块效果评测。</p>
 
 <p id="f-doxcn0tQgZHVKNjndkCCgTI7R0d"><span>这些真实问题虽然问法不同，但回答的思路和出发点仍然来自本题涉及的理论基础。只有先掌握不同分块策略的特点，后面才能根据文档类型和实际问题完成选型与调优。（参考答案有点长，面试可以稍微简化一点）</span></p>
 
@@ -936,7 +936,7 @@ nodes = [
 
 <p id="f-doxcnKPp2X3qfZGhIu514nasP9e"><span style="font-weight:bold">我知道，大部分人在个人项目中不一定会把每一个技术选型都做得如此规范。</span><span> 即使在真实企业项目中，也不是所有选型都会进行非常完整的实验。因此不需要因为自己的项目没有覆盖全部流程而怀疑自己，但需要理解每一步为什么这样设计，并提前结合自己的项目组织答案。</span></p>
 
-<p id="f-doxcnWO1v792FSBupHZD5Kb2KSh"><span style="font-weight:bold">这里需要灵活运用理论和项目表达技巧。</span><span> 所谓“包装”，不是捏造不存在的数据或结果，而是把自己已经做过的方案、遇到的问题、能够解释的取舍，以及后续可以采用的验证方式组织成一条完整逻辑。没有实际执行过的实验，可以表述为后续验证方案，不要把计划说成已经取得的结果。</span></p>
+<p id="f-doxcnWO1v792FSBupHZD5Kb2KSh">将已经验证的方案、遇到的问题、技术取舍和后续验证方式组织成完整逻辑。未执行的实验应记录为后续验证方案。</p>
 
 <p id="f-doxcnFsbR6DvVTqxOjUekxLxpad"><span style="font-weight:bold">面试前最好针对自己的文档类型、分块方式、Chunk Size、Overlap、异常情况和评测方法准备一版项目化答案。</span><span> 但也不可能预先准备所有追问。面对新的问题时，需要以扎实的理论基础为底层依据，再结合项目场景灵活分析和随机应变。</span></p>
 
@@ -1077,7 +1077,7 @@ def split_by_sentence(text: str, max_length: int = 500) -&gt; list[str]:
 
 <p id="f-doxcnEK4mUScSrUiDO6Mgvaiq7b"><span>💡 </span><span style="font-weight:bold">答题思路</span></p>
 
-<p id="f-doxcn23QvYbOY7Y1gsJEBRi9Zne"><span style="font-weight:bold">虽然面试官问有没有更高级的技巧，但是建议也不要特别盲目地说或者编造。</span><span> 实在不行就讲我们的策略是基于这个科学的方法论驱动的，把这个5.3.3 的方法论再讲一遍。如果想要将一些高级的技巧，比如说根据子块检索，召回父块这些策略，一定要找到明确的需求出发点，说明选择这个技术是合理的。能现场包装当然是更好的，但是如果包装露馅无法自圆其说，还不如不包装。我当时估计回答的就是没有，最后也通过了，面试官对我评价还挺高的，有可能这个也是压力测试，不要因为面试官这么追问就盲目现场包装，然后露馅，反而得不偿失。</span></p>
+<p id="f-doxcn23QvYbOY7Y1gsJEBRi9Zne">高级技巧应由明确的需求驱动。例如根据子块检索、召回父块，需要说明该策略解决什么问题，以及为什么适合当前任务。可结合 5.3.3 的方法论进行实验和验证。</p>
 
 <p id="f-doxcnVa6fKd3OxlJMlCdCdO6Vhb"><span>📝 </span><span style="font-weight:bold">参考答案</span></p>
 
@@ -1281,7 +1281,7 @@ def split_by_sentence(text: str, max_length: int = 500) -&gt; list[str]:
 
 ##### 精排
 
-<blockquote id="f-doxcnsziaAI6xUeXh6QC6kxk3ve"><p id="f-doxcntFXnarHq1ol4GgAsoa5Lgh"><span>第四小节的各个部分其实就是RAG最基本的模块和环节。是弄懂RAG的基础，不管是我推荐的书籍还是项目（实战都有），大家结合笔记，书籍，自己搜的资料，把这几个环节理解一下。可以多搜索视频啊，书籍来理解这些基础知识点。这里写得不是很详细，知识概括，方便大家背诵。如果说学习的话，其实可以找我推荐的书籍啊，视频啊，自己也能找。这些都是最基础的东西，网上很多讲解。</span></p></blockquote>
+<blockquote id="f-doxcnsziaAI6xUeXh6QC6kxk3ve"><p id="f-doxcntFXnarHq1ol4GgAsoa5Lgh">第四小节介绍 RAG 的基本模块与环节，可结合笔记、书籍、项目和视频理解。</p></blockquote>
 
 <p id="f-doxcnEuVi4zWHhWrZrbKuKj5fLc"><span>精排是 RAG 检索链路里位于召回之后的一层排序环节。粗排或者向量召回的目标是从大规模语料里快速找出一批候选文档，而精排的目标是对这批候选文档做更细粒度的相关性判断，把真正能回答问题、信息质量更高、业务上更适合进入上下文的内容排到前面。常见的精排方法主要有 Cross Encoder 精排、LLM 精排、规则精排，以及混合精排。它们都不是用来替代召回的，而是在候选集已经比较小的情况下，对候选内容进行二次排序、过滤和质量控制。</span></p>
 
@@ -1343,7 +1343,7 @@ def split_by_sentence(text: str, max_length: int = 500) -&gt; list[str]:
 
 <p id="f-doxcnq7gtkNoFkkaME9I434uCzb"><span>💡 </span><span style="font-weight:bold">思路：</span><span> 这个题也不难回答，我们的RAG项目中，做了很多操作：</span><span style="font-weight:bold">RRF</span><span>,双路检索，</span><span style="font-weight:bold">Rerank</span><span>, 基于Metadata 过滤答案后筛选，这些做法都是在提高检索内容的相关性。同时我们在RAG知识部分，也讲解了RAG的一些高级策略，也是回答优化方向的点。</span></p>
 
-<p id="f-doxcnUY5ahOeGVA6gR9RQUPleqR"><span>同时我们之前专门讲了</span><span><span style="font-weight:bold"><a href="#f-doxcnuLIexZJT9vCqgUe8Csx1zb"><span>Self-RAG</span></a></span></span><span>技术（因为面试官问如何保证系统生成回答的准确性），这几个技术都是来回答优化思路的出发点。因此即使我们没有专门准备过这个问题，但是可以认为不应该答不出来。如果从这个题目本身来说，我下面给的参考答案，其实有点多了，不过我还是没有删减，因为可以认为这些内容挺有价值的，从相关性差的原因，到如何解决，顺着整个链路把RAG系统串了起来。回答的时候，挑着说，简化着说就好了，我都列出来，是想给大家复习。</span></p>
+<p id="f-doxcnUY5ahOeGVA6gR9RQUPleqR">可以结合 Self-RAG、相关性差的原因及优化方法，沿完整 RAG 链路分析问题。 <a href="#f-doxcnuLIexZJT9vCqgUe8Csx1zb"><span>Self-RAG</span></a></p>
 
 <p id="f-doxcn4Zvd5NVKQDiwVn6cPIv6jb"><span>📝 </span><span style="font-weight:bold">答案：</span></p>
 
@@ -1373,7 +1373,7 @@ def split_by_sentence(text: str, max_length: int = 500) -&gt; list[str]:
 
 <a id="f-doxcnRGzQLIPyUYPoChaXrXtFHH"></a>
 
-<p id="f-doxcnlfFOOl8FDuHuJz8qTRcTHf"><span>此部分为RAG进阶部分，如前所述，一般岗位可能不会考察这么深，除非你自己简历写了Graph Rag, Agentic RAG或者本身就是专门做RAG的组，可能会考到这里。 我的原则是，该部分概念要会，问RAG有啥新方向，相关概念答得出来，但没有深入研究。</span></p>
+<p id="f-doxcnlfFOOl8FDuHuJz8qTRcTHf">此部分为 RAG 进阶内容，包括 Graph RAG、Agentic RAG。先掌握概念，再根据项目需要深入研究。</p>
 
 <div style="margin-left:25px"><h4 id="f-doxcnC6s9cWRXdSpqjD7xTwklrg"><span>13.7.1 RAG新方向</span></h4><p id="f-doxcn84NBfgLF3Hi8fQTtcCTqle"><span>（这俩新方向，虽然可能没深入研究，但是得知道，概念要能讲出来）</span></p><p id="f-doxcnXauoRa3YNL0TUCYt9rQ7Nb"><span>目前典型的RAG的新方向是 Agentic RAG和Graph RAG, 具体来讲：</span></p><p id="f-doxcn83csyXawMnqAWxHV7E4z8d"><span style="font-weight:bold">Agentic RAG</span><span>的核心是把RAG从一个固定流水线变成一个有决策能力的Agent。传统RAG就是检索一轮、生成答案、结束了。但很多复杂问题一轮检索根本不够，Agentic RAG让模型自己判断——检索结果够不够？不够就再检索一轮，或者换个检索策略。像Self-RAG、Corrective RAG都是这个思路，本质就是让</span><span style="font-weight:bold">检索过程变得更智能、可以自我纠错</span><span>。</span></p><p id="f-doxcnnp3a1NtUIj6GVhDUW2v9jA"><span style="font-weight:bold">Graph RAG</span><span>解决的是另一个问题——</span><span style="font-weight:bold">传统向量检索擅长找语义相似的内容</span><span>，但很难处理跨文档的关联推理。比如问人物之间的关系，信息散落在十几个段落里，靠embedding相似度很难串起来。Graph RAG的做法是先从文档里抽取实体和关系建成知识图谱，检索时在图上做关系遍历，特别适合需要全局理解的问题。"</span></p><p id="f-doxcnAAcxvO8NEUxARbPMbAYgpc"><span>可以认为这两个方向是互补的——一个解决检索策略的智能化，一个解决知识关联和推理，未来可能会结合起来用。</span></p></div>
 
@@ -1466,7 +1466,7 @@ IsSUP + IsUSE：评价候选答案
 
 ###### 用RAGAS 替换传统Self-RAG
 
-<p id="f-doxcnKk3RUGPPrk113zKy4aT6Ng"><span>这一节纯粹是我自己加的。因为我们看到上面的Self-RAG的 自评估方法是要使用专门的模型进行训练的。如果我们要包装，我害怕面试官问你的模型训练的细节，加上该学习案例中做了RAGAS的评估，RAGAS的评估和Self-RAG的三个指标是一样的，干脆我们讲的时候就用RAGAS集成到Self-RAG好了，这样问到我们如何实现的细节，我们更加胸有成竹。</span><span><span><a href="/posts/agent-learning-23-learning-cases/#f-doxcncre0k2okUTQXY1bNXXiCUf"><span>如何保证RAG系统生成的回答是准确的</span></a></span></span><span>，也是用这个思路来组织最终参考答案的。</span></p>
+<p id="f-doxcnKk3RUGPPrk113zKy4aT6Ng">Self-RAG 的自评估方法涉及专门模型的训练；该学习案例采用 RAGAS 评估。这里讨论将 RAGAS 的评估指标用于生成过程质量检测的思路，并结合“如何保证 RAG 系统生成的回答是准确的”组织参考答案。注意区分这种组合方案与原论文中的 Self-RAG 实现。 <a href="/posts/agent-learning-23-learning-cases/#f-doxcncre0k2okUTQXY1bNXXiCUf"><span>如何保证RAG系统生成的回答是准确的</span></a></p>
 
 <p id="f-doxcni5rOH8XXELPtn0Ef1Xedjg"><span>我们可以保留 Self-RAG 的"检索—生成—评估—修正"流程，用 RAGAS 作为外部评估器替代模型内部的自省 Token。</span></p>
 
@@ -1521,7 +1521,7 @@ RAGAS 评估上下文相关性、答案忠实度和答案相关性
 
 <p id="f-doxcn9vC4UrsUhFXxLya9LnQDzf"><span>在2026年，我相信大家听过很多论调和讨论：</span><span style="font-weight:bold">RAG已死</span><span>。</span><span style="font-weight:bold">我们现在Agent都不用RAG了</span><span>。包括还有各种面试题：</span><span style="font-weight:bold">为什么ClaudeCode不用RAG了？你设计Agent架构的时候，到底要不要用RAG（</span><span>202606滴滴面试真题）。包括还有一些你和面试官聊天的时候的讨论：</span><span style="font-weight:bold">你如何看待RAG的趋势，你觉得现在还需要不需要RAG？</span></p>
 
-<p id="f-doxcncBy58YqWe5rMTlUsuVtxxh"><span>今天这个小节，我想全面，客观的来帮助大家分析一下这个问题。大家不要背答案，而是真的去理解，去思考，去看看我说的是不是这么一回事？有了自己的思考，对于上面的各种问题的回答其实也是自然而然就知道如何回答了。</span></p>
+<p id="f-doxcncBy58YqWe5rMTlUsuVtxxh">下面结合场景分析 RAG 的适用条件与技术取舍。</p>
 
 <p id="f-doxcnKq00XkTkKeseKNTobOOHWh"><span>本文参考的资料为：</span></p>
 
@@ -1533,7 +1533,7 @@ RAGAS 评估上下文相关性、答案忠实度和答案相关性
 
 <ol start="4"><li id="f-doxcn1f5qjJHGGFjkvnNXI2ptoc"><span style="font-weight:bold">Harness 工程视角</span><span>——飞书「大模型笔记」</span><span><span><a href="/posts/agent-learning-20-skills-harness/#f-doxcnoRvBt3HPRP4L6PsFmOBoaf"><span>2.4.1 Retrieval 章节</span></a></span></span><span>(检索工具谱系 + Agentic RAG 实验)</span></li></ol>
 
-<p id="f-doxcnl9hC8IW0f6R3Al48A1HARh"><span>注意，其实我并不是说大家一定要去看对应的视频，为了严谨性我列出来源。笔记已经总结了上面的资料的各个方面的要点，已经是比较全面的了。看懂了笔记和我的视频，可以不用再去专门看上面的视频了。</span></p>
+<p id="f-doxcnl9hC8IW0f6R3Al48A1HARh"></p>
 
 <a id="f-doxcnU2sY90V5jFg97N2PxIMnrc"></a>
 

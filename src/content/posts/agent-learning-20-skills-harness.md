@@ -85,9 +85,9 @@ Skill、Harness、Loop、Graph 工程与实践
 
 <a id="f-doxcnLFIwlm2NmL623TsclPGqPo"></a>
 
-<p id="f-doxcnd4RTPFuougxzNJvlTMgl9l"><span>SKILL 比较新，是2025年10月16号提出，在12月份左右才慢慢被市场支持，在26年1月份已经变得很火了。所以虽然目前我的面经没有涉及。但是很多朋友在1月份面试已经被问到了，而且这个概念现在很火。学习大模型，特别热门的新技术一定是要学的。从目前（2026年1月）来看，Skills会成为未来一段时间面试高频考点，务必要掌握。推荐学习路线为：</span></p>
+<p id="f-doxcnd4RTPFuougxzNJvlTMgl9l">Skill 于 2025 年 10 月提出，并逐步获得工具生态支持。推荐学习路线如下：</p>
 
-<div style="margin-left:25px"><p id="f-doxcnpbPgRF6KDdLNUPpjPtcXec"><span>1：</span><span style="font-weight:bold">入门视频:</span><span> 了解Skill是什么，怎么用。(视频见</span><span><span><a href="#f-doxcnRhVErfHbQd1JkQBGloZh1g"><span>3.10</span></a></span></span><span>)</span></p><p id="f-doxcnDOZVABomP84OdxqBPEsnPe"><span>2.  </span><span style="font-weight:bold">进阶视频：</span><span>掌握Skill的设计思路。(视频见</span><span><span><a href="#f-doxcnRhVErfHbQd1JkQBGloZh1g"><span>3.10</span></a></span></span><span>)</span></p><p id="f-doxcngp9l3wRJBLA0Sl630mLcUg"><span>3.  </span><span style="font-weight:bold">Skill编写规范</span><span>：本节的笔记部分以及我在下面推荐的Anthropic关于Skill的官方文档：了解Skill编写的最佳实践，范式，命名规则等。</span></p><p id="f-doxcnWxW84QW5uCrEng02nSAzqf"><span>4. </span><span style="font-weight:bold">如何写SKILL：</span><span>下面推荐视频有个博主讲如何写出SKILL的，以及现场教学。最重要的思想：</span><span><span><a href="https://www.youtube.com/watch?v=zKBPwDpBfhs&amp;t=324s"><span>Feedback Cycle</span></a></span></span><span>其实就是反复迭代，了解了1，2，3，可以看一下他展示真的如何写的这个思想和过程。</span></p><p id="f-doxcnYlJMlrdzAvUyptTk9dqe6c"><span>5.  </span><span style="font-weight:bold">实战</span><span>：</span></p><p id="f-doxcnMEvPbV39bQsWMskcrWlkpa"><span>     1. 参考视频笔记提供了一些官方的SKILL github链接，特别是第4个链接，是由Anthropic提供的一组Skill示例，严格遵循了它提供的Skill的最佳实践文档，可以作为Skill的教科书级别的示例来阅读。 (链接见3.10 参考视频和项目里面的</span><span style="font-weight:bold"> Skills实战</span><span>）</span></p><p id="f-doxcns04KxHFLHDmpNq0ztT1wGi"><span>     2. 最后是你应该自己写一些SKILL，比如自己组内用的内部提效的SKILL，公司用的更标准的SKILL，写一些你就会更有经验。面试的时候除了基本概念，面试官喜欢问你自己做了一些什么SKILL，用了一些什么技巧，可以参考</span><span><span><a href="#f-doxcnkRfK8yvh36Igfkd4sSEDXc"><span>面试实战部分</span></a></span></span><span>。</span></p><h3 id="f-doxcnwauGqqWtb7vTANxX5DfL2c"><span>3.1 SKILL 概念</span></h3><p id="f-doxcnz6iIiwPba6ug9DZJ1ewQWd"><span>Skill是一组打包了指令的文件夹：文件夹会包含Skill.md 的核心指令文件，以及Scripts,Reference和assets的可选资源文件（后文SKILL目录结构小节有更详细解释）。它教会AI如何处理指定的任务和流程。当需要处理重复的工作流，比如根据规范生成前端设计，创建符合团队风格指南的文档，多步骤流程编排等任务时，Skill可以让你无需每次对话重新解释你的偏好，流程，领域知识，而是通过Skill一次教会AI，之后每次都能受用。相比传统的提示词，它采用渐进式披露，动态加载提示词，更节约Token.</span></p><h3 id="f-doxcnwAgdf5A7lKjtjltmMFzgCd"><span>3.2 SKILL目录结构</span></h3><p id="f-doxcnms8o6GP0SL2PRMGEMQ2LLf"><span>从图中我们可以清晰的理解概念所说，一个SKILL就是一个文件夹。其中包含以下内容：</span></p><div id="f-doxcn9RoYElxbNcQ62JtmPVF7kb"><img alt="" decoding="async" height="333" loading="lazy" src="/images/agent-learning/954d87a8514ad08531782b83.png" width="736"/></div><p id="f-doxcngAHdSV4HX3PjhWA9y6URXU"><span>1.SKILL.md：必须，包含了 Yaml头和Body。Yaml是md文件中的头，告诉AI是否加载这个SKILL，AI必定会加载。而body</span></p><p id="f-doxcnQS5O5kPseI8FVKBWa9AVTg"><span>是正文，是渐进式披露的，只有AI读取了YAML头，认为这个SKILL应该被加载，才会加载这个正文部分。</span></p><p id="f-doxcnqdNR5UFbT2Qv54rbhmAwOh"><span>2.Scripts: 可选。包含着在AI执行过程中需要使用的脚本文件。</span></p><p id="f-doxcnUs1IFD5d9wUTScYiutfnnf"><span>3.References: 可选。存放执行SKILL相关的文档，说明，内容以MD为主。</span></p><p id="f-doxcnnCRoMcEBmlnvErBZmRH8yg"><span>4.Assets：可选。存放执行SKILL时需要的模板，静态资源，比如图片等。</span></p><p id="f-doxcn0DQEEZPmDJsDe0DA3aF4jc"><span>2,3,4其实就是在SKILL执行过程中，所需要的资源。Anthropic 官方明确建议一个SKILL不应该超过500行，所以SKILL需要引用其它资源的时候，应该将这些东西放在SKILL.MD之外，而在SKILL.MD中显式指向它。</span></p><h3 id="f-doxcn7KkrWiI4JozHKrD5yc45Ac"><span>3.3 SKILL的常见应用场景：</span></h3><p id="f-doxcni9c0oZv9B0moBV3NqbMrjf"><span>1.生成一致的，高质量的内容，比如文档，PPT，app, design, 代码等。实例：</span><span><span><a href="https://github.com/anthropics/skills/tree/main/skills/frontend-design"><span>frontend-design skill</span></a></span></span></p><p id="f-doxcnMDqJnZSOocdtexDvWZq0gg"><span>2.编排多步流程，让这些步骤遵循特定的顺序，示例：</span><span><span><a href="https://github.com/anthropics/skills/blob/main/skills/skill-creator/SKILL.md"><span>Skill-creator</span></a></span></span></p><p id="f-doxcnedAo0W7AJ4CJywPX48if5c"><span>3.规范/增强MCP使用，将MCP转换成可靠的工作流。实例：</span><span><span><a href="https://github.com/getsentry/sentry-for-claude/tree/main/skills"><span>Sentry-code-review skill</span></a></span></span></p><p id="f-doxcnuJ8gvMoWbGStis9vRDJ6af"><span>（这一点我想解释一下的是，根据Anthropic官方指南，规范MCP的使用指的是用了Skill, 可以让用户/AI更清楚知道某个MCP Server 如何使用，遇到问题如何解决，取得稳定的结果。通常的最佳实践是在MCP Server的文档中附上SKILL的链接。用户在使用多个MCP Server的时候，也可以通过SKILL来编排多个MCP的使用流。从这一点可以看出SKILL和MCP是相辅相成的，而不是替代关系。这一点是Anthropic官方指南，可以认为这一点比较新颖，也是一些视频没有提到的，面试时候说出一点SKILL和MCP的补充关系和最佳实践，可以加分）</span></p><h3 id="f-doxcnloQ0qUwFtqBztGVBmR8BZg"><span>3.4 SKILL测试与评估</span></h3><p id="f-doxcnGL6bHet1blOnW76vZpbgwe"><span>通常可以从以下几个角度来测试Skill的质量：</span></p><div id="f-doxcn84SXNzPIJK5A6dVe68N1Vc" style="display:flex;gap:0.5em"><span style="min-width:1.5em">a.</span><div><span>触发测试：保证SKILL会在正确的时机被加载。在不该触发的情况不会被误触发，在该触发的情况也不会不触发。</span></div></div><div id="f-doxcn9QdjVsagLU2VhLsbteIFhg" style="display:flex;gap:0.5em"><span style="min-width:1.5em">b.</span><div><span>功能测试：测试SKILL产生正确的结果：输出是符合预期的，API正确调用，错误被处理，边缘情况被覆盖。</span></div></div><div id="f-doxcn08EnlVtwmyFCpmsbVg4hgd" style="display:flex;gap:0.5em"><span style="min-width:1.5em">c.</span><div><span>性能测试：对比使用SKILL和不使用SKILL时，用户的介入次数是否减少，API调用失败次数是否减少，Token消耗是否降低。</span></div></div></div>
+<div style="margin-left:25px"><p id="f-doxcnpbPgRF6KDdLNUPpjPtcXec"><span>1：</span><span style="font-weight:bold">入门视频:</span><span> 了解Skill是什么，怎么用。(视频见</span><span><span><a href="#f-doxcnRhVErfHbQd1JkQBGloZh1g"><span>3.10</span></a></span></span><span>)</span></p><p id="f-doxcnDOZVABomP84OdxqBPEsnPe"><span>2.  </span><span style="font-weight:bold">进阶视频：</span><span>掌握Skill的设计思路。(视频见</span><span><span><a href="#f-doxcnRhVErfHbQd1JkQBGloZh1g"><span>3.10</span></a></span></span><span>)</span></p><p id="f-doxcngp9l3wRJBLA0Sl630mLcUg">3. Skill 编写规范：参考 Anthropic 官方 Skill 文档，了解最佳实践、范式与命名规则。</p><p id="f-doxcnWxW84QW5uCrEng02nSAzqf">4. 如何写 Skill：参考下面的视频演示，理解 Feedback Cycle（反馈闭环）与反复迭代的过程。 <a href="https://www.youtube.com/watch?v=zKBPwDpBfhs&amp;t=324s"><span>Feedback Cycle</span></a></p><p id="f-doxcnYlJMlrdzAvUyptTk9dqe6c"><span>5.  </span><span style="font-weight:bold">实战</span><span>：</span></p><p id="f-doxcnMEvPbV39bQsWMskcrWlkpa"><span>     1. 参考视频笔记提供了一些官方的SKILL github链接，特别是第4个链接，是由Anthropic提供的一组Skill示例，严格遵循了它提供的Skill的最佳实践文档，可以作为Skill的教科书级别的示例来阅读。 (链接见3.10 参考视频和项目里面的</span><span style="font-weight:bold"> Skills实战</span><span>）</span></p><p id="f-doxcns04KxHFLHDmpNq0ztT1wGi"><span>     2. 最后是你应该自己写一些SKILL，比如自己组内用的内部提效的SKILL，公司用的更标准的SKILL，写一些你就会更有经验。面试的时候除了基本概念，面试官喜欢问你自己做了一些什么SKILL，用了一些什么技巧，可以参考</span><span><span><a href="#f-doxcnkRfK8yvh36Igfkd4sSEDXc"><span>面试实战部分</span></a></span></span><span>。</span></p><h3 id="f-doxcnwauGqqWtb7vTANxX5DfL2c"><span>3.1 SKILL 概念</span></h3><p id="f-doxcnz6iIiwPba6ug9DZJ1ewQWd"><span>Skill是一组打包了指令的文件夹：文件夹会包含Skill.md 的核心指令文件，以及Scripts,Reference和assets的可选资源文件（后文SKILL目录结构小节有更详细解释）。它教会AI如何处理指定的任务和流程。当需要处理重复的工作流，比如根据规范生成前端设计，创建符合团队风格指南的文档，多步骤流程编排等任务时，Skill可以让你无需每次对话重新解释你的偏好，流程，领域知识，而是通过Skill一次教会AI，之后每次都能受用。相比传统的提示词，它采用渐进式披露，动态加载提示词，更节约Token.</span></p><h3 id="f-doxcnwAgdf5A7lKjtjltmMFzgCd"><span>3.2 SKILL目录结构</span></h3><p id="f-doxcnms8o6GP0SL2PRMGEMQ2LLf"><span>从图中我们可以清晰的理解概念所说，一个SKILL就是一个文件夹。其中包含以下内容：</span></p><div id="f-doxcn9RoYElxbNcQ62JtmPVF7kb"><img alt="" decoding="async" height="333" loading="lazy" src="/images/agent-learning/954d87a8514ad08531782b83.png" width="736"/></div><p id="f-doxcngAHdSV4HX3PjhWA9y6URXU"><span>1.SKILL.md：必须，包含了 Yaml头和Body。Yaml是md文件中的头，告诉AI是否加载这个SKILL，AI必定会加载。而body</span></p><p id="f-doxcnQS5O5kPseI8FVKBWa9AVTg"><span>是正文，是渐进式披露的，只有AI读取了YAML头，认为这个SKILL应该被加载，才会加载这个正文部分。</span></p><p id="f-doxcnqdNR5UFbT2Qv54rbhmAwOh"><span>2.Scripts: 可选。包含着在AI执行过程中需要使用的脚本文件。</span></p><p id="f-doxcnUs1IFD5d9wUTScYiutfnnf"><span>3.References: 可选。存放执行SKILL相关的文档，说明，内容以MD为主。</span></p><p id="f-doxcnnCRoMcEBmlnvErBZmRH8yg"><span>4.Assets：可选。存放执行SKILL时需要的模板，静态资源，比如图片等。</span></p><p id="f-doxcn0DQEEZPmDJsDe0DA3aF4jc"><span>2,3,4其实就是在SKILL执行过程中，所需要的资源。Anthropic 官方明确建议一个SKILL不应该超过500行，所以SKILL需要引用其它资源的时候，应该将这些东西放在SKILL.MD之外，而在SKILL.MD中显式指向它。</span></p><h3 id="f-doxcn7KkrWiI4JozHKrD5yc45Ac"><span>3.3 SKILL的常见应用场景：</span></h3><p id="f-doxcni9c0oZv9B0moBV3NqbMrjf"><span>1.生成一致的，高质量的内容，比如文档，PPT，app, design, 代码等。实例：</span><span><span><a href="https://github.com/anthropics/skills/tree/main/skills/frontend-design"><span>frontend-design skill</span></a></span></span></p><p id="f-doxcnMDqJnZSOocdtexDvWZq0gg"><span>2.编排多步流程，让这些步骤遵循特定的顺序，示例：</span><span><span><a href="https://github.com/anthropics/skills/blob/main/skills/skill-creator/SKILL.md"><span>Skill-creator</span></a></span></span></p><p id="f-doxcnedAo0W7AJ4CJywPX48if5c"><span>3.规范/增强MCP使用，将MCP转换成可靠的工作流。实例：</span><span><span><a href="https://github.com/getsentry/sentry-for-claude/tree/main/skills"><span>Sentry-code-review skill</span></a></span></span></p><p id="f-doxcnuJ8gvMoWbGStis9vRDJ6af"><span>（这一点我想解释一下的是，根据Anthropic官方指南，规范MCP的使用指的是用了Skill, 可以让用户/AI更清楚知道某个MCP Server 如何使用，遇到问题如何解决，取得稳定的结果。通常的最佳实践是在MCP Server的文档中附上SKILL的链接。用户在使用多个MCP Server的时候，也可以通过SKILL来编排多个MCP的使用流。从这一点可以看出SKILL和MCP是相辅相成的，而不是替代关系。这一点是Anthropic官方指南，可以认为这一点比较新颖，也是一些视频没有提到的，面试时候说出一点SKILL和MCP的补充关系和最佳实践，可以加分）</span></p><h3 id="f-doxcnloQ0qUwFtqBztGVBmR8BZg"><span>3.4 SKILL测试与评估</span></h3><p id="f-doxcnGL6bHet1blOnW76vZpbgwe"><span>通常可以从以下几个角度来测试Skill的质量：</span></p><div id="f-doxcn84SXNzPIJK5A6dVe68N1Vc" style="display:flex;gap:0.5em"><span style="min-width:1.5em">a.</span><div><span>触发测试：保证SKILL会在正确的时机被加载。在不该触发的情况不会被误触发，在该触发的情况也不会不触发。</span></div></div><div id="f-doxcn9QdjVsagLU2VhLsbteIFhg" style="display:flex;gap:0.5em"><span style="min-width:1.5em">b.</span><div><span>功能测试：测试SKILL产生正确的结果：输出是符合预期的，API正确调用，错误被处理，边缘情况被覆盖。</span></div></div><div id="f-doxcn08EnlVtwmyFCpmsbVg4hgd" style="display:flex;gap:0.5em"><span style="min-width:1.5em">c.</span><div><span>性能测试：对比使用SKILL和不使用SKILL时，用户的介入次数是否减少，API调用失败次数是否减少，Token消耗是否降低。</span></div></div></div>
 
 
 <a id="section-0119"></a>
@@ -101,7 +101,7 @@ Skill、Harness、Loop、Graph 工程与实践
 
 <p id="f-doxcnFgZ47bmBivCAKxwuFC8k6d"><span style="font-weight:bold">如何写SKILL</span></p>
 
-<p id="f-doxcnheaki0ZnXU8vJgFecCYoBc"><span>聊了这么多都是理论，到底如何写SKILL，看一下这个视频，特别是第13分钟开始，博主讲了如何写SKILL，原则是什么，现场展示了这个过程。其中他说的Feedback Cycle说的是写SKILL最重要的是迭代，这点我很认同。他的例子使用他自己写的Skill-builder生成skill(本案例用了感觉不好用），你可以使用官方的SKILL-Creator， 其它的原理是一样的。</span></p>
+<p id="f-doxcnheaki0ZnXU8vJgFecCYoBc"><span>聊了这么多都是理论，到底如何写SKILL，看一下这个视频，特别是第13分钟开始，博主讲了如何写SKILL，原则是什么，现场展示了这个过程。其中他说的Feedback Cycle说的是写SKILL最重要的是迭代，他的例子使用他自己写的Skill-builder生成skill(可结合实际任务比较效果），你可以使用官方的SKILL-Creator， 其它的原理是一样的。</span></p>
 
 <p id="f-doxcnsTUT0HzPQAd2Kr3r7Vrwmc"><span><span><a href="https://www.youtube.com/watch?v=zKBPwDpBfhs&amp;t=324s"><span>https://www.youtube.com/watch?v=zKBPwDpBfhs&amp;t=324s</span></a></span></span></p>
 
@@ -129,7 +129,7 @@ Skill、Harness、Loop、Graph 工程与实践
 
 <p id="f-doxcnqxpvuEjLYrcdmNrOI5uVue"><span style="font-weight:bold">官方文档</span></p>
 
-<p id="f-doxcnGveDkgd5FVExZm3udKbmhW"><span>    这个文档是Anthropic  提供的教科书，包含Skill组成，如何命名，使用场景，常见范式等。非常值得一读，笔记的Skill文档部分很多地方我也是参考的这个文档。时间充足可以自己阅读，不充足可以看本节，本节总结了这个文档的最精髓部分。</span></p>
+<p id="f-doxcnGveDkgd5FVExZm3udKbmhW">Anthropic 官方文档介绍 Skill 的组成、命名、使用场景与常见范式，可结合本节内容进一步阅读。</p>
 
 <p id="f-doxcnm3gF0DF1qPZpuAKHrQ0EAc"><span><span><a href="https://resources.anthropic.com/hubfs/The-Complete-Guide-to-Building-Skill-for-Claude.pdf?hsLang=en"><span>https://resources.anthropic.com/hubfs/The-Complete-Guide-to-Building-Skill-for-Claude.pdf?hsLang=en</span></a></span></span></p>
 
@@ -143,9 +143,9 @@ Skill、Harness、Loop、Graph 工程与实践
 
 <div style="margin-left:25px"><div id="f-doxcnW1OzBghVrPmdizYGZOEOhh" style="display:flex;gap:0.5em"><span style="min-width:1.5em">◦</span><div><span style="font-weight:bold">Q1：你在做 SKILL 时遇到了什么困难，如何解决的？</span></div></div><div id="f-doxcnMEsyf0A5ZNcd1Phb6NzbUg" style="display:flex;gap:0.5em"><span style="min-width:1.5em">◦</span><div><span style="font-weight:bold">Q2：你做了什么 SKILL，可以分享一下吗？</span></div></div></div>
 
-<p id="f-doxcnEZf4SLinWlOcAMIk9P1PM4"><span>这两个问题主要难在需要一些实践经验，最好回答的能比较有深度，解决的是一些比较难一点的SKILL问题。剩下汇总的其他问题：比如</span><span style="font-weight:bold">SKILL是什么？他的设计思想是啥？</span><span>等等问题也经常被问到过，但是这些问题就容易啦，不需要精讲，我就直接给到答案好了。本小节的内容也接受大家继续反馈，你遇到的SKILL的面试问题，如果有咱们没讲到的，我也会及时继续更新总结的（本小节写于2026/07/25）</span></p>
+<p id="f-doxcnEZf4SLinWlOcAMIk9P1PM4"></p>
 
-<p id="f-doxcnqZDtQzS7SbWqKPL2zv6BUh"><span>讲清楚Q1,Q2，我的思路是先去学习理论基础。这些理论基础的来源还是我3.10里写到的这些文档，并没有超出这些文档之外。 我从上面的参考资料，主要是</span><span><span><a href="https://platform.claude.com/docs/en/agents-and-tools/agent-skills/best-practices"><span>Anthropic 公司的官方SKILL文档</span></a></span></span><span>抽取了一些最佳实践-解决方案。这是回答Q1,Q2的理论基础，我们Q1,Q2就围绕这个理论基础，展开回答就好。因为这两个问题偏向于实战内容，所以我们干脆以官方的Code review skill为例来讲解，顺便学习一下官方代码review skill的思路。</span></p>
+<p id="f-doxcnqZDtQzS7SbWqKPL2zv6BUh">Q1、Q2 可以先学习理论基础，参考 3.10 中的资料和 Anthropic 官方 Skill 文档，再以官方 Code Review Skill 为例，理解最佳实践和设计思路。 <a href="https://platform.claude.com/docs/en/agents-and-tools/agent-skills/best-practices"><span>Anthropic 公司的官方SKILL文档</span></a></p>
 
 <p id="f-doxcnaRUUABwRJLgOYXXer1jdce"><span>全文总结方式为：理论基础 - Q1,Q2问题答案 - Code-review Skill讲解 - 其它面试问题及答案。</span></p>
 
@@ -201,13 +201,13 @@ Skill、Harness、Loop、Graph 工程与实践
 
 ##### 面试问题汇总
 
-<p id="f-doxcnaWftt0es6WtROTniDZEWYX"><span>总结了相关的SKILL面试问题，这些都是真的面试过程中被问到的，虽然我没有总结具体是哪一家公司哪一次面的，其中可以认为稍微难一点的是Q1,Q2，因为这两个问题偏实战，剩下的几个问题都比较偏理论。大家把上面的SKILL的理论学好，这些问题就都很容易回答了。</span></p>
+<p id="f-doxcnaWftt0es6WtROTniDZEWYX">下面汇总 Skill 相关问题。Q1、Q2 偏实践，其余问题偏理论，可以结合 Skill 基础知识和实例理解。</p>
 
 <div style="margin-left:25px"><p id="f-doxcn1Yct0eRQLWfsOgqduCnCph"><span>本节面试问题速览：</span></p><p id="f-doxcnVBapHYvFe3A7Mx45pjj3We"><span>- </span><span style="font-weight:bold">Q1</span><span>：你在做 SKILL 时遇到了什么困难，如何解决的？</span></p><p id="f-doxcnflhx9jZPkls7x3HhLO2uVc"><span>- </span><span style="font-weight:bold">Q2</span><span>：你做了什么 SKILL，可以分享一下吗？</span></p><p id="f-doxcnYGmZYzhs22YEr1zNfyYqyb"><span>- </span><span style="font-weight:bold">Q3</span><span>：SKILL 是什么，可以谈谈你的理解吗？</span></p><p id="f-doxcnBskjGAjh2fcyN3Fz5zWnOW"><span>- </span><span style="font-weight:bold">Q4</span><span>：怎么样能写好一个 SKILL 呢？</span></p><p id="f-doxcnwAHzee4rttX4BSBgacPkEe"><span>- </span><span style="font-weight:bold">Q5</span><span>：怎么提升 SKILL 的任务准确率呢？</span></p><p id="f-doxcnNp2CLvF3IcWxQN1L6uGFxE"><span>- </span><span style="font-weight:bold">Q6</span><span>：SKILL.md 随着业务变大越写越长、导致 AI 不听某些指令，要怎么解决？</span></p></div>
 
 <p id="f-doxcnvPKYWVsWa9LJcfU9UpwDzf"><span style="font-weight:bold">Q1：你在做 SKILL 的时候遇到了什么困难，如何解决的？</span></p>
 
-<p id="f-doxcnKBqZAkT28Um5UvFuQLQbWB"><span style="font-weight:bold">【思路】</span><span> 从上面 7 个最佳实践里挑 </span><span style="font-weight:bold">3 个</span><span>、结合 code-review 场景讲深，我挑这个三个是因为可以认为这个相对高级一点，比如我没有挑渐进式披露这个思想，是因为可以认为这个思想太基本了。但是答案组织的方式是一样，你也可以从上面其他点出发，展开回答。</span></p>
+<p id="f-doxcnKBqZAkT28Um5UvFuQLQbWB">【思路】结合前面 7 种最佳实践中的 3 项，以及 Code Review 相关理念，说明组织方式与设计取舍；也可以补充渐进式披露的设计。</p>
 
 <ul><li id="f-doxcnfLxkfOtdhv5kvncSZQ5zRg"><span style="font-weight:bold">实践 1｜设定自由度</span><span>（解决</span><span style="font-weight:bold">误报</span><span>问题，是 code-review 的命门，最能体现技术判断）</span></li></ul>
 
@@ -223,9 +223,9 @@ Skill、Harness、Loop、Graph 工程与实践
 
 <p id="f-doxcny46cDVZDyOsSowdmiVdEbh"><span>我后来想明白了，code review 本质是个</span><span style="font-weight:bold">高自由度的任务</span><span>——同一段代码，怎么审都算"审了"，所以模型很容易放飞。这时候的解法就是</span><span style="font-weight:bold">主动给它收窄自由度</span><span>，本案例用了两招：</span><span style="font-weight:bold">一是给每个问题打一个 0 到 100 的置信度分，然后设一个阈值，只有 80 分以上的才真正发出来</span><span>；打分的标准我是写死在 skill 里的，比如"经不起推敲的、或者是既有问题"给 0 分，"确认是真的但可能是 nitpick"给 50 分，"高置信、确实会踩、而且团队规范明确点了名"才给 75 分往上。</span><span style="font-weight:bold">二是我在 skill 正文里专门列了一份"什么不该报"的清单</span><span>——既有问题、用户没改的行、linter 能抓的、被规范显式豁免的，全列出来让它自己先排除。这两招下来，一个 PR 的评论从二三十条压到了三五条，但条条是干货。</span></p>
 
-<p id="f-doxcnozaapioQJ1s7AClMUksBAd"><span style="font-weight:bold">第二个坑更隐蔽，是我发现它有时候压根没按我写的规范审。</span><span> 我把团队规范单独抽成了一个 reference 文件，SKILL.md 正文里只写"去读这份规范、逐条核对"。但跑起来我就纳闷——有些明明规范里白纸黑字写了的点，它就是漏。我一开始以为是规范写得不够清楚，改了几版没用。后来我去扒它到底怎么读文件的，才发现问题：</span><span style="font-weight:bold">它读那个 reference 文件的时候，用的是 </span><span style="font-weight:bold"><span><span>head -100</span></span></span><span style="font-weight:bold"> 这种命令，只把开头一百行"预览"了一下就走了</span><span>，我那份规范一百行开外的内容它根本没看到。再深挖，是我把引用套了太多层——SKILL.md 指到一个中间文件，那个文件再指到规范，嵌套一深，模型就倾向于只预览、不通读。解法有两个：一是把引用拍平、只保持一层深，所有 reference 都从 SKILL.md 直接链过去，不再转手；二是给超过一百行的规范文件顶部加一个目录（TOC），让它一眼看到全貌、知道该往下读。这么一改，规范漏检的问题基本就没了。这个坑挺提醒我的——</span><span style="font-weight:bold">skill 不是你写了模型就会乖乖全读，得顺着它实际怎么取上下文去设计文件结构。</span></p>
+<p id="f-doxcnozaapioQJ1s7AClMUksBAd"><span style="font-weight:bold">第二个坑更隐蔽，是有时候没有按照规范审核。</span><span> 案例把团队规范单独抽成一个 reference 文件，SKILL.md 正文里只写"去读这份规范、逐条核对"。但运行时，有些明明规范里白纸黑字写了的点，它就是漏。检查文件读取过程后发现：</span><span style="font-weight:bold">它读那个 reference 文件的时候，用的是 </span><span style="font-weight:bold"><span><span>head -100</span></span></span><span style="font-weight:bold"> 这种命令，只把开头一百行"预览"了一下就走了</span><span>，该规范一百行开外的内容它根本没看到。再深挖，是引用嵌套层级过多——SKILL.md 指到一个中间文件，那个文件再指到规范，嵌套一深，模型就倾向于只预览、不通读。解法有两个：一是把引用拍平、只保持一层深，所有 reference 都从 SKILL.md 直接链过去，不再转手；二是给超过一百行的规范文件顶部加一个目录（TOC），让它一眼看到全貌、知道该往下读。这么一改，规范漏检的问题基本就没了。这个案例说明：</span><span style="font-weight:bold">skill 不是你写了模型就会乖乖全读，得顺着它实际怎么取上下文去设计文件结构。</span></p>
 
-<p id="f-doxcnFVql9dyD6wNGFRWVc1OQCc"><span style="font-weight:bold">第三个，是这个 skill 一开始忽好忽坏，我说不清它到底行不行、也不知道每次改动是变好了还是变坏了。</span><span> 同样一类 PR，它今天审得挺准，明天可能就抽风。全靠我"感觉"，没法衡量。后来我干脆上了一套</span><span style="font-weight:bold">测试先行 + 反馈闭环</span><span>的打法：</span><span style="font-weight:bold">先不给 skill，让 Claude 裸跑几个我们真实的、有代表性的 PR，把它审错、漏审的地方记下来，固化成一组固定的测试用例、当成 baseline</span><span>——每条用例写清楚给什么 PR、期望它挑出哪些问题。之后就进入"测试→反馈→修改"的循环：</span><span style="font-weight:bold">每改一版 skill，都拿这同一套用例重新跑一遍，跟 baseline 比是进步了还是退步了</span><span>；关键是</span><span style="font-weight:bold">每次都用一个全新的 Claude 会话去测</span><span>，因为要是用我写 skill 那个会话测，它脑子里还残留着上下文，会把我指令里的漏洞给"脑补"掉，测不出真问题。就这么一轮轮跑到指标稳定、达到我要的效果为止。这套下来，skill 好不好不再是"可以认为"，而是有一组可复现的用例在给我兜底——</span><span style="font-weight:bold">这版比上版强多少，是量化出来的。</span></p>
+<p id="f-doxcnFVql9dyD6wNGFRWVc1OQCc"><span style="font-weight:bold">第三个，是这个 skill 一开始忽好忽坏，难以判断改动是否改善效果。</span><span> 同样一类 PR，它今天审得挺准，明天可能就抽风。仅凭感觉无法衡量，因此采用</span><span style="font-weight:bold">测试先行 + 反馈闭环</span><span>的打法：</span><span style="font-weight:bold">先不给 skill，让 Claude 裸跑几个我们真实的、有代表性的 PR，把它审错、漏审的地方记下来，固化成一组固定的测试用例、当成 baseline</span><span>——每条用例写清楚给什么 PR、期望它挑出哪些问题。之后就进入"测试→反馈→修改"的循环：</span><span style="font-weight:bold">每改一版 skill，都拿这同一套用例重新跑一遍，跟 baseline 比是进步了还是退步了</span><span>；关键是</span><span style="font-weight:bold">每次都用一个全新的 Claude 会话去测</span><span>，因为要是用编写 Skill 时的会话测试，它脑子里还残留着上下文，会把指令中的漏洞给"脑补"掉，测不出真问题。就这么一轮轮跑到指标稳定、达到目标效果为止。这套下来，skill 好不好不再是"可以认为"，而是有一组可复现的用例提供验证依据——</span><span style="font-weight:bold">这版比上版强多少，是量化出来的。</span></p>
 
 <p id="f-doxcnZc7RDNifds1PgJCb6Atkxh"><span>这三个坑其实对应了做 skill 的三个层面：</span><span style="font-weight:bold">误报治理是"输出质量"、引用拍平是"结构设计"、测试闭环是"怎么科学地衡量和打磨"</span><span>，算是把这个 skill 从能跑到好用磨了出来。</span></p>
 
@@ -233,15 +233,15 @@ Skill、Harness、Loop、Graph 工程与实践
 
 <p id="f-doxcnlriXPR0f8bmeSQp11IrCm7"><span style="font-weight:bold">Q2：你做了什么 SKILL 可以分享一下吗？</span></p>
 
-<p id="f-doxcnqOYWGcCxCJrsBnNEkNu9vf"><span style="font-weight:bold">【思路】</span><span> 按 </span><span style="font-weight:bold">定位 → 结构 → 核心设计 → 效果</span><span> 讲，把 Q1 的困难解决方案自然带出来，形成呼应。我们还是以Code-review的SKILL来讲，融合进官方code-review skill的思想。如果你想讲你自己做了某个其它的SKILL也没问题，可以用我们上面的思想去包装一下。如果你没有做什么特别深入的SKILL，就可以说你做了</span><span style="font-weight:bold">code-review skill，</span><span>然后用下面的回答讲。</span></p>
+<p id="f-doxcnqOYWGcCxCJrsBnNEkNu9vf">【思路】按定位 → 结构 → 核心设计 → 效果展开，把 Q1 的困难与解决方案自然带出来。下面以 Code Review Skill 为例，结合官方 Code Review Skill 的设计思想进行分析。</p>
 
 <p id="f-doxcnx5AExskumdWgjl4DthlTHh"><span style="font-weight:bold">【口语化答案】</span></p>
 
-<p id="f-doxcn79k8B14ysrnpc5ufCIsBze"><span>我分享一个我给团队做的 </span><span style="font-weight:bold">code-review skill</span><span>，目标很直接：</span><span style="font-weight:bold">在提 PR 或者 review PR 的时候，让 Claude 自动按我们团队的规范审一遍代码，只把真正高价值的问题挑出来，直接回帖到 PR 上。</span></p>
+<p id="f-doxcn79k8B14ysrnpc5ufCIsBze">以 Code Review Skill 为学习案例：在提交或审核 PR 时，让 Claude 按团队规范检查代码、筛选高价值问题，并生成 PR 评论。</p>
 
 <p id="f-doxcnL1GmgrtgcBdzHc9HbGM0fg"><span style="font-weight:bold">先说结构</span><span>，它其实就是一个文件夹：一个 </span><span><span><span>SKILL.md</span></span></span><span> 放触发条件和审查流程；一个 </span><span><span><span>references/team-spec.md</span></span></span><span> 把我们团队的规范全放进去、按需加载；还有个 </span><span><span><span>scripts/</span></span></span><span> 目录放一些辅助脚本，比如先跑一遍 linter 把机器能抓的问题过滤掉。触发方式两种都支持——Claude 识别到你在 review PR 会自动来问，或者手动打 </span><span><span><span>/code-review</span></span></span><span> 调。</span></p>
 
-<p id="f-doxcnbipHnupRrk5sS0UbZnliGb"><span style="font-weight:bold">核心设计我讲三个我比较得意的点：</span></p>
+<p id="f-doxcnbipHnupRrk5sS0UbZnliGb">核心设计包括以下三点：</p>
 
 <p id="f-doxcnn7yi8Gi3cdtRlkKH8F1xmg"><span style="font-weight:bold">第一是多视角并行审查。</span><span> 我不是让一个 agent 从头审到尾，而是拆成几路并行、各审各的：有的专门盯</span><span style="font-weight:bold">团队规范（CLAUDE.md）合规性</span><span>，有的</span><span style="font-weight:bold">只看 diff 本身抓明显的 bug</span><span>、故意不让它读太多上下文免得分心，还有一路会去</span><span style="font-weight:bold">看 git blame / history</span><span>、结合这个文件以前改动的上下文来判断。几路的结论汇总起来，比单打独斗全面。（官方那个 code-review plugin 就是 4 路并行，我这个思路是参考它的。）</span></p>
 
@@ -251,7 +251,7 @@ Skill、Harness、Loop、Graph 工程与实践
 
 <p id="f-doxcnSOuUfrHJKQjYmbF6maXnMe"><span>输出上我也做了规范：评论简洁、不带 emoji、每条问题都</span><span style="font-weight:bold">带上精确到行的代码永久链接</span><span>，方便人一键跳过去看。</span></p>
 
-<p id="f-doxcn9YgoRqFyR9jPx4yi65U8hh"><span style="font-weight:bold">效果</span><span>我是拿"用不用这个 skill"对比着测的——</span><span style="font-weight:bold">人工 review 要来回介入的次数明显少了，误报基本被压下去了，token 消耗也因为分级用模型降了一截。</span><span> 现在它基本能当"人工 review 的第一道过滤网"，把机械的、明显的问题先扫掉，人只需要 focus 在真正需要判断的地方。</span></p>
+<p id="f-doxcn9YgoRqFyR9jPx4yi65U8hh">效果可以通过使用与不使用 Skill 的对照实验分析，记录人工介入次数、误报与 Token 消耗，并检查其作为人工 Review 前置过滤的适用性。</p>
 
 <p id="f-doxcnjlqhk0Di8NHFKE0PDti2ib"><span style="font-weight:bold">Q3：SKILL 是什么，可以谈谈你的理解吗？</span></p>
 
@@ -271,7 +271,7 @@ Skill、Harness、Loop、Graph 工程与实践
 
 <p id="f-doxcnh3e51GgC77GDoCNyQArc3b"><span style="font-weight:bold">【口语化答案】</span></p>
 
-<p id="f-doxcnC0sgYZ72V53kVNK9NhL50J"><span>我自己写 skill 会按几步来，基本对应了几条我踩过坑总结的实践。</span></p>
+<p id="f-doxcnC0sgYZ72V53kVNK9NhL50J">编写 Skill 可以按以下步骤进行。</p>
 
 <p id="f-doxcnYkgSnI7kulqQmxfkfof4Bh"><span style="font-weight:bold">第一步，先把 </span><span style="font-weight:bold"><span><span>description</span></span></span><span style="font-weight:bold"> 写好，保证它该触发的时候能触发。</span><span> 这是最容易被忽略、但最致命的一环——skill 写得再好，触发不了就等于零。可以用第三人称，把"</span><span style="font-weight:bold">这个 skill 做什么 + 什么场景下用</span><span>"写清楚，还会特意把</span><span style="font-weight:bold">用户真实会说的关键词</span><span>塞进去。如果一个 skill 老是乱触发，我就干脆把它设成只能手动调。</span></p>
 
@@ -361,7 +361,7 @@ Skill、Harness、Loop、Graph 工程与实践
 
 <a id="f-doxcntsmmtzQiqA3fIWuaciBtyh"></a>
 
-<div style="margin-left:25px"><p id="f-doxcnXsbPMiWlszDvmtsBe7MNsd"><span>Harness工程，在2026年5月来看，都是今年整个行业的热门考点。行业有一种定义： Agent - Model = Harness。所以Harness 的概念很大，从工具使用，模型记忆如何配置，如何测试，Agent架构选择，都可以叫做Harness.</span></p><p id="f-doxcnBr90N5i2weVlwEebpZF2ce"><span style="font-weight:bold">学习建议：</span></p><div id="f-doxcnM2wXeNQZtbbR1a2QspNLIe" style="display:flex;gap:0.5em"><span style="min-width:1.5em">a.</span><div><span style="font-weight:bold">理解Harness:</span><span> 2.1 2.2. 2.3 总结Harness的定义。其实Harness的视频很多，大多都是讲解它是什么，发展历程，思想是啥，所以找一个看就够了。我给大家推荐了一个中文参考视频，建议看一下视频，因为这里写得不详细。不过这类视频只用挑一个看，理解概念和思想。</span></div></div><div id="f-doxcnFDx1JgsglaunX9doZoyxNc" style="display:flex;gap:0.5em"><span style="min-width:1.5em">b.</span><div><span style="font-weight:bold">Harness的具体实战：</span><span>2.4 小节，我写得很详细。是我看了一个特别好的Harness视频来总结的。他和别的视频不同，是因为他足够具体，给出了具体的Harness的使用思路，而且该博主做了大量实验，引用了大量论文，有理有据。这个视频特别好，对面试，做Agent项目，使用AI都有帮助。我详细解析了这个视频，总结到了文档里，并结合了大量面试题讲解，所以看了这个小节你绝对非常有收获。</span></div></div><div id="f-doxcnmAI7cGTXSkUZng4hVOa3bd" style="display:flex;gap:0.5em"><span style="min-width:1.5em">c.</span><div><span style="font-weight:bold">Harness具体项目：</span><span>2.5，2.6. 大致解析了一些Harness项目。这个里面内容就很多了，大家愿意深入学习的可以去看这些项目。我记得最近有一本书，《</span><span style="font-style:italic">Claude Code</span><span> 实战:</span><span style="font-style:italic">Harness</span><span>工程</span><span style="font-style:italic">之道</span><span>》。 你可以看出来Harness概念很大，它是一种思想，整个Claudecode的设计，都可以叫做Harness。所以Harness更多的学习，还是体现在我们使用AI，构建项目中，不断去体会。这个深入体会就靠大家自己了。</span></div></div></div>
+<div style="margin-left:25px"><p id="f-doxcnXsbPMiWlszDvmtsBe7MNsd">Harness 的一种定义是 Agent - Model = Harness，其范围包括工具使用、模型记忆配置、测试与 Agent 架构选择。学习建议：先通过 2.1、2.2、2.3 理解定义与思想；再学习 2.4 的实战、使用方法和实验；最后通过 2.5、2.6 的项目分析进一步理解设计。参考书籍包括《Claude Code 实战：Harness 工程之道》。Harness 的学习需要结合 AI 使用和项目构建，持续实践。</p><p id="f-doxcnBr90N5i2weVlwEebpZF2ce"><span style="font-weight:bold">学习建议：</span></p><div id="f-doxcnM2wXeNQZtbbR1a2QspNLIe" style="display:flex;gap:0.5em"><span style="min-width:1.5em">a.</span><div><span style="font-weight:bold">理解Harness:</span><span> 2.1 2.2. 2.3 总结Harness的定义。其实Harness的视频很多，大多都是讲解它是什么，发展历程，思想是啥，所以找一个看就够了。我给大家推荐了一个中文参考视频，建议看一下视频，因为这里写得不详细。不过这类视频只用挑一个看，理解概念和思想。</span></div></div><div id="f-doxcnFDx1JgsglaunX9doZoyxNc" style="display:flex;gap:0.5em"><span style="min-width:1.5em">b.</span><div><span style="font-weight:bold">Harness的具体实战：</span><span>2.4 小节，我写得很详细。是我看了一个特别好的Harness视频来总结的。他和别的视频不同，是因为他足够具体，给出了具体的Harness的使用思路，而且该博主做了大量实验，引用了大量论文，有理有据。这个视频特别好，对面试，做Agent项目，使用AI都有帮助。我详细解析了这个视频，总结到了文档里，并结合了大量面试题讲解，所以看了这个小节你绝对非常有收获。</span></div></div><div id="f-doxcnmAI7cGTXSkUZng4hVOa3bd" style="display:flex;gap:0.5em"><span style="min-width:1.5em">c.</span><div><span style="font-weight:bold">Harness具体项目：</span><span>2.5，2.6. 大致解析了一些Harness项目。这个里面内容就很多了，大家愿意深入学习的可以去看这些项目。我记得最近有一本书，《</span><span style="font-style:italic">Claude Code</span><span> 实战:</span><span style="font-style:italic">Harness</span><span>工程</span><span style="font-style:italic">之道</span><span>》。 你可以看出来Harness概念很大，它是一种思想，整个Claudecode的设计，都可以叫做Harness。所以Harness更多的学习，还是体现在我们使用AI，构建项目中，不断去体会。这个深入体会就靠大家自己了。</span></div></div></div>
 
 <p id="f-doxcn8920g1sHJ5Y8mH9LSj47Uf"><span>总而言之，其实按照路线a,b学完Harness。 应对Harness的面试问题，应该就没什么问题了。</span></p>
 
@@ -415,7 +415,7 @@ Skill、Harness、Loop、Graph 工程与实践
 
 ##### 参考资料
 
-<p id="f-doxcn5CEqJJqo9xJCw7MvkRPTdh"><span>关于Harness概念, 2.1 2.2 2.3. 我主要是记录了具体知识要点，其实想要理解上面内容，网上视频很多，大多都是按照2.1 2.2 2.3 这个思路讲的，大家只要看其中之一就能理解，我给大家推荐一个。</span></p>
+<p id="f-doxcn5CEqJJqo9xJCw7MvkRPTdh">关于 Harness 概念，可以结合 2.1、2.2、2.3 的知识点与下面的参考视频学习。</p>
 
 <div id="f-doxcnOJjkiZwqAzbPRJn91sQcIb"><div><div><div><div><div><div><div><div><div><a href="https://open.douyin.com/player/video?vid=7636365606182325544&amp;mode=pc">嵌入视频 / 原始播放器</a></div></div></div></div></div></div></div></div></div></div>
 
@@ -425,7 +425,7 @@ Skill、Harness、Loop、Graph 工程与实践
 
 <a id="f-doxcnPDrsexDsakv0ugeVxFy1ec"></a>
 
-<p id="f-doxcn5We7Z9wELuOx5RK8Mihtzg"><span>本期视频来源：Raj 的 "Engineering Coding Harnesses Deep Dive" 视频精读。可以认为这个视频是一个很好的视频，因为他足够细节，讲解了Harness在日常工作的应用，并且这些结论他做了实验，看了论文来支撑它。这个视频让我们更好的理解如何在日常使用Harness工程的思想，对应的一些最佳实践。我看完觉得这是非常好的视频，</span><span style="font-weight:bold">对面试，实战，做项目都有极大帮助！</span></p>
+<p id="f-doxcn5We7Z9wELuOx5RK8Mihtzg">参考视频：Raj 的 Engineering Coding Harnesses Deep Dive，结合实验与论文说明 Harness 在日常工作中的应用及相关实践。</p>
 
 <p id="f-doxcnDDeVoe39cnZZflKq1Y5Uef"><span>这一节从四个方面： </span><span style="font-weight:bold">Retrieval / Context &amp; Memory / Loops &amp; Tools / Orchestration</span><span> 来讲解了Harness工程在我们使用AI，或者说构造AIAgent应用过程中的具体做法。这里面每一个部分，给出的建议都特别具体。这一小节，结合了大量面试问题讲解，消化好这一部分对于面试非常有帮助。</span></p>
 
@@ -495,7 +495,7 @@ Skill、Harness、Loop、Graph 工程与实践
 
 <p id="f-doxcnB0AFnibjxSolWS0sLW6fsY"><span>虽然主流模型号称 1M token 上下文，但实测</span><span style="font-weight:bold">填越多越退化</span><span>——通常超过一半就开始丢信息。所以"有 1M 窗口"≠"能用 1M 窗口"，真正能可靠使用的往往只有前 30–50%。这就引出一个问题：信息越来越多（长对话、错误日志、跨会话的项目知识），但能放进窗口的就这么多，</span><span style="font-weight:bold">该把什么放进来、什么放出去、什么留到下次</span><span>？</span></p>
 
-<p id="f-doxcnoVXwqXu7HjaT1FiQRY4Wnd"><span>视频博主把这件事拆成三层记忆来处理：</span><span style="font-weight:bold">Active Context Window、Working State、Durable Memory</span><span>。下面就只讲清楚这三层各自负责什么。</span></p>
+<p id="f-doxcnoVXwqXu7HjaT1FiQRY4Wnd">可以将记忆拆分为三层：Active Context Window、Working State、Durable Memory。下面说明这三层各自负责什么。</p>
 
 <blockquote id="f-doxcnifOes9VwZDVDao5lyIXWed"><p id="f-doxcnMQliPIl58WyYMtCelhPdph"><span>关于记忆的分类有很多说法（短期/长期、工作记忆/情景记忆等），笔记里讲开源架构（CC、OpenHands、Claude Code）时也各有各的叫法。本质都是一回事，只是切分粒度不同。本节更重要的还是使用这些记忆背后的最佳实践和蕴含的思想。</span></p></blockquote>
 
@@ -591,7 +591,7 @@ Skill、Harness、Loop、Graph 工程与实践
 
 <blockquote id="f-doxcnqZaNUFjLLqCpscPqUlLK3f"><p id="f-doxcnbbzHKgyMUtdR4aUDb89zwf"><span>根据本章学习的内容，总结两个可参考方向的回答。</span></p></blockquote>
 
-<p id="f-doxcnIVpIcGqo4MzjwIXToeBVyh"><span style="font-weight:bold">版本一（记忆管理视角）</span><span>：我想谈一下关于Agent记忆管理的一些心得，我把Agent的记忆分成三层：1.上下文窗口 2.临时工作文件 3.持久记忆。在使用它们的时候，谈一下我的心得：</span></p>
+<p id="f-doxcnIVpIcGqo4MzjwIXToeBVyh">版本一（记忆管理视角）：Agent 记忆可分为上下文窗口、临时工作文件与持久记忆三层，下面分别讨论其使用方式。</p>
 
 <ol start="1"><li id="f-doxcnRXnQln3fEdpmXi0OYfQFFh"><span>上下文窗口非常宝贵，我们需要很小心管理他，同时虽然现在模型的窗口越来越大，最大的上下文可以支持1M，但是当上下文增大，模型性能也会退化，所以我们不必等到上下文满了再压缩，可以在上下文50%的时候，主动压缩。</span></li></ol>
 
@@ -601,7 +601,7 @@ Skill、Harness、Loop、Graph 工程与实践
 
 <p id="f-doxcnPeavfrFvjg3n8NLKzyNlib"><span style="font-weight:bold">版本二（AGENTS.md 管理视角）</span><span>：最大启示是</span><span style="font-weight:bold">项目级知识要外化，但要克制</span><span>。以前我习惯把所有约定写在 README 里靠人脑记，现在可以用 `AGENTS.md` 把"项目特有的事实"喂给 agent——构建命令、目录约定、踩过的坑。</span></p>
 
-<p id="f-doxcnMgk6FlyTZ1iMcx29wt60o8"><span>但管理 `AGENTS.md` 有几条铁律我是踩坑学到的，最近也有一篇论文 </span><span style="font-style:italic">Evaluating AGENTS.md — Are Repository-Level Context Files Helpful for Coding Agents?</span><span>（arxiv 2602.11988）做了实证支撑：作者在 AGENTBENCH 上对比"无 context file / LLM 自动生成 / 人类手写"三档设置，发现 </span><span style="font-weight:bold">LLM 自动生成的 AGENTS.md 反而让任务成功率下降 ~3%、token 消耗上升 ~20%</span><span>，人工手写也只有 +4% 的提升。原因是 context file 里每一条额外要求都是一个约束，Agent 会认真履行但同时也分散了注意力。所以我的做法是：</span></p>
+<p id="f-doxcnMgk6FlyTZ1iMcx29wt60o8"><span>管理 `AGENTS.md` 可以注意以下原则，最近也有一篇论文 </span><span style="font-style:italic">Evaluating AGENTS.md — Are Repository-Level Context Files Helpful for Coding Agents?</span><span>（arxiv 2602.11988）做了实证支撑：作者在 AGENTBENCH 上对比"无 context file / LLM 自动生成 / 人类手写"三档设置，发现 </span><span style="font-weight:bold">LLM 自动生成的 AGENTS.md 反而让任务成功率下降 ~3%、token 消耗上升 ~20%</span><span>，人工手写也只有 +4% 的提升。原因是 context file 里每一条额外要求都是一个约束，Agent 会认真履行但同时也分散了注意力。可采用以下做法：</span></p>
 
 <p id="f-doxcnSZZXnBTHF6OEelpK5FJ9Hd"><span>1. </span><span style="font-weight:bold">手写不自动生成</span><span>——自动生成的 `AGENTS.md` 充斥废话，论文实验里直接成了负贡献；</span></p>
 
@@ -771,7 +771,7 @@ Skill、Harness、Loop、Graph 工程与实践
 
 ##### Orchestration（单 Agent vs 多 Agent）
 
-<blockquote id="f-doxcnnX3WJ3gffSKdqQ0mhi1tcg"><p id="f-doxcnkbPJPjXRGThqPcw4vNUQr9"><span>其实这一章的内容和本节里的</span><span><span><a href="/posts/agent-learning-11-multi-agent/#f-doxcntuQVjJ2aMEP4HF4qje1X9b"><span>多Agent</span></a></span></span><span>部分非常像，这个博主讲的时候，引用的参考资料的论文都和我在笔记里推荐的论文一模一样。总体而言，这个博主说的内容和本节里这个章节是一样的，如何选单Agent, 多Agent。值得一提的是，这个博主直接把parallel模式否掉了，他说这不是一种很好的模型，因为你极难管理不同Agent之间的通信以及协调税。虽然作为知识的总结部分，多Agent架构里肯定是有parallel这种模式的。另外笔记里解析了三个开源架构，CC,Openclaw,Hermes。他们确实也都用的是orchestrator模式，由此最少也可以看出来parallel模式很难驾驭，要慎用。</span></p>
+<blockquote id="f-doxcnnX3WJ3gffSKdqQ0mhi1tcg"><p id="f-doxcnkbPJPjXRGThqPcw4vNUQr9">本节讨论如何选择单 Agent 与多 Agent。Parallel 模式需要管理不同 Agent 之间的通信及协调开销；Claude Code、OpenClaw、Hermes 等案例采用 Orchestrator 模式。可结合这些架构比较 Parallel 模式的适用条件与取舍。 <a href="/posts/agent-learning-11-multi-agent/#f-doxcntuQVjJ2aMEP4HF4qje1X9b"><span>多Agent</span></a></p>
 <p id="f-doxcnNpLDCrjL5cLjOcxArdRoTg"><span>另外你会不会有疑问，单Agent/多Agent这个内容算什么Harness？但是按现在业界的定义，Harness = Agent - Model，所以这样想你应该不会觉得奇怪了吧。</span></p></blockquote>
 
 <a id="f-doxcnBLaUQkCGxxJGxNLEwFAPbb"></a>
@@ -836,11 +836,11 @@ Skill、Harness、Loop、Graph 工程与实践
 
 <p id="f-doxcnL10JUm4KuH2zl92TISrr9b"><span>上面其实展示了很多面试问题，就是想告诉大家，这一节的内容真的很实用。这里引用字节暑期实习真题，来告诉大家，确实你看了这个笔记，对你面试有直观的帮助。这个面试真题来自于：</span><span><span><a href="/posts/agent-learning-24-interview-review/#f-doxcnobSTKPi3ZAKwTDxkqSHhEc"><span>2026/05字节跳动大模型开发暑期实习一面</span></a></span></span></p>
 
-<p id="f-doxcnxAAPBa4oc1zRUJTl4DiSDb"><span>下面这三个问题，都是我根据上面2.4的知识部分手写的。只是做一个参考。更多的其实想告诉大家，你自己理解了上述的内容，很多问题就游刃有余，可以从各个方面和面试官去讲。而且也可以深入和他探讨。重点不在于背答案，而在于理解和灵活运用。</span></p>
+<p id="f-doxcnxAAPBa4oc1zRUJTl4DiSDb"></p>
 
 <p id="f-doxcnb2eA4gLEmrDGwUyhi9SkOc"><span>8-4 如果让你用 harness 完成你的工程，你会怎么做？</span></p>
 
-<p id="f-doxcnYSP2CwlhdQ2dy2jdMtNuvd"><span>Harness这个概念其实很大，按照现在的定义，Agent除了模型以外的部分，都叫做Harness。假设我运用的是ClaudeCode来完成项目，我分享一下我是用CC完成项目的一些Harness思想。</span></p>
+<p id="f-doxcnYSP2CwlhdQ2dy2jdMtNuvd">Harness 可以理解为 Agent 中模型之外的部分。下面以 Claude Code 完成项目为例，讨论相关工程方法。</p>
 
 <p id="f-doxcnaMkx0PYDWXqIBqJluIHhig"><span>1. </span><span style="font-weight:bold">从AI调用检索工具的角度。</span><span>ClaudeCode默认使用Grep搜索，</span><span style="font-weight:bold">但是可以根据具体的任务和观测的效果，来修改模型使用的工具</span><span>，比如文件太大，那我会使用BM25建立索引。如果搜索精度低，我会使用Agentic Rag或者embedding搜索提升模型的外部获取信息能力。</span></p>
 
@@ -906,7 +906,7 @@ Skill、Harness、Loop、Graph 工程与实践
 
 <blockquote id="f-doxcntgnFfb7U8bFbSfGhygzQCP"><p id="f-doxcnKXFGGK5SLqxlpuFN6MREbf"><span>Claude Code泄漏发生后，韩国开发者 Sigrid Jin 发起了 </span><span style="font-weight:bold">Claw Code</span><span> 项目——用 AI 编排工具指挥多个 coding agent 并行工作，在 </span><span style="font-weight:bold">3 天内</span><span>将 Claude Code 的核心功能从 TypeScript 重写为 Rust（48,599 行），产生了 292 个 commit。整个过程中人类几乎不写代码，只负责方向决策和任务分解。</span></p>
 <p id="f-doxcnXCjoSDF0JI7Vhzz3rUloIf"><span>这个项目破了Github涨星最快的记录，除了乘上了CC的热度外，更在于它完整展示了一套 使用Harness工程进行Vibe Coding的技巧 —— 如何用 AI 工厂模式完成大规模代码迁移同样值得学习。</span></p>
-<p id="f-doxcnh0Zd9iD33riLQt15BX6oTv"><span>这一节带大家快速掌握一下它的方法，值得提的是我没有非常深入地继续学习，而是快速了解了他的思路。如果你想更深入的学习，我也提供了它的代码地址，可以借鉴这个代码仓库，自己做一遍，感受Harness工程（毕竟Harness 工程真的是需要自己去实践设计才能更好掌握的），也可以做一个Coding Agent，是一个不错的学习机会。</span></p></blockquote>
+<p id="f-doxcnh0Zd9iD33riLQt15BX6oTv">该项目可用于学习 Coding Agent 的实现思路。</p></blockquote>
 
 <a id="f-doxcnKLVEMFUnbRsr4Gs9EjmEBb"></a>
 
@@ -932,7 +932,7 @@ Skill、Harness、Loop、Graph 工程与实践
 
 ###### 归档 + 快照原始代码表面
 
-<blockquote id="f-doxcnzmAiHy76AumCl3J87ZYFYc"><p id="f-doxcnl07nAvAWNsMOH8t8uUq9Ne"><span>简单来说你可以理解为就是去把整个项目做一个拆解，去将ClaudeCode代码变成可以量化的文字，比如有多少工具，有多少文件，有多少Commands（就是我们讲的在Claude里面输入/models,这种叫做command)。 将大型项目变成快照，这样AI好查找，比如查找对应的某个command对应的代码是啥，做进度统计的时候也好去统计比如完成了哪些实现。这里面提到的json文件，大家可以在我后面提供的项目开源仓库中找到。</span></p></blockquote>
+<blockquote id="f-doxcnzmAiHy76AumCl3J87ZYFYc"><p id="f-doxcnl07nAvAWNsMOH8t8uUq9Ne"><span>简单来说你可以理解为就是去把整个项目做一个拆解，去将ClaudeCode代码变成可以量化的文字，比如有多少工具，有多少文件，有多少Commands（就是我们讲的在Claude里面输入/models,这种叫做command)。 将大型项目变成快照，这样AI好查找，比如查找对应的某个command对应的代码是啥，做进度统计的时候也好去统计比如完成了哪些实现。这里面提到的json文件，可以在项目开源仓库中找到。</span></p></blockquote>
 
 <p id="f-doxcnYqOpJs46AVJlxglu5JrYMf"><span>第一步不是写代码，而是</span><span style="font-weight:bold">把要重写的东西完整记录下来，形成机器可查的"参考清单"</span><span>。</span></p>
 
@@ -962,7 +962,7 @@ Skill、Harness、Loop、Graph 工程与实践
 
 ###### Python 镜像工作区
 
-<blockquote id="f-doxcnNhoBfEfyD9d0xijMOYvlKc"><p id="f-doxcnfEev6PJV6u2OQfhnsUVtcg"><span>   我个人的理解还是在建索引。上面是把Claude Code拆解了，拆解成json，让AI好查找。现在是把这个Claude Code 变成一个python的骨架，这个骨架代码没实现，但是AI可以很快看出它的目录，他是如何启动的，整个流程是啥。相当于给了AI一个空壳，虽然没有实现，但是本案例通过空壳可以快速知道项目结构，启动流程。</span></p></blockquote>
+<blockquote id="f-doxcnNhoBfEfyD9d0xijMOYvlKc"><p id="f-doxcnfEev6PJV6u2OQfhnsUVtcg"><span>   可以理解为建立索引。上面是把Claude Code拆解了，拆解成json，让AI好查找。现在是把这个Claude Code 变成一个python的骨架，这个骨架代码没实现，但是AI可以很快看出它的目录，他是如何启动的，整个流程是啥。相当于给了AI一个空壳，虽然没有实现，但是本案例通过空壳可以快速知道项目结构，启动流程。</span></p></blockquote>
 
 <p id="f-doxcnYKBw79lrKWabiZytJaz90g"><span>不直接从 TS 翻 Rust——直接翻译等于盲写。原始 TS 有 1,902 个文件、51 万行代码，AI agent 拿到工单后如果要自己在里面翻找架构信息，效率极低且容易遗漏。Claw Code 先建了一个 </span><span style="font-weight:bold">Python 中间层</span><span>——一个只有 67 个文件的轻量"沙盘模型"，让 AI agent 在后续 Rust 重写时可以先查这个中间层快速定位，而不需要大海捞针。</span></p>
 
@@ -1022,7 +1022,7 @@ Skill、Harness、Loop、Graph 工程与实践
 
 ###### 多Agent协作执行
 
-<blockquote id="f-doxcnwsSy6K8fcaUKbZAl37t4Uc"><p id="f-doxcn1KoOlEBWUhBngCAff8bZSe"><span>这一步才是真正的执行。执行也是很有技巧，当时我们的rag项目都是串行的，一个agent。但是人家是并行，多个Agent。甚至专门写了3个工具负责Agent调度，执行，监控。（这三个工具也给出了代码仓库，大家想深入学习可以学习）。Anthropic公司的harness项目也是用的多Agent。大佬们做的Harness工程，还是得用多Agent来做。所以自己做Harness的时候，最好用多Agent，想想他们如何调度，监测，执行的，这样面试时候也会显得更高级。</span></p></blockquote>
+<blockquote id="f-doxcnwsSy6K8fcaUKbZAl37t4Uc"><p id="f-doxcn1KoOlEBWUhBngCAff8bZSe">执行阶段采用多个 Agent 并行工作，并通过三个专用工具进行调度、执行与监控。可以结合参考仓库研究其模块分工、任务依赖与验证方法。</p></blockquote>
 
 <p id="f-doxcnnatNZtEXvqphsAvqNsslHk"><span>如 </span><span><span><span>PHILOSOPHY.md</span></span></span><span> 所述，这个项目的核心哲学是：</span><span style="font-weight:bold">人类提供方向，claws（AI agent）执行劳动</span><span>。</span><span style="font-weight:bold">前四个阶段建好了清单、中间层、进度条和测试题，第五阶段就是让多个 AI agent 并行干活，人类只在关键节点介入。</span></p>
 
@@ -1071,7 +1071,7 @@ Skill、Harness、Loop、Graph 工程与实践
 
 ##### 项目地址
 
-<blockquote id="f-doxcnEicXMn13j41uXC4xjXcMyb"><p id="f-doxcnQDC2Y8kFOGHwiT2ZaRIcxh"><span>这个项目本身是个很好的学习Harness技巧的项目，你可以通过这个项目，学习设计Harness，自己通过它的方法，复现，自己也可以实现一个Claude Code的Agent。这是很值得做的事。深入的学习靠大家自己了。我后面想要在案例中的Agent项目再设计一个Harness工程，我就不会深入研究这个项目了。如果你不想深入学习，最少通过这些笔记，你能更进一步理解Harness项目的设计思想，也能够在面试的时候有更多可说的。</span></p></blockquote>
+<blockquote id="f-doxcnEicXMn13j41uXC4xjXcMyb"><p id="f-doxcnQDC2Y8kFOGHwiT2ZaRIcxh">这个项目可用于学习 Harness 技巧、设计方法和复现过程，并进一步实现具有类似能力的 Coding Agent。</p></blockquote>
 
 <p id="f-doxcnAPGeCxq5sfNVgPyr6W6vUh"><span><span><a href="https://github.com/seavee/ClawCode"><span>https://github.com/seavee/ClawCode</span></a></span></span></p>
 
@@ -1199,7 +1199,7 @@ Skill、Harness、Loop、Graph 工程与实践
 
 ##### 背景：它是怎么火起来的
 
-<p id="f-doxcnVCClIEeZvRAyka4QWdkfjc"><span>这波热度不是凭空冒出来的，是 </span><span style="font-weight:bold">2026 年年中（大约 6 月前后）</span><span> 几个分量很重的人先后开了口，短短几周就把这个词推上了风口。我把时间线大致捋一下。</span></p>
+<p id="f-doxcnVCClIEeZvRAyka4QWdkfjc">下面按时间顺序介绍 Loop Engineering 相关讨论。</p>
 
 <p id="f-doxcnFCnzE9AHwk43fJJcTK76kc"><span style="font-weight:bold">第一步，龙虾之父先点的火。</span><span> 被圈里叫"龙虾之父"的 Peter Steinberger（OpenClaw 的作者）在 X 上发帖说：别再给 coding agent 写提示词了，你应该去设计"循环"来驱动这些 agent。多个解读视频都把这条帖子认定为"loop engineering 这个词爆火的起点"——"The term loop engineering exploded after Peter Steinberger posted..."。（大概在 </span><span style="font-weight:bold">2026 年 5 月底至 6 月初</span><span>这个时间窗口）。</span></p>
 
@@ -1302,9 +1302,9 @@ Skill、Harness、Loop、Graph 工程与实践
 
 <a id="f-doxcnqwm5Bo0TKqCE4UIf0V2tAf"></a>
 
-##### 我的观点：现在还不适合大多数人，但未来一定会
+##### 实践适用范围：现在还不适合大多数人，但未来一定会
 
-<p id="f-doxcnXFNBfHjKW8MjsfA3bhhUJg"><span>先说一个事实：Boris、Peter 这些人说"我不写提示词、我写 loop"，听起来很酷。但</span><span style="font-weight:bold">他们是有底气这么说的</span><span>——他们的 token 额度没有上限。如果我也有无限 token，我当然也这么干。</span></p>
+<p id="f-doxcnXFNBfHjKW8MjsfA3bhhUJg">Boris、Peter 等人提出“我不写提示词、我写 loop”的思路。实践时还需要结合 Token 预算与实际资源条件分析取舍。</p>
 
 <p id="f-doxcnDvH7qIbZPTupPrQquS8BKg"><span>Ross Mike（这个视频博主）打了个特别到位的比方。假设我俩合伙创业，雇了个很聪明的开发者，跟他说"这是我们要做的产品，这些是需求"，然后他</span><span style="font-weight:bold">不来咨询你，自己埋头把整个东西做完了</span><span>。问题来了：在做的过程中，他必然要做大量假设——产品长什么样、什么手感、某些架构怎么定。这些假设很可能跟你脑子里的愿景对不上。你以为那份 PRD 文档覆盖了一切，但说实话</span><span style="font-weight:bold">它永远覆盖不全</span><span>，总有边界情况、总有遗漏。等他把"成品"端上来，一堆东西做好了，可就不是你想要的那个味儿。</span></p>
 
@@ -1334,7 +1334,7 @@ Skill、Harness、Loop、Graph 工程与实践
 
 <p id="f-doxcn3B6TkRv1QunPkVu9Lu8wVe"><span>主持人接了一句很妙的话——这些 loop 本质上是在造一台</span><span style="font-weight:bold">老虎机（slot machine）</span><span>，拉一把，看运气出什么。中途</span><span style="font-weight:bold">没有"把半成品拿给别人收集反馈"这一环</span><span>，而对一个想做成产品的人来说，这一环恰恰是命根子。</span></p>
 
-<blockquote id="f-doxcnnRP9s9QQtVSx01j4sg20jc"><p id="f-doxcnP5hoPU4j8c2q0xF6rk8Gmf"><span>我也是认同这个观点。理想很丰满，我们希望我们就让AI能够无限LOOP，直到完成目标。但是现状是，AI还不能摆脱人的控制，必须依赖于人去监督，想清楚细节。这个疑问：你自己都没有想清楚，凭什么指望AI一次写清楚？ 我曾在Tina huang（一个讲AI很出名的Youtuber）讲vibecoding的时候也提出了这个疑问。现阶段，要想跑得好，使用Loop也需要人精心设计和编排，想清楚细节。</span></p>
+<blockquote id="f-doxcnnRP9s9QQtVSx01j4sg20jc"><p id="f-doxcnP5hoPU4j8c2q0xF6rk8Gmf">当前 Loop 仍需要人工监督，明确需求、设计执行细节与验证条件，并精心安排流程。</p>
 </blockquote>
 
 <p id="f-doxcnDHW5PFf61TjicsTe0lglOd"><span style="font-weight:bold">那它现在到底适合干啥？</span></p>
@@ -1385,7 +1385,7 @@ Skill、Harness、Loop、Graph 工程与实践
 
 <p id="f-doxcnEcltiHm1kUiv84Oj4rT6xh"><span>Loop其实也不是啥新概念，甚至很多人都已经在用了。我的理解它就是用了Harness工程技巧，定义一个完整的执行流，来完成一个复杂的任务。 所以其实这个问题也没有一个标准的答案和做法。</span></p>
 
-<p id="f-doxcn76cbrlP7LlVXkEsFjM902g"><span>你看ClaudeCode的 /LOOP就是Loop的实现，我们讲的Harness工程举到的两个例子：</span><span><span><a href="#f-doxcnGuiUPQXIXih92YIeZ6uOhb"><span>Anthropic Harness工程</span></a></span></span><span> 和 </span><span><span><a href="#f-doxcnwGyPOA7uJi8Wh6veJ1Q7uc"><span>ClawCode Harness工程</span></a></span></span><span>：他们都是精心编排，让AI driven整个开发过程，也可以看做是Loop工程 。包括我看我们同事也有分享他是如何用AI完成复杂项目。这些复杂的流程编排都是Loop。</span></p>
+<p id="f-doxcn76cbrlP7LlVXkEsFjM902g">Claude Code 的 /loop，以及 Anthropic Harness 与 Claw Code Harness，均可作为循环驱动开发流程的学习案例。 <a href="#f-doxcnGuiUPQXIXih92YIeZ6uOhb"><span>Anthropic Harness工程</span></a> <a href="#f-doxcnwGyPOA7uJi8Wh6veJ1Q7uc"><span>ClawCode Harness工程</span></a></p>
 
 <p id="f-doxcnISLECsROzJHqJxhyY0ruQh"><span>随着模型的发展，写loop的范式也一定会发生变化。比如按照上一小节讲的。也许现在我们要写spec-开发-review-测试-代码提交的流程编排写loop，但是未来，一个很强的模型出现，大型复杂项目的编写，就是/loop + 你就把这份文档给它，完成整个项目的开发。就实现了。 </span></p>
 
@@ -1401,7 +1401,7 @@ Skill、Harness、Loop、Graph 工程与实践
 
 ##### 面试问题
 
-<blockquote id="f-doxcnP40STFiw24oP08Ll38Nlch"><p id="f-doxcnvVVvckviTsg5HAtDxAV4ig"><span>其实聊到Loop工程，面试官最常问的肯定是什么是Loop？他有哪些特点？以及你如何看待？本期笔记足够你回答这三个问题了，应对最基本的和Loop相关的问题。 把上面的东西收敛成两道可能会被问到的题，顺便当作自检。</span></p></blockquote>
+<blockquote id="f-doxcnP40STFiw24oP08Ll38Nlch"><p id="f-doxcnvVVvckviTsg5HAtDxAV4ig">下面通过问题检验对 Loop 定义、特点与适用条件的理解。</p></blockquote>
 
 <a id="f-doxcnvItw2lk402GYZMBJzOr38g"></a>
 
@@ -1441,9 +1441,9 @@ Skill、Harness、Loop、Graph 工程与实践
 
 <a id="f-doxcnTZPd89uYF1317aMsSps82b"></a>
 
-<p id="f-doxcnKFgZbRAd4uOvnqCwawkslh"><span>最近，“Graph Engineering（Graph 工程）”突然成了 AI 圈的新热词。大家真的非常喜欢用这样一种说法来描述一些新技术： 提示词工程已死，上下文工程来了。 上下文工程已死，Harness工程来了。 Harness工程已死，Loop工程来了。 Loop工程已死，graph工程来了。 当时Harness Loop 出来，我都有比较早的去解析，包括今天的Graph工程，可以认为多少这些概念都有一些操作的概念。本身他们也不是一个全新的概念，其实多少都是新瓶旧酒。 不了解的人就很容易被唬住，觉得技术概念迭代这么快，感觉很难跟上对吗？我自己这里的看法是，首先这些概念真的不是一个新的概念，他只是我们已有技术，换了一个高级的说法，其实你自己都用过了，所以其实没有什么太多的学习成本。 第二点就是你也不能不会，因为即使是炒作，AI圈也很喜欢跟风，面试官甚至可能自己也不是特别懂，但是他看到这些火的概念就会问题知不知道，问你有没有关注前沿技术。所以从这个角度来说，我们还是需要花一些时间（但是通常可能1小时就够了）去理解这个词到底是什么，可以和面试官讨论，发表你的看法。</span></p>
+<p id="f-doxcnKFgZbRAd4uOvnqCwawkslh">Graph Engineering（Graph 工程）与提示词工程、上下文工程、Harness 工程、Loop 工程等概念相关。理解这些概念时，可以对照已有技术，分析其具体机制、适用场景和工程取舍。</p>
 
-<p id="f-doxcnlf9rWqOgRp7YjkNUHRu3Sd"><span>所以我的建议就是，看看本节或者视频，</span><span style="font-weight:bold">你知道这个东西是什么，来龙去脉是什么，然后我总结了相关的面试问题</span><span>，这些面试题是面试官问到这个概念会最先问的。</span><span style="font-weight:bold">学到这里就够了，也没什么好深入学的</span><span>，因为他本质就是旧的技术。如果后面发展得更火，有更难的面试问题，我们也会跟进总结相关的面试问题的。</span></p>
+<p id="f-doxcnlf9rWqOgRp7YjkNUHRu3Sd"></p>
 
 <a id="f-doxcn2TwSn7j5XCSOqMIe45EXfh"></a>
 

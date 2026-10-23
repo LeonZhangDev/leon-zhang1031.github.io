@@ -357,7 +357,7 @@ except Exception as e:
 
 <p id="t-zJ9OagTGi4ltLBAWW23Td8"><span>开通阿里云百炼不会产生费用，仅模型调用（超出免费额度后）、模型部署、模型调优会产生相应计费。</span></p>
 
-<p id="t-b4J0au71xyc7XFmU2UJDNd"><span>现在要使用 API，都需要按 token 来计费，还好都不贵，我们可以先购买个最便宜的包：</span><span>阿里云百炼大模型服务平台</span><span>。</span></p>
+<p id="t-b4J0au71xyc7XFmU2UJDNd">使用 API 通常按 Token 计费，具体计费方式见平台文档。</p>
 
 <div id="t-nrKSI01gD4AI1aMKoXVKO2"><img alt="" decoding="async" loading="lazy" src="/images/agent-learning/52879127b872c73c098f6adf.png"/></div>
 

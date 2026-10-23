@@ -154,7 +154,7 @@ verification: {"status": "not-run", "scope": "本次仅整理资料；示例代�
 
 ##### 附录：H-Neurons 论文概括
 
-<blockquote id="f-doxcnYC8Tk0YeTZYwIMxXvE0MXb"><p id="f-doxcnQdHuYBUOFxIW3C2uI1tXIg"><span>既然提到了论文，防止面试官深入问论文的事，我总结了这个论文概括。其实不用看本身，这是搞研究的人要弄的。我们大概理解一下就行。</span></p></blockquote>
+<blockquote id="f-doxcnYC8Tk0YeTZYwIMxXvE0MXb"><p id="f-doxcnQdHuYBUOFxIW3C2uI1tXIg">下面概括论文的主要内容。</p></blockquote>
 
 <p id="f-doxcnlX3Ox5xfnyio12ENv0iEYc"><span>这篇论文的核心问题是：大模型为什么会在不知道答案时仍然自信地编造？研究者没有只从训练数据、提示词或模型规模这些外部因素解释，而是尝试从模型内部的神经元活动入手，寻找和幻觉行为相关的可观测结构。</span></p>
 
@@ -210,7 +210,7 @@ verification: {"status": "not-run", "scope": "本次仅整理资料；示例代�
 
 <p id="f-doxcnjEHrXXl7hid2xmlefFhztT"><span><span style="font-weight:bold"><a href="/posts/agent-learning-23-learning-cases/#f-doxcnT8qpq6xau2OY8jqpLALVad"><span>2026 年面试官最喜欢的 6 个 AI 项目</span></a></span></span><span>最近整理的真实面试问题也进一步说明了它的重要性：</span></p>
 
-<blockquote id="f-doxcnELPden89c3Fu5WlNt3jI5f"><p id="f-doxcn1SxE1Vgo8COII7Ao26ohJk"><span style="font-weight:bold">英伟达 Agent 一面：</span><span> Agent 遇到异常故障时，用什么方式保持持续健壮的运行？（我们后面会收录这期面经，做精讲）</span></p>
+<blockquote id="f-doxcnELPden89c3Fu5WlNt3jI5f"><p id="f-doxcn1SxE1Vgo8COII7Ao26ohJk">案例问题：Agent 遇到异常故障时，用什么方式保持持续健壮的运行？</p>
 <p id="f-doxcnuijGsrSjq5YvEGnuqOiHDh"><span style="font-weight:bold">宇树科技 Agent 一面：</span><span> 外部工具调用失败后，系统如何容错或降级？</span></p></blockquote>
 
 <p id="f-doxcnOGhSuSQAsYzKhw3fiiVIec"><span>这两道问题虽然切入角度不同，但都在考察同一个核心能力： </span><span style="font-weight:bold">当 Agent 无法按照原计划继续执行时，系统能否识别故障、采取正确的恢复策略，并在无法恢复时进行优雅降级。</span><span> 由此可以看出，Agent 健壮性设计既是一个高频面试知识点，也是生产级 Agent 项目不可缺少的工程能力。</span></p>

@@ -82,13 +82,13 @@ verification: {"status": "not-run", "scope": "本次仅整理资料；示例代�
 
 <a id="f-doxcnsn7d9qpY3k8HwjWSe13GAb"></a>
 
-<p id="f-doxcncV1vjUtnUJsFjp8dO4TDeg"><span>Claude Code本身作为T0级别的Vibe Coding，本身就值得我们学习。希望大家不要把眼光局限在自己公司的工具，比如腾讯就用CodeBuddy上。不同的工具差异还是很大，即使案例团队有Github Copilot,  但是很多厉害的同事慢慢还是倾向于去用Claude Code。之前有面试官问我会使用什么Vibe Coding的工具，我就答只用Github Copilot。我当时还觉得这就是一个闲聊的问题，但是后来才发现，对于工具的使用和比较，本身就是体现了你是否关注时代，会聪明地，高效地使用AI的一个考察点。 厉害的人一定会使用最好的工具，这其实也是一种专业素养。</span></p>
+<p id="f-doxcncV1vjUtnUJsFjp8dO4TDeg">Claude Code、GitHub Copilot、CodeBuddy 等工具可以进行对比学习，关注能力差异、使用方法和适用场景。</p>
 
-<p id="f-doxcnh80onjJVXbezdaMhJcJsZb"><span>从使用的层面，我也确实希望大家能够使用Claude Code， 思考一下不同工具的不同。案例团队也在推荐使用Claude Code，而整个Claude Code如何使用，怎么使用，本身行业也在研究。我举个例子，本节视频里讲了如何用Claude Code去做自动化，这一套方法，如果你可以用在你的工作中，绝对是领先行业的。在案例团队，也只是比较少部分的人会研究Claude Code的高级使用方法，如果你能够学会，在工作中使用，比如用ClaudeCode去做一个自动化做工作测试或者部署，分享在你们公司，一定会让领导称赞，同时你可以在面试中讲，也是加分项。</span></p>
+<p id="f-doxcnh80onjJVXbezdaMhJcJsZb">可以结合不同工具的能力比较，使用 Claude Code 等工具实践工作测试、自动化编排与部署。</p>
 
 <p id="f-doxcnUBVmcu465U5DzLIevWcQIh"><span>本节介绍了ClaudeCode的基本使用方法，常见命令，技巧，也总结了一个开源项目everything-claude-code（大神总结的Claude Code的进阶技巧）的一些进阶技巧。同时给出了一些面试问题供参考。</span></p>
 
-<p id="f-doxcnL3wMgcIcESGONywoQX9Ojh"><span>通过本期的内容，你会了解ClaudeCode的相关用法和知识。但是最重要的是，希望你真的用起来，使用起来，将这些技巧用到你的工作中，使用它，提高你使用AI工具的能力，这也将是你在新时代的技能护城河。</span></p>
+<p id="f-doxcnL3wMgcIcESGONywoQX9Ojh">将本节介绍的工具与技巧应用到实际任务，检验其效果。</p>
 
 
 <a id="section-0105"></a>
@@ -827,7 +827,7 @@ git worktree add ../feature-branch-b feature-b
 
 <a id="f-doxcnalVMpbk9v5kWA1QNoeIijf"></a>
 
-<p id="f-doxcngFFuBI5TjMqxPdFa37zUhh"><span>随着近期(2026年6月初）Codex的热度增高，网上很多人说Codex已经超过ClaudeCode。这一说法我不光在自媒体上听到，也听到同事圈有类似的说法。这篇笔记希望详细，</span><span style="font-weight:bold">诚实</span><span>地对比 ClaudeCode和Codex的</span><span style="font-weight:bold">区别，优势，特征，表现</span><span>。看完本次你的收获：</span></p>
+<p id="f-doxcngFFuBI5TjMqxPdFa37zUhh">本节比较 Claude Code 与 Codex 的区别、优势、特征及表现。</p>
 
 <p id="f-doxcnMM0klNmtnWBxxDjTwWH4Be"><span>1. 如果你在</span><span style="font-weight:bold">纠结到底选择哪个工具，我相信看完你会知道如何选择。</span></p>
 
@@ -837,7 +837,7 @@ git worktree add ../feature-branch-b feature-b
 
 <p id="f-doxcnewqimlx68z8kjlsiSC8sCh"><span>注意：</span><span>因为这些工具迭代速度很快，模型也在不断迭代，定价也经常变更，本节笔记和时间强相关</span><span>。如果你阅读本节时间相隔现在（2026年6月初）有一段时间，这些架构区别可能相对保持稳定，但是具体的特征，状态可能有所差异。</span></p>
 
-<p id="f-doxcndh6540eaQbSUuvF7yhZlIh"><span>如果你觉得看文字有点枯燥，也可以参考本期讲解视频哦！</span></p>
+<p id="f-doxcndh6540eaQbSUuvF7yhZlIh"></p>
 
 <a id="f-doxcnphCDy73WybM0A3hoimwyqC"></a>
 
@@ -1180,9 +1180,9 @@ git worktree add ../feature-branch-b feature-b
 
 ##### 迁移小技巧
 
-<p id="f-doxcnvePlkUNUmBmBVoYm3qoZEj"><span>首先我个人使用codex，我走的模型的中转，不走Openai官方账号，走后台的服务器，中转API请求，比常规流程更复杂一些，但是，</span></p>
+<p id="f-doxcnvePlkUNUmBmBVoYm3qoZEj">可以通过后台服务器中转 API 请求。</p>
 
-<p id="f-doxcn7Pf6nZICoMmVtH8U7NqO1e"><span>1.</span><span style="font-weight:bold"> Codex的配置。</span><span>你使用ClaudeCode，告诉它你的基本需求：需要下载codex，使用代理来完成模型调用不走官方账号。 我先让它规划方案，最后它框框执行。经过几次测试（比如模型调用失败，我把错误粘贴给CC),让它修改，很快它就帮我完成了这个功能。 亲测使用CC下载，安装，配置Codex, 全程不到2小时，很容易。</span></p>
+<p id="f-doxcn7Pf6nZICoMmVtH8U7NqO1e">1. Codex 配置：明确安装与模型调用需求，先规划配置方案，再根据调用错误检查和修改相关配置。</p>
 
 <p id="f-doxcnXkfq9ZrwsG4bUyBDQPZ32z"><span>2. </span><span style="font-weight:bold">项目的迁移。</span><span>我将我的ClaudeCode的项目配置成Codex的项目，也很容易。因为我的CC项目里面有很多skills, workflows, claude.md等，我只用告诉它：</span><span style="font-weight:bold">这是CC的项目，现在我需要使用Codex,请帮我完成相应适配</span><span>。它会自动完成包括SKILL的转换，Claude.md-&gt;Agent.md，所以从项目工程迁移上，成本也很低。</span></p>
 
@@ -1192,8 +1192,8 @@ git worktree add ../feature-branch-b feature-b
 
 <p id="f-doxcnfF2nyojf1KU4nzfkY6UWfu"><span style="font-weight:bold">1.</span><span style="font-weight:bold">你平时会用什么VibeCoding的工具呢</span></p>
 
-<blockquote id="f-doxcnDxZGr6pADbPcAhRNoKr9Bc"><p id="f-doxcnjsJTzuDZdj7qaxvgKWvfsg"><span>如果我学习了我们今天的内容，你回答的时候，从这二者的优缺点的角度，取长补短地使用，肯定能体现你真的是在高效地使用AI，聪明地使用AI。这个问题其实面试官就是想问你对Vibecoding工具的了解，有没有聪明使用。当然我也希望大家能切实理解今天的内容，使用上了codex和Claudecode(没用过，也起码把最少相关内容理解了），因为这个答案其实挺高级的，你要是一点不懂这俩工具，面试官继续和你讨论你连他们基本特性都不懂，这个问题回答得又是这么聪明地在使用AI，那么他会觉得你是背的。</span></p>
-<p id="f-doxcnguUwdysk3RNFa7Wyeyhgce"><span>另外可以认为这个回答还是不够具体，有点浮在理论。更好的答案还是真的结合你的使用情况来说，这个就要求大家真的看懂了本期内容，真正去实践，再回答。</span></p></blockquote>
+<blockquote id="f-doxcnDxZGr6pADbPcAhRNoKr9Bc"><p id="f-doxcnjsJTzuDZdj7qaxvgKWvfsg">工具使用与比较可以从能力、效率和适用任务等方面展开。</p>
+<p id="f-doxcnguUwdysk3RNFa7Wyeyhgce"></p></blockquote>
 
 <p id="f-doxcn5Nzcsn76ioEHFGcYj3Km8f"><span>我会同时使用ClaudeCode和Codex，因为他们的特点和优缺点不同，我会取长补短地使用它们。</span></p>
 
@@ -1223,9 +1223,9 @@ git worktree add ../feature-branch-b feature-b
 
 ##### 参考资料
 
-<p id="f-doxcnjElDlGCU60hVPQUp0xpsse"><span>Nate Herk博主做的</span><span><span><a href="https://www.youtube.com/watch?v=RLjaUES9P8A&amp;t=149s"><span>CC vs Codex测评的视频</span></a></span></span><span>，也是本期视频主要参考资料，理论上如果本小节你都看明白了，不需要再去观看此视频了。</span></p>
+<p id="f-doxcnjElDlGCU60hVPQUp0xpsse">Nate Herk 的 Claude Code 与 Codex 测评视频，作为技术对比参考。 <a href="https://www.youtube.com/watch?v=RLjaUES9P8A&amp;t=149s"><span>CC vs Codex测评的视频</span></a></p>
 
-<p id="f-doxcnKyyfSp0bRt0QBFyX0zBWCQ"><span>Codex安装使用教程。其实我自己在迁移小技巧 章节教了大家如何配置Codex，结合CC的能力。我自己很快配置好了。网上也有0基础保姆级教学，我找了一个资料，供大家参考。</span></p>
+<p id="f-doxcnKyyfSp0bRt0QBFyX0zBWCQ">下面提供 Codex 安装教程。</p>
 
 <div id="f-doxcnew973DXLDt2Q9eo0zrVy2d"><div><div><div><div><div><div><div><div><div><a href="https://open.douyin.com/player/video?vid=7641831765677460776&amp;mode=pc">嵌入视频 / 原始播放器</a></div></div></div></div></div></div></div></div></div></div>
 
@@ -1235,9 +1235,9 @@ git worktree add ../feature-branch-b feature-b
 
 <a id="f-doxcnDOuqNnBTvhcNtH5x0T955b"></a>
 
-<p id="f-doxcnVRvwsIYQOq1ArhiFLyGe8a"><span>本案例用Github中转，不用订阅CC和Openai，也能用上Codex和Claudecode，也可以使用GPT5.5 和 Opus4.8的模型，我把它写成了skill，有兴趣可以参考。</span></p>
+<p id="f-doxcnVRvwsIYQOq1ArhiFLyGe8a">本案例提供了通过中转配置模型调用的 Skill，可用于学习相关配置方法。</p>
 
-<p id="f-doxcnH0WzMcQPDcvZbj3uaJ8qpc"><span>我自己安装很顺利啊，但是大家也许会遇到一些问题，我还是希望大家能够看一下里面的原理到底是什么，遇到问题去修改。这套方法是完全可行的。如果我把所有封装的特别好，其实也可以做到，但是当你遇到问题，比如你想改模型，你都不知道怎么做，你会一脸蒙。因为这里面的原理不是使用官方模型，而是走了中转，改模型要改配置。</span></p>
+<p id="f-doxcnH0WzMcQPDcvZbj3uaJ8qpc"><span>安装时需要理解相关原理，遇到问题时检查配置。这套方法是完全可行的。修改模型时需要理解配置和中转机制。因为这里面的原理不是使用官方模型，而是走了中转，改模型要改配置。</span></p>
 
 <p id="f-doxcngvfBKULH7rkiCwtQcnpJkg"><span>我举这个例子是想说，希望你能稍微理解里面的原理再去使用，这样遇到问题你知道怎么改。</span></p>
 
@@ -1253,7 +1253,7 @@ git worktree add ../feature-branch-b feature-b
 
 <p id="f-doxcnMPfaUd1VYtP3JGSw7c3Ugf"><span>本文虽然以 </span><span style="font-weight:bold">Claude Code</span><span> 为例讲解，但其中的</span><span style="font-weight:bold">方法和原理是通用的</span><span>，同样适用于 Codex、Gemini CLI 等其他 Vibecoding 工具——差别只在具体数字和命令，思路完全可以照搬。</span></p>
 
-<p id="f-doxcnheXE113kXYTOUusJZBwmQh"><span>而且，学会本章节不只是为了省钱。</span><span style="font-weight:bold">从面试的角度</span><span>看，它同样很有价值：当面试官问你有没有使用 Vibecoding 工具的心得，能介绍一下吗？如何编写提示词的最佳策略？这类问题时——包括理解 Claude Code 的压缩与缓存策略这一块——本章的内容都能让你答得有条理、有深度。文末我也会照例，把对应的面试问题单独整理出来。（我印象很深的是夸克千问的Agent开发二面，面试官就是和我讨论怎么写提示词，他会一直问我还有什么策略吗？还有什么吗？如果当时我看了今天的素材，我的回答就会多一个角度。）</span></p>
+<p id="f-doxcnheXE113kXYTOUusJZBwmQh">本章可用于理解 Vibe Coding 工具使用、提示词编写、压缩与缓存策略等相关问题。</p>
 
 <p id="f-doxcnIQXHDIJEFpEU7qi1l8wjJj"><span>本篇的组织结构是：</span></p>
 
@@ -1482,7 +1482,7 @@ git worktree add ../feature-branch-b feature-b
 
 <p id="f-doxcndlKaJWj6p9sjSp8vzcIWjd"><span style="font-weight:bold">参考答案：</span></p>
 
-<p id="f-doxcn3BrKcWIJmliodVfkTc4oCh"><span>我在使用 Claude Code 这类 Vibecoding 工具时，一个比较重要的心得是，要主动管理上下文，而不是把所有内容都交给 AI 自己处理。因为模型每一轮都需要读取上下文，而且输入、输出、缓存写入和缓存读取的价格并不相同。如果完全不管理上下文，不仅会浪费 Token，也容易让模型被无关信息干扰。</span></p>
+<p id="f-doxcn3BrKcWIJmliodVfkTc4oCh">使用 Claude Code 等工具时，需要主动管理上下文。模型每轮都读取上下文，输入、输出、缓存写入与读取的计费不同；无关信息既浪费 Token，也可能干扰判断。</p>
 
 <p id="f-doxcn9thx9Ux5ggrghJMEbUcOeh"><span>具体来说，可以把项目中长期有效、但模型无法自己推断的信息写进 CLAUDE.md，比如项目架构、特殊约定和踩过的坑，同时尽量保持这个文件精简。处理同一个任务时，我会保持模型和前面的固定内容稳定，提高提示词缓存的命中率；如果切换到完全不同的任务，我会使用 </span><span><span><span>/clear</span></span></span><span> 清理无关历史，而不是一直带着旧上下文。</span></p>
 
@@ -1566,7 +1566,7 @@ git worktree add ../feature-branch-b feature-b
 
 <p id="f-doxcntHzU5V6yDQnX4RGxa8nnpb"><span style="font-weight:bold">视频五：ClaudeCode 最全视频</span></p>
 
-<p id="f-doxcnc2wxeYzXN1oHWZzLej5KJc"><span>这个真的是一个非常全面的ClaudeCode讲解，作者是Nate老师，是可以认为非常棒的老师。这个课程有10个小时，适合0 ClaudeCode基础的同学。从0基础 带你讲解ClaudeCode如何使用，通过几个实战例子讲解ClaudeCode如何编排自动化，部署，到最后如何变现。我真的惊叹这个课程竟然不是收费。</span></p>
+<p id="f-doxcnc2wxeYzXN1oHWZzLej5KJc">该视频包含约 10 小时的 Claude Code 教程，从基础使用到自动化编排与部署，配有实战案例。</p>
 
 <p id="f-doxcnzukG2La3llwuA9ZdE8B6eg"><span>我非常相信这个老师对于Claude Code使用的技巧一定是行业领先的，视频里面讲解的内容也是全面。我相信他说的，你消化好这个视频，可以从ClaudeCode 0基础到精通使用ClaudeCode到可以变现。</span></p>
 
@@ -1676,7 +1676,7 @@ git worktree add ../feature-branch-b feature-b
 
 <a id="f-doxcnwc8ptTGLQnz1AXXYEvpH7f"></a>
 
-<p id="f-doxcnlCMJe3Z7AoblywCSwswxrc"><span>不好意思，这一小节推荐的视频都是英文的，确实找到的一些很好的教程都是英文的。如果英语差，视频下方可以点CC把字幕打开，另外很多AI工具比如Github copilot中，可以把视频链接丢进去给它总结，另外我自己本节的内容，也是对这些视频的内容做了一个总结。</span></p>
+<p id="f-doxcnlCMJe3Z7AoblywCSwswxrc">本小节提供英文视频，可以开启 CC 字幕，结合笔记或总结工具理解内容。</p>
 
 <p id="f-doxcnpRwSlfBWVxIoWIJ3g4HEMf"><span style="font-weight:bold">Tina Huang老师</span></p>
 

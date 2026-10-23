@@ -30,7 +30,7 @@ verification: {"status": "not-run", "scope": "本次仅整理资料；示例代�
 - [智能预约Agent项目](#section-0141)
 - [项目介绍](#section-0142)
 - [项目设计思路](#section-0143)
-- [项目包装](#section-0144)
+- [项目扩展方向](#section-0144)
 - [配套设施](#section-0145)
 - [使用建议](#section-0146)
 - [面试真题](#section-0147)
@@ -188,7 +188,7 @@ verification: {"status": "not-run", "scope": "本次仅整理资料；示例代�
 
 <p id="f-doxcnyLy7aHYCwbEc58Qgfiqz0g"><span>所以很多同学反馈过，Agent的系统架构的设计题很难，不会回答。今天可算逮到了一个真题，我们以这个真题来讲解如何攻破架构设计题，如何复习。</span></p>
 
-<p id="f-doxcnz7NEIzmVMLZ0GHq6GceBlb"><span>先说场景题目的准备策略和理论基础，其实Agent场景设计题的理论基础是我们整个Agent的理论部分，项目经验。因为它本身就是一个综合的题目，还会问你各种细节，所以相关问题都是理论基础。这么说大家有没有一点绝望？</span></p>
+<p id="f-doxcnz7NEIzmVMLZ0GHq6GceBlb">Agent 场景设计需要综合应用架构、记忆、工具、评估与工程知识。</p>
 
 <p id="f-doxcn4RRc2U448p9IjP4gLnhgTc"><span>哈哈，情况确实是这么个情况，这就是一个综合能力的考察。不过稍微可以画一下重点，对于架构设计也多少有一些模板。大家看了本节后设计起来应该会更容易。理论重点画一下特别关键的部分：</span></p>
 
@@ -236,7 +236,7 @@ verification: {"status": "not-run", "scope": "本次仅整理资料；示例代�
 
 <p id="f-doxcnOMprkJJMOPasEaWjrjiDJf"><span style="font-weight:bold">设计答案：</span></p>
 
-<p id="f-doxcn2ITEfMJ22o7rRQv9vwvYId"><span>针对这个题目，我是设计了如下的架构图。设计要点在后面。框架我们可以复用，框架下面的细节，就是来自于我们的经验了。</span></p>
+<p id="f-doxcn2ITEfMJ22o7rRQv9vwvYId">下面给出参考架构图，具体设计要点见后文。</p>
 
 <div id="f-doxcnnWSGadJKWgX7zWXI1qXGLh"><img alt="" decoding="async" height="1280" loading="lazy" src="/images/agent-learning/8840b01e84c994aff6022243.png" width="853"/></div>
 
@@ -315,7 +315,7 @@ verification: {"status": "not-run", "scope": "本次仅整理资料；示例代�
 <a id="section-0137"></a>
 ## 技术知识与案例补充
 
-<p id="f-doxcnMjgdN1Pt4qIXcm1rD9E7ih"><span>哪些项目值得做，项目里的哪些地方值得做？如何让你的项目看上去更值钱，避免被面试官说浅。我目前想到的两个专题：</span></p>
+<p id="f-doxcnMjgdN1Pt4qIXcm1rD9E7ih">下面从项目设计与实现角度，讨论哪些技术环节值得进一步深入。</p>
 
 <p id="f-doxcnlIvhrlERg2Xtj3DepRmEZe"><span>1.</span><span style="font-weight:bold"> 2026值得做的AI项目/方向，如何做得深入，从Demo变成生产级应用？</span></p>
 
@@ -329,7 +329,7 @@ verification: {"status": "not-run", "scope": "本次仅整理资料；示例代�
 
 <p id="f-doxcnjLyDRgsz6OzBOi7Tasm92g"><span>关于做什么项目的建议往往让人无所适从，因为每个人观点都不一样，很难判断哪些内容真正重要、哪些只是噪声。因此这里把它归纳成六个项目，每个项目都对应</span><span style="font-weight:bold">一种独特且市场需求旺盛的技能</span><span>。下面会逐一说明具体应该构建什么、使用哪些工具，以及更重要的——</span><span style="font-weight:bold">为什么每个部分都很重要</span><span>。</span></p>
 
-<p id="f-doxcneIVRi8StWWjm3tnN2Y2Wwc"><span>这个小节的笔记，文字里我也一起总结了非常多的官方的参考文档，项目的链接。肯定读不完，按</span><span style="font-weight:bold">需要阅读。</span></p>
+<p id="f-doxcneIVRi8StWWjm3tnN2Y2Wwc">本节附有官方参考文档与项目链接，可按需要阅读。</p>
 
 <p id="f-doxcnzfnxXvi9QgHoFA6RSAKXBd"><span>下面介绍的6个方向，还是针对于大模型开发岗位来说的，如果要我排优先级：</span></p>
 
@@ -696,7 +696,7 @@ verification: {"status": "not-run", "scope": "本次仅整理资料；示例代�
 
 <a id="f-doxcnhA00vvEZIDB0y1UcIynetf"></a>
 
-##### 如何写进简历
+##### 案例技术总结
 
 <p id="f-doxcnaygFGjQ0vZ9RKBdUIRUoNc"><span>做完项目只是一半，另一半是</span><span style="font-weight:bold">让别人在 30 秒内看懂你做的东西值钱在哪</span><span>。</span></p>
 
@@ -718,7 +718,7 @@ verification: {"status": "not-run", "scope": "本次仅整理资料；示例代�
 
 <a id="f-doxcnmL54RgXjmAConBaxrFXwob"></a>
 
-###### 六个可复用的包装方向
+###### 六个可复用的扩展方向
 
 <p id="f-doxcnydEzrnMgWsEBb8YryMNpnc"><span>无论你做的是哪个项目，都可以从这六个角度找素材。</span><span style="font-weight:bold">它们几乎都能套用到任何一个 AI 项目上。</span></p>
 
@@ -797,11 +797,11 @@ verification: {"status": "not-run", "scope": "本次仅整理资料；示例代�
 
 ##### 结语
 
-<p id="f-doxcnD7HNdkW0ahb5Ec1kargUTd"><span>如果你觉得你的项目做得浅，应该如何去包装。但是最后我想强调两点：</span></p>
+<p id="f-doxcnD7HNdkW0ahb5Ec1kargUTd">可以从以下方向扩展项目。</p>
 
 <p id="f-doxcnKudejw3ar4b8tjZlthe57e"><span style="font-weight:bold">切勿眼高手低：</span><span>做一个生产级别的项目是很难的，很耗时的。上面的内容和项目都有分阶段，最好的方法是</span><span style="font-weight:bold">一个阶段一个阶段的来，</span><span>只有你做了，才真正是你的。</span></p>
 
-<p id="f-doxcn5Xbrzg8hClsRMAqMo7usKc"><span>我希望教大家什么是好的，应该往哪里改进。但不是告诉大家，你面试的时候，比如一个项目是有</span><span style="font-weight:bold">一个完整评估流程，CI/CD持续集成，企业级的错误处理和回退，完整的版本管理，真实的用户数据集</span><span>你才能去面试。绝对不是这样的！特别是对于经验年限不多的，甚至是可以放缓到工作5年以内经验的同学，脚踏实地，按照这个方案去做，在你的能力范围内适度包装一下，去面试是没有问题的。越是工作年限越长，越是需要做的项目更加生产级别和成熟。</span></p>
+<p id="f-doxcn5Xbrzg8hClsRMAqMo7usKc">项目可逐步补充完整评估流程、CI/CD 持续集成、错误处理与回退、版本管理及真实场景数据集，并根据实际能力和需求安排实现顺序。</p>
 
 <a id="f-doxcn3n2BdKR48HSUpLhMqeoicf"></a>
 
@@ -837,7 +837,7 @@ verification: {"status": "not-run", "scope": "本次仅整理资料；示例代�
 
 <div id="f-doxcnoeS705M7k7IMGsdKCXYa9d"><table><colgroup><col width="110"/><col width="110"/><col width="250"/><col width="330"/></colgroup><tbody><tr><td colspan="1" rowspan="1"><p><span style="font-weight:bold">公司 / 品牌</span></p></td><td colspan="1" rowspan="1"><p><span style="font-weight:bold">产品</span></p></td><td colspan="1" rowspan="1"><p><span style="font-weight:bold">主要场景</span></p></td><td colspan="1" rowspan="1"><p><span style="font-weight:bold">最值得关注的设计</span></p></td></tr><tr><td colspan="1" rowspan="1"><p><span style="font-weight:bold">OpenAI</span></p></td><td colspan="1" rowspan="1"><p><span style="font-weight:bold">dots</span></p></td><td colspan="1" rowspan="1"><p><span>产品发布、研发、研究、销售、内容制作等持续性工作</span></p></td><td colspan="1" rowspan="1"><p><span>围绕同一个代理维持上下文，减少用户在任务线程和不同入口之间搬运背景</span></p></td></tr><tr><td colspan="1" rowspan="1"><p><span style="font-weight:bold">Manus</span></p></td><td colspan="1" rowspan="1"><p><span style="font-weight:bold">Cue</span></p></td><td colspan="1" rowspan="1"><p><span>电话与邮件沟通、出行预订、购物、日常事务，也包括工作协作</span></p></td><td colspan="1" rowspan="1"><p><span>给代理配电话、邮箱、钱包和电脑，让它拥有对外办事的身份</span></p></td></tr><tr><td colspan="1" rowspan="1"><p><span style="font-weight:bold">Meta</span></p></td><td colspan="1" rowspan="1"><p><span style="font-weight:bold">Muse</span></p></td><td colspan="1" rowspan="1"><p><span>购物、旅行、日程、长期个人目标等事务</span></p></td><td colspan="1" rowspan="1"><p><span>持续工作环境与独立安全审核结合，把“替我做事”和“允许它做事”分开</span></p></td></tr><tr><td colspan="1" rowspan="1"><p><span style="font-weight:bold">xAI / Grok</span></p></td><td colspan="1" rowspan="1"><p><span style="font-weight:bold">Grok Bot</span></p></td><td colspan="1" rowspan="1"><p><span>销售拓展、收件箱、客户管理、招聘、费用、产品与研发流程</span></p></td><td colspan="1" rowspan="1"><p><span>把具名、持续工作的 Bot 做成可直接联系的同事，并通过群聊交接工作</span></p></td></tr></tbody></table></div>
 
-<p id="f-doxcnZwdZWonwSsl3q71zKKfmed"><span>上面的主要场景，是我从各个产品的官网的演示示范总结的，可以大概体现出官方主推的功能。不过Agent 产品本身就是没有明确的边界，就像ClaudeCode，虽然他的主要定位是Coding Agent，但是其实它可以用来剪视频，做AI 自动化等其他功能。上面的这些Agent也是一样。</span></p>
+<p id="f-doxcnZwdZWonwSsl3q71zKKfmed">上述场景根据产品官网演示整理，体现官方主推功能。Agent 的实际用途也可能超出主要定位，例如 Coding Agent 也可用于视频处理与自动化。</p>
 
 <p id="f-doxcnodROC4mTg3xDG87Qp2ODLh"><span style="font-weight:bold">OpenAI dots：持续共事</span></p>
 
@@ -1031,7 +1031,7 @@ verification: {"status": "not-run", "scope": "本次仅整理资料；示例代�
 
 <p id="f-doxcn6VqLOsutIlN6iQ4nAQRuof"><span style="font-weight:bold">为什么现在的通用Agent已经很强了，你还要继续开发新的Agent？</span></p>
 
-<p id="f-doxcno5mWCg4UZuXfXNqUoLxjAg"><span style="font-weight:bold">💡 思路：</span><span> 这个问题是有可能面试官在问自己的项目的时候问的，比如我们的ForgePilot项目，面试官就有可能问。这个问题真的是一个终极拷问：真的不光你会被问到，你的+1可能会被你的+2问到，为什么你要重新开发一个Agent，你的+2可能会被+3问到这个问题。 确实现在很多功能都是使用claudecode或者claudecode + SKILL就能完成的，但确实大家好像都在乐此不疲地开发新的Agent。 这个问题也没有一个标准答案，角度非常多。对于我们的ForgePilot项目，我希望找一些特别好的理由来回答这个问题（我会总结在</span><span style="font-weight:bold">ForgePilot项目</span><span>当中）。 在本小节的这个问题中，我们这四个产品的角度，来给这个问题提供一个思考角度（为什么已经有了这么多成熟Agent，2026年12月这些公司还要发布这么多新的Agent形态）</span></p>
+<p id="f-doxcno5mWCg4UZuXfXNqUoLxjAg">为什么已有成熟 Agent，仍需要开发新的 Agent？可以从场景、产品形态、交互和核心技术需求等角度，比较 Claude Code 与 Skill 组合，以及其他案例的不同设计。</p>
 
 <p id="f-doxcngQPBEUDYFqmJeGrX6sfjlb"><span style="font-weight:bold">🎤 参考答案（约两分钟，可直接口述）：</span></p>
 
@@ -1053,7 +1053,7 @@ verification: {"status": "not-run", "scope": "本次仅整理资料；示例代�
 
 <p id="f-doxcniQZyZlSz30KdyoSRBrAomh"><span style="font-weight:bold">本节小结</span></p>
 
-<p id="f-doxcnPj0XdeQgqOrhnqwgQkUf2e"><span>在国外公司推出了新的一系列Agent形态后，我们看到国内的公司，腾讯，字节也在大力加班推进（听说字节国庆有的组都没休息在赶这种像Personal Agent的产品）。</span><br/><br/><span>对于这些产品的研究，不论是产品还是技术同学，不论是产品方面还是实现的技术细节方面，都值得我们进一步去学习和深挖。今天通过粗略的的学习，已经对我带的个人项目和面试有很大帮助，继续深挖一定会有更多的收获。</span><br/><br/><span>最后从这一波行情来看，也告诉我了我们不是说Agent不值得做了，做不出新意了，整个大厂，行业都在继续探索和迭代。从个人的角度来说，我们紧跟大厂，行业的趋势，让自己的Agent的形态和技术和行业对齐，无疑会让该学习案例更有竞争力。</span></p>
+<p id="f-doxcnPj0XdeQgqOrhnqwgQkUf2e">可以从产品形态与实现技术两方面研究 Agent 案例，分析其交互方式、能力组织与工程设计，并将相关思路用于项目扩展。</p>
 
 <a id="f-doxcny2ckMykMRakflcwkQ5TjXA"></a>
 
@@ -1069,7 +1069,7 @@ verification: {"status": "not-run", "scope": "本次仅整理资料；示例代�
 
 <p id="f-doxcnGAImBYM6EuVh9rX8P8RR0b"><span style="font-weight:bold">前言</span></p>
 
-<p id="f-doxcnVQXoiyefKihOEIQ57qNIQb"><span>最近（2026 年 10 月），有挺多朋友催我聊一聊 RSI：这个概念为什么突然这么热？AI 到底已经能自己改进自己了，还是大家又把一个遥远的设想讲成了现实？</span></p>
+<p id="f-doxcnVQXoiyefKihOEIQ57qNIQb">本节介绍 RSI 相关概念与问题。</p>
 
 <p id="f-doxcnMo8X2ZoEpQkT6ftSCytjUb"><span>RSI 的全称是 Recursive Self-Improvement，也就是“递归自我改进”。简单来说，就是 AI 利用现有能力改进自身，再由改进后的系统参与下一轮改进。</span></p>
 
@@ -1145,7 +1145,7 @@ verification: {"status": "not-run", "scope": "本次仅整理资料；示例代�
 
 <p id="f-doxcnODdIOMbMJVoE4o2lD2CHFb"><span>提到 RSI，很容易直接想到“AI 完全不靠人，自己造出更强的 AI”。但在走到这种状态之前，系统已经可以接手一部分改进工作：先记住教训，再利用反馈更新，逐步把更多改进环节串起来。</span></p>
 
-<p id="f-doxcnFL420qnSAzmlMRMopTPprh"><span>为了方便理解，本文参考 </span><span><span><a href="https://mp.weixin.qq.com/s/rlfTKyWhALsNONhAwGih1A"><span>《这是一篇把“RSI”讲明白的科普级综述！》</span></a></span></span><span> 中关于 RSI 演进过程的讨论，按 </span><span style="font-weight:bold">AI 接手改进工作的深度与自主程度</span><span>，重新整理成下面四层。需要说明的是，这不是学界统一的等级认证，而是本文作者根据相关讨论和行业发展现状整理出的讲解框架。下面分别用模型训练和应用开发举例，辅助说明这四个层次。</span></p>
+<p id="f-doxcnFL420qnSAzmlMRMopTPprh"><span>为了方便理解，本文参考 </span><span><span><a href="https://mp.weixin.qq.com/s/rlfTKyWhALsNONhAwGih1A"><span>《这是一篇把“RSI”讲明白的科普级综述！》</span></a></span></span><span> 中关于 RSI 演进过程的讨论，按 </span><span style="font-weight:bold">AI 接手改进工作的深度与自主程度</span><span>，重新整理成下面四层。需要说明的是，这不是学界统一的等级认证，而是根据相关讨论和行业发展现状整理的讲解框架。下面分别用模型训练和应用开发举例，辅助说明这四个层次。</span></p>
 
 <p id="f-doxcnxEhYoncuRWTQygipbwFE4e"><span style="font-weight:bold">第一层：记住经验——下次别再犯同样的错</span></p>
 
@@ -1365,11 +1365,11 @@ verification: {"status": "not-run", "scope": "本次仅整理资料；示例代�
 
 <a id="f-doxcn2UuVdw5tRU20F4G5ZRs1Kh"></a>
 
-<p id="f-doxcn4AvuJBB5tPzqflTOsZJ8ch"><span>先和大家讲一下这个项目的背景。这个项目是我转行大模型，自己做的第一个项目。当时还是小白，一边学Agent的课程，资料，了解什么是大模型，什么是RAG，什么是Agent，然后也看了一些书籍。慢慢开始摸索着做的（大概在25年的5月份左右）。做完这个项目，结合公司的项目（因为公司有一些类似于Hackathon)的项目，做了另外一个项目。两个项目其实难度和实现上差不太多的，我现在看来有点重复，当时可以第一个项目做Agent，第二个项目做RAG, 做两个重复的Agent，收益比较低。</span></p>
+<p id="f-doxcn4AvuJBB5tPzqflTOsZJ8ch">本节以智能预约 Agent 为学习案例。</p>
 
-<p id="f-doxcnXFEIVXnmcT8RJRTcg8Pf2c"><span>在这个章节除了介绍项目部分，其实还蕴含了一些我的思路，比如设计项目的思路，面试的经验，如何准备自己的项目等等。项目的README的部分，也写了一些关于项目的介绍，技术栈，架构之类的，大家可以看看。</span></p>
+<p id="f-doxcnXFEIVXnmcT8RJRTcg8Pf2c">项目的技术设计与使用方法见 README。</p>
 
-<p id="f-doxcnfaN9cKYGDEUfnLWU3vOMBf"><span>最后提一点，我不太清楚大家会怎么用这个项目，会不会有人拿去面试之类的。这个更新也其实不在更新计划中的（本来打算再专门做个Agent），只是很多人问想要参考，所以我放出来。我目前用了大概3天左右整理，如果后面像rag项目一样，有人拿去面试了，有了面试真题不知道怎么回答，可以再来反馈给我，我来解析在当前章节中。</span></p>
+<p id="f-doxcnfaN9cKYGDEUfnLWU3vOMBf">以下结合案例说明设计与实现。</p>
 
 
 <a id="section-0142"></a>
@@ -1389,7 +1389,7 @@ verification: {"status": "not-run", "scope": "本次仅整理资料；示例代�
 
 <a id="f-doxcnnxjcMlREbFBCWviMtBh525"></a>
 
-<p id="f-doxcn50MDG8eExFJ3U32Lh6j6rg"><span>先来讲述一下我当时的设计思路，我想设计的新特性。</span></p>
+<p id="f-doxcn50MDG8eExFJ3U32Lh6j6rg">以下是案例的设计思路与特性。</p>
 
 <p id="f-doxcnMMnHFUJOrLk6omU0DwnQfb"><span>      1： 首先项目是</span><span style="font-weight:bold">多Agent</span><span>，现在复杂的Agent肯定是多个Agent协作的。所以本案例设计的系统有4个Agent。前三个是分类机器人，预约机器人，咨询机器人。他们三个要协同工作。</span></p>
 
@@ -1397,35 +1397,35 @@ verification: {"status": "not-run", "scope": "本次仅整理资料；示例代�
 
 <p id="f-doxcnFYUWxjjtWHZts6XIs9xbNd"><span>预约机器人会问清楚用户的需求，进行多轮对话，收集到信息后，去进行数据库查询，找合适的技师。</span></p>
 
-<div style="margin-left:25px"><p id="f-doxcn5DLin18r5MPe26g3oXtl1d"><span> 咨询机器人回答用户相关咨询问题，会从内部私有文档中找答案。</span></p><p id="f-doxcnUv0wRww3y8xcL7O8D1syye"><span> 第四个Agent是用户行为分析Agent，它会根据用户历史预约，分析他的喜好，来的频率，生成回访信息（这块只是大致跑通了）</span></p><div id="f-doxcn8bIjMHh34aeI4itlW9RFfh"><a href="/images/agent-learning/50a6227aa4c2a822f832258b.jpg" title="查看原始尺寸图片"><img alt="" decoding="async" height="17676" loading="lazy" src="/images/agent-learning/e5df7063c13aba11b7cadd5f.jpg" width="24951"/></a></div><p id="f-doxcnyJJmQWBPiQpQmrLQaKIvQc"><span>2. </span><span style="font-weight:bold">集成RAG</span><span>。 我当时有这个意识，我希望我的Agent项目有RAG的技术栈。所以这个预约机器人，当用户给出了喜好技师（比如喜欢力气大的），会从维护的技师专长表格中匹配。包括咨询机器人就更是RAG了，它内部有一个专有文档，这个文档记录着按摩房的信息，咨询机器人会从这个文档找知识作为回复。 我当时只是把这一套跑通了，没有用专业数据库，只是跑通了RAG的流程。</span></p></div>
+<div style="margin-left:25px"><p id="f-doxcn5DLin18r5MPe26g3oXtl1d"><span> 咨询机器人回答用户相关咨询问题，会从内部私有文档中找答案。</span></p><p id="f-doxcnUv0wRww3y8xcL7O8D1syye"><span> 第四个Agent是用户行为分析Agent，它会根据用户历史预约，分析他的喜好，来的频率，生成回访信息（这块只是大致跑通了）</span></p><div id="f-doxcn8bIjMHh34aeI4itlW9RFfh"><a href="/images/agent-learning/50a6227aa4c2a822f832258b.jpg" title="查看原始尺寸图片"><img alt="" decoding="async" height="17676" loading="lazy" src="/images/agent-learning/e5df7063c13aba11b7cadd5f.jpg" width="24951"/></a></div><p id="f-doxcnyJJmQWBPiQpQmrLQaKIvQc">2. 集成 RAG。预约机器人根据用户对技师的喜好，从维护的技师专长表格中匹配。咨询机器人使用记录按摩房信息的私有文档检索知识并生成回复。该原型未使用专业数据库，主要跑通 RAG 流程。</p></div>
 
 <p id="f-doxcn0AcL0ABFT31beyjxaPJqih"><span>3. 用了MCP。 当时MCP 很火，所以我里面使用了MCP，在用户预约成功后，会调用天气的MCP SERVER，查询当地的天气，然后生成回复。比如：您预约了28号xx技师按摩，北京的天气是40度（调用天气mcp server)，请注意防晒。</span></p>
 
-<p id="f-doxcn6dO8YEDjd4ZQVQzXf1a7la"><span>4. 反思功能。为什么设置用户行为分析Agent，是因为我有这个意识，想让我的Agent有反思功能，根据历史的输入输出来调整行为，生成个性化回复。</span></p>
+<p id="f-doxcn6dO8YEDjd4ZQVQzXf1a7la">通过用户反馈分析行为并调整策略，是该案例可进一步研究的方向。</p>
 
-<p id="f-doxcneYamnqOVaO05Q7RbtSr57c"><span>来分析一下我当时的设计的优缺点：</span></p>
+<p id="f-doxcneYamnqOVaO05Q7RbtSr57c">案例设计的优缺点如下：</p>
 
-<p id="f-doxcnSuBoxaQaL1e7yPfurY4O7w"><span style="font-weight:bold">优点</span><span>：做了多Agent，用了MCP（当时火的技术），有工具调用，有RAG的意识，也在尽力设计高级特性（自我反思）。现在的我当然觉得整个设计简单，我后面会讲如何设计得更复杂。但这个项目，不可否认，就是本案例设计，摸索的入门项目，不管会不会被面试官说简单，但毫无争议，他其实就是帮助我入门转行LLM，有去面试的项目。</span></p>
+<p id="f-doxcnSuBoxaQaL1e7yPfurY4O7w">下面分析项目特性及其可扩展方向。</p>
 
 <p id="f-doxcnLMfiSH5tX6iTtmdJz48gCf"><span style="font-weight:bold">缺点：</span></p>
 
-<p id="f-doxcncEL3GTlSg8K3CwCWC9WEIb"><span>1. </span><span style="font-weight:bold">立意可以更复杂：</span><span>大家在设计项目的时候，一个好的立意其实很重要。比如当时很火的Agent形态是Manus。从设计场景，按摩房预约。 形态：对话Agent。这个立意不能说高明。我之前笔记有提到Anthropic 公司举办的黑客松大赛，大家可以去看看他们前10名的立意，形式，来参考，选择更好的场景和立意。</span></p>
+<p id="f-doxcncEL3GTlSg8K3CwCWC9WEIb"><span>1. </span><span style="font-weight:bold">立意可以更复杂：</span><span>大家在设计项目的时候，一个好的立意其实很重要。比如当时很火的Agent形态是Manus。从设计场景，按摩房预约。 形态：对话Agent。这个立意不能说高明。相关资料提到Anthropic 公司举办的黑客松大赛，大家可以去看看他们前10名的立意，形式，来参考，选择更好的场景和立意。</span></p>
 
-<p id="f-doxcn2Skwffej3Sb5tGoWOoxZ7d"><span>2. </span><span style="font-weight:bold">设计的简单性：</span><span>太多地方可以设计得更复杂，比如记忆模块，沉淀能力，RAG系统，工具调用等。这个后面再说。不过其实作为一个初学者，自学者，没人指点的情况下，可以认为设计成这样，也无可厚非。毕竟我当时的水平是要先理解啥是LLM的。不过我后面会教大家如何设计得更复杂。</span></p>
+<p id="f-doxcn2Skwffej3Sb5tGoWOoxZ7d">2. 设计的简单性：记忆模块、能力沉淀、RAG 系统与工具调用等环节都可以进一步完善。</p>
 
-<p id="f-doxcnLrAnPBAYHz1JgkMCwvsKnb"><span>3. </span><span style="font-weight:bold">编程范式：</span><span>这也不能怪当时的我。当时连SKILL都没出。我当时编程的思路就是使用copilot，提一次需求，审核代码。不过当时大家不都这样吗？ 但是大家在设计项目时，强烈建议使用现在vibecoding的方法，harness技巧（这也是面试常考点）。把时间放在建设harness上，而不是放在让AI生成功能上。</span></p>
+<p id="f-doxcnLrAnPBAYHz1JgkMCwvsKnb">3. 编程范式：可从单次提出需求并审核生成代码，进一步学习 Vibe Coding 与 Harness 技巧，将重点放在任务约束、验证与执行环境的建设上。</p>
 
 
 <a id="section-0144"></a>
-## 项目包装
+## 项目扩展方向
 
 <a id="f-doxcnCj7BcLSaWWQOp9ZOpDEkdf"></a>
 
-<p id="f-doxcnFkFrkhFWg9tEsdbh9eoYrd"><span>可包装的点也是你可以扩展的点。一般做任何项目，都建议大家去包装一下。可以认为这是一种技巧，面试不能完全实事求是，得吹。人人都在夸大了说，你不夸大说，哪有这么实诚的人？但是你说能不能不做项目？你是100分，包装一下成120分。你不可能不做那是0分啊，你只能包装到20分。而且包装的东西，其实讲起来虚，没真实做过，遇到很懂的面试官多少会露馅。下面说包装方向：</span></p>
+<p id="f-doxcnFkFrkhFWg9tEsdbh9eoYrd"></p>
 
 <p id="f-doxcnVy5gU6PyLkXrZxQAsdVtyb"><span>1. </span><span><span style="font-weight:bold"><a href="#section-0148"><span>和RAG项目结合</span></a></span></span><span>。告诉面试官该项目用的自研RAG系统，接入我们这个笔记中的RAG项目。工作量，复杂度直接增加。</span></p>
 
-<p id="f-doxcnxLBGJRTh8rC8SFcvoCmogW"><span><span style="font-weight:bold"><a href="/posts/agent-learning-18-training-inference/#f-doxcnH4LTSdRSP70XiVy6y1Mnp7"><span>可以包装一个算法项目</span></a></span></span><span>比如某个地方简单任务用了自己后训练过的模型，体现算法的能力（这块等我们后面算法项目出来了可以再想具体场景）</span></p>
+<p id="f-doxcnxLBGJRTh8rC8SFcvoCmogW">可以将后训练模型用于简单任务，并通过任务评测分析其效果。 <a href="/posts/agent-learning-18-training-inference/#f-doxcnH4LTSdRSP70XiVy6y1Mnp7"><span>后训练模型任务实验</span></a></p>
 
 <p id="f-doxcn17R34UB3bAfwnnLR0JV6Rh"><span>3. </span><span style="font-weight:bold">记忆系统的设计。</span><span>这个项目没有记忆系统。长短期记忆如何实现？上下文对话满了如何压缩？这些策略需要设计。再不济你就抄袭我们解析的开源项目（</span><span><span><a href="/posts/agent-learning-21-open-source-architectures/#f-doxcneK3qVfDjLnKOQFCdsbYDmf"><span>cc</span></a></span></span><span>,</span><span><span><a href="/posts/agent-learning-21-open-source-architectures/#f-doxcnc8YH0bvC3K6RFin6B4JnIh"><span>hermes</span></a></span></span><span>,</span><span><span><a href="/posts/agent-learning-21-open-source-architectures/#f-doxcnfdqX7Xmgd1YRp2zV5utl0e"><span>openclaw</span></a></span></span><span>)，把内容丢给ai, 让AI给你设计和写代码。但是你不能不设计！</span></p>
 
@@ -1439,7 +1439,7 @@ verification: {"status": "not-run", "scope": "本次仅整理资料；示例代�
 
 <p id="f-doxcnPi80UgYO2ElF0BrExZoG7b"><span>8. </span><span style="font-weight:bold">Agent 性能评估：</span><span> 建议一定要做。如果有时间，还是建议大家做。具体的理论方法在</span><span><span style="font-weight:bold"><a href="/posts/agent-learning-15-evaluation-observability/#f-doxcnqrKdVGPbNYY8Xm3Fr8NVkh"><span>Agent性能评估</span></a></span></span><span style="font-weight:bold">。</span></p>
 
-<p id="f-doxcnbM1zOPIFhuJqR4RpbcRRMh"><span>9. Langchain用到的是0.3的版本，可以换成1.0. 我个人其实觉得Langchain这块就是个工具，面试一般问的也不深入。不过基本上问你的项目，如果你用的Langchain，都会考一下Langchain的特性，用了啥版本。现在Langchain也有更新的版本了，如果面试大家觉得有必要，可以改成1.0。其实很容易，让AI给弄就完了。或者你不改，你就说你用的1.0, 了解下1.0特性，一般面试都够了。</span></p>
+<p id="f-doxcnbM1zOPIFhuJqR4RpbcRRMh">9. 项目使用 LangChain 0.3，可以作为练习迁移到 1.0，比较接口变化、新版本特性与项目适配方式。</p>
 
 
 <a id="section-0145"></a>
@@ -1451,7 +1451,7 @@ verification: {"status": "not-run", "scope": "本次仅整理资料；示例代�
 
 <p id="f-doxcnfH7Ri18T24X0es9boPQxrh"><span style="font-weight:bold">Project-learner skill</span><span>： 让AI带着你了解这个项目。通过用这个SKILL和它对话和打卡。了解这个项目。</span></p>
 
-<p id="f-doxcnPhJGjBmob2WwNpt8036aih"><span style="font-weight:bold">Interview-prep skill</span><span>：根据这个项目，你的简历，让AI对你模拟面试。</span></p>
+<p id="f-doxcnPhJGjBmob2WwNpt8036aih">可以使用模拟面试 Skill 练习项目知识点，结合代码、设计和评估结果检查掌握程度。</p>
 
 <p id="f-doxcnM8Zt9CbY9IbYVybJIFlg1c"><span style="font-weight:bold">Setup-environment skill: </span><span> 让AI一键帮你配置好环境。</span></p>
 
@@ -1521,7 +1521,7 @@ verification: {"status": "not-run", "scope": "本次仅整理资料；示例代�
 
 <p id="f-doxcnHfinfZOhSZXhgq8JxfkMMd"><span>其它的一些实际思路，比如项目如何启动，从0到1的过程，项目如何配置环境，如何开发的，如何写的SKILL,SPEC，以及一些如何面试前的准备，请看视频讲解。</span></p>
 
-<p id="f-doxcnYNzgrG8kwigFOW7SP5stQe"><span>如果进行突击前的准备，比如项目会问哪些问题，那就请看</span><span><span><a href="#f-doxcn0hGuFO84zrM95ERdC4jj9d"><span>模拟面试SKILL</span></a></span></span><span>。用这个方法，带你复习整个项目70多个知识点和八股，并进行模拟面试。 项目基本整个流程已经完毕，</span><span style="font-weight:bold">不会增加新的功能了。</span><span>请各位需要深入扩展，</span><span style="font-weight:bold">比如加一个新功能，自定义评估模块，垂直业务适配 大家按照思路自己扩展就好了。看看我上述的思路，扩展应该并不难。</span><span>具体的项目八股部分，我没有总结，但是请你使用</span><span><span><a href="#f-doxcn0hGuFO84zrM95ERdC4jj9d"><span>模拟面试SKILL</span></a></span></span><span>的方法，让AI带你过完整个项目。我想要继续总结的是真实场景下，该项目的面试问题。</span></p>
+<p id="f-doxcnYNzgrG8kwigFOW7SP5stQe">模拟面试 Skill 可用于复习项目中的 70 多个知识点。进一步的扩展方向包括新功能、自定义评估模块和垂直业务适配。 <a href="#f-doxcn0hGuFO84zrM95ERdC4jj9d"><span>模拟面试SKILL</span></a> <a href="#f-doxcn0hGuFO84zrM95ERdC4jj9d"><span>模拟面试SKILL</span></a></p>
 
 
 <a id="section-0151"></a>
@@ -1539,15 +1539,15 @@ verification: {"status": "not-run", "scope": "本次仅整理资料；示例代�
 
 <a id="f-doxcnkBTXhi7vtyQFfSZ2lg4xzd"></a>
 
-<p id="f-doxcnw7FipLckpmIFAewsROdXVb"><span>这一小节会展示真实的面试问题。即使不给我录音，也建议大家自己面试录音，然后自己复盘的时候就根据录音去听细节。 当然并不是每个小伙伴都愿意提供录音，毕竟有一些隐私性，那么你可以尽量回忆当时的细节，可以给我文字版，可以把你的内容整理，告诉你怎么改进，也会记录在文档中，也是一个一起学习的过程。</span></p>
+<p id="f-doxcnw7FipLckpmIFAewsROdXVb"></p>
 
-<p id="f-doxcnnrperDZL7DIU2hlhK3rb3e"><span>本节呢，会展示该项目的真实的面试问题，素材来自于技术问答案例和自己面试。技术问答案例有时细节可能就有限了，因为可能是以回忆的文字形式整理的。</span></p>
+<p id="f-doxcnnrperDZL7DIU2hlhK3rb3e"></p>
 
 <a id="f-doxcnJWobctglYMaBozDgwflSEb"></a>
 
 ##### 技术问答案例
 
-<div style="margin-left:25px"><h5 id="f-doxcnBiQy57LPTj0h7NscqXhptb"><span>3.3.1.2 PDF不规范、乱码多的情况下，MarkItDown转换效果不好怎么办？</span></h5><p id="f-doxcnyteHXEtWwkfB0a2xfL6nKh"><span style="font-weight:bold">思路：</span><span>其实这个问题挺好的，在我做完这个项目的时候，我和大家说的，我强烈的建议是你真的把它用在你的业务场景中。这时你可能会遇到各种问题，比如输入文档质量不好，太大，或者文档中的表格处理不到。这块你遇到的问题和解决思路就是很好的经验和面试问题。 你在解决了他们的时候，可以提高系统的准确性，可以讲出来为啥你的系统效果更好，因为你可能做了xx针对性的调整等经验。</span></p><p id="f-doxcnIt5L2HEoscAdPvJkw3WbOf"><span>所以这个问题其实是该项目在真实场景下可能会遇到的问题，值得我们去思考。当然答案其实不唯一，我也只能纸上谈兵，给一个我思考的答案。</span></p><p id="f-doxcnHqYL7RccHWJslOah6TlJZb"><span style="font-weight:bold">参考答案：</span></p><p id="f-doxcn3X4RT0hWMdWSzvWnMUI5Th"><span>这个问题我们在设计时是有考虑的，整体是</span><span style="font-weight:bold">三层防线</span><span>的思路，采用 Garbage In Garbage Out的思路。</span></p><p id="f-doxcn68KN3HlXX1mlP62tjRrhDi"><span>第一层，Pipeline 入口有</span><span style="font-weight:bold">文档质量检测的前处理</span><span>。 文档进入系统后，Loader 不会直接无脑解析，而是会先做一轮质量预检：提取前几页文本，计算有效字符占比和可识别文本密度。如果有效字符率低于阈值（我们设的是 80%），说明这个 PDF 的文本层本身就有严重问题，这种文档即使硬塞进去，后面切出来的 chunk 也是垃圾，检索质量根本没法保证。所以直接拒绝入库，在 Dashboard 上给用户一个明确的提示：'该文档质量不达标，请检查后重新上传'。与其让脏数据污染整个知识库，不如在入口就拦住。（</span><span>注意哦，这里其实该学习案例并没有做这个前处理，你可以加进去，你试试让AI完成，它能很快完成。另外即使你没做，想清楚了怎么做的，大胆说就行了，面试的时候真的不用完全实事求是</span><span>）</span></p><p id="f-doxcnXXPB3vtOJFrDU5c0jrO24f"><span>第二层，</span><span style="font-weight:bold">从业务场景来说，这个问题在实际中的影响面其实有限</span><span>。 我们这个系统定位是</span><span style="font-weight:bold">企业内部知识库</span><span>，文档来源主要是团队内部产出的技术文档、产品文档、会议纪要这类——这些基本都是 Word/LaTeX 导出的文本型 PDF，格式规范、编码正常。MarkItDown 底层用的是 pdfminer.six，对这类标准文本型 PDF 的提取准确率是很高的。所以在我们的实际场景中，大部分文档走主路径就能处理好。</span></p><p id="f-doxcnFg56ZjKz01gM4s9VIoXatf"><span>第三层</span><span style="font-weight:bold">，即使文本提取有轻微的噪声，后面的 Transform 阶段还有 LLM 做兜底</span><span>。 我们在 Splitter 切分完之后有一个 Transform &amp; Enrichment 阶段，会用 LLM 对每个 Chunk 做智能重组——合并被物理切断的段落、剔除页眉页脚和残余乱码、补全上下文。所以对于那种'</span><span style="font-weight:bold">大部分正常、偶尔几段有点问题</span><span>'的情况，Transform 阶段的 LLM 去噪能力是可以兜住的。</span></p><p id="f-doxcn8rsgKKwGKtYJj1hIUxk0Kp"><span>退一步讲，就算有</span><span style="font-weight:bold">少量噪声数据漏进了知识库</span><span>，</span><span style="font-weight:bold">也不会影响最终检索质量</span><span>。 因为乱码文本生成的 Embedding 向量在语义空间中是没有方向的噪声，跟用户任何有意义的查询之间的相似度都会很低，检索排序时自然就沉底了。所以本质上就是浪费了一点存储空间，但不会污染检索结果。</span></p><h5 id="f-doxcn4F45XXquL8qlHqXg4eceNe"><span>3.3.1.3 图转文用的视觉模型有什么考量？</span></h5><p id="f-doxcnKN8lK5cerDLwyykaJZrVNf"><span style="font-weight:bold">思路：</span><span>其实也是一个非常好的问题，面试喜欢问，你为什么选xx的模型。不光是这个RAG项目的视觉模型，还有你自己做Agent，这些都是常考的问题。比如通过这次面试，总结了这个问题，我就会对是觉得模型多考虑一层。但是现在分析看来，我还是有些东西没有考虑到， 比如</span><span style="font-weight:bold">文本质量差如何前处理，视觉模型的选型</span><span>。 总结这些问题的时候，还要思考，查资料。 项目要考虑的东西还是很多的，经验这个东西还是学无止境的，我们慢慢积累，你看这个笔记，以及做项目，以及面试，都会增加你的经验，让你以后写spec，考虑得更全面。</span></p><p id="f-doxcnwu8HpY96H9BJ7M9jGQWdcc"><span style="font-weight:bold">答案：</span></p><p id="f-doxcnQv1TpTvXuaMlpubWfST9qc"><span>首先，传统RAG处理图像主要有两条路线：一种是用</span><span style="font-weight:bold">CLIP这类多模态Embedding模型</span><span>，把图片和文本映射到同一个向量空间，做视觉相似性匹配；另一种是用</span><span style="font-weight:bold">Vision LLM做图转文</span><span>，把图片内容理解成自然语言描述，然后复用文本RAG链路去检索。我们选的是图转文。因为我们的业务场景是内部技术文档，图片基本都是架构图、流程图、表格截图这些，用户问的是'调用链路是什么'、'超时配多少'这种具体的技术问题，要的是图里的含义不是外观。CLIP匹配不到这个层面的语义，Vision LLM可以。</span></p><p id="f-doxcnx3JEKVwtNPFKxQFXhl635g"><span>然后，具体选哪个Vision LLM，我们用了</span><span style="font-weight:bold">双模型策略</span><span>。英文文档和复杂图表主选</span><span style="font-weight:bold">GPT-4o，理解能力最强；中文场景主选Qwen-VL-Max，中文OCR和图表理解更好，价格大概GPT-4o的三分之一到五分之一，国内访问延迟也低。通过配置切换，代码层是解耦的</span><span>。</span></p><p id="f-doxcn8xf35GZE1MVU4KCKutIvyh"><span>最后，用法上也做了一些优化。不同类型的图片用不同的结构化prompt，比如流程图侧重提取节点关系，数据图表侧重提取数值和结论。调模型的时候会把图片前后的文本段落一起传进去，让模型理解图在文档中的上下文。另外做了内容哈希缓存，同一张图不会重复调用。</span></p><p id="f-doxcnuWzCtmeHa90UACMtzaqqwg"><span>（</span><span>这里我设想的我的RAG场景是业务内部技术文档。所以有如下的答案。我希望大家要参考这个思路，比如CLIP和Vision LLM, 对于不同提示词的使用，然后针对性修改，来放在自己项目的回答中</span><span>）</span></p></div>
+<div style="margin-left:25px"><h5 id="f-doxcnBiQy57LPTj0h7NscqXhptb"><span>3.3.1.2 PDF不规范、乱码多的情况下，MarkItDown转换效果不好怎么办？</span></h5><p id="f-doxcnyteHXEtWwkfB0a2xfL6nKh">思路：在真实业务场景中可能遇到输入文档质量差、文件过大或表格无法处理等问题，需要结合具体输入分析处理与验证方法。</p><p id="f-doxcnIt5L2HEoscAdPvJkw3WbOf">以下提供一种参考方案，具体实现需要结合场景验证。</p><p id="f-doxcnHqYL7RccHWJslOah6TlJZb"><span style="font-weight:bold">参考答案：</span></p><p id="f-doxcn3X4RT0hWMdWSzvWnMUI5Th"><span>这个问题我们在设计时是有考虑的，整体是</span><span style="font-weight:bold">三层防线</span><span>的思路，采用 Garbage In Garbage Out的思路。</span></p><p id="f-doxcn68KN3HlXX1mlP62tjRrhDi"><span>第一层，Pipeline 入口有</span><span style="font-weight:bold">文档质量检测的前处理</span><span>。 文档进入系统后，Loader 不会直接无脑解析，而是会先做一轮质量预检：提取前几页文本，计算有效字符占比和可识别文本密度。如果有效字符率低于阈值（我们设的是 80%），说明这个 PDF 的文本层本身就有严重问题，这种文档即使硬塞进去，后面切出来的 chunk 也是垃圾，检索质量根本没法保证。所以直接拒绝入库，在 Dashboard 上给用户一个明确的提示：'该文档质量不达标，请检查后重新上传'。与其让脏数据污染整个知识库，不如在入口就拦住。（此处为可扩展的前处理方案，需要实现后验证。）</span><span></span><span></span></p><p id="f-doxcnXXPB3vtOJFrDU5c0jrO24f"><span>第二层，</span><span style="font-weight:bold">从业务场景来说，这个问题在实际中的影响面其实有限</span><span>。 我们这个系统定位是</span><span style="font-weight:bold">企业内部知识库</span><span>，文档来源主要是团队内部产出的技术文档、产品文档、会议纪要这类——这些基本都是 Word/LaTeX 导出的文本型 PDF，格式规范、编码正常。MarkItDown 底层用的是 pdfminer.six，对这类标准文本型 PDF 的提取准确率是很高的。所以在我们的实际场景中，大部分文档走主路径就能处理好。</span></p><p id="f-doxcnFg56ZjKz01gM4s9VIoXatf"><span>第三层</span><span style="font-weight:bold">，即使文本提取有轻微的噪声，后面的 Transform 阶段还有 LLM 做兜底</span><span>。 我们在 Splitter 切分完之后有一个 Transform &amp; Enrichment 阶段，会用 LLM 对每个 Chunk 做智能重组——合并被物理切断的段落、剔除页眉页脚和残余乱码、补全上下文。所以对于那种'</span><span style="font-weight:bold">大部分正常、偶尔几段有点问题</span><span>'的情况，Transform 阶段的 LLM 去噪能力是可以兜住的。</span></p><p id="f-doxcn8rsgKKwGKtYJj1hIUxk0Kp"><span>退一步讲，就算有</span><span style="font-weight:bold">少量噪声数据漏进了知识库</span><span>，</span><span style="font-weight:bold">也不会影响最终检索质量</span><span>。 因为乱码文本生成的 Embedding 向量在语义空间中是没有方向的噪声，跟用户任何有意义的查询之间的相似度都会很低，检索排序时自然就沉底了。所以本质上就是浪费了一点存储空间，但不会污染检索结果。</span></p><h5 id="f-doxcn4F45XXquL8qlHqXg4eceNe"><span>3.3.1.3 图转文用的视觉模型有什么考量？</span></h5><p id="f-doxcnKN8lK5cerDLwyykaJZrVNf">思路：关注文本质量差时的前处理、视觉模型选型，并根据文档类型和检索任务设计方案。</p><p id="f-doxcnwu8HpY96H9BJ7M9jGQWdcc"><span style="font-weight:bold">答案：</span></p><p id="f-doxcnQv1TpTvXuaMlpubWfST9qc"><span>首先，传统RAG处理图像主要有两条路线：一种是用</span><span style="font-weight:bold">CLIP这类多模态Embedding模型</span><span>，把图片和文本映射到同一个向量空间，做视觉相似性匹配；另一种是用</span><span style="font-weight:bold">Vision LLM做图转文</span><span>，把图片内容理解成自然语言描述，然后复用文本RAG链路去检索。我们选的是图转文。因为我们的业务场景是内部技术文档，图片基本都是架构图、流程图、表格截图这些，用户问的是'调用链路是什么'、'超时配多少'这种具体的技术问题，要的是图里的含义不是外观。CLIP匹配不到这个层面的语义，Vision LLM可以。</span></p><p id="f-doxcnx3JEKVwtNPFKxQFXhl635g"><span>然后，具体选哪个Vision LLM，我们用了</span><span style="font-weight:bold">双模型策略</span><span>。英文文档和复杂图表主选</span><span style="font-weight:bold">GPT-4o，理解能力最强；中文场景主选Qwen-VL-Max，中文OCR和图表理解更好，价格大概GPT-4o的三分之一到五分之一，国内访问延迟也低。通过配置切换，代码层是解耦的</span><span>。</span></p><p id="f-doxcn8xf35GZE1MVU4KCKutIvyh"><span>最后，用法上也做了一些优化。不同类型的图片用不同的结构化prompt，比如流程图侧重提取节点关系，数据图表侧重提取数值和结论。调模型的时候会把图片前后的文本段落一起传进去，让模型理解图在文档中的上下文。另外做了内容哈希缓存，同一张图不会重复调用。</span></p><p id="f-doxcnuWzCtmeHa90UACMtzaqqwg">该方案以内部技术文档为场景。可比较 CLIP 与 Vision LLM，并根据图片类型设计提示词，结合项目需求验证。</p></div>
 
 <div id="f-doxcn1JSFzI77OXTAG2zbArbT53" style="margin-left:25px">项目常规技术问题：如何做粗排、精排？如何使用双路检索？数据库存储了哪些信息？这些问题涉及项目细节与基础知识。可以按项目知识点逐个学习，并通过模拟问答检验理解。</div>
 
@@ -1559,7 +1559,7 @@ verification: {"status": "not-run", "scope": "本次仅整理资料；示例代�
 
 ###### 有没有了解RAG的新方向
 
-<p id="f-doxcnGw1spP7fftVTEOGdjaTxPh"><span style="font-weight:bold">思路：</span><span>其实方向还是挺明确的，Agentic RAG 和 Graph RAG.我的复习思路是先去理解概念，当面试官问到相关问题，通常第一个问题都是解释概念，问你了解不，然后就按照以下内容答就行了。</span><span style="font-weight:bold">我暂时不会深入学习。</span><span>为什么呢？因为不是说每个人都需要把RAG学得比较深的，RAG如果脱离了Agent，它也不算大模型方向了。所以在大模型方向Agent的重要性比RAG重要，RAG基本的知识就是该学习案例相关的。学习好这些个RAG基本相关的内容，是基础，有余力当然可以去学这两个方向，或者做相关项目。但是并不是每个岗位都需要很深的RAG，深入到Agentic 和 Graph，个人精力也有限嘛。总而言之，我不深入学习Agentic 和 Graph RAG，是因为在这里他优先级没排上。</span></p>
+<p id="f-doxcnGw1spP7fftVTEOGdjaTxPh">Agentic RAG、Graph RAG 等可以作为进一步学习和扩展的方向。</p>
 
 <p id="f-doxcnK8aV71cjFs5BLvkiHgt0Fe"><span>但是提醒大家的还是根据自己的情况去分析。因为有的人的岗位就是偏RAG这一块的，那他肯定就需要把RAG多学一点。如果你的目标岗位是宽泛的，比如大模型应用，大模型算法。可以先把其他的内容，Agent, RAG基础内容，微调，推理相关的东西学好了，再来。</span></p>
 
@@ -1647,7 +1647,7 @@ verification: {"status": "not-run", "scope": "本次仅整理资料；示例代�
 
 ###### 大模型增强部分是做什么的？有什么用？元数据都有什么？增强前后效果对比了吗？
 
-<p id="f-doxcnlfI8llPFvD9rriqa5SKere"><span>（前三个问题，其实就是项目的最基本的模块，我设置的机器人都会带大家复习过。理解了以后，其实自己对于这些问题需要自己尝试表达一下，因为理解和表达流畅是不一样的。最后一个问题：前后效果对比了吗，可以认为就是编吧，或者叫自圆其说，结合我们做测评制定json的数据集以及使用ragas的经验，把最后一个问题编出来）</span></p>
+<p id="f-doxcnlfI8llPFvD9rriqa5SKere">前三个问题对应项目基本模块；效果对比需要结合数据集与 RAGAS 评估实际测量，记录实验条件与结果。</p>
 
 <p id="f-doxcn09zfjeEwAHjjcB7PDGHWDh"><span style="font-weight:bold">Q1: 大模型增强做了什么</span></p>
 
@@ -1715,7 +1715,7 @@ verification: {"status": "not-run", "scope": "本次仅整理资料；示例代�
 
 <p id="f-doxcnzirwOJchtA4PnpYfGJS91e"><span style="font-weight:bold">Q3：嵌入模型用了什么？为什么？</span></p>
 
-<p id="f-doxcnvajdvFXqH1Avl6yzdwRIUe"><span>老实讲有时候我们自己做项目哪里考虑那么多啊，每个地方都做技术选型和对比，毕竟又不是商业项目。但是面对这些问题的时候，我们还是得思考，编也要编一个理由自圆其说）</span></p>
+<p id="f-doxcnvajdvFXqH1Avl6yzdwRIUe"></p>
 
 <p id="f-doxcnbM2yQQn7i1gtbjtnRUiXWf"><span>项目目前使用的是text-embedding-ada-002，维度是 1536 维。稍微提一句，整个项目采用的是工厂模式和插件注册的方式，所以其实修改不同的嵌入模型特别容易，只用准备好api，修改配置文件即可。本案例采用text-embedding-ada-002的原因是：</span></p>
 
@@ -1789,13 +1789,13 @@ verification: {"status": "not-run", "scope": "本次仅整理资料；示例代�
 
 ##### 百度二面
 
-<blockquote id="f-doxcnrTnV8puoEyAWIl7EIlAuLd"><p id="f-doxcn6531eDMuv3sVXyFDiknFed"><span>谢谢这个朋友再次给我投稿，笔记内容的3.5和3.6部分就是这个朋友给我投的稿。3.4~3.6都来自于这位朋友，而且这四个面试素材都是大厂）</span></p></blockquote>
+<blockquote id="f-doxcnrTnV8puoEyAWIl7EIlAuLd"><p id="f-doxcn6531eDMuv3sVXyFDiknFed"></p></blockquote>
 
 <a id="f-doxcnXqFt9AuUF9r3ugV7yfPhce"></a>
 
 ###### 考虑性能优化了吗？项目中哪些地方可以优化？
 
-<blockquote id="f-doxcnsNqZqxoQvW6FUsbsx2dNUb"><p id="f-doxcnfbfSIvJhRPpUn5JREGfj8b"><span>这个问题也没有标准的答案。我总结了项目中一些对于性能优化的地方，比如整个操作做异步处理比如计算embedding块的时候，是批处理的。比如跳过重复计算hash，懒加载这样可以让客户端连接mcp server会快一些，另外就是所有的环节都有耗时记录，这无非也是我们对性能的考虑. </span></p>
+<blockquote id="f-doxcnsNqZqxoQvW6FUsbsx2dNUb"><p id="f-doxcnfbfSIvJhRPpUn5JREGfj8b">性能优化可包括异步处理、批量计算 Embedding、内容哈希去重、懒加载 MCP 连接，并在各环节记录耗时。</p>
 <p id="f-doxcnuqDeqzzKp5vbVYEpZQnnEf"><span>优化这一块。</span></p></blockquote>
 
 <p id="f-doxcnQzV12QRvp8hWOAXzzXM6cb"><span style="font-weight:bold">参考回答：</span></p>
@@ -1823,7 +1823,7 @@ verification: {"status": "not-run", "scope": "本次仅整理资料；示例代�
 ###### 对系统吞吐量做过测试吗？QPS / TPS 是多少？
 
 <blockquote id="f-doxcnQafTnISrcLxPiPWPAmWLeg"><p id="f-doxcngljDnjJdeLK0Usg2ZhqG2g"><span>这个问题就是问你有没有考虑过一秒钟整个系统能处理多少次查询？有没有考虑过。因为我们目前项目还是单机，不涉及多个客户端查询，很难出现并发查询的场景，这里更多是从串行角度上算性能，分析QPS，计算瓶颈。其实在后面那个问题如果是做成生产项目的时候，要做什么处理提到了，可以变成远端server，通过http让多个客户端请求，这时QPS的计算就要考虑并发了。</span></p>
-<p id="f-doxcn8bbeCFQl61PpvjXbbcjVKc"><span>这里我说上面的内容只是为了让大家清楚有这么一回事，你自己回答的时候，没必要提出什么并发，什么部署到server，这样不是主动暴露自己做得不够深入吗？我们不主动揭自己的短。</span></p></blockquote>
+<p id="f-doxcn8bbeCFQl61PpvjXbbcjVKc"></p></blockquote>
 
 <p id="f-doxcn69PptbA6zxeGOQ3M1OlRr0"><span style="font-weight:bold">参考回答：</span></p>
 
@@ -1939,7 +1939,7 @@ verification: {"status": "not-run", "scope": "本次仅整理资料；示例代�
 
 ###### 如何评估VibeCoding
 
-<blockquote id="f-doxcn3zYNcmzUTJTrQznI48icKe"><p id="f-doxcnGBmUirj86tF7tpHmoVCWbb"><span>这个问题其实还挺好回答的。spec, 测试，一小步一小步执行都是我们自己的实践。然后加了一个harness工程的思想，harness工程本节里总结的也有，就是如何让AI更好的写代码的思路，加了一些思想进去。之前我做这个项目的时候用的技巧是1，2，4. 现在如果再让我做，我会加入harness工程的思想，随着学习，技巧还是在不断进步的。</span></p></blockquote>
+<blockquote id="f-doxcn3zYNcmzUTJTrQznI48icKe"><p id="f-doxcnGBmUirj86tF7tpHmoVCWbb">开发方法可以结合 Spec、分步执行与测试，并通过 Harness 建设约束和验证生成代码。</p></blockquote>
 
 <p id="f-doxcnMHvJOsmwTb66Cu5nhUrykf"><span>总结一下思想：Spec 管设计，Harness 管边界，人工 Review 管意图，测试管底线。</span></p>
 
@@ -1963,7 +1963,7 @@ verification: {"status": "not-run", "scope": "本次仅整理资料；示例代�
 
 ###### 设计模式八股（工厂，策略）
 
-<blockquote id="f-doxcnBf6Gvua6oUcT2Qbd0ANdnk"><p id="f-doxcnAv27uRyeApP3LeHQFHrd3c"><span>设计模式通常其实也是需要一些工作经验才能慢慢理解的，面试其实问的没那么多，偶尔会出现，可以先不学那么深入，毕竟先学性价比高的。但是你做了该学习案例，用了大量工厂模式，建议最少还是学一下工厂模式。我来给大家总结个工厂模式八股。</span></p></blockquote>
+<blockquote id="f-doxcnBf6Gvua6oUcT2Qbd0ANdnk"><p id="f-doxcnAv27uRyeApP3LeHQFHrd3c">本案例使用工厂模式，下面介绍相关概念与实现思路。</p></blockquote>
 
 <p id="f-doxcnZ7rJGhVnbw2r7Pqp3XdPyc"><span style="font-weight:bold">参考答案：</span></p>
 
@@ -1983,7 +1983,7 @@ verification: {"status": "not-run", "scope": "本次仅整理资料；示例代�
 
 ###### 你的 Index 是怎么做的？
 
-<ul><li id="f-doxcnwOmO52hVnrKeCiZtU18Qzg"><span>粉丝回答：存成了 JSON 格式</span></li></ul>
+<ul><li id="f-doxcnwOmO52hVnrKeCiZtU18Qzg"><span>参考回答：存成了 JSON 格式</span></li></ul>
 
 <p id="f-doxcnkqrdeNX12ptK69aO3t2Nae"><span>- 面试官追问：</span><span style="font-weight:bold">用 JSON 怎么读取？</span><span>（没答上来）</span></p>
 
@@ -2083,7 +2083,7 @@ verification: {"status": "not-run", "scope": "本次仅整理资料；示例代�
 
 ###### 向量数据库大小，有多少个 PDF？
 
-<blockquote id="f-doxcnRNgndIG7R9rciC6DvZrowf"><p id="f-doxcnY2LZELk563ufu3ls44wQob"><span>这个问题其实就是因人而异了。 这里需要大家自己思考一下业务场景然后包装。这里我们不妨，假设我们就是一个给公司内部小组使用的知识库（不是整个公司啊，而是一些组），以这个角度去回答。</span></p></blockquote>
+<blockquote id="f-doxcnRNgndIG7R9rciC6DvZrowf"><p id="f-doxcnY2LZELk563ufu3ls44wQob">明确具体业务场景，例如公司内部小组使用的知识库，再根据其规模与需求设计系统。</p></blockquote>
 
 <p id="f-doxcnXXZZKMtdjm8tDcuRA8cOKd"><span style="font-weight:bold">假设场景</span><span>：企业内部小组知识库（如技术文档、规范流程、会议纪要等），服务于一个 10-30 人的业务线。</span></p>
 
@@ -2149,7 +2149,7 @@ verification: {"status": "not-run", "scope": "本次仅整理资料；示例代�
 
 ###### MCP tools 的编写原则——不只是 tools 的描述需要描述好，还有什么关键点？
 
-<blockquote id="f-doxcnQsEhDd3R6HITLTL5X4Jg1b"><p id="f-doxcnDj8g2LOzyGVqJ2MMwF78ld"><span style="font-weight:bold">答题策略</span><span>：MCP 官方规范定义了 tool 的六个字段（name / title / description / inputSchema / outputSchema / annotations），每个字段背后都对应一条设计原则。回答时从六个维度展开，结合项目实际代码举例，展示对 MCP 协议的深度理解。我把这个问题放到了MCP八股中。</span></p></blockquote>
+<blockquote id="f-doxcnQsEhDd3R6HITLTL5X4Jg1b"><p id="f-doxcnDj8g2LOzyGVqJ2MMwF78ld">答题思路：MCP tool 的 name、title、description、inputSchema、outputSchema、annotations 对应不同设计原则，可以结合项目代码逐项说明。</p></blockquote>
 
 <p id="f-doxcncycKt4MVmHGIqFWlXBNqCr"><span>参考八股</span><span><span><a href="/posts/agent-learning-06-mcp-integrations/#f-doxcnYzEvV8C81Mg7gFvkdlbYks"><span> MCP Server Tool的设计原则</span></a></span></span></p>
 
@@ -2171,7 +2171,7 @@ verification: {"status": "not-run", "scope": "本次仅整理资料；示例代�
 
 ##### PDF 处理问题
 
-<p id="f-doxcnAlUKknqJCzukcWnWTM8KFg"><span>虽然我没有写这个是哪个公司的面试真题，但是根据粉丝朋友的反馈，很多公司都会问你如何处理的PDF，包括群里提问，也有粉丝问PDF有页眉怎么处理，最近一次粉丝给我提问的原话是："</span><span style="font-weight:bold">博主，现在很多低阶的岗位特别喜欢问你对PDF是如何处理的，能否讲一下这个问题</span><span>"。所以这个问题还是挺有代表性的。我也专门把这个PDF的处理标准流程提炼成了专题知识放在RAG知识部分：</span><span><span><a href="/posts/agent-learning-09-rag-data-processing/#f-doxcnb2YC7Vpe2VuLAvjyNeJrik"><span>输入文件处理</span></a></span></span><span>。常见的问法如下：</span></p>
+<p id="f-doxcnAlUKknqJCzukcWnWTM8KFg">案例问题：PDF 如何处理？包含页眉的 PDF 如何处理？相关技术流程见“输入文件处理”。常见问法如下： <a href="/posts/agent-learning-09-rag-data-processing/#f-doxcnb2YC7Vpe2VuLAvjyNeJrik"><span>输入文件处理</span></a></p>
 
 <ol start="1"><li id="f-doxcnezdNWLmtvW99jGv5OUoz8S"><span style="font-weight:bold">你在处理pdf转成markdown文本的这个步骤，你是怎么处理的，可以分享一下吗？</span></li></ol>
 
@@ -2195,7 +2195,7 @@ verification: {"status": "not-run", "scope": "本次仅整理资料；示例代�
 
 <p id="f-doxcnXjGFiezbbZcnCDczpk4gMg"><span>我们从回答里面可以看出来，想要把PDF处理好，处理完整是多么复杂的一件事，你看看我们下面的回答，用了多少不同的库，要处理多少类型。</span></p>
 
-<p id="f-doxcnZaig3r5Zi891uGApDq42bg"><span>我的个人建议是：</span><span style="font-weight:bold">背一背得了。 </span><span>通过我们的讲解和回答，最少对于下面的问题，你有一个大体的思路和了解，面试官真问到，大面上能回答上来。通常来说他不会再追问更加具体的细节了，比如里面使用的某个库，以及具体处理细节。</span></p>
+<p id="f-doxcnZaig3r5Zi891uGApDq42bg">关注处理流程、相关库与实现细节。</p>
 
 <ul><li id="f-doxcnnCkxTsq4fKP91jU4qWE2Cb"><span style="font-weight:bold">1.1 你的pdf中有乱码，你是如何处理的？</span></li></ul>
 
@@ -2255,7 +2255,7 @@ verification: {"status": "not-run", "scope": "本次仅整理资料；示例代�
 
 ##### 如何保证RAG系统生成的回答是准确的？
 
-<p id="f-doxcnn7mxtHZS26mvLpwYWu21we"><span>这两个问题也是粉丝朋友投稿的，虽然他没告诉我是哪个公司，但是这两个问题确实是来自于面试真题。可以认为这两个题目也很好，很有价值。</span><span style="font-weight:bold">面试官关心你的RAG最后的回答，准确性到底怎么样？</span><span>虽然我们有讲</span><span style="font-weight:bold">RAGAS</span><span>在事后去评估，但是有没有方法可以在整个RAG系统生成回答的时候，就能够检测质量，及时兜底呢？要讲清楚这个问题，我的思路是从Self-RAG这个技术出发，可以先参考RAG专题笔记：</span><span><span><a href="/posts/agent-learning-09-rag-data-processing/#f-doxcnuLIexZJT9vCqgUe8Csx1zb"><span>Self-RAG.</span></a></span></span></p>
+<p id="f-doxcnn7mxtHZS26mvLpwYWu21we">面试官关心 RAG 最后回答的准确性。除了事后使用 RAGAS 评估，是否可以在生成回答时检测质量并及时兜底？可以从 Self-RAG 的技术思路出发，参考 RAG 专题中的 Self-RAG。 <a href="/posts/agent-learning-09-rag-data-processing/#f-doxcnuLIexZJT9vCqgUe8Csx1zb"><span>Self-RAG.</span></a></p>
 
 <p id="f-doxcn4p91tmGJRdznISvaEibWSE"><span style="font-weight:bold">💡 答题思路</span></p>
 
@@ -2401,7 +2401,7 @@ verification: {"status": "not-run", "scope": "本次仅整理资料；示例代�
 
 <p id="f-doxcnq6u4f6MJWpKdwoNeuNpCkb"><span>项目是什么</span></p>
 
-<p id="f-doxcnkHqufKDLniTuAOnStzPrff"><span>我要做一个</span><span style="font-weight:bold">模块化的 RAG (Retrieval-Augmented Generation) 系统</span><span>，同时把它包装成一个 </span></p>
+<p id="f-doxcnkHqufKDLniTuAOnStzPrff"><span>我要做一个</span><span style="font-weight:bold">模块化的 RAG (Retrieval-Augmented Generation) 系统</span><span>，同时将其扩展为一个 </span></p>
 
 <p id="f-doxcnPIjBnW5jicbO2iiSHKqHub"><span style="font-weight:bold">MCP Server（Model Context Protocol）</span><span>，这样 GitHub Copilot、Claude Desktop 等 AI </span></p>
 
@@ -2413,7 +2413,7 @@ verification: {"status": "not-run", "scope": "本次仅整理资料；示例代�
 
 <p id="f-doxcnY7u6CrAFKWRjxajNp3iEkb"><span>这个项目不仅是一个功能完备的系统，更重要的是它是一个</span><span style="font-weight:bold">面向学习和面试求职</span><span>的实战项目：</span></p>
 
-<ul><li id="f-doxcnxoqRnKW4m3j1J7kN0asT2c"><span>"教是最好的学"——我会边做边录视频教学，所以架构设计要清晰、易于讲解</span></li></ul>
+<ul><li id="f-doxcnxoqRnKW4m3j1J7kN0asT2c"></li></ul>
 
 <ul><li id="f-doxcnUFpEWYT9K6x2txiAS1uagc"><span>配套有技术文档、代码示范和视频讲解</span></li></ul>
 
@@ -2525,9 +2525,9 @@ verification: {"status": "not-run", "scope": "本次仅整理资料；示例代�
 
 <p id="f-doxcnJvTl2JHCC1iO9wU1Nt3VPh"><span>这个是一个虚构的项目，所以不会有代码，但是可以把项目的设计文档，技术文档，思路，真题总结得非常详细。</span></p>
 
-<p id="f-doxcn7VJ9YBV5OpQQoWlKDmbe3g"><span>目前我现在这里占位一下，目前该项目内容可以参考：</span></p>
+<p id="f-doxcn7VJ9YBV5OpQQoWlKDmbe3g">相关技术设计见：</p>
 
-<p id="f-doxcnuvEXePqkIgs1w0Y798msjr"><span><span><a href="/posts/agent-learning-24-interview-review/#f-doxcnd3gcraXgECWirqD1kbrBdr"><span>简历编写原则</span></a></span></span></p>
+<p id="f-doxcnuvEXePqkIgs1w0Y798msjr"><span><span><a href="/posts/agent-learning-24-interview-review/#f-doxcnd3gcraXgECWirqD1kbrBdr"><span>案例分析原则</span></a></span></span></p>
 
 <p id="f-doxcnk75wauHwxjAPxGdxBOB0jg"><span>项目面试前突击：</span><span><span><a href="/posts/agent-learning-24-interview-review/#f-doxcnfF7sLFjdM6BowX2p8RJiSc"><span>ForgePilot架构设计</span></a></span></span></p>
 
@@ -5772,7 +5772,7 @@ for event in app.stream(state, stream_mode="debug"):
 
 <a id="t-sDQViNlkE7hxqeQete8uAN"></a>
 
-<p id="t-sQkKDWTjCQMHOJrGDWtRpa"><span>https://item.taobao.com/item.htm?ft=t&amp;id=1086381736593&amp;spm=a21dvs.23580594.0.0.3f062c1bia9dR5</span></p>
+<p id="t-sQkKDWTjCQMHOJrGDWtRpa"></p>
 
 <div id="t-MFIxD2tA9uRI0uCBS2opPR"><div class="technical-image-transcript"><h4>Bear Agent：自进化 Harness Agent</h4><p>Bear Agent - 是一个会把用户反馈沉淀成 Skills 的自进化 Harness Agent。一个可以本地运行、支持 Docker 部署的企业级 AI Agent 项目。它不是普通命令行聊天工具，而是一个完整的自进化 Harness Agent。统一编排大模型推理、工具调用、权限控制、长期记忆、Skills 自进化、MCP 外部工具、子 Agent 和会话恢复，让 Agent 的能力可沉淀、可审计、可比较、可回滚。</p><p>反馈驱动 · Skill 沉淀 · 持续进化</p><table><thead><tr><th>层次</th><th>图中技术内容</th></tr></thead><tbody><tr><td>入口层</td><td>参数解析、REPL、一次性任务、命令处理、终端输出</td></tr><tr><td>Harness 层</td><td>Agent Loop、模型协议适配、工具调度、Multi-Agent、子 Agent</td></tr><tr><td>能力层</td><td>文件工具、Shell、Skills、Memory、MCP、子 Agent</td></tr><tr><td>演化层</td><td>从反馈中抽取 Skill 候选、注入规则；动态构建系统提示词；Memory 索引；Skills 列表；子 Agent 描述</td></tr><tr><td>持久化层</td><td>保存 Skills、Memory、Session、审计记录、大工具结果、Plan 文件</td></tr></tbody></table><p>自下而上，层层递进，协同工作。</p><p>学习教程中可读的技术目录：项目介绍；系统架构设计；技术亮点；从 0 到 1 学习项目；阅读目标和验收标准；先建立整体认知；项目目录和文件职责；运行和配置；一次请求的完整链路；CLI 入口；Agent Runtime；Prompt 构建；工具系统和权限控制；Plan Mode；Skills；Skills 自进化；Memory 长期记忆；MCP；子 Agent。</p><p>Agent Loop 闭环执行。</p></div></div>
 
@@ -5782,7 +5782,7 @@ for event in app.stream(state, stream_mode="debug"):
 
 <a id="t-Tq4PiJVCLpmpSI5WwauCxX"></a>
 
-<p id="t-YisyTKPqt0IiEPUjwTjJE1"><span>https://item.taobao.com/item.htm?ft=t&amp;id=1087086612342&amp;spm=a21dvs.23580594.0.0.3f062c1bia9dR5</span></p>
+<p id="t-YisyTKPqt0IiEPUjwTjJE1"></p>
 
 <div id="t-rqFdk6eFFp1L0ZPlb9xRnh"><div class="technical-image-transcript"><h4>MClaude Code Agent</h4><p>MClaude Code Agent 是一个从零构建的终端 AI 编程助手（类 Claude Code），支持多轮工具调用对话、流式 SSE 响应、上下文智能压缩、MCP 协议扩展、长期记忆与权限管控。通过命令行终端与 LLM 交互，可跨平台执行文件读写、代码搜索、Shell 命令等编程任务。</p><p>技术栈：textual、anthropic / openai SDK、mcp、pydantic + pyyaml。</p><p>语言版本：Go / Java / Python / TypeScript。</p><table><thead><tr><th>对比项</th><th>Go</th><th>Java</th><th>Python</th><th>TypeScript</th></tr></thead><tbody><tr><td>语言版本</td><td>Go1.25</td><td>JDK21</td><td>Python3</td><td>Bun+TS5</td></tr><tr><td>TUI 框架</td><td>BubbleTea</td><td>tui4j</td><td>Textual</td><td>Ink</td></tr><tr><td>LLM SDK</td><td>Anthropic SDK</td><td>Anthropic SDK</td><td>Anthropic SDK</td><td>Anthropic SDK</td></tr><tr><td>多模型</td><td>OpenAI SDK</td><td>OpenAI SDK</td><td>OpenAI SDK</td><td>OpenAI SDK</td></tr><tr><td>MCP 协议</td><td>MCP SDK</td><td>MCP SDK</td><td>MCP SDK</td><td>MCP SDK</td></tr><tr><td>配置</td><td>yaml.v3</td><td>SnakeYAML</td><td>PyYAML</td><td>js-yaml</td></tr><tr><td>HTTP</td><td>net/http</td><td>HttpClient</td><td>httpx</td><td>node:http</td></tr><tr><td>测试</td><td>testing</td><td>JUnit</td><td>pytest</td><td>bun:test</td></tr></tbody></table><p>Agent 核心技术：ReAct Loop、Tool Use、Streaming、SubAgent、MCP、Multi-Agent Teams、Hook System、Memory。</p><p>教程可读的技术目录：项目简介；架构设计；工具系统；AI Agent 自己干活；System Prompt 设计；权限系统；MCP 协议；上下文管理；记忆系统；Slash Command；Skill 系统；Hook 系统；SubAgent；Worktree；Agent Teams。</p></div></div>
 

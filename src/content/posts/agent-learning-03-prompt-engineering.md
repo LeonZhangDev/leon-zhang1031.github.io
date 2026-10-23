@@ -91,7 +91,7 @@ verification: {"status": "not-run", "scope": "本次仅整理资料；示例代�
 
 <a id="f-doxcn0beNldpi26wbazA9ClJ5Fc"></a>
 
-<div style="margin-left:25px"><p id="f-doxcn3QkMGhWHRb0UPMhyMHFAFb"><span>说实话，提示词工程不管是任何培训，都会作为一个很大的重点和知识模块去讲。谷歌甚至也是专门推出了8小时的提示词工程，但是在实际面试中，真的几乎没有出现，甚至是我总结的这些简单介绍提示词工程最基本的入门八股，都完全没有被考到！</span></p><p id="f-doxcnKJVW6BAByJLkwW0eegSCfi"><span>并且提示词工程其实也不难，我的建议是，你好好地把下面这个视频看完，这个视频总结了google 8小时 提示词工程的核心要点，把这个视频消化，并且总结成笔记，运用到实战中，就可以了。不用花过多时间在提示词工程上。</span></p><p id="f-doxcnf4RXA59hd82okkJOKvpu0f"><span>写于2026-05-18: Prompt工程其实2026年已经很不火了，面试问的也不多，也都被Harness，Skill这些最新技术热度盖过了。面试问的少，不建议花太多时间在上面。不过从实用性的角度，因为我们使用AI，每次都需要写提示词嘛，还是看一下，看看这视频就大概就理解了。</span></p><p id="f-doxcnZwn7VR3Q2QLqDDDeHFmb9g"><span><span><a href="https://www.youtube.com/watch?v=p09yRj47kNM"><span>https://www.youtube.com/watch?v=p09yRj47kNM</span></a></span></span></p></div>
+<div style="margin-left:25px"><p id="f-doxcn3QkMGhWHRb0UPMhyMHFAFb">提示词工程是大模型应用的基础。可以通过下面的视频了解 Google 8 小时提示词工程课程的核心要点，整理笔记并运用到实战中。</p><p id="f-doxcnKJVW6BAByJLkwW0eegSCfi">下面的视频总结了 Google 8 小时提示词工程课程的核心要点，可整理笔记并应用到实战。</p><p id="f-doxcnf4RXA59hd82okkJOKvpu0f"><span>写于2026-05-18: Prompt工程其实2026年已经很不火了，面试问的也不多，也都被Harness，Skill这些最新技术热度盖过了。面试问的少，不建议花太多时间在上面。不过从实用性的角度，因为我们使用AI，每次都需要写提示词嘛，还是看一下，看看这视频就大概就理解了。</span></p><p id="f-doxcnZwn7VR3Q2QLqDDDeHFmb9g"><span><span><a href="https://www.youtube.com/watch?v=p09yRj47kNM"><span>https://www.youtube.com/watch?v=p09yRj47kNM</span></a></span></span></p></div>
 
 
 <a id="section-0027"></a>
@@ -141,7 +141,7 @@ verification: {"status": "not-run", "scope": "本次仅整理资料；示例代�
 
 ##### 在项目过程中，怎么去做提示词的压缩和裁剪？
 
-<p id="f-doxcn5beaw2QYBFUhfOf3ZM36Oc"><span>选自</span><span><span><a href="/posts/agent-learning-24-interview-review/#f-doxcngrPSnBZqaMgnxtfDF66wxd"><span>2026年12月夸克千问Agent开发二面</span></a></span></span><span>。 答案我就写在面经里了，辛苦大家点击链接跳转观看。</span></p>
+<p id="f-doxcn5beaw2QYBFUhfOf3ZM36Oc">相关问题与参考答案见链接。 <a href="/posts/agent-learning-24-interview-review/#f-doxcngrPSnBZqaMgnxtfDF66wxd"><span>2026年12月夸克千问Agent开发二面</span></a></p>
 
 
 <a id="section-0433"></a>

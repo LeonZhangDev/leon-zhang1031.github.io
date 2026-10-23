@@ -168,7 +168,7 @@ Transformer、微调、LoRA、SFT、DPO、量化、显存与加速
 
 <a id="f-doxcnqPRbEFW2IepnXwbyGANwHe"></a>
 
-<p id="f-doxcnxKFFkmW6llfmywd4vKxlWh"><span>（模型是怎么训练出来的，其实暂时没有在面试中反映出来，没有面试问这个问题。不过可以认为这是自己需要理解的，通过这个知识点，你可以对大模型有一个更好的认识，把这个微调，强化学习，预训练分别在哪个阶段串起来，这个知识点我给大家推荐这个链接，他讲得很好，而且还贴心地准备了一些小工具，比如你直观去看大模型分词效果的网站，特别好</span></p>
+<p id="f-doxcnxKFFkmW6llfmywd4vKxlWh">通过模型训练流程理解微调、强化学习与预训练分别处于哪个阶段，并结合参考资料中的分词等工具学习。</p>
 
 <p id="f-doxcnu3t0kqDqD4C8vqNAi1CjUd"><span><span><a href="https://baijiahao.baidu.com/s?id=1826882165583568205&amp;wfr=spider&amp;for="><span>https://baijiahao.baidu.com/s?id=1826882165583568205&amp;wfr=spider&amp;for=</span></a></span></span><span>）</span></p>
 
@@ -422,7 +422,7 @@ Transformer、微调、LoRA、SFT、DPO、量化、显存与加速
 
 <p id="f-doxcnPdveA38ooAgEJscRPBHYMf"><span>这个问题其实做Infra/算法的人需要知道更多，因为他会做推理加速，他会用专业的卡去做一些调整。 但是通常如果是说做应用的岗，可能很多使用的是远端模型，如果你使用的是远端模型而且是应用岗，这个问题被考察到的概率不大。</span></p>
 
-<p id="f-doxcnyzPIQ7FgPUOOwiEDuyG85e"><span>那么我们为什么要讲这个问题，如果你按照我的思路，去使用了本地模型，然后微调，量化，推理走了个大概的话，重点是你用了本地模型，那么面试官很可能在问你项目的时候，就会涉及到硬件问题。 问：那你的机器能跑得了这个模型吗？ 这个参考夸克千问一面以及Deepwisdom 一面。 在这里我们讲清楚 模</span><span style="font-weight:bold">型能不能跑，跑得有多快</span><span>和什么相关，有了这个背景，你就比较清楚如何去回答这个面试官问题了。</span></p>
+<p id="f-doxcnyzPIQ7FgPUOOwiEDuyG85e">本地部署模型需要关注硬件条件、模型参数量和内存需求。</p>
 
 
 <a id="section-0202"></a>
@@ -430,7 +430,7 @@ Transformer、微调、LoRA、SFT、DPO、量化、显存与加速
 
 <a id="f-doxcnVYmK7xE977Rge5puOYz3Lc"></a>
 
-<blockquote id="f-doxcnMxEAVbICHDsP5B82Vaf5Yf"><p id="f-doxcnOXbmyMpOOnJfmMpRwnjAwb"><span>这个章节其实涉及的内容也很复杂，涉及训练，推理。要是都弄得特别透彻的话，需要结合具体的算法来计算，需要理解神经网络的结构，训练过程，具体的算法。如果没有深度学习背景，算法基础，推理的基础，肯定看不懂所有的细节，不过你可以抓大放小，细节你都放掉，掌握具体的原则即可。你看我总结的面试问题和回答示例的时候，也没有回答特别多的细节。如果还在学习应用的朋友，</span><span style="font-weight:bold">抓大放小，忽略细节</span><span>。如果学习了算法，有推理，训练的基础，可以对细节看得更仔细。另外本期内容也配备了视频讲解，可以结合来看。 另外这一小节的内容其实有非常多的算法，推理部署相关的东西，还是按照我们的思路来说，第一阶段的核心任务是学好应用，这里的内容对于应用岗位属于</span><span style="font-weight:bold">拔高项和加分项</span><span>，优先级低于应用相关知识。</span></p>
+<blockquote id="f-doxcnMxEAVbICHDsP5B82Vaf5Yf"><p id="f-doxcnOXbmyMpOOnJfmMpRwnjAwb">本节涉及训练与推理。深入理解需要神经网络、训练过程与算法基础；应用学习可以先掌握基本原则，再逐步研究具体细节。</p>
 
 </blockquote>
 
@@ -576,7 +576,7 @@ Transformer、微调、LoRA、SFT、DPO、量化、显存与加速
 
 ###### 激活值大小的计算
 
-<blockquote id="f-doxcnYF3PfKmpbje3cuipuT2tAf"><p id="f-doxcnZE1ABmfyhqFd2Man55q0re"><span>激活值的大小计算就比较复杂了，和超参数，数据量，模型结构都有关系。大家如果看不懂很正常，缺少算法基础，还是像我们前头说的原则，抓大放小，我下面也总结了激活值大小大概的估算方法。看不懂先有大概印象就行。</span></p></blockquote>
+<blockquote id="f-doxcnYF3PfKmpbje3cuipuT2tAf"><p id="f-doxcnZE1ABmfyhqFd2Man55q0re">激活值大小与超参数、数据量和模型结构有关。下面提供估算方法，可以先理解原则，再进一步研究细节。</p></blockquote>
 
 <p id="f-doxcnO8e8kpGAgNdkvW5Zk266gh"><span>激活值不像参数一样固定，它由四个变量共同决定：</span></p>
 
@@ -891,8 +891,8 @@ Transformer、微调、LoRA、SFT、DPO、量化、显存与加速
 
 ###### Q4：你说在CPU机器上跑7B的模型，这个可以跑得动吗？
 
-<blockquote id="f-doxcny18pTdYMfYRN07pvOpRr21"><p id="f-doxcnYuspdT6J2wiLFZtA1LYAdf"><span>这个是阿里夸克千问一面面试官的原题。我当时被问到这个问题，其实我答得很笼统，我就说模型比较小，也做了量化。但当我学习了今天这个内容以后，我才总结出这个更细致，详实的答案。我们都会按照100分甚至是120的回答去准备，但是通过一次面试，不意味着面试每个问题都要回答到100分。</span></p>
-<p id="f-doxcnqCsDUiFWHq2ocrPkVgfx5p"><span>另外，其实我分析来说，其实当时的面试官我估计也不懂这个细节。原因是本身就是应用岗，夸克千问整体面试下来给我的感觉，他们这个岗位不会做算法，不做训练，纯专注于应用，强度又高，其实面试官不知道这块内容很正常。他问到这个问题，是因为项目写了在cpu机器上本地跑7B模型。所以我答得模糊这事也就过去了。不过在这种情况下，当时我能够像下面这个答案一样回答得很具体，甚至面试官感兴趣，继续问我，我给他讲一下，这样面试会更加分。如果在面试官不懂的地方，你能够给他讲得很清楚，会极大地加分。</span></p></blockquote>
+<blockquote id="f-doxcny18pTdYMfYRN07pvOpRr21"><p id="f-doxcnYuspdT6J2wiLFZtA1LYAdf"></p>
+<p id="f-doxcnqCsDUiFWHq2ocrPkVgfx5p"></p></blockquote>
 
 <p id="f-doxcnOVr1YEIYMQLSwtg88Zl5fe"><span>可以跑，但要分两个角度看：</span><span style="font-weight:bold">能不能装下</span><span>，以及</span><span style="font-weight:bold">跑得快不快</span></p>
 
@@ -906,7 +906,7 @@ Transformer、微调、LoRA、SFT、DPO、量化、显存与加速
 
 ##### 视频讲解
 
-<p id="f-doxcnGDshuV4OTaKql7ygiPspRh"><span>本小节的内容涉及范围很广，算法，部署，深度学习，大家可能学起来有难度。我录了一个视频，视频的讲解面向于0基础，相信大家都能看懂。</span></p>
+<p id="f-doxcnGDshuV4OTaKql7ygiPspRh">下面的视频讲解相关基础知识。</p>
 
 <p id="f-doxcnonhbe3fgpI7gCi8E7tL6td"><span><span><a href="https://www.bilibili.com/video/BV1Lb5S6qEuA/?spm_id_from=333.1387.homepage.video_card.click&amp;vd_source=144bec9c3f54e465073138bed788be1b"><span>https://www.bilibili.com/video/BV1Lb5S6qEuA/?spm_id_from=333.1387.homepage.video_card.click&amp;vd_source=144bec9c3f54e465073138bed788be1b</span></a></span></span></p>
 
@@ -1042,7 +1042,7 @@ Transformer、微调、LoRA、SFT、DPO、量化、显存与加速
 
 ###### Grok (SpaceXAI)
 
-<p id="f-doxcnQmCf3JRlMvZyNzMCYC4CRf"><span>这个Grok估计不太会问了，作为国外模型，不如前三个亮眼。我还是总结大家了解一下。</span></p>
+<p id="f-doxcnQmCf3JRlMvZyNzMCYC4CRf">下面概括 Grok 的主要特性。</p>
 
 <blockquote id="f-doxcnzijQCZOAb9d7wdzMi1QOze"><p id="f-doxcnoiZ6XcOQUxISqkKioiLMIg"><span style="font-weight:bold">一句话定位：</span><span> 实时 X（Twitter）集成 + 最自然的对话感；尺度大、争议多。</span></p></blockquote>
 
@@ -1124,7 +1124,7 @@ Transformer、微调、LoRA、SFT、DPO、量化、显存与加速
 
 ##### 视觉生成模型
 
-<blockquote id="f-doxcnPt2NMzFbfTldi1dYGUfskd"><p id="f-doxcn5JQcGiRxOJBqUi4kgfGwYd"><span>视觉生成模型和视频生成模型不作为重点。从面试角度来说，那种专门做视频，多模态相关的岗位会侧重视觉模型和视频生成模型，找工作如果没有这方面的倾向（比如我），不需要深入了解。所以这两章只是简单总结，大家有个印象就行。</span></p></blockquote>
+<blockquote id="f-doxcnPt2NMzFbfTldi1dYGUfskd"><p id="f-doxcn5JQcGiRxOJBqUi4kgfGwYd">视觉生成与视频生成可根据学习方向进一步研究，本节先介绍基本内容。</p></blockquote>
 
 <p id="f-doxcnkdcyC8EKmvRwePMm1oBhYd"><span>- </span><span style="font-weight:bold">美感极致 → Midjourney</span><span>：艺术质量之王，画面电影感、精致；约 $10/月起。</span></p>
 
@@ -1180,7 +1180,7 @@ Transformer、微调、LoRA、SFT、DPO、量化、显存与加速
 
 ##### 参考资料
 
-<p id="f-doxcnw4d8GFtaSXzyiM08pb6Dnf"><span>文档的内容基本按照这个视频来总结的。不过这个视频有一些错误的地方，比如Openai的图像模型用的早都不是DALLE 而是Image，时效性有问题，比如现在claude 4.7，GPT 5.5 都出了。这些我在文章内更正了</span></p>
+<p id="f-doxcnw4d8GFtaSXzyiM08pb6Dnf">参考资料中部分模型信息存在版本时效差异，例如 OpenAI 图像模型的 Image 与 DALL·E，以及 Claude、GPT 的版本变化。阅读时需要核对具体版本。</p>
 
 <p id="f-doxcn8G8kKaRBITcrneX0kTszpB"><span><span><a href="https://www.bilibili.com/video/BV1hWo1BXEko/?spm_id_from=333.337.search-card.all.click&amp;vd_source=144bec9c3f54e465073138bed788be1b"><span>https://www.bilibili.com/video/BV1hWo1BXEko/?spm_id_from=333.337.search-card.all.click&amp;vd_source=144bec9c3f54e465073138bed788be1b</span></a></span></span></p>
 
@@ -1238,7 +1238,7 @@ Transformer、微调、LoRA、SFT、DPO、量化、显存与加速
 
 ##### 实战演示
 
-<blockquote id="f-doxcnRppou4kybGHckbrgL6ovWh"><p id="f-doxcnBMngNfKm7Suz0dDemogPKf"><span>我结合本节中的项目：智能预约系统来演示一下上面这个理论的应用。大家要是面试问到这个问题，根据你自己的项目往里面套模板就行。从另一个角度来说，如果你还没有做项目，真的可以考虑一下这个原则，在做项目之前好好考虑一下应该用什么模型。</span></p></blockquote>
+<blockquote id="f-doxcnRppou4kybGHckbrgL6ovWh"><p id="f-doxcnBMngNfKm7Suz0dDemogPKf">下面以智能预约系统说明模型选型原则的应用。</p></blockquote>
 
 <p id="f-doxcnkYVavLqRSVkhFlFRRHwJcd"><span>以一个真实的 Agent 项目为例，演示如何将"场景 - 能力 - 模型"框架落地。该项目背景是：传统按摩房依赖人工前台接听电话，完成预约分配、咨询解答、客户回访等工作，效率低、成本高。因此设计了一套多 Agent 对话系统来替代人工前台。</span></p>
 
@@ -1307,7 +1307,7 @@ Transformer、微调、LoRA、SFT、DPO、量化、显存与加速
 
 <a id="f-doxcnKzZ9NHElctToHJETtMzYQc"></a>
 
-<p id="f-doxcnFxOGcSOPju3sanUCqLM57b"><span>这一章主要是给大家提一个醒。作为最火的，最新的，上热搜的模型，大家可以了解一下它的核心特点，做了什么改进。我知道我们都不是专业做模型的，所以对里面技术细节不会深入了解。我的建议是，新模型，比如gpt5.5, deepseek v4 出来以后，让AI给你总结下它的核心提升和改变，特性就好了。这么做是防止面试官问（因为我之前有被问到过。 我主要提供个思路，打个样。以Deepseek v4为例，让AI总结一下特性。防止面试官和你聊最近最新Deepseekv4, 你啥也不知道。更重要的是这个思路，后面还有各种新模型的发布，都可以用这个策略快速准备下。</span></p>
+<p id="f-doxcnFxOGcSOPju3sanUCqLM57b">了解新模型时，可以先阅读其核心改进、特性与技术资料，再根据使用场景深入研究。</p>
 
 <a id="f-doxcno1ggcSpE6gPmxP8g2YIfmc"></a>
 
@@ -1345,7 +1345,7 @@ Transformer、微调、LoRA、SFT、DPO、量化、显存与加速
 
 <p id="f-doxcnkNKShUxQbMhv9D0rUPV8td"><span>Jev是2026年9月份快速火起来的一个模型，如我们一直说的，大模型圈，爆火的内容你不能不会。面试几乎一定会问到。所以2026年9月份，面试前，建议学习一下Jev。 大家也不用担心学不过来，最开始我们只要先理解最基本的内容，最简单的面试问题就够了。如果他持续爆火，我们再深入学习。</span></p>
 
-<p id="f-doxcnIMlDrEaDA8fR7iJt47yaWJ"><span>这一期视频我就总结的内容都是Jev最核心的内容：</span><span style="font-weight:bold">是什么，特点，设计理念，使用方式，技术架构和面试真题</span><span>，希望大家可以用1小时的时间，结合视频和文档快速理解Jev是什么，如果后续面试对Jev的考察持续加深，我们也会持续跟进的。</span></p>
+<p id="f-doxcnIMlDrEaDA8fR7iJt47yaWJ">本节介绍 Jev 的定义、特点、设计理念、使用方式、技术架构与相关问题。</p>
 
 <a id="f-doxcnz9Rve523Dbo4ANihGQEbsc"></a>
 
@@ -1655,7 +1655,7 @@ Jev：分类、评估复杂度、识别处理要求
 
 ##### 你是怎么做的微调？
 
-<p id="f-doxcnQBbJIXB1fqeSAicnjlSskf"><span>（这也是一个</span><span style="font-weight:bold">比较常考</span><span>的问题，这个答案也是我参考了一些资料和自己项目总结的一个暂时比较满意的答案）</span></p>
+<p id="f-doxcnQBbJIXB1fqeSAicnjlSskf"></p>
 
 <p id="f-doxcnF9kpuorGKKXoFhS11APUJb"><span>首先按照这个4个思路来讲解：</span></p>
 
@@ -1669,7 +1669,7 @@ Jev：分类、评估复杂度、识别处理要求
 
 <p id="f-doxcnjTlZaLHCU74qrkdJtMtZPh"><span> 在这个思路下，再添加自己的项目细节。让答案更加丰满，以下以该学习案例，按照上述思路进行回答，请大家自己根据实际情况参考。 </span></p>
 
-<p id="f-doxcn1DwAwOP8Lx28TJazAyeIFh"><span>我的答案是根据这个笔记总结的，如果你需要总结自己的答案，强烈建议阅读这个：</span></p>
+<p id="f-doxcn1DwAwOP8Lx28TJazAyeIFh">下面给出参考答案。</p>
 
 <p id="f-doxcnzvW9kxrfOSn05a8Ltofi0e"><span>）</span></p>
 
@@ -1783,7 +1783,7 @@ Jev：分类、评估复杂度、识别处理要求
 
 ##### DeepSeek R1 训练方法
 
-<p id="f-doxcn8MRHRmzCmKvsxMQlqHKFkd"><span>（参考资料 </span><span><span><a href="https://zhuanlan.zhihu.com/p/24621463668"><span>https://zhuanlan.zhihu.com/p/24621463668</span></a></span></span><span>，作为一个</span><span style="font-weight:bold">拔高知识点</span><span>，这个题大概率不是面试官直接问的，但是如果你能够在某个契机能把这个讲出来，就会比较加分。从DeepSeekR1训练方法去理解 整个模型 SFT + 强化学习 + 训练集的准备的整个过程。理解整个过程，可以给面试官讲清楚 训练过程 + 谈谈自己对这套方法的理解。一定会加分。 大概这么吹牛逼： 我看了DeepSeekR1的训练，它的大概的训练步骤是xx(笔记部分训练过程）。通过这篇论文和训练方法，我的启发是（笔记部分训练背后蕴含的思想）xx）</span></p>
+<p id="f-doxcn8MRHRmzCmKvsxMQlqHKFkd">参考 DeepSeek-R1 的训练方法，理解 SFT、强化学习与训练集准备的完整过程，结合训练步骤分析其中的设计思想。 <a href="https://zhuanlan.zhihu.com/p/24621463668"><span>https://zhuanlan.zhihu.com/p/24621463668</span></a></p>
 
 <div id="f-doxcnbY3BWaWTtuE6b5t8MS7BWP"><img alt="" decoding="async" height="1280" loading="lazy" src="/images/agent-learning/c3dce4b1da4fe486131e222b.png" width="1084"/></div>
 
@@ -2043,7 +2043,7 @@ Jev：分类、评估复杂度、识别处理要求
 
 ##### 为什么Llama.cpp 的在cpu上效果更好？
 
-<p id="f-doxcnICe8C0K9stXz1TDuzr7NOh"><span>（因为该学习案例使用了Llama.cpp 替代了 onnx runtime, 在cpu上对于同一模型推理速度提升了1倍以上，所以面试官可能会问我这个问题，这个问题更多是根据我个人情况准备的，供大家参考。大家也可以结合自己的情况，自己用了什么推理加速来准备一些相似问题。）</span></p>
+<p id="f-doxcnICe8C0K9stXz1TDuzr7NOh">该学习案例使用 llama.cpp 替代 ONNX Runtime，在 CPU 上比较了同一模型的推理速度。原案例报告速度提升一倍以上；可结合硬件、量化和任务条件复现对比。</p>
 
 <ol start="1"><li id="f-doxcnbpE6DPzor2gtAj9qWKfMOd"><span style="font-weight:bold">内核优化</span><span>：llama.cpp 针对 LLM 做了高度融合的算子（注意力、RoPE、KV cache），减少框架调度和内存拷贝；ONNX Runtime是通用框架，算子分发和调度开销更大。</span></li></ol>
 
@@ -2055,7 +2055,7 @@ Jev：分类、评估复杂度、识别处理要求
 
 <p id="f-doxcnY7pMYaldbP18DHFz7ydrdS"><span style="font-weight:bold">7.2 介绍一下vLLM 框架</span></p>
 
-<p id="f-doxcnCJYdOzxuD5i5sbm15fPJnf"><span>（vLLM 框架在很多岗位的jd 上都写着有要求，今天平安证券也问到了这个，不过亲测这个问题问的不多，倾向于咱们先背个基本概念就好。我从三个方面总结了， 设计</span><span style="font-weight:bold">思路，特点，总结，</span><span>如果问到可以选择性地和面试官介绍）</span></p>
+<p id="f-doxcnCJYdOzxuD5i5sbm15fPJnf">vLLM 可以从设计思路、特点与整体机制三个方面学习。</p>
 
 <p id="f-doxcnR6UwpXUg0JZgfntgzJozOh"><span style="font-weight:bold"> 1. 设计思路</span></p>
 
@@ -2083,7 +2083,7 @@ Jev：分类、评估复杂度、识别处理要求
 
 <p id="f-doxcnXuu5gObTB4xVAYmbzXQsqo"><span>（ 这个问题是我给面试官准备好的，该学习案例中是如何使用 </span><span style="font-weight:bold">LoRa + 强化学习DPO + 量化 + 推理，来完成将Qwen2.5-7B-Instruct 模型 适配在CPU 电脑上，极大降低推理延迟，提升推理速度，并且提升任务质量的</span><span>。 </span></p>
 
-<p id="f-doxcn1etRd81rXAcDUHoYinMyIf"><span>    这个问题几乎是所有我所学的关于模型推理加速/微调这两部分的内容 在 该学习案例中运用的实际体现。  这个问题答案供大家参考，如果你想要向面试官展示你有 模型微调/推理加速的经验，你也要准备一个你自己对这个问题的回答，讲清楚 在你的项目中，背景是什么，用了什么技术，怎么使用，为什么要使用，最终达到了什么效果。）</span></p>
+<p id="f-doxcn1etRd81rXAcDUHoYinMyIf">下面将模型微调与推理加速知识应用到学习案例，说明背景、技术、使用方式、选型理由与效果验证。</p>
 
 <p id="f-doxcn8HEqsJgSLm0WhyNYBv8imc"><span>我负责优化邮件日历事件提取的模型性能。</span><span style="font-weight:bold">背景是</span><span>用户需要从邮件快速创建日程，但云端API延迟2-3秒且按调用计费，不适合高频场景。</span><span style="font-weight:bold">我的方案是</span><span>本地部署微调后的开源模型Qwen2.5-7B-Instruct，通过三步优化实现性能和成本的平衡。</span></p>
 
@@ -2113,15 +2113,15 @@ Jev：分类、评估复杂度、识别处理要求
 
 <a id="f-doxcnH4LTSdRSP70XiVy6y1Mnp7"></a>
 
-<p id="f-doxcnUpIPWtujczPnY1VU3atyke"><span>这一章呢，我想要记录的是我0算法基础，开始学习大模型算法的全记录。其实大家看的目前笔记的其他部分，是我在摸索出来一条路线以后，给大家不断总结和优化的。但是这个记录，是我在还没有开始系统学习算法的时候，记录的。按照之前的路线，我的主攻是大模型应用，学了Agent, RAG, 做了个项目，算法我是带了一点点，就是理解了概念，走通了流程。这一章的笔记是在我一边学习算法，一边记录的，好处是你可以看到我整个学习过程的记录，我会每天做了什么，学了什么，心态和感受是什么，我会如实记录。好处是，以后你们在学习大模型算法的时候，一定会有很多和我一样的困惑，买什么卡，学什么，项目怎么找。我把这些如实记录，我相信后来的人看到后，能够找到，复刻我的来时路。 另外因为我是实时记录，这个路上我学了什么视频，参考资料，怎么做的项目，这些都不会遗漏。</span></p>
+<p id="f-doxcnUpIPWtujczPnY1VU3atyke"></p>
 
-<p id="f-doxcnnrylDco7clitaZhECQRIQb"><span>好了，虽说是0基础，但准确说，是0.1基础（我大概了解过一些深度学习，机器学习是啥，我知道具体的大模型部署，训练到底是干啥，知道LoRA, 强化学习概念是啥）。 好吧，如果你这些不知道，我会给你推荐一个一周入门深度学习，机器学习的视频。对应的概念部分，就看本节的其他章节，微调，部署，都有一些概念的理解，我希望你能清楚这些到底是啥东西？ 先把这些准备好，然后我们就上车吧！本节的记录标号，表示学习顺序。</span></p>
+<p id="f-doxcnnrylDco7clitaZhECQRIQb">先理解深度学习、机器学习、部署、训练、LoRA 与强化学习的基本概念，再按照本节记录的顺序实践。</p>
 
-<p id="f-doxcnQFlmKJaDIaRu7Mpvv37Ash"><span>最后说一下学习这个环节硬件的问题，我的意思是先学习，先用我的cpu电脑，以及游戏笔记本，实在需要更好的硬件的时候，再看看是租还是怎么着，总之先学着。先把基础打好，硬件不是瓶颈，知识才是。</span></p>
+<p id="f-doxcnQFlmKJaDIaRu7Mpvv37Ash">根据现有硬件安排学习和实验，先理解基础，再逐步进行训练、微调与推理实践。</p>
 
-<div style="margin-left:25px"><h2 id="f-doxcnZ4P7jBtyWfQC3vS2LJWiag"><span>1 学习路线确定</span></h2><p id="f-doxcnkIIpBEZ5WRGs7JZLqhtXAf"><span>      第一天根据实际情况，确定学习路线。每个基础不一样，大家根据情况自己辨别。本节我介绍学习路线，以及我针对自己情况做的学习计划和建议。</span></p><p id="f-doxcnx4ECWtvVhxpH1SdOSe1mFf"><span>      学习大模型算法分三条路：数学+传统技术+大模型技术。</span></p><p id="f-doxcnMNBeIQFhaCFEwtQ5vlQfde"><span>算法包含：</span><span style="font-weight:bold">微积分，概率论，线性代数，高等数学</span><span>。 </span></p><p id="f-doxcn7655VmKAUQJJaVZjymeBFs"><span>传统技术：</span><span style="font-weight:bold">git, linux,python pytorch, 深度学习。</span><span> 注意啊，对于不是特别高端的算法岗，算法不是拉开差距的核心。 所以最开始不用啃得特别细致，甚至去做高等数学题目，但是需要有个印象。比如讲到深度学习，求偏导是啥，得有个概念。</span></p><p id="f-doxcno9OIYQXyimYFvCD64YEeMc"><span>大模型：transformer,  RAG, Agent 之类的。</span></p></div>
+<div style="margin-left:25px"><h2 id="f-doxcnZ4P7jBtyWfQC3vS2LJWiag"><span>1 学习路线确定</span></h2><p id="f-doxcnkIIpBEZ5WRGs7JZLqhtXAf">先根据基础确定学习路线，再按照阶段安排实践。</p><p id="f-doxcnx4ECWtvVhxpH1SdOSe1mFf"><span>      学习大模型算法分三条路：数学+传统技术+大模型技术。</span></p><p id="f-doxcnMNBeIQFhaCFEwtQ5vlQfde"><span>算法包含：</span><span style="font-weight:bold">微积分，概率论，线性代数，高等数学</span><span>。 </span></p><p id="f-doxcn7655VmKAUQJJaVZjymeBFs"><span>传统技术：</span><span style="font-weight:bold">git, linux,python pytorch, 深度学习。</span><span> 注意啊，对于不是特别高端的算法岗，算法不是拉开差距的核心。 所以最开始不用啃得特别细致，甚至去做高等数学题目，但是需要有个印象。比如讲到深度学习，求偏导是啥，得有个概念。</span></p><p id="f-doxcno9OIYQXyimYFvCD64YEeMc"><span>大模型：transformer,  RAG, Agent 之类的。</span></p></div>
 
-<div style="margin-left:25px"><p id="f-doxcnEYcfUXEdeCoyzN7cOIVfre"><span> 至于git, python,linux 都是老程序员了，不用学了，然后大模型这块，因为之前我们已经按照应用走了一遍，相关概念有了，直接实操。</span></p><p id="f-doxcn9ubs7m5Rns6sd5Ot0WzdPh"><span>综上，跑一些手写分类啊，Dropout的例子，应该很快，这里再打一下理论基础，唤醒之前的记忆。然后主要关注在大模型行业的训练，微调，找一些项目试一下，再实践一些复杂的例子，比如动手写出transformer，调试之类的，上手到模型的DPO, PPO，最后做一个项目，读一些论文，然后面试试一下，再根据面试反馈不断迭代。</span></p><p id="f-doxcnXgDwWAX40c5UhiHEB7Qsmg"><span> 对于学生来说，你可以花更多时间学基础知识。对于其他社招的程序员来说，其实你也应该看到，大模型算法这块门槛会高一些，对于深度学习，机器学习有难度。</span></p><p id="f-doxcnbrXnLVF3FJBVRJIfUrOP9r"><span>对于大家来说呢</span></p><p id="f-doxcnnA9ZpIYjU0Ii3gsA11veOg"><span>1. 社招，之前做开发的，建议先去学大模型应用。要学的少一些。如果学习能力特别强，时间多，包括在学校学的专业课，比如深度学习，数学都学得比较好，你可以激进一点，就直接目标定位大模型算法。如果你的基础比较差，比如对于深度学习，机器学习都没概念，甚至是上学没学过，可能是本科生，对于数学，微积分那些也都忘光了。还是建议慎重直接挑战大模型算法的。</span></p><p id="f-doxcnIjTkNIH86uA3CAZ9CYqyAe"><span>2. 社招，之前做算法的。那其实你和转到大模型算法之间的gap并不大。数学，传统技术都是你的对口内容，只用补齐大模型相关知识。值得一提的是即使做算法也需要补一下Agent,rag，可以去看看本节其它内容。然后参考这一小节，我后面如何做一个项目的。当然算法大哥毕竟是专业的，可能不需要参考。</span></p><p id="f-doxcnOLyQbkV3Pp9i17vUEz9Zsg"><span>3. 校招生，如果你马上着急找工作，根据自己情况觉得是找一个大模型应用项目更容易，还是算法容易，然后弄个项目刷实习，不断学习，比如从3月学到7月找暑期，找到暑期继续学习找秋招，再学习到明年3月甚至能找春招。</span></p><p id="f-doxcnHH0x9UMPGZpF0Dv6KDC8Qe"><span>4. 校招生，不着急找工作的。理论知识先学好吧，学习得更细致，比如深度学习的课程之类的，到了快找实习的阶段，参考上面几条，准备项目，刷实习，找工作。</span></p><h3 id="f-doxcnTQjf6SZkGr1ZemEAwsr6yf"><span>1.1 参考视频</span></h3><p id="f-doxcnKY78lxlqu3kG5yIoT1x5Cd"><span> 该视频讲解了大模型算法学习路线（10分钟）。只讲大的学习方向，没讲具体技术。</span></p><p id="f-doxcnXL3w5ZkltcAszBJRrIvxLf"><span><span><a href="https://www.bilibili.com/video/BV1nNkFBMEDS/?spm_id_from=333.337.search-card.all.click&amp;vd_source=144bec9c3f54e465073138bed788be1b"><span>https://www.bilibili.com/video/BV1nNkFBMEDS/?spm_id_from=333.337.search-card.all.click&amp;vd_source=144bec9c3f54e465073138bed788be1b</span></a></span></span></p><p id="f-doxcnOGvyUD4TDnILEAcW8vg2cc"><span>从技术角度拆分哪些是重点，比如预训练用得比较少啊，SFT更重点呀，哪些论文要学习啊，数据工程之类的。（19分钟）</span></p><p id="f-doxcnBSsOVzd017m7UuR8Yzh7zd"><span><span><a href="https://www.bilibili.com/video/BV1ix6UBcEp2?spm_id_from=333.788.videopod.sections&amp;vd_source=144bec9c3f54e465073138bed788be1b"><span>https://www.bilibili.com/video/BV1ix6UBcEp2?spm_id_from=333.788.videopod.sections&amp;vd_source=144bec9c3f54e465073138bed788be1b</span></a></span></span></p><p id="f-doxcnlKX8tr5749cP6w88pyxckb"><span>快速入门深度学习，机器学习：</span></p><p id="f-doxcnyipzKDEc7xPE3kgOCC9Ziq"><span><span><a href="https://www.bilibili.com/video/BV1eP411w7Re/?spm_id_from=333.337.search-card.all.click&amp;vd_source=144bec9c3f54e465073138bed788be1b"><span>https://www.bilibili.com/video/BV1eP411w7Re/?spm_id_from=333.337.search-card.all.click&amp;vd_source=144bec9c3f54e465073138bed788be1b</span></a></span></span></p></div>
+<div style="margin-left:25px"><p id="f-doxcnEYcfUXEdeCoyzN7cOIVfre">根据现有基础补齐 Git、Python、Linux，再结合大模型应用概念进行实践。</p><p id="f-doxcn9ubs7m5Rns6sd5Ot0WzdPh"><span>综上，跑一些手写分类啊，Dropout的例子，应该很快，这里再打一下理论基础，唤醒之前的记忆。然后主要关注在大模型行业的训练，微调，找一些项目试一下，再实践一些复杂的例子，比如动手写出transformer，调试之类的，上手到模型的DPO, PPO，最后做一个项目，读一些论文，然后面试试一下，再根据面试反馈不断迭代。</span></p><p id="f-doxcnXgDwWAX40c5UhiHEB7Qsmg"><span> 对于学生来说，你可以花更多时间学基础知识。对于其他社招的程序员来说，其实你也应该看到，大模型算法这块门槛会高一些，对于深度学习，机器学习有难度。</span></p><p id="f-doxcnbrXnLVF3FJBVRJIfUrOP9r"><span>对于大家来说呢</span></p><p id="f-doxcnnA9ZpIYjU0Ii3gsA11veOg"><span>1. 社招，之前做开发的，建议先去学大模型应用。要学的少一些。如果学习能力特别强，时间多，包括在学校学的专业课，比如深度学习，数学都学得比较好，你可以激进一点，就直接目标定位大模型算法。如果你的基础比较差，比如对于深度学习，机器学习都没概念，甚至是上学没学过，可能是本科生，对于数学，微积分那些也都忘光了。还是建议慎重直接挑战大模型算法的。</span></p><p id="f-doxcnIjTkNIH86uA3CAZ9CYqyAe">2. 有算法基础时，可以补齐大模型相关知识，同时学习 Agent、RAG，并结合本节项目实践。</p><p id="f-doxcnOLyQbkV3Pp9i17vUEz9Zsg"><span>3. 校招生，如果你马上着急找工作，根据自己情况觉得是找一个大模型应用项目更容易，还是算法容易，然后弄个项目刷实习，不断学习，比如从3月学到7月找暑期，找到暑期继续学习找秋招，再学习到明年3月甚至能找春招。</span></p><p id="f-doxcnHH0x9UMPGZpF0Dv6KDC8Qe"><span>4. 校招生，不着急找工作的。理论知识先学好吧，学习得更细致，比如深度学习的课程之类的，到了快找实习的阶段，参考上面几条，准备项目，刷实习，找工作。</span></p><h3 id="f-doxcnTQjf6SZkGr1ZemEAwsr6yf"><span>1.1 参考视频</span></h3><p id="f-doxcnKY78lxlqu3kG5yIoT1x5Cd"><span> 该视频讲解了大模型算法学习路线（10分钟）。只讲大的学习方向，没讲具体技术。</span></p><p id="f-doxcnXL3w5ZkltcAszBJRrIvxLf"><span><span><a href="https://www.bilibili.com/video/BV1nNkFBMEDS/?spm_id_from=333.337.search-card.all.click&amp;vd_source=144bec9c3f54e465073138bed788be1b"><span>https://www.bilibili.com/video/BV1nNkFBMEDS/?spm_id_from=333.337.search-card.all.click&amp;vd_source=144bec9c3f54e465073138bed788be1b</span></a></span></span></p><p id="f-doxcnOGvyUD4TDnILEAcW8vg2cc"><span>从技术角度拆分哪些是重点，比如预训练用得比较少啊，SFT更重点呀，哪些论文要学习啊，数据工程之类的。（19分钟）</span></p><p id="f-doxcnBSsOVzd017m7UuR8Yzh7zd"><span><span><a href="https://www.bilibili.com/video/BV1ix6UBcEp2?spm_id_from=333.788.videopod.sections&amp;vd_source=144bec9c3f54e465073138bed788be1b"><span>https://www.bilibili.com/video/BV1ix6UBcEp2?spm_id_from=333.788.videopod.sections&amp;vd_source=144bec9c3f54e465073138bed788be1b</span></a></span></span></p><p id="f-doxcnlKX8tr5749cP6w88pyxckb"><span>快速入门深度学习，机器学习：</span></p><p id="f-doxcnyipzKDEc7xPE3kgOCC9Ziq"><span><span><a href="https://www.bilibili.com/video/BV1eP411w7Re/?spm_id_from=333.337.search-card.all.click&amp;vd_source=144bec9c3f54e465073138bed788be1b"><span>https://www.bilibili.com/video/BV1eP411w7Re/?spm_id_from=333.337.search-card.all.click&amp;vd_source=144bec9c3f54e465073138bed788be1b</span></a></span></span></p></div>
 
 <p id="f-doxcnXpNp1KMbbvfz3rji4W5YZc"><span>我们的学习目标是为了快速完成一个项目</span></p>
 
@@ -2133,7 +2133,7 @@ Jev：分类、评估复杂度、识别处理要求
 
 <p id="f-doxcnptkRPdulZ3tq6qHEc7eVgc"><span>4. </span><span style="font-weight:bold">小项目</span><span>：确定一个方向，比如提升模型数学推理能力，然后使用SFT + GRPO 进行训练，准备测试集，跑测试结果，把完整规范的训练，测评，调试，迭代的逻辑走一遍，完成代码，写一个小论文（不是发布的那种，类似结题报告，说明原理，做的事，逻辑，参考论文）。</span></p>
 
-<p id="f-doxcnEz43HE92YgOdEtRikwktTf"><span>这块我也做了一个图，这个图是笔记里三个SKILL对应的课程内容。覆盖了后训练的基本的理论。我三个阶段已经学完，全程就是用SKILL跟着AI对话，提问，复习。学完了以后，对整个后训练的核心概念会有一个理解，具备了做算法项目的理论知识。</span></p>
+<p id="f-doxcnEz43HE92YgOdEtRikwktTf">图中展示三个 Skill 对应的课程内容，覆盖后训练的基本理论，可以结合对话、提问和复习学习。</p>
 
 <div id="f-doxcn0mQYRxOxSlKKdfiq5AKFGg"><img alt="" decoding="async" height="853" loading="lazy" src="/images/agent-learning/ea43e08101fa11f7f394c681.png" width="1280"/></div>
 
@@ -2143,7 +2143,7 @@ Jev：分类、评估复杂度、识别处理要求
 
 <a id="f-doxcnHDFHrdczLwckw4zcqGW1qc"></a>
 
-<p id="f-doxcnipzdqMY71ItGXAWmAtVN1d"><span>我的学习方法是使用了一个SKILL作为老师，制定了课程的教纲，一共有16课，包含4次考试，每次课程结束也会有5个测试题，你只要使用这个SKILL，告诉AI开始学习Pytorch，触发它就能一步步完成。完成后你会了解：深度学习基本概念，如何使用Pytorch训练，搭建网络，整理数据，attention, transformer gpt的原理等。</span></p>
+<p id="f-doxcnipzdqMY71ItGXAWmAtVN1d">可以使用教学 Skill 学习 PyTorch，并结合课程、考试与测试检验学习效果。</p>
 
 <p id="f-doxcnkRtoN9vS9QVaKklU1pXrTb"><span>我想谈一下使用该SKILL注意事项和说明：</span></p>
 
@@ -2161,7 +2161,7 @@ Jev：分类、评估复杂度、识别处理要求
 
 <a id="f-doxcnL5x2vkLYmzjEvBEMQY5BYe"></a>
 
-<p id="f-doxcnaMLkuCEXfS0PebYxXtT5cf"><span>这个视频讲了我学习Pytorch和设计学习路线的思路</span></p>
+<p id="f-doxcnaMLkuCEXfS0PebYxXtT5cf">PyTorch 学习路线讲解视频。</p>
 
 <p id="f-doxcny13LmjEjI8eJWyMpSKfgTe"><span><span><a href="https://www.bilibili.com/video/BV1MYwvzvEFL/?vd_source=144bec9c3f54e465073138bed788be1b"><span>https://www.bilibili.com/video/BV1MYwvzvEFL/?vd_source=144bec9c3f54e465073138bed788be1b</span></a></span></span></p>
 
@@ -2183,9 +2183,9 @@ Jev：分类、评估复杂度、识别处理要求
 
 <p id="f-doxcnbG4IamLsJRlgKFLnvV8it8"><span>最后结合DeepSeekR1的训练技巧，把内容串起来。</span></p>
 
-<p id="f-doxcnwkpOppzbeC2oLcfGOinRHg"><span>这些东西我很肯定地说，都很重要，面试也很常考。大家看面经可以看到 数据类型（fp32, fp16,bp 16) 这个网龙面试问过。 DeepSeekR1的训练技巧 也在面试出现过。这些内容非常重要，也是我们后面自己做一个项目的核心。</span></p>
+<p id="f-doxcnwkpOppzbeC2oLcfGOinRHg">数据类型（FP32、FP16、BF16）与 DeepSeek-R1 训练方法等，是后续项目实践需要理解的基础。</p>
 
-<p id="f-doxcnmPwV7rS3pjftOEMI42hqTf"><span>不过内容理解起来有一些难度，我也设置了很多技巧，比如SKILL设置了不同讲课风格，大家可以由浅到深。每个小节设置了md复习文本，SKILL可以带你复习等各种策略，大家可以看SKILL的README。 虽然很难，我相信大家耐心一点，用SKILL 多刷几遍，绝对可以学会的。可以认为这已经是比看书，看视频，看文章高效多了的方法。大家注意思考，多和AI聊天，提问题。</span></p>
+<p id="f-doxcnmPwV7rS3pjftOEMI42hqTf">可以使用教学 Skill 的不同讲课风格、Markdown 复习文本与问答方式，循序渐进理解知识；使用方式见 Skill README。</p>
 
 <p id="f-doxcnVxUBeq8zx5sGbbbXioPSJc"><span>SKILL已经整理到下方的资源合集中，和pytorch学习SKILL放在一起了，有需要就学起来吧。</span></p>
 
@@ -2195,7 +2195,7 @@ Jev：分类、评估复杂度、识别处理要求
 
 <a id="f-doxcnzM2DJBUDfcRsD9jMwrAzZe"></a>
 
-<p id="f-doxcnbZkYkqjO7MO7hPNV0nAf1g"><span>这个视频讲了我学习后训练，和使用这个SKILL的思路</span></p>
+<p id="f-doxcnbZkYkqjO7MO7hPNV0nAf1g">后训练与教学 Skill 使用讲解视频。</p>
 
 <p id="f-doxcnytEufGUShurMyBJrlhEnub"><span><span><a href="https://www.bilibili.com/video/BV1Wp9zBJE6r/?vd_source=144bec9c3f54e465073138bed788be1b"><span>https://www.bilibili.com/video/BV1Wp9zBJE6r/?vd_source=144bec9c3f54e465073138bed788be1b</span></a></span></span></p>
 
@@ -2223,9 +2223,9 @@ Jev：分类、评估复杂度、识别处理要求
 
 <a id="f-doxcnIjLgG7Pe2zBY5bPMMqlIRh"></a>
 
-<p id="f-doxcn2hgUFOIIDQgye2F10fQYgd"><span>做这个项目，其实我的一大目的，就是真的希望所有人都能够自己去做一个算法项目。因为我知道算法项目本身天然从知识上就有一定的难度和门槛，同时硬件上也会劝退一些人。普通的开发，没有深度学习训练相关的内容的同学，很多人对算法项目是望而却步的。</span></p>
+<p id="f-doxcn2hgUFOIIDQgye2F10fQYgd"></p>
 
-<p id="f-doxcnSSL9OhyqZYGZmgsXbZvH6c"><span style="font-weight:bold">当然如果你想真的学习，我希望你能学习整个项目完成的技巧和方法。</span><span>我相信文档记录得非常非常全，我是怎么完成的，学习这些方法，你自己做一遍，或者按照这个方法迁移到你的项目中，你的收获肯定更大。</span></p>
+<p id="f-doxcnSSL9OhyqZYGZmgsXbZvH6c">学习项目完成的方法，结合文档实际运行，并将相关方法迁移到具体任务中。</p>
 
 <p id="f-doxcnl1GeLO73eH9GQ45XaUSKHh"><span>注意该项目属于开发中，文档会逐步补齐。</span></p>
 
@@ -2235,7 +2235,7 @@ Jev：分类、评估复杂度、识别处理要求
 
 <a id="f-doxcntzTSDKPsVXAE65jzjcn2zc"></a>
 
-<div style="margin-left:25px"><div id="f-doxcn3hYXWQ9ug83I20ZQSGwAld" style="display:flex;gap:0.5em"><span style="min-width:1.5em">a.</span><div><span>首先，算法项目的理论阶段的学习，请看笔记 </span><span><span><a href="#f-doxcnH4LTSdRSP70XiVy6y1Mnp7"><span>0基础学算法</span></a></span></span><span>。 先把前三个阶段理论知识学习，</span><span style="font-weight:bold">深度学习，训练，SFT和强化学习相关内容</span><span>，理论知识先学了。</span></div></div><div id="f-doxcnPmcMiQ9LP1SaDBo25J1LGc" style="display:flex;gap:0.5em"><div><span>可以当故事看，没多少，你知道我整个过程是怎么来的，中间遇到哪些问题和思考。</span></div></div><div id="f-doxcn310I0ajaK75Vh9hJtFf5Pe" style="display:flex;gap:0.5em"><span style="min-width:1.5em">c.</span><div><span>先看</span><span><span><a href="https://github.com/jerry-ai-dev/post-training-slot-extractor"><span>技术文档</span></a></span></span><span>。技术文档是整个项目的细节，要理解它。当然更推荐的方法是去学习整个技术文档如何做的，我在文档中也写了很多心得。因为我做项目，都是先写技术文档，逼迫你想清楚细节，是我做项目的方法论，我也希望你能学会这个写文档的方法，文档里有记录。 同时也有技术文档的</span><span><span><a href="https://www.bilibili.com/video/BV1XSTy6AEMP/?spm_id_from=333.1387.homepage.video_card.click&amp;vd_source=144bec9c3f54e465073138bed788be1b"><span>讲解视频</span></a></span></span><span>。</span></div></div><div id="f-doxcnscFutwNjkDjnO6OSXP1tle" style="display:flex;gap:0.5em"><span style="min-width:1.5em">d.</span><div><span>在技术文档中，我将代码完工的整个流程分成了</span><span style="font-weight:bold">7个阶段</span><span>。每个阶段我会提交一个commit，所以主分支上会有8个commit，初始（只有spec) - stage1 -stage2 -stage 3.. </span></div></div><div style="margin-left:25px"><p id="f-doxcn0LGFBSu9ggPvJDLJW5dK7P"><span>我是建议你切换到每一个阶段的节点，来看当前阶段完成了什么。</span></p><p id="f-doxcnH0XAfWZe3I4ZIWP4qy4MTe"><span>每个阶段的阶段性spec写在对应的</span><span style="font-weight:bold">docs - spec目录下</span><span>。</span></p><p id="f-doxcnqtGmoG3VmAqwMZ8P43Zhde"><span>对应实施细节写在对应</span><span style="font-weight:bold">docs-plan目录</span><span>下。（这个是superpowers生成的，可以主要看看specs，plans不太用看）。 </span></p><p id="f-doxcn1sKNqYxFv5GHoEyyMRkNNf"><span>每个阶段的完工代码，比如我怎么做的，这个阶段关键目标，你可以跑哪些指令，重点要掌握知识，写在对应的项目的</span><span style="font-weight:bold">project-log对应的phasex下</span><span>。这个logs 告诉大家每个阶段的理论重点，需要关注的内容。避免大家无从下手。</span></p><p id="f-doxcny9GkEZu7IA64NSRZS26tHe"><span>同时每个阶段配置讲解视频，我会逐步上传，补在这里。</span></p></div><p id="f-doxcnYIuqel5tHbnJO0bgdvAvBd"><span style="font-weight:bold">1阶段：</span><span> 主要是完成了项目的具体框架，串起来整个流程。这个阶段的学习重点：superpowers的方法论，以及llama.cpp本地部署的知识。详细文档见</span><span><span><a href="https://github.com/jerry-ai-dev/post-training-slot-extractor/tree/master/project-log/phase-01-scaffold"><span>这里</span></a></span></span><span>。 该阶段讲解视频在</span><span><span><a href="https://www.bilibili.com/video/BV1tVN86CEEX/?spm_id_from=333.1387.homepage.video_card.click&amp;vd_source=144bec9c3f54e465073138bed788be1b"><span>这里</span></a></span></span><span>。</span></p><p id="f-doxcnSLvMUR535GnK21i15GRQmh"><span style="font-weight:bold">2阶段：</span><span>完成了Agent的评估。这部分非常重要。即使你不做算法项目，这里也值得学习。Agent评估理论可以先看笔记</span><span><span><a href="/posts/agent-learning-15-evaluation-observability/#f-doxcnqrKdVGPbNYY8Xm3Fr8NVkh"><span>这里</span></a></span></span><span>。 掌握理论基础。整个作为实战例子。文档在</span><span><span><a href="https://github.com/jerry-ai-dev/post-training-slot-extractor/blob/master/project-log/phase-02-eval-baseline/log.md"><span>这里</span></a></span></span><span>。 讲解视频在</span><span><span><a href="https://www.bilibili.com/video/BV1VrKV65EQJ/?spm_id_from=333.1387.homepage.video_card.click&amp;vd_source=144bec9c3f54e465073138bed788be1b"><span>这里</span></a></span></span><span>。</span></p><p id="f-doxcnmADs4xw5GNxsoPWvcxBJ8f"><span style="font-weight:bold">3阶段：</span><span>这阶段最重要的内容，就是创建了后训练 SFT和DPO的数据集，整个阶段数据集如何制作出来的，整个工作流是这个阶段需要学习的。文档在</span><span><span><a href="https://github.com/jerry-ai-dev/post-training-slot-extractor/tree/master/project-log/phase-03-dataset"><span>这里</span></a></span></span><span>，讲解视频在</span><span><span><a href="https://www.bilibili.com/video/BV1ZogX6gE4o/?spm_id_from=333.1387.homepage.video_card.click&amp;vd_source=144bec9c3f54e465073138bed788be1b"><span>这里</span></a></span></span><span>。</span></p></div>
+<div style="margin-left:25px"><div id="f-doxcn3hYXWQ9ug83I20ZQSGwAld" style="display:flex;gap:0.5em"><span style="min-width:1.5em">a.</span><div><span>首先，算法项目的理论阶段的学习，请看笔记 </span><span><span><a href="#f-doxcnH4LTSdRSP70XiVy6y1Mnp7"><span>0基础学算法</span></a></span></span><span>。 先把前三个阶段理论知识学习，</span><span style="font-weight:bold">深度学习，训练，SFT和强化学习相关内容</span><span>，理论知识先学了。</span></div></div><div id="f-doxcnPmcMiQ9LP1SaDBo25J1LGc" style="display:flex;gap:0.5em"><div><span>可以当故事看，没多少，你知道我整个过程是怎么来的，中间遇到哪些问题和思考。</span></div></div><div id="f-doxcn310I0ajaK75Vh9hJtFf5Pe" style="display:flex;gap:0.5em"><span style="min-width:1.5em">c.</span><div><span>先看</span><span><span><a href="https://github.com/jerry-ai-dev/post-training-slot-extractor"><span>技术文档</span></a></span></span><span>。技术文档是整个项目的细节，要理解它。当然更推荐的方法是去学习整个技术文档如何做的，我在文档中也写了很多心得。因为我做项目，都是先写技术文档，逼迫你想清楚细节，是我做项目的方法论，我也希望你能学会这个写文档的方法，文档里有记录。 同时也有技术文档的</span><span><span><a href="https://www.bilibili.com/video/BV1XSTy6AEMP/?spm_id_from=333.1387.homepage.video_card.click&amp;vd_source=144bec9c3f54e465073138bed788be1b"><span>讲解视频</span></a></span></span><span>。</span></div></div><div id="f-doxcnscFutwNjkDjnO6OSXP1tle" style="display:flex;gap:0.5em"><span style="min-width:1.5em">d.</span><div><span>在技术文档中，我将代码完工的整个流程分成了</span><span style="font-weight:bold">7个阶段</span><span>。每个阶段我会提交一个commit，所以主分支上会有8个commit，初始（只有spec) - stage1 -stage2 -stage 3.. </span></div></div><div style="margin-left:25px"><p id="f-doxcn0LGFBSu9ggPvJDLJW5dK7P">可以切换到各阶段节点，查看对应阶段完成的内容。</p><p id="f-doxcnH0XAfWZe3I4ZIWP4qy4MTe"><span>每个阶段的阶段性spec写在对应的</span><span style="font-weight:bold">docs - spec目录下</span><span>。</span></p><p id="f-doxcnqtGmoG3VmAqwMZ8P43Zhde"><span>对应实施细节写在对应</span><span style="font-weight:bold">docs-plan目录</span><span>下。（这个是superpowers生成的，可以主要看看specs，plans不太用看）。 </span></p><p id="f-doxcn1sKNqYxFv5GHoEyyMRkNNf">每个阶段的代码、关键目标、可运行指令与重点知识见 project-log 对应的 phase 目录。</p><p id="f-doxcny9GkEZu7IA64NSRZS26tHe"></p></div><p id="f-doxcnYIuqel5tHbnJO0bgdvAvBd"><span style="font-weight:bold">1阶段：</span><span> 主要是完成了项目的具体框架，串起来整个流程。这个阶段的学习重点：superpowers的方法论，以及llama.cpp本地部署的知识。详细文档见</span><span><span><a href="https://github.com/jerry-ai-dev/post-training-slot-extractor/tree/master/project-log/phase-01-scaffold"><span>这里</span></a></span></span><span>。 该阶段讲解视频在</span><span><span><a href="https://www.bilibili.com/video/BV1tVN86CEEX/?spm_id_from=333.1387.homepage.video_card.click&amp;vd_source=144bec9c3f54e465073138bed788be1b"><span>这里</span></a></span></span><span>。</span></p><p id="f-doxcnSLvMUR535GnK21i15GRQmh"><span style="font-weight:bold">2阶段：</span><span>完成了Agent的评估。这部分非常重要。即使你不做算法项目，这里也值得学习。Agent评估理论可以先看笔记</span><span><span><a href="/posts/agent-learning-15-evaluation-observability/#f-doxcnqrKdVGPbNYY8Xm3Fr8NVkh"><span>这里</span></a></span></span><span>。 掌握理论基础。整个作为实战例子。文档在</span><span><span><a href="https://github.com/jerry-ai-dev/post-training-slot-extractor/blob/master/project-log/phase-02-eval-baseline/log.md"><span>这里</span></a></span></span><span>。 讲解视频在</span><span><span><a href="https://www.bilibili.com/video/BV1VrKV65EQJ/?spm_id_from=333.1387.homepage.video_card.click&amp;vd_source=144bec9c3f54e465073138bed788be1b"><span>这里</span></a></span></span><span>。</span></p><p id="f-doxcnmADs4xw5GNxsoPWvcxBJ8f"><span style="font-weight:bold">3阶段：</span><span>这阶段最重要的内容，就是创建了后训练 SFT和DPO的数据集，整个阶段数据集如何制作出来的，整个工作流是这个阶段需要学习的。文档在</span><span><span><a href="https://github.com/jerry-ai-dev/post-training-slot-extractor/tree/master/project-log/phase-03-dataset"><span>这里</span></a></span></span><span>，讲解视频在</span><span><span><a href="https://www.bilibili.com/video/BV1ZogX6gE4o/?spm_id_from=333.1387.homepage.video_card.click&amp;vd_source=144bec9c3f54e465073138bed788be1b"><span>这里</span></a></span></span><span>。</span></p></div>
 
 <p id="f-doxcnuvRDUYY0U0jRDkHJ1Byluh"><span style="font-weight:bold">4阶段：</span><span>4阶段是真正训练了阶段，使用了SFT+DPO进行训练。训练使用AutoDL租卡训练，成本小于20元。文档在</span><span><span><a href="https://github.com/jerry-ai-dev/post-training-slot-extractor/blob/master/project-log/phase-04-training/log.md"><span>这里</span></a></span></span><span>，讲解视频待上传。</span></p>
 

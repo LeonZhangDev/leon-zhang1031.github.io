@@ -48,7 +48,7 @@ verification: {"status": "not-run", "scope": "本次仅整理资料；示例代�
 
 <p id="f-doxcnjndaDr17vSDw1P2x5A4z6b"><span>所以，本学习资料希望先帮你建立一个</span><span style="font-weight:bold">完整的大框架</span><span>：沿着 Agent 开发的生命周期去理解，在每个阶段哪些地方应该测、测什么、怎么测、有哪些常见方法。你顺着这个思路，就能把 Agent 测试和评估的大部分内容理清楚。</span></p>
 
-<p id="f-doxcnUA8doLQCrSYh3JulU5brye"><span>每一个小的测试环节，我都根据参考资料总结了一些方法或思路。但还是要强调：这里没有绝对标准答案。真正落地时，应该结合你的业务、你的 Agent 架构、你的工具链和你的风险边界来设计。如果你希望面试回答听起来更贴近实践，而不是只停留在理论层面，可以把本节理论和你自己的项目结合起来想一遍：比如你的项目里应该如何评估工具调用、如何评估多 Agent 协作、如何设置上线前发布闸门、上线后如何监控质量。也可以把你的项目背景和这一节理论一起交给 AI，让它帮你总结成更贴合你项目的回答。</span></p>
+<p id="f-doxcnUA8doLQCrSYh3JulU5brye">评估需要结合业务、Agent 架构、工具链和风险边界设计，包括工具调用、多 Agent 协作、上线前验证与线上监控。</p>
 
 <p id="f-doxcnOQeXDW16JUoU7oH31kocrd"><span>本学习资料希望你达到三个目的：</span></p>
 
@@ -68,7 +68,7 @@ verification: {"status": "not-run", "scope": "本次仅整理资料；示例代�
 <ul><li id="f-doxcnIm24dCkDR9Lacfe5fJe8Hc"><span><span style="font-weight:bold"><a href="https://github.com/xindoo/agentic-design-patterns"><span>《Agentic Design Patterns》</span></a></span></span><span>（智能体设计模式）—— 评估作为设计模式与生产治理</span></li></ul>
 <ul><li id="f-doxcnr5GF14QlJfVza1rzYduZxf"><span><span style="font-weight:bold"><a href="https://arxiv.org/abs/2509.26490"><span>美团 LongCat VitaBench</span></a></span></span><span>（ICLR 2026 / arXiv:2509.26490）—— 真实场景下的评测基准实战</span></li></ul>
 <p id="f-doxcnBqFzJY2XvKyJTyPZon7yjg"><span>全文每个评测点均标注资料出处，便于追溯。</span></p>
-<p id="f-doxcn9KlxShNcUZrPDbvZv9UIeh"><span>前面两本是书籍，没有找到在线观看的链接，如果想要看，可以自己购买书籍，或者电子资源。第三个是一本google的书籍，网上有免费阅读版本。最后一个是论文，也可以直接阅读，链接已经附上。</span></p></blockquote>
+<p id="f-doxcn9KlxShNcUZrPDbvZv9UIeh">前两项为参考书籍；第三项为 Google 书籍，提供在线阅读版本；最后一项为论文，附有阅读链接。</p></blockquote>
 
 
 <a id="section-0072"></a>
@@ -89,7 +89,7 @@ verification: {"status": "not-run", "scope": "本次仅整理资料；示例代�
 <div style="margin-left:25px"><div id="f-doxcnHAkME8j3pHIUIBQPXu6zfd" style="display:flex;gap:0.5em"><span style="min-width:1.5em">◦</span><div><span style="font-weight:bold">选型时</span><span>：靠评估在一堆模型里选出最合适的；</span></div></div><div id="f-doxcn9LRfXs9DUZH1WNqwLPSGDU" style="display:flex;gap:0.5em"><span style="min-width:1.5em">◦</span><div><span style="font-weight:bold">开发时</span><span>：靠评估判断每次改动是变好还是变坏；</span></div></div><div id="f-doxcny7Stk7D2uwxU2DhMLBPWMe" style="display:flex;gap:0.5em"><span style="min-width:1.5em">◦</span><div><span style="font-weight:bold">上线时</span><span>：靠评估做 A/B 测试、灰度放量；</span></div></div><div id="f-doxcnuwmjzMlOSn1wHW9ZwnKsUe" style="display:flex;gap:0.5em"><span style="min-width:1.5em">◦</span><div><span style="font-weight:bold">生产时</span><span>：靠评估（监控）发现线上退化、漂移和安全问题。</span></div></div></div>
 
 <blockquote id="f-doxcnm2GaFqvYE2Rb8CuZesUkEe"><p id="f-doxcnLetiyAvkin1SG7s2fJDngP"><span>一句话：在 Agent 时代，</span><span style="font-weight:bold">评估不是质检环节，而是研发的指南针</span><span>。</span></p>
-<p id="f-doxcnQFbQpVDHjodqP9uJ3GJH5C"><span>💬 </span><span style="font-weight:bold">【面试卡片】</span><span style="font-weight:bold">Q：TDD 你了解过吗？你自己用 TDD 做过完整开发吗？</span><span>（这个题目是</span><span style="font-weight:bold">202606社招 雄帝科技Agent二面的题目</span><span>，是粉丝朋友在小红书上分享面试题。本篇所有笔记几乎就是在讲TDD，想告诉大家的是如果学好了这篇笔记，如果问到TDD的内容你就可以引经据典了）</span></p>
+<p id="f-doxcnQFbQpVDHjodqP9uJ3GJH5C">💬 【面试卡片】Q：TDD 你了解过吗？你自己用 TDD 做过完整开发吗？</p>
 <p id="f-doxcnlAN7v2B1a9Z0Uwttv0jmjg"><span style="font-weight:bold">A：</span><span> TDD 我了解，也实践过。传统 TDD 就是测试先行：先写测试用例让它失败，再写最小代码让它通过，然后重构，靠测试来驱动设计，而不是写完再补测试。不过在 Agent 项目里它没法直接照搬，因为大模型是概率性的、输出又是开放式的，同一个输入跑两次结果都可能不一样，没法像传统代码那样断言"输出等于期望值"。所以本案例用的是它在 Agent 时代的升级版——评估驱动开发（EDD），内核和 TDD 一样：动手之前先把"怎么算成功"定义清楚，再用一套可量化、可重复的评估来驱动每次改动，只是"断言相等"换成了打分、相似度、通过率这类度量。</span></p>
 <p id="f-doxcnMeDOySwz75kOPHiDyvXYSd"><span>具体落地，我是顺着三个阶段做的。第一个阶段是模型确定，先选对地基模型：用成本、延迟、隐私这些硬约束把候选缩小，再用业务私有数据集做终筛，避免被公开榜单的数据污染带偏。第二个阶段是开发阶段，这一段最能体现 TDD 的思想——可以先把各个环节怎么评估定清楚，再去搭 Pipeline。先做组件级评测，把 Prompt、RAG、工具调用、规划推理各自的失败模式逐个测出来；再做集成级评测，用端到端成功率、轨迹评测、多轮对抗、多 Agent 协作验证整机能不能稳定完成任务；等这些维度的测法和指标都定清楚了，我才把评测集和评估 Pipeline 一起组装出来，并设一道发布闸门，质量、延迟、成本、安全都过线才能上。第三个阶段是上线，把同一组指标搬到真实流量里持续监控，做 A/B 灰度、盯漂移和成本安全告警，一旦发现新问题就回灌评测集重新跑回归。</span></p>
 <p id="f-doxcnMc1zHyrAe2NZymPDT57zsC"><span>总结来说，传统 TDD 本案例用过，在 Agent 里本案例用它的升级版 EDD，把评估贯穿到模型确定、开发、上线这三个阶段——尤其在开发阶段是先把各环节怎么评估定清楚、再组装 Pipeline 和发布闸门，让评估全程驱动开发，而不是事后补测。</span></p>
@@ -244,7 +244,7 @@ verification: {"status": "not-run", "scope": "本次仅整理资料；示例代�
 
 <p id="f-doxcn61sF1sZMSiP0u0d9QugZnd"><span>2. 我们准备的黄金数据集，</span><span style="font-weight:bold">比例，分布是否合理，是否具有代表性</span><span>？</span></p>
 
-<p id="f-doxcnT3eYSDS6F0pTwfFvDCcjqf"><span>（温馨提示：这个小节的内容，是我在整理2026年9月阿里淘天秋招实习时，从本次面试中抠出来的考点，并补充到我们评测章节的笔记中的）</span></p>
+<p id="f-doxcnT3eYSDS6F0pTwfFvDCcjqf"></p>
 
 <a id="f-doxcnZYhnHY2GS6H9skqz2DVeLn"></a>
 
@@ -335,7 +335,7 @@ verification: {"status": "not-run", "scope": "本次仅整理资料；示例代�
 <p id="f-doxcnAtRfQszuxNYRy22MGRzqZ7"><span>本章是全篇主体。我们沿着第 2 章那张生命周期主线，</span><span style="font-weight:bold">从"通用武器库"开始，再依次走过上线前验证（选型 → 前置定成功标准 → 组件 → 集成 → 组装评测集与 Pipeline → 发布闸门）和上线后监控（灰度、可观测性、漂移、成本与安全告警）</span><span>。每一个小节都用同一个模板讲：</span></p>
 
 <blockquote id="f-doxcnm0vh7zy0UnzHURLxJNxdgd"><p id="f-doxcnRZaqBmXqJ7kKuoS5PE3WRe"><span style="font-weight:bold">【是什么】</span><span> 这一节评的对象是什么 → </span><span style="font-weight:bold">【为什么测】</span><span> 不测会怎么翻车 → </span><span style="font-weight:bold">【怎么测】</span><span> 具体指标、工具、可照做的步骤。</span></p>
-<p id="f-doxcnyn2OnaCPKVKjjqt5qGdJ1g"><span>📌 这里的怎么测，注意也不是标准的答案。而是我基于这4个资料来总结的。怎么测这一步有的地方写的是具体的思路，有的地方是一些可以参考的做法。具体真正工程实践上，没有标准答案，而是要根据我们今天讲解的思路，结合自己的项目灵活扩展。</span></p></blockquote>
+<p id="f-doxcnyn2OnaCPKVKjjqt5qGdJ1g">这里提供评估思路与参考做法，实际工程需要结合具体项目设计和验证。</p></blockquote>
 
 <a id="f-doxcnBom3uw61IVWwGWOBKUarFn"></a>
 
@@ -1319,7 +1319,7 @@ Booking Agent       负责最终预约下单</code></pre>
 
 <ol start="15"><li id="f-doxcnmM2s9XSBGeAlI7WfckRgyg"><span style="font-weight:bold">你的项目是如何做Agent评估的？</span></li></ol>
 
-<p id="f-doxcnLkyrfevNxtnkVmLeeMq64d"><span>（推荐思路，要么你就按照今天的理论，做一遍Agent评测，然后按照你的做法适度包装。要么你可以把今天的笔记输入给AI，然后把你的项目也让AI可见。让AI结合你的项目和这个Agent评估思路包装一套方法，然后自己多想想细节，修改润色下，提前准备好相关问题细节，和面试官说）</span></p>
+<p id="f-doxcnLkyrfevNxtnkVmLeeMq64d">按照本章理论完成一次 Agent 评测，将评测思路应用到具体项目中，记录数据集、评估方法、结果和相关细节。</p>
 
 <p id="f-doxcnBdFKlV7O68poRvUGK0aiMh"><span>16. 评估一个 AI Agent，除了准确率还看哪些指标？</span></p>
 

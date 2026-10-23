@@ -45,7 +45,7 @@ verification: {"status": "not-run", "scope": "本次仅整理资料；示例代�
 
 <a id="f-doxcnpxZpyskc95HNytUKb3dXTX"></a>
 
-<p id="f-doxcnuWZ1DRO033qKdv4df7w47c"><span>以下三个问题几乎必问，上线T0问题，前两个问题我在英伟达面经中解析了，大家可以直接跳转观看问题答案。</span></p>
+<p id="f-doxcnuWZ1DRO033qKdv4df7w47c">下面给出上线相关问题与参考答案。</p>
 
 <p id="f-doxcnaUrJU0bXCDFfB7yjfheT4c"><span><span><a href="/posts/agent-learning-24-interview-review/#f-doxcnD2WqzaQMKEHuOPvSBw5TEg"><span>1.你的项目Agent上线了以后，你是如何监控的？</span></a></span></span></p>
 
@@ -73,11 +73,11 @@ verification: {"status": "not-run", "scope": "本次仅整理资料；示例代�
 
 <p id="f-doxcnC121cp29e5DVqvI3yatSXe"><span>要命的是，面试有时还问后端。</span></p>
 
-<p id="f-doxcn06CG90uUyGrmkUiGMSreAc"><span>这里涉及一个学习路线的问题，对于我个人，我是</span><span style="font-weight:bold">学完了大模型应用，就去学算法，没学后端。</span><span>因为我想慢慢往一些底层的岗位：推理，训练岗靠。</span></p>
+<p id="f-doxcn06CG90uUyGrmkUiGMSreAc">本节介绍算法方向的学习内容。</p>
 
 <p id="f-doxcnk8eHyrhS02aBSD3LvoO6yd"><span>当然</span><span style="font-weight:bold">你也可以学完应用，再补一下后端，算法内容稍微放一放，这样对于你找LLM应用开发岗帮助可能会更大</span><span>。</span></p>
 
-<p id="f-doxcnwsPNzk6GHeU6CBDlA4MOxb"><span>所以这一大块的内容，我的建议是，你根据本章节汇总的面试真题出发，</span><span style="font-weight:bold">从题目出发，我讲解题目的时候会讲这个题对应的背后的知识点，把真题刷完，这一小节就学完了。</span><span>（之前的小节，学习顺序都是先学知识，然后每小节后面的真题是作为检验的，但这一小节比较特殊哈，</span><span style="font-weight:bold">推荐学习顺序反过来了，请大家注意！</span><span>）</span></p>
+<p id="f-doxcnwsPNzk6GHeU6CBDlA4MOxb"></p>
 
 
 <a id="section-0133"></a>
@@ -389,7 +389,7 @@ TPS/TPOT：开始说话后说得多快
 
 <a id="f-doxcnmMlQTj93PLCOhBon8z8nwf"></a>
 
-<p id="f-doxcnJ3o6Jt92aRxKgfVtl5Wk2b"><span>（其实Python语法在llm 的岗位问的不多，我也没有专门准备，但是这个问题确实是出现在了好几次面试中，所以我把它整理在这里，还是建议掌握这个问题。这个其实涉及到了</span><span style="font-weight:bold">协程</span><span>以及具体的语法，第一次接触的朋友理解起来应该是会有点费劲的，不要着急寻求一次就能弄懂）</span></p>
+<p id="f-doxcnJ3o6Jt92aRxKgfVtl5Wk2b">下面通过问题说明 Python 异步与协程相关知识。</p>
 
 <p id="f-doxcnRYYC7ZX9UBW0kxrVIQ8LLe"><span> Python 中最常见的方法是使用asyncio库，使用async 定义异步函数，然后在异步函数中使用await 来等待另一个异步操作完成。</span></p>
 

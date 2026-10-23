@@ -50,7 +50,7 @@ verification: {"status": "not-run", "scope": "本次仅整理资料；示例代�
 
 <a id="f-doxcntuQVjJ2aMEP4HF4qje1X9b"></a>
 
-<p id="f-doxcnt8XxrbCkC1ezSVCuwLPOtf"><span>（Multi-agent 设计架构应该来说是Agent项目里最常用的设计方法了。面试的时候难免会和面试官讲到。面试时我也不止一次被问到， 多Agent 和 单Agent架构的区别。这里的重点就是弄清楚，多Agent 有哪些架构？各个不同架构的优缺点是什么？我们应该怎么设计架构？如果知道了这些，比如后面实战中，</span><span><span><a href="/posts/agent-learning-24-interview-review/#f-doxcnvVgC8ikiePZWxfGoISnqzd"><span>小红书面试</span></a></span></span><span>时和你讨论架构设计的时候，其实你就可以比较游刃有余了。 其实这些问题都在这个论文中（</span><span><span><a href="https://arxiv.org/pdf/2512.08296v1"><span>https://arxiv.org/pdf/2512.08296v1</span></a></span></span><span> ），这个论文不光回答了这些问题，回答的还很深入，从数学，实验数据的角度来分析的。本节整理了相关问题，和参考资料）</span></p>
+<p id="f-doxcnt8XxrbCkC1ezSVCuwLPOtf">Multi-Agent 的重点包括：有哪些架构、各自的优缺点，以及如何根据任务设计架构。下面的论文从数学和实验数据角度分析这些问题。 <a href="/posts/agent-learning-24-interview-review/#f-doxcnvVgC8ikiePZWxfGoISnqzd"><span>小红书面试</span></a> <a href="https://arxiv.org/pdf/2512.08296v1"><span>https://arxiv.org/pdf/2512.08296v1</span></a></p>
 
 <p id="f-doxcnY1KX50PERzcsNzGlB8WTpd"><span style="font-weight:bold">参考资料：</span></p>
 
@@ -254,9 +254,9 @@ verification: {"status": "not-run", "scope": "本次仅整理资料；示例代�
 
 <a id="f-doxcnJKXIQdfK31iQzVUCR7ZB5d"></a>
 
-<p id="f-doxcnUwTwFkLO27yUiG4FewRMJd"><span>（这个小节，我从</span><span style="font-weight:bold">参考论文的例子</span><span>以及</span><span style="font-weight:bold">面试真题</span><span>中抽取出来几个典型的例子和问题，帮助大家来掌握Agent架构设计相关的内容。现在很多面试都会考察一个小型的场景下的Agent架构设计题目，我会持续将架构设计相关内容汇总于此，这样大家复习更加方便。</span></p>
+<p id="f-doxcnUwTwFkLO27yUiG4FewRMJd">本小节结合论文与场景问题，说明 Agent 架构设计方法。</p>
 
-<p id="f-doxcnpSAuOmkOcf3z7AFreMo3rd"><span>在我整理了几个例子后，某种程度上，可以认为这个问题其实可以套模板，大家看一下是不是，如果你认为你的任务应该用去中心化架构，你就参考这个6.5.1,对于架构的好处，通信方式都可以复用，唯一不同的是Agent的设计和功能。）</span></p>
+<p id="f-doxcnpSAuOmkOcf3z7AFreMo3rd">分析架构时，可以从架构收益、通信方式、Agent 设计与功能展开，并结合具体任务说明取舍。</p>
 
 <a id="f-doxcn8kzkQAazZ9a42nyuHrTp3b"></a>
 

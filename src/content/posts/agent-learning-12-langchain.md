@@ -286,7 +286,7 @@ verification: {"status": "not-run", "scope": "本次仅整理资料；示例代�
 
 <p id="f-doxcnYbfCXHWor6UzvM5CMf5e5c"><span>因此，</span><span style="font-weight:bold">LangChain 在我看来已经不是所有人都必须深入掌握的内容。你完全可以使用其他 Agent 框架，也可以不使用框架，直接基于模型 API 手写 Agent</span><span>。框架的价值是减少重复开发，而不是赋予模型某种只有该框架才具备的智能。</span></p>
 
-<p id="f-doxcnY6BDKpkh5IyDIsL2FctKEI"><span>回到面试角度，我来给大家画一下重点。</span></p>
+<p id="f-doxcnY6BDKpkh5IyDIsL2FctKEI">下面总结框架学习重点。</p>
 
 <p id="f-doxcn8rbuHndvss6Ty3fruFzoeh"><span>必学的内容： </span></p>
 
@@ -298,7 +298,7 @@ verification: {"status": "not-run", "scope": "本次仅整理资料；示例代�
 
 <p id="f-doxcnhfTLvAIn9UtUp18cluGXyd"><span>1.1 </span><span style="font-weight:bold">小节属于必学</span><span>:带你了解2026年有哪些Agent框架，特点是什么，如何选型，同时讲清楚上面两个Agent框架最高频的面试问题：这个是学完上面内容的面试实战运用，也是面试官问Agent框架，几乎一定会先问的问题。</span></p>
 
-<p id="f-doxcnVxcTipnjFa2SpS5cjWZeUh"><span>1.2 </span><span style="font-weight:bold">小节是历史遗留章节</span><span>，</span><span style="font-weight:bold">讲解了Langchain/Langgraph的一些特点。</span><span>我知道这里内容有一点过时，因为Langchain有更新的版本了。 </span><span>我没有删除的原因是 ：历史的面经，特别是25年的面经有问到引用了这个章节，但更重要的是，根据我们的思想，如果你用了某个框架，你应该自己主动去深入理解一下，比如你项目用了Langchain，你就应该稍微比笔记多了解一下。所以留在这里一个LangChain的一点内容，是一个提醒。你应该根据自己用的框架，稍微补充一点相关知识。</span></p>
+<p id="f-doxcnVxcTipnjFa2SpS5cjWZeUh">本节保留框架版本相关内容，便于理解不同版本的接口和特性差异。</p>
 
 
 <a id="section-0067"></a>
@@ -406,7 +406,7 @@ verification: {"status": "not-run", "scope": "本次仅整理资料；示例代�
 
 <p id="f-doxcnCg7Dvqojw6T6SF3iTKikae"><span>本案例通过1.1.1~1.1.3 是想让大家能够对这些框架建立一个印象。你不要背，也能够轻松知道常见的一些框架，对它有一个印象。某种程度也是为这个小节做铺垫，这个小节很枯燥，但是是面试问题：讲讲你了解的Agent框架。</span><span style="font-weight:bold">该背还是得背一下，有了前面的小节，应该背起来容易一点</span><span>。</span><span>但你不用都背</span><span>，这个小节就是防止面试官问：你知道什么Agent框架，讲一下？</span><span>所以你是要挑你项目使用的，或者关注的几个背就行了。</span></p>
 
-<p id="f-doxcngxtphHr1RPwiDKO1bKpZvf"><span>这个小节每一个框架下面我都穿插了面试问题，供大家检验。</span></p>
+<p id="f-doxcngxtphHr1RPwiDKO1bKpZvf">每个框架附有相关问题，用于检验理解程度。</p>
 
 <a id="f-doxcny0DnNBHSBYMAhxErJYhWsW"></a>
 
@@ -771,7 +771,7 @@ verification: {"status": "not-run", "scope": "本次仅整理资料；示例代�
 
 ##### LangChain的版本
 
-<p id="f-doxcn3XILFMABB7FxYEXi9g5pfb"><span>（面试官偶尔会问你使用的是哪个Langchain版本，因为Langchain版本更新的确实比较频繁，我知道大家可能有时没太关注版本，这里整理了一个表格，你需要根据表格里对应Langchain的时间来推断出你当时大概用的哪个版本，要心里有数。从这个表中，大概率可以看出在25年中的时候，我开发的项目，使用的是v0.3.6的Langchain版本，也是在这个时候引入了Graph的概念。弄清楚你用的哪个版本是我们要掌握的）</span></p>
+<p id="f-doxcn3XILFMABB7FxYEXi9g5pfb">需要明确项目实际使用的 LangChain 版本，并了解对应特性与接口。表格可帮助比较版本变化；案例使用过 v0.3.6。</p>
 
 <div id="f-doxcnNVq7q9ydDvHnpCi423ZQae"><img alt="" decoding="async" height="287" loading="lazy" src="/images/agent-learning/ee72985f88167407d1b8316b.png" width="754"/></div>
 
@@ -779,7 +779,7 @@ verification: {"status": "not-run", "scope": "本次仅整理资料；示例代�
 
 ##### LangChain 1.0新版本
 
-<p id="f-doxcnnRkIilUV49Nk0hcbxAEzTd"><span>(LangChain在25年11月份发布了新版本，其实是大的变化。如果你已经做完了项目，并不是说你就要用最新的版本再做一遍，讲起来Langchain的时候，你还是按照我上面设计的答案去回答就行，然后面试官可能会问你新版本你了解吗？你再给讲讲1.0版本的特性。如果你还没做项目，现在开始做，那么推荐你直接用1.0。现在这个还不是硬性要求的，面试很多时候其实并没有一定要考察你新版本，他这个刚刚发布，可能面试官都没太用。暂时我们先粗略了解1.0的新特性就够了，如果后面我发现面试官开始倾向于问1.0的问题，我再来总结更多新版的知识。</span></p>
+<p id="f-doxcnnRkIilUV49Nk0hcbxAEzTd">LangChain 新旧版本存在较大变化。需要明确项目实际使用的版本，理解对应接口，并根据需求研究 1.0 的新特性。</p>
 
 <p id="f-doxcnvI8T9Hdw5g9Ew0Zj2vwkje"><span>这里的复习思路是</span><span style="font-weight:bold">大概理解一下新特性思路和思想就好了，不用太深入研究，</span><span>因为目前问的不多，面试官最多问道你知不知道langchain新版本。 如果你想要深入学习一下，可以看</span><span><span><a href="https://mp.weixin.qq.com/s/asAiFhl8mWIl01s-LSD9VA"><span>https://mp.weixin.qq.com/s/asAiFhl8mWIl01s-LSD9VA</span></a></span></span><span>）</span></p>
 
@@ -823,7 +823,7 @@ verification: {"status": "not-run", "scope": "本次仅整理资料；示例代�
 
 ##### LangChain 不方便的地方
 
-<p id="f-doxcnNepvd3jUhe66XzoNScXWKb"><span>（ 这个问题相比前面的Langchain的基本问题，肯定没有出现的那么频繁。不过这个题目是我从面试真题截取来的，而且这个问题其实也不止被问到一次，反映了面试官想了解你对Langchain的理解是不是浮于表面，有没有一些更深的理解，建议也需要掌握，即使面试官不主动问，你在和面试官聊Langchain的时候也可以找个时机回答出来这两点，体现你其实对这个框架有一些深入的思考，答出来一定会加分。当然这个问题的反面题，你觉得Langchain有没有一些方便的地方，这个你可以回答它集成了各种方法，比如RAG的召回优化，RAGAS的评测方法等，之前笔记我都写出来了）</span></p>
+<p id="f-doxcnNepvd3jUhe66XzoNScXWKb">除 LangChain 的基本概念，也需要理解框架设计的便利性与局限性。</p>
 
 <p id="f-doxcnETIxmF2bfXgxsDXWXoYbWc"><span style="font-weight:bold">1.依赖过多，复杂度高</span></p>
 

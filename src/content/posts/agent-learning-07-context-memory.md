@@ -63,7 +63,7 @@ verification: {"status": "not-run", "scope": "本次仅整理资料；示例代�
 
 <p id="f-doxcnUiccBFyq4WHanoal4gpwtg"><span>（属于</span><span style="font-weight:bold">必考内容</span><span>，熟练掌握</span></p>
 
-<p id="f-doxcnC1cwv3f3V2gh5mQWj1wSlf"><span><span><a href="https://github.com/xindoo/agentic-design-patterns/blob/main/chapters/Chapter%208_%20Memory%20Management.md"><span>《Agentic design pattern》第八章</span></a></span></span><span>有对这一问题专门讲解。我把这个经典面试问题，结合了理论知识和现在最火的Openclaw结合，我相信这个回答会更让面试官眼前一亮。然后你这么回答其实把话题引到了Openclaw，所以Openclaw的知识要好好看，接着面试主动权就在我们手里了！）</span></p>
+<p id="f-doxcnC1cwv3f3V2gh5mQWj1wSlf">《Agentic Design Patterns》第八章专门讨论这一问题。可以结合 OpenClaw 的实现理解理论与实践。 <a href="https://github.com/xindoo/agentic-design-patterns/blob/main/chapters/Chapter%208_%20Memory%20Management.md"><span>《Agentic design pattern》第八章</span></a></p>
 
 <p id="f-doxcnLFc15lylEDgTcrj3hkT3Pg"><span>Agent 的记忆功能通常分为</span><span style="font-weight:bold">短期记忆</span><span>和</span><span style="font-weight:bold">长期记忆。</span></p>
 
@@ -105,7 +105,7 @@ verification: {"status": "not-run", "scope": "本次仅整理资料；示例代�
 
 <a id="f-doxcnedGCuf5pLpbokvK5VHxBCf"></a>
 
-<p id="f-doxcnAh1bjVUgOwpuPucLVQ8cBd"><span>（依旧是从我推荐的书籍《Agentic design pattern》中给大家总结， 在面试聊到长期记忆的时候，我们可以给面试官举一些常见应用场景下具体的长期记忆的例子，这个问题倒是不会直接被问。不过记忆部分是重点，很多场合其实会聊到。聊到了能清晰有条理的列举一些长期记忆典型例子就很好。）</span></p>
+<p id="f-doxcnAh1bjVUgOwpuPucLVQ8cBd">可以参考《Agentic Design Patterns》，理解典型场景下需要保存的长期记忆。</p>
 
 <p id="f-doxcnJwGyMoQg9DWZgShZKegYog"><span><span><a href="https://github.com/fzy2012/rhzl-Agentic-Design-Patterns-cn/blob/feature/interactive-website/14-Chapter-08-Memory-Management.md"><span>https://github.com/fzy2012/rhzl-Agentic-Design-Patterns-cn/blob/feature/interactive-website/14-Chapter-08-Memory-Management.md</span></a></span></span></p>
 
@@ -139,7 +139,7 @@ verification: {"status": "not-run", "scope": "本次仅整理资料；示例代�
 
 ##### 请介绍一下Agent 记忆的常见类型与作用。
 
-<p id="f-doxcnxy9kijIi1jQND0OSTOzzgb"><span>💡 </span><span style="font-weight:bold">思路：</span><span> 这个就是最典型的八股问题了。大的分类上来说，Agent记忆分</span><span style="font-weight:bold">长期记忆</span><span>和</span><span style="font-weight:bold">短期记忆</span><span>，我参考了一些书籍，再把</span><span style="font-weight:bold">长期记忆</span><span>分成：</span><span style="font-weight:bold">语义记忆</span><span>，</span><span style="font-weight:bold">情景记忆</span><span>，</span><span style="font-weight:bold">程序性记忆</span><span>三类，方便大家理解。 答题的时候从这个角度出发，分类型讲解。同时我在</span><span style="font-weight:bold">长期记忆</span><span>这里加入了举例，以最近比较火的DSH框架为例，写了例如 DSX xx，让答案更具体，侧面表明了自己看过DSH 框架，也可以把话题引导到DSH上。当然这里可以替换成用你自己的项目举例，或者其他的开源项目举例。 另外，这个回答也是另一个典型的八股：</span><span style="font-weight:bold">长期记忆</span><span>主要存哪些东西 的参考答案。</span></p>
+<p id="f-doxcnxy9kijIi1jQND0OSTOzzgb">思路：Agent 记忆分为长期记忆与短期记忆。长期记忆又可分为语义记忆、情景记忆和程序性记忆。可以结合 DSH 等开源框架或具体项目举例，分析长期记忆应存储什么。</p>
 
 <p id="f-doxcnoMM0yqG3a7bOplsTjGI4Zg"><span>📝 </span><span style="font-weight:bold">答案：</span></p>
 

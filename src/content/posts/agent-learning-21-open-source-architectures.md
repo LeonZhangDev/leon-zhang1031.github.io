@@ -114,7 +114,7 @@ PI-Agent、OpenClaw、Hermes 与 DeepSeek Harness
 
 <a id="f-doxcnFOWnBrl5Ak7OWmNe0UzNBc"></a>
 
-<p id="f-doxcnLlq1hb7TiSQPqHQLzgr04c"><span>当你学习完了理论部分，这里给出一个非常好的实战例子。有些同学问我，有没有推荐的开源的学习Agent的项目啊？那我的回答就是使用这个Pi-Agent。为什么？因为它足够简单，好上手。但是具备Agent项目的最核心的要素。同时他又支持扩展，官方给了很多扩展的例子。你通过这个项目，可以快速学习Agent，也给了你丰富的资料和空间去扩展，改造成自己的项目。另外他也足够权威，github上有快60k 的stars。包括也有博主说，Openclaw也就是使用它改造的，所以权威性和可学习性也不用担心。当然该学习案例还有解析Hermes,解析</span><span><span><a href="#f-doxcnfdqX7Xmgd1YRp2zV5utl0e"><span>Openclaw</span></a></span></span><span>,</span><span><span><a href="/posts/agent-learning-19-ai-coding/#f-doxcnsn7d9qpY3k8HwjWSe13GAb"><span>ClaudeCode</span></a></span></span><span>。 我的建议是先看这个项目，看明白再看其他的，因为其他项目复杂太多。</span></p>
+<p id="f-doxcnLlq1hb7TiSQPqHQLzgr04c">Pi-Agent 适合作为 Agent 实战学习案例：它足够简单，包含 Agent 的核心要素，并提供扩展示例。可以先学习该项目，再阅读更复杂的 Hermes、OpenClaw 和 Claude Code 架构。 <a href="#f-doxcnfdqX7Xmgd1YRp2zV5utl0e"><span>Openclaw</span></a> <a href="/posts/agent-learning-19-ai-coding/#f-doxcnsn7d9qpY3k8HwjWSe13GAb"><span>ClaudeCode</span></a></p>
 
 
 <a id="section-0156"></a>
@@ -483,7 +483,7 @@ A ← B
 
 ##### CLI 入口和三种运行模式
 
-<blockquote id="f-doxcneaaDNvLd9OJKKg6He7ZQEy"><p id="f-doxcnRaXdURiKVXgrRYtOLOTuj5"><span>在看这个章节前，我想请大家思考一个问题？如果你设计了一个coding Agent。你怎么设计这个架构，让它既可以作为一个独立的Agent产品用，又能够像一个插件一样，方便地给到其他的应用，比如Openclaw用，让其他进程能够快速集成Coding的能力？答案就在本小节，PI的这个设计方法值得我们学习。</span></p></blockquote>
+<blockquote id="f-doxcneaaDNvLd9OJKKg6He7ZQEy"><p id="f-doxcnRaXdURiKVXgrRYtOLOTuj5">案例问题：如何设计 Coding Agent，使它既能作为独立产品，也能被其他进程作为插件集成？可以参考 Pi 的设计。</p></blockquote>
 
 <p id="f-doxcncBS6wfEbwXNMY4iP3VG61d"><span>输入 </span><span><span><span>pi</span></span></span><span> 后，入口主要在两个文件：</span></p>
 
@@ -507,7 +507,7 @@ A ← B
 
 ##### TUI
 
-<blockquote id="f-doxcnJRmvYQ2A4855eJjtNhz0Xg"><p id="f-doxcnSgCFi9NmQmiVATwSKRco7q"><span>TUI这里是负责前端的内容，我没有特别关注。我自己写的项目，前端的内容，完全没有看代码，面试也没问。如果你也不想学前端，也可以基本浏览一下本章节，大概知道它是用什么技术栈实现的就好。</span></p></blockquote>
+<blockquote id="f-doxcnJRmvYQ2A4855eJjtNhz0Xg"><p id="f-doxcnSgCFi9NmQmiVATwSKRco7q">TUI 负责终端交互界面，可结合本节了解其技术栈和实现方式。</p></blockquote>
 
 <p id="f-doxcnRiWb8vMcynHCXPjXh4VsFc"><span>TUI 可以理解成"跑在终端里的前端"。但它不是我们平时说的 Web 前端，也不是 FastAPI 这种后端框架。FastAPI 是 Python 后端框架，通常负责 HTTP API；Pi 这里没有浏览器、没有 DOM、没有 HTML/CSS，也没有 React/Vue。</span></p>
 
@@ -626,7 +626,7 @@ A ← B
 
 <a id="f-doxcnSqNnfbDMEuquZd7J0AXcFh"></a>
 
-<p id="f-doxcnH2eGxiQZ34RyOkKxVwRuTd"><span>通过这个小节，我是希望能带大家了解PI Agent的一个大概的思想和架构。如果你是想在这个基础上继续去扩展，深入学习，还是得靠大家。我总结了一些可以去做的扩展任务，包括让AI也总结出来了对应的参考代码和官方示例（可能不准）大家多包涵。</span></p>
+<p id="f-doxcnH2eGxiQZ34RyOkKxVwRuTd">本节介绍项目结构与核心实现，后续可结合扩展示例进一步学习。</p>
 
 <p id="f-doxcnTz3Tfjj1z5JsW4CO0ifU1e"><span>如果想在 Pi 基础上动手，可以按下面几个难度推进。下面每条都尽量附上了官方对应的示例扩展或文档，建议先读官方实现再动手——Pi 自带的示例很全，照着改往往比从零写更快。扩展 API 的全貌见 </span><span><span><span><a href="https://github.com/earendil-works/pi/blob/main/packages/coding-agent/docs/extensions.md"><span>docs/extensions.md</span></a></span></span></span><span>，所有示例扩展都在 </span><span><span><span><a href="https://github.com/earendil-works/pi/tree/main/packages/coding-agent/examples/extensions"><span>examples/extensions/</span></a></span></span></span><span> 下。</span></p>
 
@@ -772,7 +772,7 @@ A ← B
 
 <a id="f-doxcnfdqX7Xmgd1YRp2zV5utl0e"></a>
 
-<p id="f-doxcnOr5aXm0dzTdTMeYtxs3hVc"><span>（写于2026年3月份）OpenClaw一定是一个必考的问题，大模型应用岗位，产品岗，必须得会。原因很简单，我想先和大家讲清楚这里面的底层逻辑，为什么会考。 因为它是目前最热门的AI Agent产品了。在这个大模型高速发展的时代，热门的东西一定是要了解会考察的。 有人说2025年是Agent年，从2025发展到现在，Agent的形式在不断演进。火爆出圈的Agent从去年的Manus到今年的Openclaw, 它是整个行业发展的风向标。 我回想去年（2025年）面试的时候，很多面试官问我Manus是什么，我说不知道，当时觉得没啥，现在觉得很掉分。对于行业爆品，一定要掌握，是高频考点。网上很多视频基本都是讲的Openclaw如何配置，有什么能力。相关视频太多了，在本章我会给大家推荐2个我自己看的部署，玩openclaw的视频，感兴趣可以去玩。 但是本章更侧重的是Openclaw的原理，技术，为什么出圈。讲的人不多，但是作为开发，或者产品，从面试的角度，你无疑是要掌握这个产品里面包含的核心技术的，本节就从功能，技术层面来讲解Openclaw, 相信它一定是你准备面试必不可少的素材。学了本章，你可以在面试的时候和面试官说你看过Openclaw的源码（其实也有必要看，作为Agent开源项目），Manus其实也可以去学习，因为它也是很火的Agent，而且和Openclaw 侧重点是不同的。可以当作课外作业大家自己去学一下。</span></p>
+<p id="f-doxcnOr5aXm0dzTdTMeYtxs3hVc">本章侧重 OpenClaw 的功能、原理、核心技术与源码，并提供部署和使用视频作为参考。可以进一步比较 Manus 与 OpenClaw 的不同侧重点。</p>
 
 
 <a id="section-0165"></a>
@@ -841,7 +841,7 @@ A ← B
 
 ##### 总结&amp;举例
 
-<p id="f-doxcn8F8kdIjkZvfyYYjTbI4TCd"><span>朋友们，所以你看，Openclaw其实也没有什么特别大不了的对吗？比如Agent模块，我们的描述并不复杂，没有用什么深奥的技术。如果你看完了我这个笔记Agent，我相信你很容易理解，所以OpenClaw本身也没啥大不了的对吧。我在这一节再给大家用实际例子来讲解，其实它就是这么回事~.</span></p>
+<p id="f-doxcn8F8kdIjkZvfyYYjTbI4TCd"></p>
 
 <p id="f-doxcn4sZi7B2YUPgqD2hZc8cArd"><span style="font-weight:bold">先总结</span><span>，OpenClaw的本质是</span><span style="font-weight:bold">事件驱动模型</span><span>，看起来主动是有定时任务以及间隔触发，看起来能记事是因为有记忆，采用双路检索。看上去功能强大，可以用应用驱动是因为用了Gateway做适配。快速总结：</span></p>
 
@@ -863,7 +863,7 @@ A ← B
 
 <p id="f-doxcnmjlFtta9Lcn516bqkgWrNf"><span>2. 如果你想玩openclaw的话，</span><span style="font-weight:bold">Openclaw为什么总是忘记事情？</span><span>如果你学了本节，那你自己就能够尝试去解决，你也可以修改里面的记忆文件，手动确定让你的龙虾能记住什么，高效组织你的龙虾记忆。</span></p>
 
-<p id="f-doxcn4ZqlUPQ8ePaF8GzqpVcpxe"><span>3. 我想借助这个机会，学习Openclaw，大家可以理解这个产品的架构是怎么设计的，记忆模块是怎么组织的。这样的好处是</span><span style="font-weight:bold">建立你的审美</span><span>，大家在设计自己的agent的时候，如果你去设计架构，你用上他这个</span><span style="font-weight:bold">心跳机制，定时机制 </span><span>而不是干巴巴的只有一个用户输入作为触发，你用上它的4层记忆，哪怕你不改，你就去抄它的，是不是也比自己设计的高级一些，所以通过这个学习，也是为我们自己设计Agent项目打基础，站在他们的肩膀上设计你的项目，让面试官觉得你的项目是高级的，有想法，有深度的。</span></p>
+<p id="f-doxcn4ZqlUPQ8ePaF8GzqpVcpxe">3. 可以参考 OpenClaw 的心跳、定时触发与分层记忆，分析如何将这些机制应用到 Agent 项目中。</p>
 
 <a id="f-doxcn0pUUqcT3PbdbWogNBNHTlh"></a>
 
@@ -1045,7 +1045,7 @@ A ← B
 网关层  →  Gateway（路由、session 管理、并发控制）
 Agent 层 →  Agent（LLM 驱动，执行任务）</code></pre>
 
-<p id="f-doxcnYi7fkenJT1cNMNM5wy4mwd"><span>本文聚焦 </span><span style="font-weight:bold">Agent 层</span><span>的内部架构。Agent的架构其实是面试官非常喜欢问的高频考点，我们在笔记中有了很详细的总结。要说我们之前学的是理论，那么我希望通过这一章来从实践上看看，Openclaw使用的Agent架构和我们之前的理论知识是否吻合。学习这一小节，除了从真正工程的角度加强对这个经典面试题的理解，另一方面其实也体现在自己的架构设计上，我们在设计自己的Agent的特性和架构上，能不能参考Openclaw的架构，把该学习案例做得更高级。</span></p>
+<p id="f-doxcnYi7fkenJT1cNMNM5wy4mwd">本文聚焦 OpenClaw 的 Agent 层内部架构，结合已有理论分析其设计，并将相关思路应用到项目实践。</p>
 
 <p id="f-doxcnV7UWna4A30vh5hbe21adFg"><span>在本节的</span><span> Multi-Agent 典型架构章节</span><span>中，讲过常见的架构模式：</span><span style="font-weight:bold">SAS、Independent、Centralized、Decentralized、Hybrid</span><span>，这里简单回顾一下：</span></p>
 
@@ -1095,7 +1095,7 @@ Agent 层 →  Agent（LLM 驱动，执行任务）</code></pre>
 
 ###### 为什么选 Centralized
 
-<p id="f-doxcnpT9c970jX19Ffsn98fr8vd"><span>Openclaw的作者并没有说他自己为什么这么设计架构，不过我们之前笔记有讲不同的架构的抉择，我谈一谈我的理解，不过对于模型架构的选择，其实你很难说哪个是最好的，这没有固定答案，可以认为这一点就是你能够想清楚，面试能讲清楚，能自洽就行。</span></p>
+<p id="f-doxcnpT9c970jX19Ffsn98fr8vd">架构选择没有固定答案，需要结合任务特点、约束与设计取舍分析。</p>
 
 <p id="f-doxcnb2Idndck8yzTqzBW7zLaWg"><span>用户通过消息渠道发来一条消息，最终必须有一条连贯的回复发回去。这个"一进一出"的结构，天然要求有且只有一个 Agent 对最终回复负责——谁收到消息、谁整合结果、谁发出回复，必须是同一个主体。Centralized 的父子结构正好对应这个模型：Parent Agent 是唯一的回复责任人，子 Agent 只是它用来扩展执行能力的手段。</span></p>
 
@@ -1350,7 +1350,7 @@ and call sessions_spawn with runtime: "acp".</code></pre>
 
 <a id="f-doxcnxKoerSinodUSXm8Y07Sqhg"></a>
 
-<p id="f-doxcnJLz4Ct8yBIdxwyfRqRW1zZ"><span>首先是OpenClaw的Setup，网上太多啦，我就分享两个我看过的视频，我确实跟着他操作起来的。</span></p>
+<p id="f-doxcnJLz4Ct8yBIdxwyfRqRW1zZ">下面提供 OpenClaw Setup 相关视频。</p>
 
 <p id="f-doxcnijew1Oa5bLvEMSquHB6KWb"><span>2026/2/14发布的：《15分钟用Openclaw + GLM5打造国内最强AI助手》 讲了环境配置，以及接入飞书和GLM5模型</span></p>
 
@@ -2263,7 +2263,7 @@ Hermes: 你正在做基于 Gemma4 + SAM 的视频感知项目……</code></pre>
 <blockquote id="f-doxcnEtwyHVHGvTUPBpixsEGcwb"><p id="f-doxcnOgXT1kv5EHXFcPcMzEZuef"><span>26年三月底，Claude Code源码泄露。一经泄露，面试就成近期必考的问题。有同学反映面试官直接问他，Claude Code代码泄露2天了？你还没看吗？所以对于这一部分，近期是非常重要的考点。</span></p>
 <p id="f-doxcnQDKXJG4PkIFJT4IN37IaUc"><span>另外其实除开最近热点事件外，学习ClaudeCode本身就是非常有帮助的，他本质是一个CodingAgent。我们学习Agent可以分成三步：</span></p>
 <p id="f-doxcnloX3gFXhd2MicqCsHc7cEg"><span>1. 掌握了Agent的基础知识</span></p>
-<p id="f-doxcnUodqWwcAFBdiXy3YSMs0Bd"><span>2. 可以分析典型的Agent架构，比如笔记已经有的Openclaw架构分析，本期的ClaudeCode架构以及马上会出的字节的Deerflow2.0的Agent架构，建立审美。</span></p>
+<p id="f-doxcnUodqWwcAFBdiXy3YSMs0Bd">2. 可比较 OpenClaw、Claude Code 与 DeerFlow 2.0 的 Agent 架构。</p>
 <p id="f-doxcnnwYe7mDLSOk0oGHHbA7Ieb"><span>3. 设计一个自己的Agent项目架构，写文档，用Harness工程来完成。</span></p>
 <p id="f-doxcnyN8cIFjFxLGrURfaDa9PJd"><span>有了项目后，我们就可以面试了，所以学习经典的Agent架构是很有帮助的，本节就一起来学习这个经典的CodingAgent - Claude Code</span></p>
 </blockquote>
@@ -2298,7 +2298,7 @@ Hermes: 你正在做基于 Gemma4 + SAM 的视频感知项目……</code></pre>
 
 ###### 社区反应
 
-<blockquote id="f-doxcnKt9WNaN3V58syt78136gkg"><p id="f-doxcnw0fne0SYGU03ee7zspZRch"><span>这里我们在笔记的 Harness Engineering工程中，来讲解这个Claw Code开源项目。学习这个项目，可以进一步帮我理解Harness工程（无疑这个也是26年的高频考点）。你自己其实也可以更深入学习这个项目，自己仿照这个来做一个Claude Code，是一个很好的学习Claude Code， Agent的机会，同时也是一个练手Harness 工程的机会。具体请看笔记的Harness工程的Claw Code讲解。</span></p></blockquote>
+<blockquote id="f-doxcnKt9WNaN3V58syt78136gkg"><p id="f-doxcnw0fne0SYGU03ee7zspZRch">Claw Code 可作为 Harness 工程与 Coding Agent 的实践案例，具体分析见 Harness 章节。</p></blockquote>
 
 <p id="f-doxcnwfUEOMlC7qQcWmbXiMq0Ce"><span>泄漏发生后数小时内，社区迅速行动：有开发者连夜将核心功能从 TypeScript 移植到 Python（以规避 DMCA 版权风波），推送到 GitHub 后迅速成为有记录以来</span><span style="font-weight:bold">最快达到 10 万星的仓库（Claw Code）</span><span>，随后又被用 Rust 重写了一遍。甚至有人用 Claude Code 本身生成了一个 PR，试图将全部泄漏源码提交回 Anthropic 的官方仓库。</span></p>
 
@@ -2541,7 +2541,7 @@ Hermes: 你正在做基于 Gemma4 + SAM 的视频感知项目……</code></pre>
 
 <p id="f-doxcnQQyffdpmy16Clbi6v0CR0g"><span style="font-weight:bold">当返回到某个Checkpoint的时候怎么做的？</span></p>
 
-<p id="f-doxcnSMnKjQqSP3RDX3xePInZse"><span>这些具体的细节还是依赖于大家自己，如果你要用这一套包装，最好能做一下，不能做也想清楚这些问题。我也给到大家对应的参考资料，大家可以借鉴LangGraph的恢复功能弄清这些问题，本节只介绍CC大概的思路（具体实现各个产品不一样，但宏观思路是一样的：记忆系统让Agent聪明+日志系统让Agent重建会话）</span></p>
+<p id="f-doxcnSMnKjQqSP3RDX3xePInZse">记忆与会话恢复可以参考 LangGraph 等框架：记忆系统提供任务知识，日志系统支持重建会话。具体机制需要结合产品实现验证。</p>
 
 <p id="f-doxcntxHgebGhrQRftOSVPs1oSf"><span style="font-weight:bold">功能介绍</span></p>
 
@@ -2597,7 +2597,7 @@ Hermes: 你正在做基于 Gemma4 + SAM 的视频感知项目……</code></pre>
 
 ###### 压缩
 
-<blockquote id="f-doxcnLpZsMTy6QCJgQmqWr9VTKg"><p id="f-doxcnvufmrMts70XxAWG6fFpLsb"><span>压缩是Agent里面的一个核心技巧。可以认为这里面的内容相当复杂，作者在这里也重构过几次，如果你看到的内容和视频有不一样的地方，说明内容重构过了。我也参考了好几个资料（我会附在本节参考资料里），但是其实这些参考资料里讲的都不太一样。我重构的思路，加入了更多的图片讲解，同时我避免讲得过于复杂，因为里面太深奥了，如果写得太复杂反而会弄晕。如果你想更深入研究，可以去看我给出的参考资料（当然我给的参考资料不同参考资料对这一块讲解也有所不同，可以认为不用深究，理解原理知道如何运用到自己项目就好）</span></p>
+<blockquote id="f-doxcnLpZsMTy6QCJgQmqWr9VTKg"><p id="f-doxcnvufmrMts70XxAWG6fFpLsb">压缩是 Agent 的核心技巧。本节结合图片与参考资料说明原理；不同产品的实现可能不同，可以进一步阅读资料研究。</p>
 </blockquote>
 
 <p id="f-doxcnvI1BE3abiBI8PTMst1Fveg"><span>对话越来越长，上下文窗口终会被填满。Claude Code 设计了一套</span><span style="font-weight:bold">四层压缩流水线</span><span>，在每轮查询循环中按固定顺序依次执行，每层有独立的触发条件——不是每层每次都触发，而是逐层检查、按需执行，越往后越激进。</span></p>
@@ -2749,7 +2749,7 @@ Hermes: 你正在做基于 Gemma4 + SAM 的视频感知项目……</code></pre>
 
 <p id="f-doxcngC5BxDyQGbdrWHj1wgSzdh"><span>比如第二层微压缩，主要为了处理的是提示词缓存，这个和Anthropic的推理端缓存有关，我们大概率不用做。一般建议做的：工具要清理 + 失败停止重试+你的压缩过程保留哪些信息。</span></p>
 
-<p id="f-doxcnzyjq6ed08H0RNUw0RTkklf"><span>另外我分析了两个同学的面经，他们和面试官讲压缩的时候是异步压缩的，结果被面试官追问细节答不上来。其实根据我们小节讲的，在真正压缩的时候，都是同步的。但是压缩的时候依赖于一些异步执行（比如实时总结中间过程）的结果。这里注意一下。所以你最好别把你的项目压缩过程设计成异步的，弄得比CC还复杂，不想清楚面试还爱翻车。</span></p>
+<p id="f-doxcnzyjq6ed08H0RNUw0RTkklf">需要区分执行压缩的同步阶段与异步生成中间摘要的阶段，明确触发、读取与阻塞关系，结合具体实现验证。</p>
 
 <a id="f-doxcnw329329gc5jlsGFnygWVZf"></a>
 
@@ -2905,7 +2905,7 @@ Hermes: 你正在做基于 Gemma4 + SAM 的视频感知项目……</code></pre>
 
 ###### 你的项目长短期记忆是如何存的？
 
-<blockquote id="f-doxcnp5ZrbpqXMKOy037WATq9Vg"><p id="f-doxcnBHBgg02UUhq2nmDWRk7J5c"><span>假装该学习案例是CC,现场根据CC的记忆模块包装。</span></p></blockquote>
+<blockquote id="f-doxcnp5ZrbpqXMKOy037WATq9Vg"><p id="f-doxcnBHBgg02UUhq2nmDWRk7J5c">以 Claude Code 的记忆模块为学习案例。</p></blockquote>
 
 <p id="f-doxcnthAthcbOUvVo7OGrCbgQHc"><span>该学习案例的</span><span style="font-weight:bold">短期记忆</span><span>，只是保存在内存中的，不需要存储成文件。</span></p>
 
@@ -2919,7 +2919,7 @@ Hermes: 你正在做基于 Gemma4 + SAM 的视频感知项目……</code></pre>
 
 ###### 你的项目长期记忆存哪些东西？
 
-<blockquote id="f-doxcnflR7fcDxJzkmiavyY0FjEZ"><p id="f-doxcnRGtMsgxwoMU6JNVc5pZ4Lg"><span>假装该学习案例是CC,现场根据CC的记忆模块包装。基本项目写了都会有记忆功能。可以用来回答你的项目长期记忆存什么？以及理论知识：长期项目应该存什么？</span></p></blockquote>
+<blockquote id="f-doxcnflR7fcDxJzkmiavyY0FjEZ"><p id="f-doxcnRGtMsgxwoMU6JNVc5pZ4Lg">可以参考 Claude Code 的记忆模块，分析项目的长期记忆存储内容与实现方式。</p></blockquote>
 
 <p id="f-doxcnsCpoPBtmHM5hdB52mCB6kg"><span>在设计上，该学习案例在长期记忆里会明确过滤并</span><span style="font-weight:bold">排除</span><span>那</span><span style="font-weight:bold">些可以通过代码、Git 历史或直接检索就能推导出的内容</span><span>（如底层代码模式、具体架构细节等，避免污染）。我们只持久化存储无法从当前项目状态直接推导出的</span><span style="font-weight:bold">四类核心高价值信息：</span></p>
 
@@ -2937,7 +2937,7 @@ Hermes: 你正在做基于 Gemma4 + SAM 的视频感知项目……</code></pre>
 
 ###### 你的项目压缩是怎么做的/ClaudeCode的压缩机制是怎么做的？
 
-<blockquote id="f-doxcnuW5Rdop9RokbEkr09qZCze"><p id="f-doxcnXGPXEKqwqpwA9Qirkvp2Mb"><span>在 </span><span><span><a href="/posts/agent-learning-24-interview-review/#f-doxcnRnCE6nbvTaHent4MycJ8MT"><span>虾皮2026暑期实习面试</span></a></span></span><span> 和 </span><span><span><a href="/posts/agent-learning-24-interview-review/#f-doxcn1TOxu3HeFWCmG0itNoXm0e"><span>安克2026暑期实习面试</span></a></span></span><span> 都有讨论如何做的压缩，是同步还是异步的？这里背景都是同学项目设计了压缩，和面试官讨论。最后讨论都没讨论清楚。我想说的还是，你要么借鉴CC，纯用它的理论复用，要么在他之上做设计，取长补短，但一定想清楚细节。 我也专门重构了CC压缩的笔记，专门说明CC的压缩是同步异步的？</span></p></blockquote>
+<blockquote id="f-doxcnuW5Rdop9RokbEkr09qZCze"><p id="f-doxcnXGPXEKqwqpwA9Qirkvp2Mb">本题讨论压缩的同步与异步处理。可以参考 Claude Code 的压缩机制，明确各阶段的执行方式和任务影响。 <a href="/posts/agent-learning-24-interview-review/#f-doxcnRnCE6nbvTaHent4MycJ8MT"><span>虾皮2026暑期实习面试</span></a> <a href="/posts/agent-learning-24-interview-review/#f-doxcn1TOxu3HeFWCmG0itNoXm0e"><span>安克2026暑期实习面试</span></a></p></blockquote>
 
 <p id="f-doxcnFWRM3auz0tfkPJQoczgZLc"><span>在设计上，该学习案例参考了 Claude Code 的实践，设计了一套</span><span style="font-weight:bold">由弱到强、四层渐进式的压缩流水线</span><span>。在每轮交互前，系统会按需依次检测并执行。项目里面</span><span style="font-weight:bold">压缩组装与替换行为必须是同步阻塞的</span><span>；但</span><span style="font-weight:bold">中间高开销的摘要提炼大量依赖后台异步的提前筹备，从而形成“异步准备、同步应用”的混合模式。</span></p>
 
@@ -2967,7 +2967,7 @@ Hermes: 你正在做基于 Gemma4 + SAM 的视频感知项目……</code></pre>
 
 <div id="f-doxcn4dRYbEeUXkYG8snEL3nAnh" style="display:flex;gap:0.5em"><span style="min-width:1.5em">◦</span><div><span>防御机制：提供断路器，限制连续 AutoCompact 失败达到 3 次时触发熔断，拒绝对同一个死循环节点重复产生无意义的 API 账单开销。</span></div></div>
 
-<blockquote id="f-doxcn9wPWP06e0w5tKO6fXMC6Kd"><p id="f-doxcnDeKSX2b0GlLy5qmcfZoLAg"><span>⚠ 这个是CC的压缩策略，我在笔记：</span><span><span><a href="#f-doxcnjEqJDzh6o9CxLjjJaslxxh"><span>我的Agent要做这么复杂吗？</span></a></span></span><span> 写了，如果你自己设计压缩策略，哪些要保留，哪些可以删除。如果问题是你的项目怎么的压缩，可以在此问题答案上适当简化。</span></p>
+<blockquote id="f-doxcn9wPWP06e0w5tKO6fXMC6Kd"><p id="f-doxcnDeKSX2b0GlLy5qmcfZoLAg">下面介绍 Claude Code 的压缩策略。实际设计时，需要结合任务分析哪些内容保留、哪些内容删除。 <a href="#f-doxcnjEqJDzh6o9CxLjjJaslxxh"><span>我的Agent要做这么复杂吗？</span></a></p>
 </blockquote>
 
 <p id="f-doxcngiCG1xXsI4DJk4bZe0rdTh"><span>该面试题选自</span><span><span><a href="/posts/agent-learning-24-interview-review/#f-doxcn1TOxu3HeFWCmG0itNoXm0e"><span> 安克2026暑期实习面试</span></a></span></span></p>
@@ -3099,7 +3099,7 @@ Hermes: 你正在做基于 Gemma4 + SAM 的视频感知项目……</code></pre>
 <p id="f-doxcnCYDpTOYRdbrS8UdF6PEtLq"><span>2. Fork的具体好处（Prompt Cache减少开销）</span></p>
 <p id="f-doxcndiPJPiKyTDEvFA7AgwqMUe"><span>3. SubAgent如何运行，何时中止，它内部的AgentLoop是什么？</span></p>
 <p id="f-doxcnis3lYGWC3YdN0veMo8ZZFf"><span>4. SubAgent的权限系统，可以用哪些工具。 可以看这个链接。</span></p>
-<p id="f-doxcnHOa7DgIhe3jz29jzgZzR69"><span>我没有总结得无限深入。</span></p></blockquote>
+<p id="f-doxcnHOa7DgIhe3jz29jzgZzR69"></p></blockquote>
 
 <a id="f-doxcn2MadQs64wqkOGVr3GlQz6g"></a>
 
@@ -3352,7 +3352,7 @@ Hermes: 你正在做基于 Gemma4 + SAM 的视频感知项目……</code></pre>
 
 ###### 第一层：规则过滤
 
-<blockquote id="f-doxcnp9RICtjJCc4P31mj4WfQTd"><p id="f-doxcnxBZ11Fr4z2aQCe831N0iIg"><span>这一层我在使用github copilot的时候也有，大家有没有注意到在使用copilot的时候，如果有一个工具，他让你点击approve，下面有选项（是否alway approve)，如果你点了是，其实就在对应copilot的配置文件（json)中把这个命令设置为allow,下次执行相同内容就不会再要approve了。 </span></p>
+<blockquote id="f-doxcnp9RICtjJCc4P31mj4WfQTd"><p id="f-doxcnxBZ11Fr4z2aQCe831N0iIg">工具权限可以通过配置记录。例如 GitHub Copilot 的 Always Approve 可以将相应命令加入 allow 配置，后续相同调用按配置处理。</p>
 <p id="f-doxcnkqhsTYDrgMxkFaRDlIGpmc"><span>这个方法是CodingAgent的通用技巧，设置规则，下次直接按照规则命中。</span></p></blockquote>
 
 <p id="f-doxcnKEhKefhaRrA38TZJ1AO5Mh"><span>这一层与当前处于什么模式</span><span style="font-weight:bold">完全无关</span><span>，是一道纯粹的静态匹配。</span></p>
@@ -3598,7 +3598,7 @@ Hermes: 你正在做基于 Gemma4 + SAM 的视频感知项目……</code></pre>
 
 <p id="f-doxcnmIYHbd49YEBqPFPmvBdK3d"><span>读完这一节，应该能得到两类收获：</span></p>
 
-<p id="f-doxcnRDPaowR6YjCptVWAn6DMOG"><span>1. </span><span style="font-weight:bold">面试回答思路</span><span>：当面试官问“Agent 如何做成本控制”时，可以从速率限制、实时计费、缓存成本、预算保护、会话持久化几个角度系统回答。当面试官问你，如何防止Agent进入无限循环，无限消耗TOKEN时，我们也能够借助今天的问题有一个回答。我也会结合今天的知识，总结一些常见的面试问题。</span></p>
+<p id="f-doxcnRDPaowR6YjCptVWAn6DMOG">成本控制可以从速率限制、实时计费、缓存成本、预算保护与会话持久化等角度分析，也可用于限制无限循环与 Token 消耗。</p>
 
 <p id="f-doxcnE2tSpWD6OxbAw36OnU2Jxf"><span>2. </span><span style="font-weight:bold">项目设计启发</span><span>：首先我们要有一个意识，就是我们在做自己的Agent项目的时候，需要考虑成本模块。所以你最好能够在你的项目中设计出一个模块专门负责成本控制的。另一方面成本控制模块也可以从两个方面，比如设计两个类。一类专门统计速率，按照现在的消耗，是否需要限速，需要提示消耗过多，及时提醒？第二个类统计花费，持久化每一次请求工作的Token消耗，并从输入、输出、缓存读写、网页搜索、模型维度等方面去统计。这些就是看完本篇给我们的启示。</span></p>
 
@@ -3864,7 +3864,7 @@ Hermes: 你正在做基于 Gemma4 + SAM 的视频感知项目……</code></pre>
 
 <p id="f-doxcnqPCdaZhhgKCTFGtEeOpLig"><span>这一步的关键是：</span><span style="font-weight:bold">成本控制不能只看上限，还要看收益</span><span>。如果模型已经在原地打转，哪怕还没完全用完预算，也应该及时停下来，让用户重新确认方向。</span></p>
 
-<blockquote id="f-doxcnIPGMWyzbpeylMXlZlnhHIe"><p id="f-doxcnkQVU0pNrgWsg8LEfDmJsMg"><span>这里对我们也是一个很好的启示。就是我们怎么防止Agent无限调用。我们知道我们讲的ClaudeCode也好，Openclaw也好，它内部用了React,是自己在循环中思考，推理的。所以如何防止他无限调用呢？设置最大次数可以认为大家都可以想到吧，但是看到这里，我们就有了新的思路：可以从预算以及输出增量的角度，前者从成本上控制，后者从收益上控制是否需要继续迭代。我也会将这个思路总结到后面面试题中。</span></p></blockquote>
+<blockquote id="f-doxcnIPGMWyzbpeylMXlZlnhHIe"><p id="f-doxcnkQVU0pNrgWsg8LEfDmJsMg">防止 Agent 无限调用，除了最大次数，还可以从预算与输出增量分析：预算控制成本，输出增量反映继续迭代的收益。</p></blockquote>
 
 <ol start="6"><li id="f-doxcnmfEEZf7zz1C07jO8MlsMhd"><span style="font-weight:bold">保存并恢复会话成本</span></li></ol>
 
@@ -3995,13 +3995,13 @@ Hermes: 你正在做基于 Gemma4 + SAM 的视频感知项目……</code></pre>
 
 <a id="f-doxcnZAZ8GjpUOPs8U00WN0l3Ph"></a>
 
-<p id="f-doxcny6lyRCgl3RIqFHlrsUFisc"><span>DeepSeek Harness 2026年8月份开源的Harness 框架， 已经开源几天内，stars 数已经突破了158k了。在2026年来说，一定是属于超级8热门的项目之一，是大家必须要关注的。在2026年8月份，或者未来的几个月，我相信你去面试大模型Agent岗，大部分面试官都会问你DeepSeek Harness相关的内容，所以请注意：</span></p>
+<p id="f-doxcny6lyRCgl3RIqFHlrsUFisc">本节以 DeepSeek Harness 为开放 Harness 架构学习案例。</p>
 
 <ul><li id="f-doxcnNfoU3dvLmgLtOHWbISO1kd"><span style="font-weight:bold">从近期面试来说（2026年8~9月）</span><span>，是你几乎一定要准备的，我这个是保守来说的，因为他现在很爆，所以近两个月一定要学，如果说未来DSH 被证明效果很好，越来越火，会在更长的时间内被列为面试必学内容。</span></li></ul>
 
 <ul><li id="f-doxcnXZdkC49YbkRdgjq5cLxi7e"><span style="font-weight:bold">从长期的角度来说</span><span>，做大模型开发，学开源项目肯定是非常有必要的，特别是最新的，最热的架构，学习他们背后的思想，对于面试也是非常有帮助的，学习这些框架的思想，对于很多其他考点，你也能找到答题的出发点，所以同样值得学习。</span></li></ul>
 
-<p id="f-doxcnYKtTHHbYG5qWhX2eFcvGvg"><span>我知道大家可能有点迷茫，觉得学习不过来，过去像这些类似的事情出现过太多次了，我非常有经验。我的个人建议是：</span></p>
+<p id="f-doxcnYKtTHHbYG5qWhX2eFcvGvg"></p>
 
 <ul><li id="f-doxcn4ywTDjRVuSTwcStsxeG6nh"><span style="font-weight:bold">从短期的角度</span><span>，你需要掌握DSH 是什么？核心思想？架构图？你怎么看待行业的发展？你有没有用过它，你的实际体验是什么？ 学好了这些问题，大部分面试官问DSH，问的也不深。</span></li></ul>
 

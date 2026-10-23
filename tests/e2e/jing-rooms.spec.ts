@@ -73,7 +73,7 @@ test.describe('Jingxin woodfish room', () => {
     const sprite = page.locator('.jing-muyu-strike-sprite');
     await expect(sprite).toBeVisible();
     await expect(sprite).toHaveAttribute('data-strike-frame', '0');
-    await expect(sprite).toHaveCSS('background-image', /strike-sequence\.webp/);
+    await expect(sprite).toHaveCSS('background-image', /strike-sequence-optimized\.webp/);
     await page.locator('#muyu-fish').click();
     await expect(sprite).toHaveAttribute('data-strike-frame', /[1-5]/);
     await expect(page.locator('#muyu-mode-status')).toContainText('第 1 声');

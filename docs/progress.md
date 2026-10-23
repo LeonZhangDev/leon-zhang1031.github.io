@@ -1,5 +1,25 @@
 # Project Progress
 
+## 2026-10-23 — Woodfish atlas production follow-up
+
+- First publication `c4382f4` passed the local target but real-network mobile
+  median remained 2,824 ms. Continued instead of declaring production completion.
+- Added a 593,902-byte near-lossless WebP atlas (-39.8%): same six frames,
+  resolution, animation, effects and functions. Original PNG/lossless WebP remain;
+  composited RGB error ≤4/255, alpha error ≤2/255. No codec/loader branch added.
+- Final fifteen alternating pairs/device: mobile LCP median 3,324→1,564 ms,
+  P75 1,568 ms and max 1,580 ms; desktop 3,288→1,324 ms. Mobile transfer -57.5%,
+  load 3,277→1,518 ms, final CLS/page errors zero. Every after sample meets 2.5 s.
+- Final build 211 pages; 29 Node and 98 Jing E2E checks pass. All 24 frame/theme/
+  device visual pairs pass; differences above RGB delta 8 stay in prop regions.
+  Final desktop/mobile offline first-use tests pass with 147 files / 12,476,617 B,
+  local worker `e2be968311540ee3064c`. Earlier 212 unit/25 blog-security checks
+  remain valid for modules unchanged in this follow-up. Production acceptance
+  is recorded after publication, separate from local emulation.
+- [Detailed final comparison](features/jingxin-hall.md#production-atlas-follow-up--2026-10-23).
+  Previous props-only/production cohorts and failed probes remain in evidence.
+
+
 ## 2026-10-23 — Woodfish mobile cold-load release candidate
 
 - User authorized production publication after reaching mobile LCP below 2.5 s.

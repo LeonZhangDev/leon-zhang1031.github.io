@@ -221,7 +221,7 @@
 .jing-muyu-strike-sprite {
   position: absolute; z-index: 3; left: 50%; top: 50%; width: min(500px, 48vw); aspect-ratio: 1;
   transform: translate(-50%, -50%); pointer-events: none;
-  background: url('/jing/generated/muyu/strike-sequence.webp') 0 0 / 300% 200% no-repeat;
+  background: url('/jing/generated/muyu/strike-sequence-optimized.webp') 0 0 / 300% 200% no-repeat;
   filter: drop-shadow(0 24px 26px rgba(0, 0, 0, 0.58));
 }
 .jing-muyu-strike-sprite[data-strike-frame='1'] { background-position: 50% 0; }

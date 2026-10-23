@@ -1,5 +1,110 @@
 # Jingxin Hall
 
+## Production atlas follow-up — 2026-10-23
+
+### Production acceptance — 2026-10-23
+
+- Normally published application commit `e3e92f7` through the existing GitHub
+  main deployment pipeline; Vercel reports success. Fresh public EdgeOne visits
+  subsequently confirm the optimized atlas on the canonical site without cache-
+  busting URLs. No domain, paid resource or backend/data configuration changed.
+- Five fresh mobile Chrome contexts on the real production URL, with the same
+  5 Mbps / 60 ms / 4× CPU setup: LCP **7,392→2,032 ms** median (-72.5%), sample
+  P75 **7,432→2,072 ms**, final range **1,844–2,092 ms**. Every after sample meets
+  2.5 s, has empty HTTP cache, keeps the woodfish as final LCP and has no page
+  errors or layout shifts. Transfer **3,664,654→912,597 B**; full-load median
+  **7,353→2,532 ms**. These separate before/after cohorts include real CDN timing;
+  they are not field-user P75 data or a guarantee for every physical phone/network.
+- Real touch/keyboard/count/pause/reset pass. Home, Jing hall, Agent foundations
+  with its course sidebar, Transformer math article, games and roadmap return
+  200 without mobile overflow/math errors. The real deferred Artalk editor opens;
+  no comment is submitted. No uncaught page errors occur across seven routes.
+- Optimized atlas and three selected prop images match source SHA256 byte for
+  byte; the preserved lossless atlas also matches. The production worker serves
+  `Cache-Control: no-cache`, contains the committed worker code and its exact
+  versioned public graph. A fresh production profile installs all 147 files, clears
+  normal HTTP cache, then enters ten rooms offline and passes first-use effects,
+  calculations, lot editions, encrypted saving, 206 audio range and shortcuts.
+  Private plaintext and query URLs remain absent from the public cache.
+- Actual Linux/Git-normalized worker version: `6ba85d8450becd43a036`,
+  12,476,593 public bytes. This differs from
+  the Windows local version because Git normalizes checked-in text line endings.
+  The worker template matches committed source, its version recomputes correctly,
+  and every differing public-text entry matches the corresponding Git blob.
+  Image hashes agree and actual production offline verification passes.
+- Full receipts, failed initial production cohort, raw visits and local artifacts
+  remain in `.tmp/muyu-mobile-release/`. Rollback target before this performance
+  release is `584eea9`; the intermediate props-only release is `c4382f4`.
+  Roll back through a normal compensating commit and verify the worker update;
+  do not reset user work, force-push or delete private storage.
+
+
+
+The first authorized publication, `c4382f4`, passed the local target, but the
+actual production CDN cohort remained above budget: five cold mobile visits
+measured 2,768–3,100 ms, median 2,824 ms. Those results are preserved, and were
+not presented as completion. The remaining atlas transfer is reduced further.
+
+### Design decisions
+
+- The existing Sharp producer adds `strike-sequence-optimized.webp`: 593,902 B
+  versus the lossless atlas's 987,220 B (-39.8%). All six 512×512 frames remain
+  in their original 1536×1024 atlas. The original PNG and lossless WebP stay in
+  public assets. The codec remains WebP, with no new runtime loader or fallback
+  branch; the existing CSS background and its matching head preload select it.
+- This derivative uses **near-lossless** preprocessing, not an exact-pixel claim.
+  Every pixel is composited against backgrounds 0/32/128/255 and checked: maximum
+  RGB difference 4/255, alpha difference 2/255. Its rendered error is smaller than
+  the tested AVIF alternatives. Pose, grid, timing, effects, audio and gameplay
+  scripts are unchanged. The seven responsive prop variants remain as above.
+- The cache graph automatically replaces the old atlas with its new derivative;
+  still 147 files, now 12,476,617 B, local version `e2be968311540ee3064c`.
+  The complete offline payload is slightly smaller than the previous hall-only
+  cache despite retaining every responsive prop candidate.
+
+### Final controlled comparison
+
+Same conditions and fifteen alternating pairs per device as documented below.
+The comparison baseline includes the prior unshipped performance batches; it is
+separate from the much slower old PNG version formerly served in production.
+
+| Metric | Before | Final after |
+| --- | ---: | ---: |
+| Mobile median LCP | 3,324 ms | 1,564 ms (-52.9%) |
+| Mobile P75 / maximum LCP | 3,340 / 3,356 ms | 1,568 / 1,580 ms |
+| Mobile median load | 3,277 ms | 1,518 ms |
+| Mobile transfer | 1,966,107 B | 835,498 B (-57.5%) |
+| Desktop median LCP | 3,288 ms | 1,324 ms (-59.7%) |
+| Desktop P75 / maximum LCP | 3,304 / 3,324 ms | 1,336 / 1,344 ms |
+| Final CLS / script errors | — | 0 / 0 |
+
+All fifteen after visits on each device meet 2.5 s; LCP still belongs to the
+visible woodfish sprite. No metric is gained by removing or hiding the sprite.
+
+### Final verification
+
+- Fresh 211-page build, all 29 Node checks and all 98 Jing browser tests pass
+  after the atlas change. The earlier 212 unit checks and 25 blog/security browser
+  checks cover modules unchanged by this follow-up; Astro check remains zero
+  errors/warnings with 26 pre-existing hints.
+- Twenty-four settled frame/theme/device pairs preserve all geometry, main
+  content and computed styles after normalizing only the expected atlas URL.
+  Maximum pixels above RGB delta 8: 0.275%; maximum full-screen RMSE 1.205.
+  All such differences remain in resized-prop regions; the woodfish region
+  stays below the threshold across all six frames. No horizontal overflow.
+- Both final desktop/mobile profiles cache all 147 assets, clear normal HTTP
+  cache, enter ten rooms offline and execute first-use interactions. Encrypted
+  saving, audio ranges and query shortcuts pass with no cached private plaintext
+  or query URLs and no page errors.
+- Final artifact proof: all JS/media originals and non-Jing HTML remain identical
+  to the integrated baseline. Room CSS changes only its atlas URL. Ten room HTML
+  files update the corresponding CSS hash; woodfish additionally has its approved
+  preload/srcset attributes. The derived worker and optimized atlas are expected
+  changes. Raw comparisons and rejected encodings are retained under the evidence
+  directory. Actual production acceptance follows publication and is separate
+  from the controlled desktop-Chrome simulation, not a field-P75 guarantee.
+
+
 ## Woodfish mobile cold-load release — 2026-10-23
 
 User authorized optimization followed by production publication while preserving

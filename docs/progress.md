@@ -1,5 +1,26 @@
 # Project Progress
 
+## 2026-10-23 — Woodfish production accepted
+
+- Published application `e3e92f7` through the existing main deployment pipeline.
+  Fresh canonical-site browser checks confirm the new assets. Five live cold
+  mobile visits meet 2.5 s: median **7,392→2,032 ms**, sample P75 **7,432→2,072 ms**,
+  final maximum **2,092 ms**. Same 5 Mbps / 60 ms / 4× CPU configuration; empty
+  HTTP caches. This is Chrome simulation over real CDN, not field-user P75.
+- Live source checks verify optimized/original atlas and selected props. Seven
+  routes, touch/keyboard/pause/reset, Agent course sidebar, math and the real
+  deferred comment editor pass with zero page errors; no comment/data write.
+- Fresh production offline installation verifies 147 public files, ten first-use
+  rooms, encrypted saving and audio ranges. Actual worker `6ba85d8450becd43a036`
+  matches committed source and the Git-normalized graph; text-only Windows/Linux
+  line-ending differences are accounted for. Private plaintext/query caches zero.
+- Local fifteen pairs/device remain 3,324→1,564 ms mobile / 3,288→1,324 ms desktop.
+  Visual style, all six frames, effects, sound and features remain. Evidence:
+  `final-production-receipt.json` and accompanying raw/visual/offline records in
+  the isolated release checkout's `.tmp/muyu-mobile-release/`.
+  [Full comparison and release receipt](features/jingxin-hall.md#production-atlas-follow-up--2026-10-23).
+
+
 ## 2026-10-23 — Woodfish atlas production follow-up
 
 - First publication `c4382f4` passed the local target but real-network mobile

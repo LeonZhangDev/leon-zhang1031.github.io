@@ -18,7 +18,7 @@
 - [waline-account-modal](waline-account-modal.md)
 - [quiet-cyber-editorial-design](quiet-cyber-editorial-design.md)
 - [deep-learning-course-series](deep-learning-course-series.md)
-- [jingxin-hall](jingxin-hall.md) — scenes, study tools, responsive woodfish assets, offline caching and mobile cold-load evidence
+- [jingxin-hall](jingxin-hall.md) — scenes, study tools, optimized woodfish assets, offline caching and production cold-load acceptance
 - [ai-research-content-course](ai-research-content-course.md)
 
 - [飞书图文复制产品展示](feishu-copy-helper.md)

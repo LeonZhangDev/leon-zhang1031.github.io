@@ -1,4 +1,4 @@
-param([switch]$AllowModelCalls, [switch]$AllowCloudTraces, [switch]$AllowMemoryModelCalls)
+param([switch]$AllowModelCalls, [switch]$AllowCloudTraces, [switch]$AllowMemoryModelCalls, [switch]$AllowWebTools)
 $ErrorActionPreference = 'Stop'
 $candidates = @()
 $nodeCommand = Get-Command node -ErrorAction SilentlyContinue
@@ -20,5 +20,6 @@ $agentArguments = @()
 if ($AllowModelCalls) { $agentArguments += '--allow-model-calls' } else { $env:AGENT_MODE = 'mock' }
 if ($AllowMemoryModelCalls) { $agentArguments += '--allow-memory-model-calls' } else { $env:AGENT_MEMORY_MODE = 'offline' }
 if ($AllowCloudTraces) { $agentArguments += '--allow-cloud-traces' } else { $env:AGENT_TRACE_MODE = 'offline' }
+if ($AllowWebTools) { $agentArguments += '--allow-web-tools' } else { $env:AGENT_TOOLS_MODE = 'mock' }
 & $selectedNode (Join-Path $PSScriptRoot 'server.mjs') @agentArguments
 exit $LASTEXITCODE

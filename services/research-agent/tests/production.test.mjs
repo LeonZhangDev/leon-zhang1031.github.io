@@ -19,7 +19,7 @@ for (const offline of [false, true]) test(`CLI starts through a release-director
   const probe = createServer(); await new Promise(resolve => probe.listen(0, '127.0.0.1', resolve));
   const port = probe.address().port; await new Promise(resolve => probe.close(resolve));
   const child = spawn(process.execPath, [join(entry, 'server.mjs'), ...(offline ? ['--offline'] : [])], { stdio: ['ignore', 'pipe', 'pipe'],
-    env: { ...process.env, AGENT_MODE: offline ? 'qwen' : 'mock', AGENT_TRACE_MODE: offline ? 'cloud' : 'offline', AGENT_PORT: String(port), AGENT_MEMORY_MODE: offline ? 'qwen' : 'offline',
+    env: { ...process.env, AGENT_MODE: offline ? 'qwen' : 'mock', AGENT_TRACE_MODE: offline ? 'cloud' : 'offline', AGENT_PORT: String(port), AGENT_MEMORY_MODE: offline ? 'qwen' : 'offline', AGENT_TOOLS_MODE: offline ? 'tavily' : 'mock',
       AGENT_DATA_DIR: join(temp, 'data'), AGENT_PUBLIC_ORIGIN: '', AGENT_TRIAL_SEED_RESERVED_UNITS: '0' } });
   t.after(async () => { if (child.exitCode === null) { child.kill(); await once(child, 'exit'); } });
   child.stderr.resume();
@@ -35,6 +35,7 @@ for (const offline of [false, true]) test(`CLI starts through a release-director
   const response = await fetch(`http://127.0.0.1:${port}${BASE_PATH}api/auth/status`);
   assert.equal(response.status, 200); const auth = await response.json();
   assert.equal(auth.mode, 'mock'); assert.equal(auth.traceMode, 'offline'); assert.equal(auth.setupRequired, true);
+  assert.equal(auth.toolsMode, 'mock');
 });
 
 test('public configuration requires exact HTTPS, persistent storage and a cumulative seed floor', () => {

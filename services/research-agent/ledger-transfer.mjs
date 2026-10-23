@@ -10,6 +10,7 @@ const tables = {
   memory_operations: ['id', 'task_id', 'kind', 'created', 'status'],
   model_calls: ['id', 'task_id', 'reserved_units', 'state', 'body'],
   memory_model_calls: ['id', 'operation_id', 'reserved_units', 'state', 'body'],
+  tool_calls: ['id', 'task_id', 'reserved_units', 'state', 'body'],
   cloud_dispatch: ['task_id'],
 };
 const primary = table => table === 'cloud_dispatch' ? 'task_id' : 'id';
@@ -19,16 +20,19 @@ const rows = (db, table) => db.prepare("SELECT name FROM sqlite_master WHERE typ
 // This private bundle deliberately excludes settings, credentials and sessions.
 export function exportLedger(db) {
   const records = Object.fromEntries(Object.keys(tables).map(table => [table, rows(db, table)]));
-  const referenced = new Set([...records.model_calls, ...records.memory_operations, ...records.cloud_dispatch].map(row => row.task_id).filter(Boolean));
+  const referenced = new Set([...records.model_calls, ...records.memory_operations, ...records.tool_calls, ...records.cloud_dispatch].map(row => row.task_id).filter(Boolean));
   records.tasks = records.tasks.filter(row => referenced.has(row.id));
-  return { version: 1, locked: db.prepare("SELECT value FROM settings WHERE key='model-budget-locked'").get()?.value === 'true', records };
+  // Old importers must reject this bundle rather than silently omit tool costs.
+  return { version: 2, locked: db.prepare("SELECT value FROM settings WHERE key='model-budget-locked'").get()?.value === 'true', records };
 }
 
 export function planLedgerImport(db, bundle, config) {
-  if (bundle?.version !== 1 || typeof bundle.locked !== 'boolean' || !bundle.records) throw new Error('LEDGER_FORMAT');
+  if (![1, 2].includes(bundle?.version) || typeof bundle.locked !== 'boolean' || !bundle.records) throw new Error('LEDGER_FORMAT');
+  if (bundle.version === 1 && bundle.records.tool_calls?.length) throw new Error('LEDGER_FORMAT');
   const additions = {}, merged = {};
   for (const [table, columns] of Object.entries(tables)) {
-    const incoming = bundle.records[table];
+    // v1 bundles made before Tavily have no tool_calls. Preserve their records.
+    const incoming = bundle.version === 1 && table === 'tool_calls' && !Object.hasOwn(bundle.records, table) ? [] : bundle.records[table];
     if (!Array.isArray(incoming) || incoming.length > 10_000) throw new Error('LEDGER_FORMAT');
     const existing = new Map(rows(db, table).map(row => [row[primary(table)], row]));
     additions[table] = [];
@@ -38,7 +42,7 @@ export function planLedgerImport(db, bundle, config) {
         || typeof row[primary(table)] !== 'string' || seen.has(row[primary(table)])) throw new Error('LEDGER_FORMAT');
       seen.add(row[primary(table)]);
       if (['tasks', 'memory_operations'].includes(table) && ['queued', 'running'].includes(row.status)) throw new Error('LEDGER_ACTIVE_WORK');
-      if (table.endsWith('model_calls')) {
+      if (table.endsWith('model_calls') || table === 'tool_calls') {
         if (!Number.isSafeInteger(row.reserved_units) || row.reserved_units < 1 || !['measured', 'uncertain'].includes(row.state)) throw new Error('LEDGER_FORMAT');
         try { if (!JSON.parse(row.body) || Array.isArray(JSON.parse(row.body))) throw new Error(); } catch { throw new Error('LEDGER_FORMAT'); }
       }
@@ -55,13 +59,16 @@ export function planLedgerImport(db, bundle, config) {
   for (const row of merged.model_calls.values()) if (!merged.tasks.has(row.task_id)) throw new Error('LEDGER_REFERENCE');
   for (const row of merged.memory_operations.values()) if (row.task_id && !merged.tasks.has(row.task_id)) throw new Error('LEDGER_REFERENCE');
   for (const row of merged.memory_model_calls.values()) if (!merged.memory_operations.has(row.operation_id)) throw new Error('LEDGER_REFERENCE');
+  for (const row of merged.tool_calls.values()) if (!merged.tasks.has(row.task_id)) throw new Error('LEDGER_REFERENCE');
   for (const row of merged.cloud_dispatch.values()) if (!merged.tasks.has(row.task_id)) throw new Error('LEDGER_REFERENCE');
-  const calls = [...merged.model_calls.values(), ...merged.memory_model_calls.values()];
+  const calls = [...merged.model_calls.values(), ...merged.memory_model_calls.values(), ...merged.tool_calls.values()];
   const reservedUnits = calls.reduce((sum, row) => sum + row.reserved_units, 0);
   const validationUnits = calls.filter(row => JSON.parse(row.body).pricingSnapshot?.validationId === 'mem0-qwen-v1').reduce((sum, row) => sum + row.reserved_units, 0);
-  if (reservedUnits > Math.min(config.trialBudgetUnits, 50_000) || validationUnits > Math.min(config.validationBudgetUnits, 5000)) throw new Error('LEDGER_BUDGET');
+  const webValidationUnits = calls.filter(row => JSON.parse(row.body).pricingSnapshot?.webValidationId === 'tavily-v1').reduce((sum, row) => sum + row.reserved_units, 0);
+  if (reservedUnits > Math.min(config.trialBudgetUnits, 50_000) || validationUnits > Math.min(config.validationBudgetUnits, 5000)
+    || webValidationUnits > Math.min(config.webValidationBudgetUnits ?? 3000, 3000)) throw new Error('LEDGER_BUDGET');
   return { additions, summary: { added: Object.fromEntries(Object.entries(additions).map(([table, values]) => [table, values.length])),
-    calls: calls.length, reservedYuan: reservedUnits / 10_000, validationReservedYuan: validationUnits / 10_000,
+    calls: calls.length, reservedYuan: reservedUnits / 10_000, validationReservedYuan: validationUnits / 10_000, webValidationReservedYuan: webValidationUnits / 10_000,
     uncertainCalls: calls.filter(row => row.state === 'uncertain').length, locked: bundle.locked || db.prepare("SELECT value FROM settings WHERE key='model-budget-locked'").get()?.value === 'true' } };
 }
 

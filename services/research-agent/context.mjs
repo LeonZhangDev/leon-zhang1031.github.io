@@ -23,7 +23,13 @@ export class ContextManager {
   }
   prepare(state) {
     const documents = [...new Map(state.evidence.map(doc => [sourceId(doc), doc])).values()];
-    const evidence = documents.map(doc => ({ ...doc, sourceId: sourceId(doc) }));
+    // Full real pages remain in raw events/state for read_evidence. Only the
+    // bounded excerpt enters model context; it is explicitly marked as partial.
+    const evidence = documents.map(doc => {
+      const { excerpt, content, ...metadata } = doc;
+      return { ...metadata, sourceId: sourceId(doc), content: excerpt ?? content,
+        ...(excerpt !== undefined ? { cachedLength: content.length, truncated: excerpt.length < content.length, recoverWith: 'read_evidence' } : {}) };
+    });
     // Page bodies already live in evidence; don't pay to send them twice.
     const observations = state.observations.map((item, index) => ({ eventIndex: index, ...item,
       output: item.tool === 'read_page' && !item.output.error
@@ -41,7 +47,7 @@ export class ContextManager {
       // Rebuild from originals rather than repeatedly summarizing an old summary.
       const summary = { version: this.version + 1, coveredEventCount: covered,
         facts: evidence.map(doc => ({ sourceId: doc.sourceId, url: doc.url, title: doc.title,
-          hash: digest(doc.content || doc.text || ''), excerpt: (doc.content || doc.text || '').slice(0, 220),
+          hash: doc.contentHash || digest(doc.content || doc.text || ''), excerpt: (doc.content || doc.text || '').slice(0, 220),
           numericFacts: numericFacts(doc.content || doc.text || ''), qualifications: qualifications(doc.content || doc.text || '') })),
         actions: observations.slice(0, covered).map(item => ({ eventIndex: item.eventIndex, tool: item.tool, args: item.args,
           error: item.output?.error || null, result: item.tool === 'calculate' ? item.output : undefined })),

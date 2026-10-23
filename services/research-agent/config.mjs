@@ -21,6 +21,21 @@ export function loadConfig(env = process.env, approval = {}) {
   const mode = env.AGENT_MODE || 'mock', traceMode = env.AGENT_TRACE_MODE || 'offline';
   if (!['mock', 'qwen'].includes(mode) || (mode === 'qwen' && approval.allowModelCalls !== true)) throw new Error('Only mock mode is authorized without --allow-model-calls; supported modes: mock/qwen.');
   if (!['offline', 'cloud'].includes(traceMode) || (traceMode === 'cloud' && approval.allowCloudTraces !== true)) throw new Error('Only offline tracing is authorized without --allow-cloud-traces.');
+  const toolsMode = env.AGENT_TOOLS_MODE || 'mock';
+  if (!['mock', 'tavily'].includes(toolsMode) || (toolsMode === 'tavily' && approval.allowWebTools !== true)) throw new Error('WEB_TOOLS_NOT_AUTHORIZED: Tavily requires --allow-web-tools.');
+  if (toolsMode === 'tavily' && mode !== 'qwen') throw new Error('Tavily research requires the independently authorized Qwen decision loop.');
+  const webValidationBudgetUnits = Math.round(Number(env.AGENT_WEB_VALIDATION_BUDGET_YUAN || '0.3') * 10_000);
+  if (!Number.isSafeInteger(webValidationBudgetUnits) || webValidationBudgetUnits < 1 || webValidationBudgetUnits > 3000) throw new Error('Web validation budget must be greater than zero and no more than 0.3 yuan.');
+  const tavily = {
+    apiKey: env.TAVILY_API_KEY || '', baseUrl: 'https://api.tavily.com',
+    creditUnits: 640, usdPerCredit: 0.008, budgetYuanPerUsd: 8,
+    pricingCheckedDate: '2026-10-23', pricingSource: 'https://docs.tavily.com/documentation/api-credits',
+    requestTimeoutMs: 20_000, maxResponseBytes: 1_048_576, excerptBytes: 6000,
+  };
+  if (toolsMode === 'tavily') {
+    if (!/^tvly-[A-Za-z0-9_-]{8,}$/.test(tavily.apiKey)) throw new Error('Missing or invalid TAVILY_API_KEY');
+    if (env.TAVILY_PRICING_CONFIRMED !== 'true' || env.TAVILY_FREE_TIER_CONFIRMED !== 'true') throw new Error('Confirm Tavily prices, remaining free credits and disabled pay-as-you-go before enabling web tools.');
+  }
   const trialBudgetUnits = Math.round(Number(env.AGENT_TRIAL_BUDGET_YUAN || 5) * 10_000);
   if (!Number.isSafeInteger(trialBudgetUnits) || trialBudgetUnits < 1 || trialBudgetUnits > 50_000) throw new Error('First-validation budget must be greater than zero and no more than 5 yuan.');
   const validationBudgetUnits = Math.round(Number(env.AGENT_VALIDATION_BUDGET_YUAN || '0.5') * 10_000);
@@ -84,12 +99,14 @@ export function loadConfig(env = process.env, approval = {}) {
     host: '127.0.0.1', port, basePath: BASE_PATH, publicOrigin, trialSeedReservedUnits,
     dataDir: resolve(env.AGENT_DATA_DIR || fileURLToPath(new URL('../../.tmp/research-agent/', import.meta.url))),
     mode, traceMode, qwen, langsmith, trialBudgetUnits, validationBudgetUnits, memoryMode, memory,
+    toolsMode, tavily, webValidationBudgetUnits,
+    allowWebTools: toolsMode === 'tavily' && approval.allowWebTools === true,
     allowModelCalls: mode === 'qwen' && approval.allowModelCalls === true,
     allowMemoryCalls: memoryMode === 'qwen' && approval.allowMemoryCalls === true,
     allowCloudTraces: traceMode === 'cloud' && approval.allowCloudTraces === true,
     sessionMs: 8 * 60 * 60 * 1000, idleMs: 30 * 60 * 1000,
     loginWindowMs: 15 * 60 * 1000, loginMaxFailures: 5,
-    maxSteps: 12, maxSearches: 6, maxPages: 8, taskTimeoutMs: mode === 'qwen' ? 180_000 : 30_000,
+    maxSteps: 12, maxSearches: toolsMode === 'tavily' ? 1 : 6, maxPages: toolsMode === 'tavily' ? 2 : 8, taskTimeoutMs: mode === 'qwen' ? 180_000 : 30_000,
     dayBudgetUnits: 100_000, monthBudgetUnits: 1_000_000,
     stepDelayMs: 120,
   };

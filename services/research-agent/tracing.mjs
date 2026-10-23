@@ -5,7 +5,8 @@ import { redact } from './security.mjs';
 // The SDK always uses our transport. Offline interception remains the default.
 export function cloudSummary(run) {
   return { ...run, inputs: { step: run.inputs?.step, evidenceCount: run.inputs?.evidenceCount },
-    outputs: { status: run.outputs?.status, usage_metadata: run.outputs?.usage_metadata },
+    outputs: { status: run.outputs?.status, usage_metadata: run.outputs?.usage_metadata,
+      ...(run.outputs?.tool_usage ? { tool_usage: run.outputs.tool_usage } : {}) },
     ...(run.error ? { error: 'Operation failed; details retained locally.' } : {}) };
 }
 export class TaskTrace {
@@ -54,15 +55,20 @@ export class TaskTrace {
       trace_id: this.taskId, dotted_order: parent ? `${parent.dotted_order}.${stamp}${id}` : `${stamp}${id}`,
       ...(parent ? { parent_run_id: parent.id } : {}),
       session_name: this.cloud ? this.config.langsmith.project : 'private-research-agent-local',
-      tags: [this.config.mode || 'mock', this.cloud ? 'cloud-summary-only' : 'offline', 'synthetic-tools'],
+      tags: [this.config.mode || 'mock', this.cloud ? 'cloud-summary-only' : 'offline', this.config.toolsMode === 'tavily' ? 'tavily-tools' : 'synthetic-tools'],
       extra: { metadata: { mode: this.config.mode || 'mock', trace_transport: this.cloud ? 'cloud' : 'offline',
-        tools_simulated: true, vendor_bill_verified: false,
+        tools_simulated: this.config.toolsMode !== 'tavily', vendor_bill_verified: false,
         ...(runType === 'llm' ? { ls_provider: this.config.mode === 'qwen' ? 'alibaba' : 'mock', ls_model_name: this.config.mode === 'qwen' ? this.config.qwen.model : 'mock-research-v1' } : {}) } },
     };
     this.runs.push(run); return run;
   }
   end(run, outputs, error) {
     run.end_time = Date.now(); run.outputs = redact(outputs);
+    const billing = outputs?.result?.billing;
+    if (['tool.search', 'tool.read_page'].includes(run.name) && billing?.provider === 'tavily') {
+      run.outputs.tool_usage = { provider: 'tavily', status: outputs.result.error ? 'error' : 'ok',
+        credits: billing.credits, reserved_yuan: billing.reservedYuan, elapsed_ms: billing.elapsedMs };
+    }
     if (run.run_type === 'llm' && this.config.mode === 'qwen') {
       if (outputs?.result?.usageMetadata) run.outputs.usage_metadata = outputs.result.usageMetadata;
       run.extra.metadata.tokens_are_synthetic = false;

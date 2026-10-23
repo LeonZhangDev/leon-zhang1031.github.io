@@ -20,6 +20,7 @@ npm-debug.log*
 .playwright-cli/
 test-results/
 playwright-report/
+output/playwright/
 
 .vercel
 

@@ -1,6 +1,6 @@
 # Features
 
-- [private-research-agent](private-research-agent.md) — deployed password workspace, terminal reports, Qwen/LangSmith API acceptance and preserved trial budget
+- [private-research-agent](private-research-agent.md) — deployed Tavily/Qwen workspace, cached recovery, verified summary traces and preserved trial budgets
 
 - [game-loading-optimization](game-loading-optimization.md) — small icon, exact engine cache contracts and critical-resource preloads
 

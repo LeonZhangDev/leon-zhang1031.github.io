@@ -11,6 +11,59 @@ import { newToken } from '../security.mjs';
 
 globalThis.fetch = () => { throw new Error('NETWORK_FORBIDDEN'); };
 
+test('offline Chromium: Tavily mode displays real-tool state, bounded budget, citations and retained mock history', { timeout: 60000 }, async t => {
+  const config = { ...loadConfig({ AGENT_MODE: 'qwen', DASHSCOPE_API_KEY: newToken(), QWEN_PRICING_CONFIRMED: 'true',
+    AGENT_TOOLS_MODE: 'tavily', TAVILY_API_KEY: `tvly-${newToken()}`, TAVILY_PRICING_CONFIRMED: 'true', TAVILY_FREE_TIER_CONFIRMED: 'true' },
+  { allowModelCalls: true, allowWebTools: true }), port: 0, stepDelayMs: 0, dataDir: mkdtempSync(join(tmpdir(), 'tavily-browser-')) };
+  const sources = ['https://nodejs.org/en/docs/', 'https://docs.python.org/3/'];
+  let decisions = 0, tools = 0;
+  const actions = [['search', { query: 'official runtimes' }], ...sources.map(url => ['read_page', { url }]),
+    ['save_report', { markdown: `# 调研结果\n\n| 方案 | 来源 |\n| --- | --- |\n| Node | [文档](${sources[0]}) |\n| Python | [文档](${sources[1]}) |\n\n## 未确认事项\n这是离线传输测试，尚未验证实时资料。` }]];
+  const app = createApplication(config, { providers: {
+    fetchImplementation: async () => {
+      const [name, args] = actions[decisions++];
+      return new Response(JSON.stringify({ usage: { prompt_tokens: 100, completion_tokens: 20 }, choices: [{ finish_reason: 'tool_calls',
+        message: { tool_calls: [{ type: 'function', function: { name, arguments: JSON.stringify(args) } }] } }] }));
+    },
+    webFetchImplementation: async (url, init) => {
+      tools++;
+      return new Response(JSON.stringify(url.endsWith('/search')
+        ? { results: sources.map(url => ({ url, title: '官方文档', content: '待核对摘要' })), usage: { credits: 1 } }
+        : { results: [{ url: JSON.parse(init.body).urls[0], raw_content: '离线正文：限制 10 次。' }], failed_results: [], usage: { credits: 0 } }));
+    },
+  } });
+  const old = app.store.createTask({ goal: '历史模拟任务', constraints: '', scenario: 'standard', budgetUnits: 20_000 }, loadConfig({}));
+  old.status = 'completed'; old.report = '# 原始模拟报告'; app.store.saveTask(old);
+  const oldBody = app.store.db.prepare('SELECT body FROM tasks WHERE id=?').get(old.id).body;
+  const origin = await app.listen(); t.after(() => app.close());
+  const browser = await chromium.launch({ channel: process.env.AGENT_TEST_BROWSER_CHANNEL || 'chrome' }); t.after(() => browser.close());
+  const context = await browser.newContext(); const external = [], errors = [];
+  await context.route('**/*', route => {
+    if (new URL(route.request().url()).origin !== origin) { external.push(route.request().url()); return route.abort(); }
+    return route.continue();
+  });
+  const page = await context.newPage(); page.on('pageerror', error => errors.push(error.message));
+  await page.goto(`${origin}${config.basePath}`);
+  await expect(page.locator('#auth-submit')).toBeEnabled();
+  await expect(page.locator('#login-runtime-notice')).toContainText('Tavily Basic');
+  const password = newToken(); await page.locator('#password').fill(password); await page.locator('#confirm-password').fill(password);
+  await page.locator('#auth-submit').click(); await expect(page.locator('#task-form')).toBeVisible();
+  await expect(page.locator('#mode-badge')).toHaveText('QWEN · TAVILY');
+  await expect(page.locator('#budget')).toHaveValue('0.3'); await expect(page.locator('#budget')).toHaveAttribute('max', '0.3');
+  await expect(page.locator('#task-limits')).toContainText('1 次搜索 / 2 页资料');
+  await page.locator('#goal').fill('对比 Node 与 Python'); await page.locator('#start-task').click();
+  await expect(page.locator('#task-status')).toHaveText('已完成');
+  await expect(page.locator('#report table')).toBeVisible();
+  await expect(page.locator('#report a').first()).toHaveAttribute('href', sources[0]);
+  await expect(page.locator('#budget-status')).toContainText('工具 3 次，等价预留 ¥0.1920');
+  await expect(page.locator('#activity')).toContainText('查看工具响应（联网工具）');
+  assert.equal(decisions, 4); assert.equal(tools, 3);
+  assert.equal(app.store.db.prepare('SELECT body FROM tasks WHERE id=?').get(old.id).body, oldBody);
+  await page.setViewportSize({ width: 390, height: 844 });
+  assert.equal(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), true);
+  assert.deepEqual(external, []); assert.deepEqual(errors, []);
+});
+
 const markdown = '# Markdown 验收\n\n**加粗** 和 *斜体*，~~删除~~，`inline()`\n\n1. 步骤一\n   - 嵌套项\n\n- [x] 已完成\n\n> 保留引用\n\n| 列一 | 列二 |\n| --- | --- |\n| A | B |\n\n```js\nconst value = "<script>literal</script>";\n```\n\n[官方链接](https://example.test/docs) [不安全](javascript:alert(1))\n\n![外部图片](https://tracker.example.test/pixel)\n\n<img src="https://tracker.example.test/raw" onerror="globalThis.markdownExecuted=true">\n<script>globalThis.markdownExecuted=true</script>\n';
 
 test('offline Chromium: authenticated memory workflow, GFM, source/copy/download, mobile and XSS protection', { timeout: 60000 }, async t => {

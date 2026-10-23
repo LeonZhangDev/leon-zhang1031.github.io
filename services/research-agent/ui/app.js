@@ -31,7 +31,7 @@ async function loginPage() {
   if (auth.authenticated) { location.replace(base); return; }
   $('access-tag').textContent = auth.accessScope === 'password-protected-https' ? 'PRIVATE' : 'LOCAL';
   $('access-location').textContent = auth.accessScope === 'password-protected-https' ? 'HTTPS · 密码保护' : '127.0.0.1 · 仅本机';
-  $('login-runtime-notice').textContent = `模型 ${auth.mode} · 追踪 ${auth.traceMode}。搜索和网页为合成资料，不联网搜索；报告不代表实时调研。`;
+  $('login-runtime-notice').textContent = `模型 ${auth.mode} · 追踪 ${auth.traceMode}。${auth.toolsMode === 'tavily' ? '搜索和网页读取使用 Tavily Basic；结论需结合来源核对。' : '搜索和网页为合成资料，不联网搜索；报告不代表实时调研。'}`;
   $('auth-title').textContent = auth.setupRequired ? '设置你的访问密码' : '进入私人工作台';
   $('auth-description').textContent = auth.setupRequired ? '首次使用，请设置至少 6 个字符的本地访问密码。没有默认密码。'
     : auth.accessScope === 'password-protected-https' ? '输入访问密码后继续。' : '输入密码后继续，只允许本机访问。';
@@ -65,14 +65,20 @@ async function updateHistory() {
   if ([...select.options].some(option => option.value === previous)) select.value = previous;
 }
 async function updateBudget() {
-  const { budget, trialBudget = { reservedYuan: 0, limitYuan: 5, usageEstimateYuan: 0 }, mode, traceMode, memoryMode } = await api('status');
-  $('mode-badge').textContent = mode === 'qwen' ? 'QWEN · 模拟资料' : 'MOCK MODE';
+  const { budget, trialBudget = { reservedYuan: 0, limitYuan: 5, usageEstimateYuan: 0 }, mode, traceMode, memoryMode, toolsMode, limits } = await api('status');
+  const realTools = toolsMode === 'tavily';
+  $('mode-badge').textContent = realTools ? 'QWEN · TAVILY' : mode === 'qwen' ? 'QWEN · 模拟资料' : 'MOCK MODE';
   $('runtime-status').textContent = `模型 ${mode} · 记忆 ${memoryMode || 'offline'} · 追踪 ${traceMode}`;
-  $('runtime-notice').textContent = mode === 'qwen' ? `Qwen 模型已启用，搜索和网页仍为合成资料。追踪模式 ${traceMode}；报告不代表实时调研。` : `模型、搜索和网页为合成响应。追踪模式 ${traceMode}；报告不代表实时事实。`;
+  $('runtime-notice').textContent = realTools ? `Qwen 决策＋Tavily Basic 搜索与读取。引用须来自成功读取的网页；追踪模式 ${traceMode}。` : mode === 'qwen' ? `Qwen 模型已启用，搜索和网页仍为合成资料。追踪模式 ${traceMode}；报告不代表实时调研。` : `模型、搜索和网页为合成响应。追踪模式 ${traceMode}；报告不代表实时事实。`;
+  $('budget').max = String(limits?.taskBudgetYuan ?? 2);
+  if (Number($('budget').value) > Number($('budget').max)) $('budget').value = $('budget').max;
+  $('budget-label').textContent = realTools ? '单次调用预留上限 / 元' : '单次模拟预算 / 元';
+  $('task-limits').textContent = `最多 12 轮决策 / ${limits?.searches ?? 6} 次搜索 / ${limits?.pages ?? 8} 页资料。请勿输入密钥或其他敏感信息。`;
   for (const option of $('scenario').options) option.disabled = mode === 'qwen' && option.value !== 'standard';
   if (mode === 'qwen') $('scenario').value = 'standard';
-  $('budget-status').textContent = `模拟流程账本：今日 ${yuan(budget.dayUsedUnits)} / ${yuan(budget.dayLimitUnits)} · 本月 ${yuan(budget.monthUsedUnits)} / ${yuan(budget.monthLimitUnits)}。首次模型验证累计预留 ¥${trialBudget.reservedYuan.toFixed(4)} / ¥${trialBudget.limitYuan.toFixed(2)}（重启不清零、不退款）。usage 估算 ¥${trialBudget.usageEstimateYuan.toFixed(6)}，未核对供应商账单。`;
+  $('budget-status').textContent = `模拟流程账本：今日 ${yuan(budget.dayUsedUnits)} / ${yuan(budget.dayLimitUnits)} · 本月 ${yuan(budget.monthUsedUnits)} / ${yuan(budget.monthLimitUnits)}。全部真实调用累计预留 ¥${trialBudget.reservedYuan.toFixed(4)} / ¥${trialBudget.limitYuan.toFixed(2)}（重启不清零、不退款）。模型 usage 估算 ¥${trialBudget.usageEstimateYuan.toFixed(6)}，未核对供应商账单。`;
   if (trialBudget.validation) $('budget-status').textContent += ` 本轮新增验证预留 ¥${trialBudget.validation.reservedYuan.toFixed(4)} / ¥${trialBudget.validation.limitYuan.toFixed(2)}，包含在累计上限内。`;
+  if (trialBudget.webValidation) $('budget-status').textContent += ` Tavily 首次验证累计预留 ¥${trialBudget.webValidation.reservedYuan.toFixed(4)} / ¥${trialBudget.webValidation.limitYuan.toFixed(2)}（含该任务的模型与记忆）。工具 ${trialBudget.toolCalls || 0} 次，等价预留 ¥${(trialBudget.toolReservedYuan || 0).toFixed(4)}，不代表现金账单。`;
 }
 function displayTask(task, events) {
   currentTask = task;
@@ -86,7 +92,7 @@ function displayTask(task, events) {
   for (const event of events) {
     const row = node('div', undefined, 'event');
     row.append(node('small', new Date(event.time).toLocaleTimeString('zh-CN', { hour12: false })), node('p', event.message));
-    if (event.output) { const details = node('details'); details.append(node('summary', '查看工具响应（模拟）'), node('pre', JSON.stringify(event.output, null, 2))); row.append(details); }
+    if (event.output) { const details = node('details'); details.append(node('summary', `查看工具响应（${event.output.provider === 'tavily' ? '联网工具' : event.output.simulated === true ? '模拟资料' : '本地工具'}）`), node('pre', JSON.stringify(event.output, null, 2))); row.append(details); }
     activity.append(row);
   }
   if (atBottom) activity.scrollTop = activity.scrollHeight;

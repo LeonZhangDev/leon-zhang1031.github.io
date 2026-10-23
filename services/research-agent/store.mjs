@@ -5,6 +5,7 @@ import { randomUUID } from 'node:crypto';
 
 // Stable campaign identity: config changes/restarts must never reset this allowance.
 const VALIDATION_ID = 'mem0-qwen-v1';
+const WEB_VALIDATION_ID = 'tavily-v1';
 
 export class Store {
   constructor(dataDir, clock = () => Date.now()) {
@@ -41,6 +42,8 @@ export class Store {
       CREATE TABLE IF NOT EXISTS memory_operations (id TEXT PRIMARY KEY, task_id TEXT REFERENCES tasks(id),
         kind TEXT NOT NULL, created INTEGER NOT NULL, status TEXT NOT NULL);
       CREATE TABLE IF NOT EXISTS memory_model_calls (id TEXT PRIMARY KEY, operation_id TEXT NOT NULL REFERENCES memory_operations(id),
+        reserved_units INTEGER NOT NULL, state TEXT NOT NULL, body TEXT NOT NULL);
+      CREATE TABLE IF NOT EXISTS tool_calls (id TEXT PRIMARY KEY, task_id TEXT NOT NULL REFERENCES tasks(id),
         reserved_units INTEGER NOT NULL, state TEXT NOT NULL, body TEXT NOT NULL);
     `);
     this.db.prepare("UPDATE memory_operations SET status='interrupted' WHERE status='running'").run();
@@ -93,9 +96,10 @@ export class Store {
       const budget = this.budget(config);
       if (budget.dayUsedUnits + input.budgetUnits > config.dayBudgetUnits || budget.monthUsedUnits + input.budgetUnits > config.monthBudgetUnits) throw new Error('BUDGET_EXCEEDED');
       const task = { id: randomUUID(), createdAt: new Date(this.clock()).toISOString(), status: 'queued', ...input,
+        ...(config.toolsMode === 'tavily' ? { budgetUnits: Math.min(input.budgetUnits, config.webValidationBudgetUnits, 3000) } : {}),
         estimatedCostUnits: 0, actualCostYuan: config.mode === 'mock' && config.memoryMode !== 'qwen' ? 0 : null, simulated: config.mode === 'mock',
-        mode: config.mode, traceMode: config.traceMode, toolsSimulated: true, traceStatus: 'pending', report: null };
-      this.db.prepare('INSERT INTO tasks(id,created,day,month,status,reserved,body) VALUES (?,?,?,?,?,?,?)').run(task.id, this.clock(), budget.day, budget.month, 'queued', input.budgetUnits, JSON.stringify(task));
+        mode: config.mode, traceMode: config.traceMode, toolsMode: config.toolsMode || 'mock', toolsSimulated: config.toolsMode !== 'tavily', traceStatus: 'pending', report: null };
+      this.db.prepare('INSERT INTO tasks(id,created,day,month,status,reserved,body) VALUES (?,?,?,?,?,?,?)').run(task.id, this.clock(), budget.day, budget.month, 'queued', task.budgetUnits, JSON.stringify(task));
       this.db.exec('COMMIT'); return task;
     } catch (error) { this.db.exec('ROLLBACK'); throw error; }
   }
@@ -113,17 +117,24 @@ export class Store {
     const rows = taskId
       ? this.db.prepare(`SELECT reserved_units,body,state FROM model_calls WHERE task_id=?
           UNION ALL SELECT c.reserved_units,c.body,c.state FROM memory_model_calls c
-          JOIN memory_operations o ON o.id=c.operation_id WHERE o.task_id=?`).all(taskId, taskId)
-      : this.db.prepare('SELECT reserved_units,body,state FROM model_calls UNION ALL SELECT reserved_units,body,state FROM memory_model_calls').all();
+          JOIN memory_operations o ON o.id=c.operation_id WHERE o.task_id=?
+          UNION ALL SELECT reserved_units,body,state FROM tool_calls WHERE task_id=?`).all(taskId, taskId, taskId)
+      : this.db.prepare('SELECT reserved_units,body,state FROM model_calls UNION ALL SELECT reserved_units,body,state FROM memory_model_calls UNION ALL SELECT reserved_units,body,state FROM tool_calls').all();
     const usage = rows.map(row => JSON.parse(row.body));
     const validationRows = rows.filter((row, index) => usage[index].pricingSnapshot?.validationId === VALIDATION_ID);
+    const webRows = rows.filter((row, index) => usage[index].pricingSnapshot?.webValidationId === WEB_VALIDATION_ID);
+    const toolRows = rows.filter((row, index) => usage[index].pricingSnapshot?.provider === 'tavily');
     return { limitYuan: Math.min(config.trialBudgetUnits, 50_000) / 10_000,
       reservedYuan: rows.reduce((total, row) => total + row.reserved_units, 0) / 10_000,
       usageEstimateYuan: Number(usage.reduce((total, body) => total + (body.usageEstimateYuan || 0), 0).toFixed(6)),
       uncertainCalls: rows.filter(row => row.state !== 'measured').length, calls: rows.length,
+      toolCalls: toolRows.length, toolReservedYuan: toolRows.reduce((total, row) => total + row.reserved_units, 0) / 10_000,
+      toolUsageEstimateYuan: Number(usage.reduce((total, body) => total + (body.toolUsageEstimateYuan || 0), 0).toFixed(6)),
       locked: this.getSetting('model-budget-locked') === 'true',
       validation: { id: VALIDATION_ID, limitYuan: Math.min(config.validationBudgetUnits ?? 5000, 5000) / 10_000,
         reservedYuan: validationRows.reduce((total, row) => total + row.reserved_units, 0) / 10_000, calls: validationRows.length },
+      webValidation: { id: WEB_VALIDATION_ID, limitYuan: Math.min(config.webValidationBudgetUnits ?? 3000, 3000) / 10_000,
+        reservedYuan: webRows.reduce((total, row) => total + row.reserved_units, 0) / 10_000, calls: webRows.length },
       accounting: 'conservative-no-refund', vendorBillVerified: false };
   }
   createMemoryOperation(kind, taskId = null) {
@@ -135,6 +146,12 @@ export class Store {
     this.db.prepare('UPDATE memory_operations SET status=? WHERE id=?').run(status, id);
   }
   reserveModelCall(taskId, units, config, pricingSnapshot = {}, operationId = null) {
+    return this.reserveCall(taskId, units, config, pricingSnapshot, { operationId });
+  }
+  reserveToolCall(taskId, units, config, pricingSnapshot) {
+    return this.reserveCall(taskId, units, config, pricingSnapshot, { tool: true });
+  }
+  reserveCall(taskId, units, config, pricingSnapshot, { operationId = null, tool = false } = {}) {
     if (!Number.isSafeInteger(units) || units < 1) throw new Error('INVALID_RESERVATION');
     this.db.exec('BEGIN IMMEDIATE');
     try {
@@ -145,15 +162,26 @@ export class Store {
         || Math.round(budget.reservedYuan * 10_000) + units > Math.min(config.trialBudgetUnits, 50_000)
         || (task && Math.round(this.trialBudget(config, taskId).reservedYuan * 10_000) + units > task.budgetUnits)) throw new Error('MODEL_BUDGET');
       if (Math.round(budget.validation.reservedYuan * 10_000) + units > Math.min(config.validationBudgetUnits ?? 5000, 5000)) throw new Error('VALIDATION_BUDGET');
+      // Standalone memory actions while Tavily is enabled share the same first
+      // validation allowance, even without a task foreign key.
+      const web = config.toolsMode === 'tavily' || task?.toolsMode === 'tavily';
+      if (tool && (!web || config.toolsMode !== 'tavily' || config.allowWebTools !== true)) throw new Error('WEB_TOOLS_NOT_AUTHORIZED');
+      if (web && Math.round(budget.webValidation.reservedYuan * 10_000) + units > Math.min(config.webValidationBudgetUnits ?? 3000, 3000)) throw new Error('WEB_VALIDATION_BUDGET');
       const id = randomUUID();
       // No refunds, including on cancellation, errors, process death or timeout.
-      this.db.prepare(operation ? 'INSERT INTO memory_model_calls VALUES (?,?,?,?,?)' : 'INSERT INTO model_calls VALUES (?,?,?,?,?)')
-        .run(id, operationId || taskId, units, 'uncertain', JSON.stringify({ pricingSnapshot: { ...pricingSnapshot, validationId: VALIDATION_ID } }));
+      const table = tool ? 'tool_calls' : operation ? 'memory_model_calls' : 'model_calls';
+      this.db.prepare(`INSERT INTO ${table} VALUES (?,?,?,?,?)`)
+        .run(id, operationId || taskId, units, 'uncertain', JSON.stringify({ pricingSnapshot: { ...pricingSnapshot, validationId: VALIDATION_ID,
+          ...(web ? { webValidationId: WEB_VALIDATION_ID } : {}) } }));
       this.db.exec('COMMIT'); return id;
     } catch (error) { this.db.exec('ROLLBACK'); throw error; }
   }
   recordModelUsage(id, usage) {
     const table = this.db.prepare('SELECT id FROM model_calls WHERE id=?').get(id) ? 'model_calls' : 'memory_model_calls';
+    this.recordUsage(table, id, usage);
+  }
+  recordToolUsage(id, usage) { this.recordUsage('tool_calls', id, usage); }
+  recordUsage(table, id, usage) {
     const row = this.db.prepare(`SELECT body FROM ${table} WHERE id=?`).get(id);
     if (!row) throw new Error('MODEL_RESERVATION_MISSING');
     this.db.prepare(`UPDATE ${table} SET state=?,body=? WHERE id=?`).run('measured', JSON.stringify({ ...JSON.parse(row.body), ...usage }), id);

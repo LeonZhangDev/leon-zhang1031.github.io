@@ -1,6 +1,6 @@
 # Requirements
 
-- [005-private-research-agent](005-private-research-agent.md) — HTTPS deployed; Qwen task completion and LangSmith API ingest verified
+- [005-private-research-agent](005-private-research-agent.md) — deployed Tavily/Qwen, strict source/termination checks and persistent CNY0.30 validation cap
 
 - [001-site-feedback-and-discovery](001-site-feedback-and-discovery.md)
 - [002-deep-learning-course-series](002-deep-learning-course-series.md) — Completed

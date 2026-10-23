@@ -90,13 +90,19 @@ const SCHOOLS = ['chai-bu', 'zhi-run', 'mao-shan'] as const;
 </section>
 
 <script>
-  import { compareSchools } from '../../lib/jing/qimen/compare';
   import { loadSettings } from '../../lib/jing/settings';
   import { SCHOOL_LABEL, type QimenChart, type SchoolId } from '../../lib/jing/qimen/types';
   import { createStudyCase, type StudyCaseRecord } from '../../lib/jing/study-case';
 
   const form = document.getElementById('qimen-form') as HTMLFormElement | null;
   if (form) {
+    let loading: Promise<typeof import('../../lib/jing/qimen/compare')> | undefined;
+    const loadCalculation = () => loading ??= import('../../lib/jing/qimen/compare')
+      .catch((error) => { loading = undefined; throw error; });
+    const prepare = () => { void loadCalculation().catch(() => {}); };
+    let formRevision = 0;
+    form.addEventListener('pointerenter', prepare, { once: true });
+    form.addEventListener('focusin', prepare, { once: true });
     const $ = <T extends HTMLElement>(id: string) => document.getElementById(id) as T;
     const result = $('qm-result');
     const errorEl = $('qm-error');
@@ -169,8 +175,10 @@ const SCHOOLS = ['chai-bu', 'zhi-run', 'mao-shan'] as const;
           + `</button>`;
       }).join('');
 
-    form.addEventListener('submit', (event) => {
+    form.addEventListener('submit', async (event) => {
       event.preventDefault();
+      if (submitBtn.disabled) return;
+      const revision = formRevision;
       errorEl.hidden = true;
       statusEl.classList.remove('is-error');
       submitBtn.disabled = true;
@@ -190,6 +198,8 @@ const SCHOOLS = ['chai-bu', 'zhi-run', 'mao-shan'] as const;
           hour: Number(($('qm-hour') as HTMLInputElement).value),
           minute: Number(($('qm-minute') as HTMLInputElement).value),
         };
+        const { compareSchools } = await loadCalculation();
+        if (revision !== formRevision) return;
         const comparison = compareSchools(input);
 
         $('qm-context').textContent = `${comparison.inputSummary} · 节气「${comparison.solarTerm}」（交节 ${comparison.solarTermTime}）`;
@@ -263,18 +273,23 @@ const SCHOOLS = ['chai-bu', 'zhi-run', 'mao-shan'] as const;
           behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth',
         });
       } catch (error) {
+        if (revision !== formRevision) return;
         errorEl.textContent = error instanceof Error ? error.message : '输入无法解析，请检查后重试。';
         errorEl.hidden = false;
         result.hidden = true;
         statusEl.textContent = '起局未完成，请检查输入。';
         statusEl.classList.add('is-error');
       } finally {
-        submitBtn.disabled = false;
-        submitBtn.textContent = '重新排盘';
+        if (revision === formRevision) {
+          submitBtn.disabled = false;
+          submitBtn.textContent = '重新排盘';
+        }
       }
     });
 
     form.addEventListener('reset', () => {
+      formRevision++;
+      submitBtn.disabled = false;
       clearReveal();
       errorEl.hidden = true;
       result.hidden = true;

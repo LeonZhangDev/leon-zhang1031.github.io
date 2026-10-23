@@ -42,8 +42,21 @@
 </div>
 
 <script>
-  import { answerStudyQuestion, getKnowledgeEntry, type StudyAnswer } from '../../lib/jing/study-knowledge';
+  import type { StudyAnswer } from '../../lib/jing/study-knowledge';
   import { loadSettings, saveSettings } from '../../lib/jing/settings';
+  let loading: Promise<typeof import('../../lib/jing/study-knowledge')> | undefined;
+  const loadKnowledge = () => loading ??= import('../../lib/jing/study-knowledge')
+    .catch((error) => { loading = undefined; throw error; });
+  let answerRevision = 0;
+  const withKnowledge = async (answer: (knowledge: Awaited<ReturnType<typeof loadKnowledge>>) => void) => {
+    const revision = ++answerRevision;
+    try {
+      const knowledge = await loadKnowledge();
+      if (revision === answerRevision) answer(knowledge);
+    } catch {
+      if (revision === answerRevision && askAnswer) askAnswer.textContent = '资料暂未载入，请再次查典。';
+    }
+  };
 
   const askToggle = document.getElementById('jing-ask-toggle') as HTMLButtonElement | null;
   const askDrawer = document.getElementById('jing-ask-drawer') as HTMLElement | null;
@@ -119,14 +132,17 @@
     askScrim.hidden = !open;
     askToggle.setAttribute('aria-expanded', String(open));
     document.body.classList.toggle('jing-ask-open', open);
-    if (open) window.setTimeout(() => askInput?.focus(), 20);
+    if (open) {
+      void loadKnowledge().catch(() => {});
+      window.setTimeout(() => askInput?.focus(), 20);
+    }
     else askToggle.focus({ preventScroll: true });
   };
 
   const ask = (question: string) => {
     const trimmed = question.trim();
     if (!trimmed) return;
-    renderAnswer(answerStudyQuestion(trimmed, contextTerms));
+    void withKnowledge(({ answerStudyQuestion }) => renderAnswer(answerStudyQuestion(trimmed, contextTerms)));
   };
 
   askToggle?.addEventListener('click', () => setAskOpen(askDrawer ? askDrawer.hidden === true : true));
@@ -142,17 +158,20 @@
   });
   askAnswer?.addEventListener('click', (event) => {
     const button = (event.target as HTMLElement).closest<HTMLButtonElement>('[data-knowledge-id]');
-    const entry = button ? getKnowledgeEntry(button.dataset.knowledgeId ?? '') : undefined;
-    if (entry) renderAnswer(answerStudyQuestion(entry.term, [entry.id]));
+    if (button) void withKnowledge(({ getKnowledgeEntry, answerStudyQuestion }) => {
+      const entry = getKnowledgeEntry(button.dataset.knowledgeId ?? '');
+      if (entry) renderAnswer(answerStudyQuestion(entry.term, [entry.id]));
+    });
   });
   document.addEventListener('click', (event) => {
     const target = (event.target as HTMLElement).closest<HTMLElement>('[data-jing-term]');
     if (!target) return;
-    const entry = getKnowledgeEntry(target.dataset.jingTerm ?? '');
-    if (!entry) return;
     event.preventDefault();
     setAskOpen(true);
-    renderAnswer(answerStudyQuestion(entry.term, [entry.id]));
+    void withKnowledge(({ getKnowledgeEntry, answerStudyQuestion }) => {
+      const entry = getKnowledgeEntry(target.dataset.jingTerm ?? '');
+      if (entry) renderAnswer(answerStudyQuestion(entry.term, [entry.id]));
+    });
   });
   window.addEventListener('jing:study-context', ((event: CustomEvent<{ terms?: string[]; facts?: string[]; rule?: string; open?: boolean }>) => {
     contextTerms = Array.from(new Set([...contextTerms, ...(event.detail.terms ?? [])])).slice(-12);
@@ -160,7 +179,8 @@
     contextRule = event.detail.rule ?? (event.detail.facts ? '' : contextRule);
     if (event.detail.open) {
       setAskOpen(true);
-      renderAnswer(answerStudyQuestion(contextTerms.map((id) => getKnowledgeEntry(id)?.term ?? '').join(' '), contextTerms));
+      void withKnowledge(({ getKnowledgeEntry, answerStudyQuestion }) =>
+        renderAnswer(answerStudyQuestion(contextTerms.map((id) => getKnowledgeEntry(id)?.term ?? '').join(' '), contextTerms)));
     }
   }) as EventListener);
 

@@ -1,5 +1,147 @@
 # Project Progress
 
+## 2026-10-23 — Woodfish mobile cold-load release candidate
+
+- User authorized production publication after reaching mobile LCP below 2.5 s.
+  Retained current remote main `584eea9` and all fifteen newer commits; integrated
+  only website performance work from the original dirty checkout.
+- Added seven responsive lossless-after-resize prop WebPs, native srcset/sizes,
+  and a room-specific atlas preload. The six-frame atlas, style, effects, sound,
+  timing, interaction code, original PNGs and full-size fallback WebPs remain.
+  The existing offline producer follows all candidate widths: 147 public files,
+  12,869,915 bytes, version `aa9bfa2f9d7129dac133`.
+- Fifteen alternating cold pairs per device: mobile median LCP 3,324→2,180 ms,
+  P75 3,356→2,184 ms, maximum after 2,228 ms; all fifteen after visits pass.
+  Desktop median 3,292→1,940 ms. Mobile load 3,276→2,127 ms; transfer drops
+  37.5%. CLS/script errors remain zero, and the final LCP is still the woodfish.
+- Passed 211-page build, Astro check (zero errors/warnings, 26 existing hints),
+  212 unit tests, 29 Node checks and 123 existing browser cases. Twenty-four
+  frame/theme/device visual pairs preserve content, geometry and computed styles;
+  differences stay inside resized prop regions. Desktop/mobile first-use offline
+  room, private encrypted saving, audio-range and shortcut checks pass.
+- The separate five-visit live before cohort has median LCP 7,392 ms on the old
+  production PNG version. Controlled local results do not imply field P75 or all
+  physical phones. Actual production after verification follows publication.
+  [Details](features/jingxin-hall.md#woodfish-mobile-cold-load-release--2026-10-23).
+  Evidence is in the isolated release checkout's `.tmp/muyu-mobile-release/`.
+
+## 2026-10-23 — Jing hall mobile cold-load styles, local only
+
+- Split Jing layout styles by route using the installed processed CSS URL
+  pipeline: shared hall/shell, room scenes and continuity tools. The hall no
+  longer blocks on unrelated room rules. Preserved fonts, textures, images,
+  motion and functions, with no new dependency or client loader.
+- Visual checks caught a global eyebrow override hidden inside room styles.
+  Restored its shared ownership without changing its declarations; the first
+  split/build/results are retained as rejected evidence. All other CSS bytes
+  and ordering, eleven pages' non-stylesheet HTML, and 473 runtime assets remain
+  unchanged. Hall decoded styles fall 89,116→32,307 B (-63.7%).
+- Final 15 alternating cold pairs per device (60 visits): mobile emulation LCP
+  680→624 ms (-8.2%), desktop 656→616 ms (-6.1%); both improve in 14/15 pairs.
+  Mobile/desktop FCP is 564→508 / 552→504 ms. Initial transfer falls 7.5%;
+  CLS and script errors remain zero. These are within-run local comparisons,
+  not comparisons against earlier rounds or production-phone acceptance.
+- Final 186-page build, Astro check (0 errors/warnings, 26 unrelated hints),
+  210 unit tests, 29 Node checks and 98 existing Jing E2E cases pass. Thirty-two visual
+  pairs pass geometry, content, computed-style and settled-pixel checks; two
+  early captures are retained alongside settled recaptures. Desktop/mobile
+  restored-scroll checks pass. Both fresh worker profiles cache 140 files and
+  support first-use room interactions offline, including encrypted saving,
+  audio ranges and hall shortcuts; no query URLs/private plaintext are cached.
+- The complete room stylesheet path and first hall→room transition are measured
+  separately: small cold-room samples regress by 8–56 ms, and first hall→Qimen
+  navigation without an installed worker adds 11,327 B CSS and 56 ms LCP. This
+  tradeoff is recorded explicitly, not a claim of site-wide acceleration.
+  Worker version: `60c9b0d783216f9238ef`.
+- [Full comparison, tradeoffs and validation](features/jingxin-hall.md#hall-mobile-cold-load-styles--2026-10-22-local-only).
+  Evidence: `.tmp/jing-hall-mobile/`; older rounds and failed probes preserved.
+  No deployment, push, commit, real model call or third-party write by this batch.
+
+
+## 2026-10-22 — Jing hall cold-load diagnosis, local only
+
+- Repaired parser-time back-to-top initialization in `JingLayout.astro`: read
+  initial/restored scroll on `pageshow` instead. Tracing identifies 76.551 ms of
+  forced layout in that call; layout CPU work remains, but the measured script
+  long task is avoided. Retained passive scrolling, click behavior and all visuals.
+- Ten alternating cold pairs per device (40 visits): desktop LCP 724→718 ms;
+  mobile emulation 726→736 ms. **No stable LCP improvement**. Long Tasks API
+  blocking medians fall 44/47.5→0 ms; FCP is 580→580 / 590→598 ms. Prior cache
+  improvements apply to installed-worker revisits; hall assets remained unchanged.
+  Final LCP belongs to the portal paper texture and retains the entry animation.
+- Rejected full-CSS inlining after it delayed desktop FCP. No styles, motion,
+  images, browser bundles, worker algorithm, dependencies or production settings
+  changed. Compared 495 files: only eleven HTML files and the generated cache
+  version differ. New cache version: `d004a7a7da4210b43473`, still 138 URLs.
+- Passed 186-page build, Astro check (0 errors/warnings, 26 unrelated hints),
+  210 unit tests, 29 Node checks, all 98 existing Jing E2E cases (83+15 corrected
+  local-origin reruns), restored-scroll checks, desktop/mobile offline interaction
+  checks over ten rooms and 20 visual pairs (zero pixels above the RGB threshold).
+- [Full diagnosis, paired medians and verification boundaries](features/jingxin-hall.md#hall-cold-load-diagnosis--2026-10-22-local-only).
+  Evidence: `.tmp/jing-hall-cold/`; previous artifacts and initial failures kept.
+  No deployment, push, commit, real model call or third-party write by this batch.
+
+
+## 2026-10-22 — Woodfish props and Jing offline cache, local only
+
+- Preserved visual style, original PNGs and dimensions, transparency, motion,
+  sound, all three lot collections, chart rules and encrypted notebook format.
+  Added three lossless prop WebPs: 1,349,916 -> 940,066 B (-30.36%); all 52
+  current runtime derivatives pass visible-pixel/alpha/dimension checks.
+- Forty alternating paired cold visits: desktop woodfish LCP 3996 -> 3380 ms
+  (-15.4%); mobile emulation 3988 -> 3420 ms (-14.2%). Initial woodfish transfer
+  2,373,634 -> 1,963,810 B (-17.3%). Hall cold LCP did not improve (+32/+16 ms);
+  no general acceleration claim. All samples have CLS=0 and no page errors.
+- Replaced HTML-only/network-first offline caching with a build-derived public
+  allowlist: 138 files / 12,478,056 uncompressed B, exact content hashes and
+  versioned caches. Downloads complete and verify before installation succeeds;
+  failed updates retain the active version. Existing tabs retain old dependencies
+  until they close. Cached audio supports ranges. No personal inputs/notes are
+  cached; known static timer/topic queries read public HTML without storing URLs.
+- Real Chrome desktop/mobile offline runs clear normal HTTP caches first and
+  exercise ten previously unvisited rooms, first chart calculations, all three
+  lot draws, Ask Classics, encrypted case saving, audio ranges and ten query
+  shortcuts. Worker update tests preserve old-tab lazy calculation, unrelated
+  storage and the active cache after a deliberate revision mismatch.
+- Twenty installed-cache revisits with an injected 800 ms HTML delay: hall LCP
+  916 -> 152 ms desktop and 964 -> 156 ms mobile emulation; TTFB becomes 3.8/3.3 ms.
+  This verifies cache-first navigation under a controlled delay, not live CDN speed.
+- Passed final 186-page build, Astro check (0 errors/warnings, 26 unrelated
+  hints), 210 Vitest tests, 29 Node checks and all 98 Jing E2E scenarios (54+44).
+  Twenty visual pairs retain layout/content; 19 pairs are pixel-identical at the
+  recorded threshold and one has 0.15% localized citation rasterization differences.
+  Woodfish images/screenshots retain their visible pixels. No frame-rate claim.
+- One complete cache stores 11.90 MiB before compression; installation/update
+  incurs a background download and updates may temporarily retain two versions.
+  The exact local worker revalidation header is configured but not deployed.
+- [Full cold/cached measurements, offline/update checks and boundaries](features/jingxin-hall.md#woodfish-assets-and-offline-cache--2026-10-22-local-only).
+  Evidence: `.tmp/jing-offline/`; previous `.tmp/jing-performance/` preserved.
+  No commit, push, deployment, real model call or third-party write by this batch.
+
+
+## 2026-10-22 — First website performance batch, local only
+
+- Removed the fixed navigation wait while retaining the existing fade and
+  restoring visibility on browser back/forward. Kept particles, cards, themes,
+  QR controls, article copy/zoom and mobile navigation.
+- Moved shared interactions into Astro-built scripts, made article title/body
+  immediately visible, and deferred Artalk JS/CSS/API until near the comments.
+  Reading progress uses transform; pointer spotlight updates once per frame.
+- Final local five-pair comparison: navigation initiation 177.9ms to 7.2ms;
+  article cold first-window transfer 304.5KiB to 248.9KiB (-18.3%); initial
+  inline/external script source 200.5KiB to 11.5KiB (-94.3%).
+- LCP is mixed: desktop article cold 1872ms to 2076ms; mobile emulation 1848ms
+  to 1760ms. Do not claim universal first-paint acceleration or production gains.
+- Passed 210 unit tests, 20 Node checks, 126 Chrome E2E tests, 29 focused browser
+  checks, a stylesheet-failure/retry check, 186-page build and Astro check
+  (0 errors/warnings, 10 existing hints). Eight visual comparisons match after
+  excluding random particles; sampled layout/content also match.
+- No push, deployment, real comment writes, dependency or backend changes by
+  this batch. Preserved concurrent private research-agent work.
+- See [scope, full comparison and local evidence](features/site-performance-first-batch.md).
+
+
+
 ## 2026-10-22 — Agent 新版上线与真实闭环验收
 
 - 用户追加授权后，部署后端 `mem0-a8784daf9571`，沿用现有随机路径/密码和服务器，不变更公开博客及 Caddy/Artalk 配置。Mem0 真实 Qwen/embedding、上下文管理、3 个 Skills、安全 GFM 已上线；源码 42 文件哈希核对，Windows 106/106、Ubuntu 104/104 测试通过。

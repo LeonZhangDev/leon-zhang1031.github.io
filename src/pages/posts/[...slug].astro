@@ -1,6 +1,9 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import 'katex/dist/katex.min.css';
+import katexMainFont from 'katex/dist/fonts/KaTeX_Main-Regular.woff2?url';
+import katexMathFont from 'katex/dist/fonts/KaTeX_Math-Italic.woff2?url';
+import katexAmsFont from 'katex/dist/fonts/KaTeX_AMS-Regular.woff2?url';
 import Comments from '../../components/Comments.astro';
 import ArticleTools from '../../components/ArticleTools.astro';
 import AgentLearningSidebar from '../../components/AgentLearningSidebar.astro';
@@ -19,6 +22,13 @@ export async function getStaticPaths() {
 
 const { post } = Astro.props;
 const { Content, headings } = await render(post);
+// Inspect generated math markup, including old posts whose math flag is false.
+const renderedHtml = post.rendered?.html || '';
+const mathFonts = renderedHtml.includes('class="katex"') ? [
+  katexMainFont,
+  ...(renderedHtml.includes('mathnormal') ? [katexMathFont] : []),
+  ...(/class="[^"]*\b(?:amsrm|mathbb|textbb)\b/.test(renderedHtml) ? [katexAmsFont] : []),
+] : [];
 const toc = headings.filter(heading => heading.depth <= 3);
 
 const allPosts = (await getCollection('posts', ({ data }) => !data.draft))
@@ -45,6 +55,9 @@ const verificationLabels = { 'not-run':'示例未复跑', 'example-tested':'指�
 ---
 
 <BaseLayout title={post.data.title} description={post.data.description}>
+  <Fragment slot="head">
+    {mathFonts.map(href => <link rel="preload" href={href} as="font" type="font/woff2" crossorigin="anonymous" />)}
+  </Fragment>
   <div class:list={['post-layout', { 'course-layout': isAgentCourse }]}>
   {isAgentCourse && <AgentLearningSidebar currentId={post.id} chapters={agentCourse.slice(1)} />}
   <article class:list={['post-detail container-narrow', { 'agent-learning': isAgentCourse }]}>

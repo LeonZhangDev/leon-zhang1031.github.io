@@ -13,6 +13,12 @@ test('candidate edge headers preserve mobile navigation, comments and game scrip
   page.on('console', message => {
     if (/Content Security Policy|MIME type.*executable/.test(message.text())) violations.push(message.text());
   });
+  await page.route('https://comments.leonzk.cn/api/v2/**', route => route.fulfill({
+    contentType: 'application/json',
+    body: JSON.stringify(new URL(route.request().url()).pathname.endsWith('/conf')
+      ? { frontend_conf: {}, version: { app: 'artalk', version: '2.10.0', commit_hash: '' } }
+      : { comments: [], roots_count: 0, count: 0, page: { key: '/posts/ai-learning-roadmap/' } }),
+  }));
   // Astro preview does not apply vendor headers. Explicitly inject the actual
   // candidate configuration; production header acceptance is a separate check.
   await page.route('http://localhost:4321/**', async route => {
@@ -22,7 +28,7 @@ test('candidate edge headers preserve mobile navigation, comments and game scrip
   await page.setViewportSize({ width: 390, height: 844 });
   const response = await page.goto('/posts/ai-learning-roadmap/');
   expect(response?.headers()['content-security-policy']).toBe(headers['content-security-policy']);
-  await page.locator('.artalk').scrollIntoViewIfNeeded();
+  await page.locator('[data-comments]').scrollIntoViewIfNeeded();
   await expect(page.locator('.atk-textarea')).toBeVisible();
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
   await page.goto('/games/');

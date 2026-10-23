@@ -73,7 +73,7 @@ test.describe('Jingxin woodfish room', () => {
     const sprite = page.locator('.jing-muyu-strike-sprite');
     await expect(sprite).toBeVisible();
     await expect(sprite).toHaveAttribute('data-strike-frame', '0');
-    await expect(sprite).toHaveCSS('background-image', /strike-sequence\.png/);
+    await expect(sprite).toHaveCSS('background-image', /strike-sequence\.webp/);
     await page.locator('#muyu-fish').click();
     await expect(sprite).toHaveAttribute('data-strike-frame', /[1-5]/);
     await expect(page.locator('#muyu-mode-status')).toContainText('第 1 声');
@@ -88,7 +88,7 @@ test.describe('Jingxin woodfish room', () => {
       (node) => getComputedStyle(node).backgroundImage,
     );
     expect(background).not.toContain('woodfish-table');
-    await expect(page.locator('.jing-muyu-prop--incense')).toHaveAttribute('src', /incense-burner\.png$/);
+    await expect(page.locator('.jing-muyu-prop--incense')).toHaveAttribute('src', /incense-burner\.webp$/);
   });
 
   test('centers the desktop woodfish stage independently of the side panels', async ({ page }) => {

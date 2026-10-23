@@ -1,6 +1,4 @@
 ---
-import 'artalk/Artalk.css';
-
 interface Props {
   prompt: string;
 }
@@ -11,15 +9,34 @@ const { prompt } = Astro.props;
 <section id="comments" class="comments-section" data-comments data-prompt={prompt}>
   <h2 class="comments-title">💬 评论</h2>
   <p class="comments-prompt">{prompt}</p>
-  <div class="comments-status" role="status" aria-live="polite">正在连接评论服务，首次访问可能需要几秒…</div>
+  <div class="comments-status" role="status" aria-live="polite">滚动到此处后加载评论…</div>
   <button class="comments-retry" type="button" hidden>重新检查</button>
   <div class="artalk-wrap" hidden></div>
 </section>
 
 <script>
-  import Artalk from 'artalk';
+  import type Artalk from 'artalk';
+  import artalkStyles from 'artalk/Artalk.css?url';
 
   const serverURL = 'https://comments.leonzk.cn';
+  let stylesheetReady: Promise<void> | undefined;
+  const loadStylesheet = () => {
+    if (!stylesheetReady) {
+      stylesheetReady = new Promise<void>((resolve, reject) => {
+        const link = document.createElement('link');
+        link.rel = 'stylesheet';
+        link.href = artalkStyles;
+        link.onload = () => resolve();
+        link.onerror = () => {
+          link.remove();
+          stylesheetReady = undefined;
+          reject(new Error('Comment stylesheet unavailable'));
+        };
+        document.head.appendChild(link);
+      });
+    }
+    return stylesheetReady;
+  };
 
   document.querySelectorAll<HTMLElement>('[data-comments]').forEach((section) => {
     const status = section.querySelector<HTMLElement>('.comments-status');
@@ -27,6 +44,7 @@ const { prompt } = Astro.props;
     const container = section.querySelector<HTMLElement>('.artalk-wrap');
     const prompt = section.dataset.prompt || '欢迎留下你的问题或建议。';
     let artalk: Artalk | undefined;
+    let loading = false;
 
     const showUnavailable = (message: string) => {
       if (status) {
@@ -38,6 +56,8 @@ const { prompt } = Astro.props;
     };
 
     const checkAndInit = async () => {
+      if (loading) return;
+      loading = true;
       if (retry) retry.hidden = true;
       if (status) status.textContent = '正在连接评论服务，首次访问可能需要几秒…';
 
@@ -52,10 +72,13 @@ const { prompt } = Astro.props;
           throw new Error('Invalid comment response');
         }
 
-        if (status) status.hidden = true;
-        if (container) container.hidden = false;
         if (!artalk && container) {
-          artalk = Artalk.init({
+          const [{ default: ArtalkClient }] = await Promise.all([
+            import('artalk'),
+            loadStylesheet(),
+          ]);
+          container.hidden = false;
+          artalk = ArtalkClient.init({
             el: container,
             server: serverURL,
             site: '张坤个人主页',
@@ -71,6 +94,7 @@ const { prompt } = Astro.props;
             placeholder: `${prompt}\n评论将先进入审核，请勿发布广告或敏感信息。`,
           });
         }
+        if (status) status.hidden = true;
       } catch (error) {
         const detail = error instanceof DOMException && error.name === 'AbortError'
           ? '连接超时'
@@ -78,6 +102,7 @@ const { prompt } = Astro.props;
         showUnavailable(`评论维护中（${detail}），目前无法提交。你可以稍后重试。`);
       } finally {
         window.clearTimeout(timer);
+        loading = false;
       }
     };
 
@@ -85,6 +110,17 @@ const { prompt } = Astro.props;
     window.addEventListener('themechange', () => {
       artalk?.setDarkMode(document.documentElement.classList.contains('dark'));
     });
-    void checkAndInit();
+    // Keep the initial article light, including Artalk's stylesheet and API work.
+    if ('IntersectionObserver' in window) {
+      const observer = new IntersectionObserver(entries => {
+        if (entries.some(entry => entry.isIntersecting)) {
+          observer.disconnect();
+          void checkAndInit();
+        }
+      }, { rootMargin: '400px' });
+      observer.observe(section);
+    } else {
+      void checkAndInit();
+    }
   });
 </script>

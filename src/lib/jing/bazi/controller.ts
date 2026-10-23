@@ -1,24 +1,23 @@
-import {
-  calculateBazi,
-  calculateBaziFromPillars,
-  type CalculationEnvelope,
-  type BaziOutput,
-} from './calculate';
+import type { CalculationEnvelope, BaziOutput } from './calculate';
 import { interpretBazi } from './interpret';
-import {
-  resolveLunarInput,
-  validateFourPillars,
-  type BaziGender,
-  type BaziInputMode,
-} from './input';
-import { calculateLuckTimeline, type LuckTimeline } from './luck';
+import type { BaziGender, BaziInputMode } from './input';
+import type { LuckTimeline } from './luck';
 import { buildRelationNodes, detectGanZhiRelations } from './relations';
-import { normalizeInput } from '../calendar/engine';
 import type { CalendarInput } from '../calendar/types';
 import { createStudyCase, type StudyCaseRecord } from '../study-case';
 import { receiveStudyCase } from '../study-handoff';
 const form = document.getElementById('bazi-form') as HTMLFormElement | null;
 if (form) {
+  let runtime: typeof import('./runtime') | undefined;
+  let loading: Promise<typeof import('./runtime')> | undefined;
+  const loadRuntime = () => loading ??= import('./runtime').then((module) => {
+    runtime = module;
+    return module;
+  }).catch((error) => { loading = undefined; throw error; });
+  const prepare = () => { void loadRuntime().catch(() => {}); };
+  form.addEventListener('pointerenter', prepare, { once: true });
+  form.addEventListener('focusin', prepare, { once: true });
+  let formRevision = 0;
   const $ = <T extends HTMLElement>(id: string) => document.getElementById(id) as T;
   const inputPanels: Record<BaziInputMode, HTMLElement> = {
     solar: $('bazi-solar-fields'),
@@ -112,7 +111,9 @@ if (form) {
           'bazi-lunar-minute',
         ]
       : ['bazi-year', 'bazi-month', 'bazi-day', 'bazi-hour', 'bazi-minute'];
-  const updateTimePreview = () => {
+  let previewRevision = 0;
+  const updateTimePreview = async () => {
+    const revision = ++previewRevision;
     if (checkedValue('timeMode') === 'legal') {
       text('bazi-time-preview', '法定时不作经度校正。');
       return;
@@ -122,6 +123,8 @@ if (form) {
       return;
     }
     try {
+      const { normalizeInput } = await loadRuntime();
+      if (revision !== previewRevision) return;
       const normalized = normalizeInput({
         year: numberValue('bazi-year'),
         month: numberValue('bazi-month'),
@@ -138,6 +141,7 @@ if (form) {
         `校正 ${normalized.trueSolarShiftMinutes >= 0 ? '+' : ''}${normalized.trueSolarShiftMinutes.toFixed(1)} 分钟 → ${t.year}-${pad(t.month)}-${pad(t.day)} ${pad(t.hour)}:${pad(t.minute)}`,
       );
     } catch {
+      if (revision !== previewRevision) return;
       text('bazi-time-preview', '校正预览需要有效日期与 70°E—140°E 经度。');
     }
   };
@@ -192,7 +196,7 @@ if (form) {
       ...(timeMode === 'true-solar' ? { longitude: Number(longitude.value) } : {}),
     };
     if (inputMode === 'lunar') {
-      const resolved = resolveLunarInput({
+      const resolved = runtime!.resolveLunarInput({
         year: numberValue('bazi-lunar-year'),
         month: numberValue('bazi-lunar-month'),
         day: numberValue('bazi-lunar-day'),
@@ -398,13 +402,17 @@ if (form) {
     result.hidden = false;
     syncView(viewMode);
   };
-  form.addEventListener('submit', (event) => {
+  form.addEventListener('submit', async (event) => {
     event.preventDefault();
+    if (submitBtn.disabled) return;
+    const revision = formRevision;
     clearError();
     submitBtn.disabled = true;
     submitBtn.textContent = '排盘中…';
     statusEl.textContent = '正在按所选规则推演…';
     try {
+      const { calculateBazi, calculateBaziFromPillars, validateFourPillars, calculateLuckTimeline } = await loadRuntime();
+      if (revision !== formRevision) return;
       let env: CalculationEnvelope<BaziOutput>,
         summary: string,
         resumeForm: Record<string, string | number | boolean>;
@@ -492,10 +500,12 @@ if (form) {
         behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth',
       });
     } catch (error) {
-      showError(error instanceof Error ? error.message : '输入无法解析，请检查后重试。');
+      if (revision === formRevision) showError(error instanceof Error ? error.message : '输入无法解析，请检查后重试。');
     } finally {
-      submitBtn.disabled = false;
-      submitBtn.textContent = '重新排盘';
+      if (revision === formRevision) {
+        submitBtn.disabled = false;
+        submitBtn.textContent = '重新排盘';
+      }
     }
   });
   document
@@ -663,7 +673,10 @@ if (form) {
   $('bazi-save-case').addEventListener('click', () => {
     if (lastCase) window.dispatchEvent(new CustomEvent('jing:save-case', { detail: lastCase }));
   });
-  form.addEventListener('reset', () =>
+  form.addEventListener('reset', () => {
+    formRevision++;
+    previewRevision++;
+    submitBtn.disabled = false;
     window.setTimeout(() => {
       syncMode('solar');
       syncView('basic');
@@ -681,8 +694,8 @@ if (form) {
       submitBtn.textContent = '排盘';
       statusEl.textContent = '选择输入方式后排盘';
       updateTimePreview();
-    }),
-  );
+    });
+  });
   $('bazi-edit').addEventListener('click', () => {
     form.scrollIntoView({
       block: 'start',

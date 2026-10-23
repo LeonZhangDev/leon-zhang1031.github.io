@@ -20,9 +20,8 @@ const immutable = new Map([
 ]);
 
 test('long caching is limited to eight checked versioned engine resources', () => {
-  // Private dynamic routes explicitly disable caching; all cacheable overrides
-  // must still be the eight exact versioned game assets below.
-  const rules = config.headers.filter(rule => rule.headers.some(header => header.key === 'Cache-Control' && header.value !== 'private, no-store'));
+  const rules = config.headers.filter(rule => rule.headers.some(header => header.key === 'Cache-Control'
+    && /\b(?:s-maxage|max-age)\s*=\s*[1-9]\d*|\bimmutable\b/i.test(header.value)));
   assert.deepEqual(rules.map(rule => rule.source).sort(), [...immutable.keys()].sort());
   for (const rule of rules) {
     assert.equal(rule.source.includes('*'), false);

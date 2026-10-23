@@ -2,7 +2,8 @@ import { expect, test } from '@playwright/test';
 
 test.describe('Jingxin hidden shell', () => {
   test('public footer exposes exactly one subtle 静 seal linking to /jing/', async ({ page }) => {
-    await page.goto('/');
+    // This DOM contract must not wait for the public page's external analytics.
+    await page.goto('/', { waitUntil: 'domcontentloaded' });
     const seal = page.locator('.site-footer a.jing-seal');
     await expect(seal).toHaveCount(1);
     await expect(seal).toHaveText('静');

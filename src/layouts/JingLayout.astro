@@ -1,5 +1,7 @@
 ---
-import '../styles/jing.css';
+import jingStyles from '../styles/jing.css?url';
+import roomStyles from '../styles/jing-room-scenes.css?url';
+import continuityStyles from '../styles/jing-continuity.css?url';
 import JingExperienceTools from '../components/jing/JingExperienceTools.astro';
 import StudyCaseSaver from '../components/jing/StudyCaseSaver.astro';
 
@@ -61,12 +63,16 @@ const groups = [
   <link rel="manifest" href="/jing/jingxin-hall.webmanifest" />
   <meta name="theme-color" content="#17110c" />
   {isHall && <link rel="preload" as="image" href="/jing/scene/hall-courtyard.webp" />}
+  {routeKey === 'muyu' && <link rel="preload" as="image" href="/jing/generated/muyu/strike-sequence.webp" fetchpriority="high" />}
   <title>{title} · 静心堂</title>
   <script is:inline>
     const t = localStorage.getItem('theme') || 'dark';
     document.documentElement.classList.toggle('light', t === 'light');
     document.documentElement.classList.toggle('dark', t !== 'light');
   </script>
+  <link rel="stylesheet" href={jingStyles} />
+  {!isHall && <link rel="stylesheet" href={roomStyles} />}
+  <link rel="stylesheet" href={continuityStyles} />
 </head>
 <body class:list={['jing-body', `jing-route-${routeKey}`, isHall && 'jing-is-hall']}>
   <div class="jing-shell jing-app-shell">
@@ -168,7 +174,8 @@ const groups = [
         var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
         window.scrollTo({ top: 0, behavior: reduced ? 'auto' : 'smooth' });
       });
-      updateTop();
+      // Read restored scroll position after layout, rather than forcing it during parsing.
+      window.addEventListener('pageshow', updateTop);
 
       var zenTimer = null;
       function wake() {
@@ -192,7 +199,7 @@ const groups = [
             }).catch(function () {});
             return;
           }
-          navigator.serviceWorker.register('/jing/service-worker.js', { scope: '/jing/' }).catch(function () {});
+          navigator.serviceWorker.register('/jing/service-worker.js', { scope: '/jing/', updateViaCache: 'none' }).catch(function () {});
         });
       }
 

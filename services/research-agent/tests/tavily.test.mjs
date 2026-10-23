@@ -45,7 +45,8 @@ test('web authorization is independent, key-only configuration stays offline and
   assert.throws(() => loadConfig(env, { allowWebTools: true }), /allow-model-calls/);
   for (const change of [{ TAVILY_API_KEY: '' }, { TAVILY_API_KEY: 'bad key' }, { TAVILY_PRICING_CONFIRMED: 'false' },
     { TAVILY_FREE_TIER_CONFIRMED: 'false' }, { AGENT_MODE: 'mock' }, { AGENT_TOOLS_MODE: 'advanced' }]) assert.throws(() => loadConfig({ ...env, ...change }, approvals));
-  for (const cap of ['0', '-1', 'NaN', '0.3001']) assert.throws(() => loadConfig({ AGENT_WEB_VALIDATION_BUDGET_YUAN: cap }), /0.3/);
+  for (const cap of ['0', '-1', 'NaN', '5.0001']) assert.throws(() => loadConfig({ AGENT_WEB_VALIDATION_BUDGET_YUAN: cap }), /budget/);
+  assert.throws(() => loadConfig({ AGENT_TRIAL_BUDGET_YUAN: '1', AGENT_WEB_VALIDATION_BUDGET_YUAN: '1.01' }), /budget/);
   assert.equal(safe.webValidationBudgetUnits, 3000);
 });
 
@@ -179,10 +180,34 @@ test('the persistent 0.3 allowance includes chat, task memory and tool reservati
   f.task.status = 'completed'; f.store.saveTask(f.task);
   f.store.close(); f.store = new Store(f.config.dataDir);
   const next = f.store.createTask(input, f.config);
-  assert.throws(() => f.store.reserveModelCall(next.id, 61, { ...f.config, webValidationBudgetUnits: 50_000 }), /WEB_VALIDATION_BUDGET/);
+  assert.throws(() => f.store.reserveModelCall(next.id, 61, f.config), /WEB_VALIDATION_BUDGET/);
   assert.deepEqual(exportLedger(f.store.db).records.model_calls, originalRows.model_calls);
   assert.equal(f.store.trialBudget(f.config).reservedYuan, 0.294);
   assert.equal(f.store.trialBudget(f.config).validation.reservedYuan, 0.294);
+});
+
+test('authorized phase increases retain history, task caps and ledger import enforcement', t => {
+  const f = fixture(t), target = new Store(mkdtempSync(join(tmpdir(), 'tavily-raised-')));
+  t.after(() => target.close());
+  const first = f.store.reserveModelCall(f.task.id, 2900, f.config);
+  f.task.status = 'completed'; f.store.saveTask(f.task);
+  const raised = { ...f.config, ...loadConfig({ ...envFor(), AGENT_VALIDATION_BUDGET_YUAN: '1.5', AGENT_WEB_VALIDATION_BUDGET_YUAN: '1.2' }, approvals) };
+  const next = f.store.createTask({ ...input, budgetUnits: 12_000 }, raised);
+  assert.equal(next.budgetUnits, 3000);
+  assert.throws(() => f.store.reserveModelCall(next.id, 640, f.config), /WEB_VALIDATION_BUDGET/);
+  f.store.reserveToolCall(next.id, 640, raised, { provider: 'tavily' });
+  assert.equal(f.store.trialBudget(raised).webValidation.reservedYuan, 0.354);
+  assert.equal(f.store.trialBudget(raised).webValidation.limitYuan, 1.2);
+  assert.equal(f.store.trialBudget(raised).validation.limitYuan, 1.5);
+  assert.equal(f.store.db.prepare('SELECT reserved_units FROM model_calls WHERE id=?').get(first).reserved_units, 2900);
+  next.status = 'completed'; f.store.saveTask(next);
+  const bundle = exportLedger(f.store.db);
+  assert.throws(() => importLedger(target, bundle, f.config), /LEDGER_BUDGET/);
+  assert.equal(importLedger(target, bundle, raised).reservedYuan, 0.354);
+  assert.equal(importLedger(target, bundle, raised).calls, 2);
+  const operation = f.store.createMemoryOperation('budget-bound');
+  assert.throws(() => f.store.reserveModelCall(null, 1, { ...raised, trialBudgetUnits: 3540 }, {}, operation), /MODEL_BUDGET/);
+  f.store.finishMemoryOperation(operation, 'interrupted');
 });
 
 test('standalone memory operations while Tavily is enabled also consume the same 0.3 allowance', t => {

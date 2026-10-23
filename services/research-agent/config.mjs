@@ -25,7 +25,6 @@ export function loadConfig(env = process.env, approval = {}) {
   if (!['mock', 'tavily'].includes(toolsMode) || (toolsMode === 'tavily' && approval.allowWebTools !== true)) throw new Error('WEB_TOOLS_NOT_AUTHORIZED: Tavily requires --allow-web-tools.');
   if (toolsMode === 'tavily' && mode !== 'qwen') throw new Error('Tavily research requires the independently authorized Qwen decision loop.');
   const webValidationBudgetUnits = Math.round(Number(env.AGENT_WEB_VALIDATION_BUDGET_YUAN || '0.3') * 10_000);
-  if (!Number.isSafeInteger(webValidationBudgetUnits) || webValidationBudgetUnits < 1 || webValidationBudgetUnits > 3000) throw new Error('Web validation budget must be greater than zero and no more than 0.3 yuan.');
   const tavily = {
     apiKey: env.TAVILY_API_KEY || '', baseUrl: 'https://api.tavily.com',
     creditUnits: 640, usdPerCredit: 0.008, budgetYuanPerUsd: 8,
@@ -39,7 +38,8 @@ export function loadConfig(env = process.env, approval = {}) {
   const trialBudgetUnits = Math.round(Number(env.AGENT_TRIAL_BUDGET_YUAN || 5) * 10_000);
   if (!Number.isSafeInteger(trialBudgetUnits) || trialBudgetUnits < 1 || trialBudgetUnits > 50_000) throw new Error('First-validation budget must be greater than zero and no more than 5 yuan.');
   const validationBudgetUnits = Math.round(Number(env.AGENT_VALIDATION_BUDGET_YUAN || '0.5') * 10_000);
-  if (!Number.isSafeInteger(validationBudgetUnits) || validationBudgetUnits < 1 || validationBudgetUnits > 5000) throw new Error('Additional validation budget must be greater than zero and no more than 0.5 yuan.');
+  if (!Number.isSafeInteger(validationBudgetUnits) || validationBudgetUnits < 1 || validationBudgetUnits > trialBudgetUnits) throw new Error('Validation budget must be greater than zero and no more than the cumulative trial budget (5 yuan maximum).');
+  if (!Number.isSafeInteger(webValidationBudgetUnits) || webValidationBudgetUnits < 1 || webValidationBudgetUnits > trialBudgetUnits) throw new Error('Web validation budget must be greater than zero and no more than the cumulative trial budget (5 yuan maximum).');
   const model = env.QWEN_MODEL || 'qwen3.8-flash';
   const pricing = Object.hasOwn(QWEN_PRICING, model) ? QWEN_PRICING[model] : null;
   const qwen = {

@@ -45,7 +45,9 @@ test('memory keys/config alone cannot authorize calls; independent flags and exa
     { MEMORY_RECALL_THRESHOLD: 'NaN' }, { MEMORY_RECALL_THRESHOLD: '1.1' }]) {
     assert.throws(() => loadConfig({ ...envFor(), ...change }, { allowMemoryCalls: true }));
   }
-  for (const value of ['0', '0.5001', '5', 'NaN', '-1']) assert.throws(() => loadConfig({ AGENT_VALIDATION_BUDGET_YUAN: value }));
+  for (const value of ['0', '5.0001', 'NaN', '-1']) assert.throws(() => loadConfig({ AGENT_VALIDATION_BUDGET_YUAN: value }));
+  assert.equal(loadConfig({ AGENT_VALIDATION_BUDGET_YUAN: '1.5' }).validationBudgetUnits, 15_000);
+  assert.throws(() => loadConfig({ AGENT_TRIAL_BUDGET_YUAN: '1', AGENT_VALIDATION_BUDGET_YUAN: '1.01' }));
   const config = loadConfig({ ...envFor(), AGENT_MEMORY_MODE: 'offline' });
   assert.equal(config.allowMemoryCalls, false); assert.equal(config.validationBudgetUnits, 5000);
   assert.equal(config.memory.llm.maxOutputTokens, 512); assert.equal(config.memory.embedding.dimensions, 1024);

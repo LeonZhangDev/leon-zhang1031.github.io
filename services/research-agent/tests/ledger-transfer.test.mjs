@@ -6,8 +6,15 @@ import { join } from 'node:path';
 import { randomUUID } from 'node:crypto';
 import { Store } from '../store.mjs';
 import { loadConfig } from '../config.mjs';
-import { exportLedger, planLedgerImport, importLedger } from '../ledger-transfer.mjs';
+import { exportLedger, planLedgerImport, importLedger, ledgerConfig } from '../ledger-transfer.mjs';
 const config = loadConfig({});
+test('offline ledger maintenance reads explicit phase caps without activating transports', () => {
+  const maintenance = ledgerConfig({ AGENT_MODE: 'qwen', AGENT_MEMORY_MODE: 'qwen', AGENT_TRACE_MODE: 'cloud', AGENT_TOOLS_MODE: 'tavily',
+    AGENT_WEB_VALIDATION_BUDGET_YUAN: '1.2', AGENT_VALIDATION_BUDGET_YUAN: '1.5', AGENT_TRIAL_BUDGET_YUAN: '5' });
+  assert.equal(maintenance.webValidationBudgetUnits, 12_000); assert.equal(maintenance.validationBudgetUnits, 15_000);
+  assert.equal(maintenance.mode, 'mock'); assert.equal(maintenance.toolsMode, 'mock'); assert.equal(maintenance.traceMode, 'offline');
+  assert.throws(() => ledgerConfig({ AGENT_TRIAL_BUDGET_YUAN: '5.0001' }));
+});
 function stores(t) {
   const source = new Store(mkdtempSync(join(tmpdir(), 'ledger-source-'))), target = new Store(mkdtempSync(join(tmpdir(), 'ledger-target-')));
   t.after(() => { source.close(); target.close(); });

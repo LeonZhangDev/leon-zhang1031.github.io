@@ -65,8 +65,8 @@ export function planLedgerImport(db, bundle, config) {
   const reservedUnits = calls.reduce((sum, row) => sum + row.reserved_units, 0);
   const validationUnits = calls.filter(row => JSON.parse(row.body).pricingSnapshot?.validationId === 'mem0-qwen-v1').reduce((sum, row) => sum + row.reserved_units, 0);
   const webValidationUnits = calls.filter(row => JSON.parse(row.body).pricingSnapshot?.webValidationId === 'tavily-v1').reduce((sum, row) => sum + row.reserved_units, 0);
-  if (reservedUnits > Math.min(config.trialBudgetUnits, 50_000) || validationUnits > Math.min(config.validationBudgetUnits, 5000)
-    || webValidationUnits > Math.min(config.webValidationBudgetUnits ?? 3000, 3000)) throw new Error('LEDGER_BUDGET');
+  if (reservedUnits > Math.min(config.trialBudgetUnits, 50_000) || validationUnits > Math.min(config.validationBudgetUnits, config.trialBudgetUnits, 50_000)
+    || webValidationUnits > Math.min(config.webValidationBudgetUnits ?? 3000, config.trialBudgetUnits, 50_000)) throw new Error('LEDGER_BUDGET');
   return { additions, summary: { added: Object.fromEntries(Object.entries(additions).map(([table, values]) => [table, values.length])),
     calls: calls.length, reservedYuan: reservedUnits / 10_000, validationReservedYuan: validationUnits / 10_000, webValidationReservedYuan: webValidationUnits / 10_000,
     uncertainCalls: calls.filter(row => row.state === 'uncertain').length, locked: bundle.locked || db.prepare("SELECT value FROM settings WHERE key='model-budget-locked'").get()?.value === 'true' } };
@@ -85,12 +85,19 @@ export function importLedger(store, bundle, config) {
   } catch (error) { store.db.exec('ROLLBACK'); throw error; }
 }
 
+// Only budget settings are relevant to offline ledger inspection/import.
+// Never enable transports or load credential configuration for maintenance.
+export function ledgerConfig(env = process.env) {
+  return loadConfig(Object.fromEntries(['AGENT_TRIAL_BUDGET_YUAN', 'AGENT_VALIDATION_BUDGET_YUAN', 'AGENT_WEB_VALIDATION_BUDGET_YUAN']
+    .filter(key => env[key] !== undefined).map(key => [key, env[key]])));
+}
+
 if (process.argv[1] && import.meta.url === pathToFileURL(realpathSync(process.argv[1])).href) {
   const [action, dataDir, file, flag] = process.argv.slice(2);
   if (!['export', 'inspect', 'import'].includes(action) || !dataDir || !file || (action === 'import' ? flag !== '--apply' : flag !== undefined)) throw new Error('Usage: ledger-transfer.mjs export|inspect DATA_DIR PRIVATE_JSON; import DATA_DIR PRIVATE_JSON --apply');
   if (action === 'import') {
     // Inspect on a read-only handle before Store can initialize/recover anything.
-    const bundle = JSON.parse(readFileSync(file, 'utf8')), config = loadConfig({});
+    const bundle = JSON.parse(readFileSync(file, 'utf8')), config = ledgerConfig();
     const db = new DatabaseSync(join(dataDir, 'agent.sqlite'), { readOnly: true });
     try { planLedgerImport(db, bundle, config); } finally { db.close(); }
     const store = new Store(dataDir);
@@ -99,7 +106,7 @@ if (process.argv[1] && import.meta.url === pathToFileURL(realpathSync(process.ar
     const db = new DatabaseSync(join(dataDir, 'agent.sqlite'), { readOnly: true });
     try {
       if (action === 'export') { writeFileSync(file, JSON.stringify(exportLedger(db)), { flag: 'wx', mode: 0o600 }); console.log('Private ledger bundle exported.'); }
-      else console.log(JSON.stringify(planLedgerImport(db, JSON.parse(readFileSync(file, 'utf8')), loadConfig({})).summary));
+      else console.log(JSON.stringify(planLedgerImport(db, JSON.parse(readFileSync(file, 'utf8')), ledgerConfig()).summary));
     } finally { db.close(); }
   }
 }

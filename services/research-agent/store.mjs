@@ -131,9 +131,9 @@ export class Store {
       toolCalls: toolRows.length, toolReservedYuan: toolRows.reduce((total, row) => total + row.reserved_units, 0) / 10_000,
       toolUsageEstimateYuan: Number(usage.reduce((total, body) => total + (body.toolUsageEstimateYuan || 0), 0).toFixed(6)),
       locked: this.getSetting('model-budget-locked') === 'true',
-      validation: { id: VALIDATION_ID, limitYuan: Math.min(config.validationBudgetUnits ?? 5000, 5000) / 10_000,
+      validation: { id: VALIDATION_ID, limitYuan: Math.min(config.validationBudgetUnits ?? 5000, config.trialBudgetUnits, 50_000) / 10_000,
         reservedYuan: validationRows.reduce((total, row) => total + row.reserved_units, 0) / 10_000, calls: validationRows.length },
-      webValidation: { id: WEB_VALIDATION_ID, limitYuan: Math.min(config.webValidationBudgetUnits ?? 3000, 3000) / 10_000,
+      webValidation: { id: WEB_VALIDATION_ID, limitYuan: Math.min(config.webValidationBudgetUnits ?? 3000, config.trialBudgetUnits, 50_000) / 10_000,
         reservedYuan: webRows.reduce((total, row) => total + row.reserved_units, 0) / 10_000, calls: webRows.length },
       accounting: 'conservative-no-refund', vendorBillVerified: false };
   }
@@ -161,12 +161,12 @@ export class Store {
       if ((!operation && !task) || (taskId && !task) || budget.locked
         || Math.round(budget.reservedYuan * 10_000) + units > Math.min(config.trialBudgetUnits, 50_000)
         || (task && Math.round(this.trialBudget(config, taskId).reservedYuan * 10_000) + units > task.budgetUnits)) throw new Error('MODEL_BUDGET');
-      if (Math.round(budget.validation.reservedYuan * 10_000) + units > Math.min(config.validationBudgetUnits ?? 5000, 5000)) throw new Error('VALIDATION_BUDGET');
+      if (Math.round(budget.validation.reservedYuan * 10_000) + units > Math.min(config.validationBudgetUnits ?? 5000, config.trialBudgetUnits, 50_000)) throw new Error('VALIDATION_BUDGET');
       // Standalone memory actions while Tavily is enabled share the same first
       // validation allowance, even without a task foreign key.
       const web = config.toolsMode === 'tavily' || task?.toolsMode === 'tavily';
       if (tool && (!web || config.toolsMode !== 'tavily' || config.allowWebTools !== true)) throw new Error('WEB_TOOLS_NOT_AUTHORIZED');
-      if (web && Math.round(budget.webValidation.reservedYuan * 10_000) + units > Math.min(config.webValidationBudgetUnits ?? 3000, 3000)) throw new Error('WEB_VALIDATION_BUDGET');
+      if (web && Math.round(budget.webValidation.reservedYuan * 10_000) + units > Math.min(config.webValidationBudgetUnits ?? 3000, config.trialBudgetUnits, 50_000)) throw new Error('WEB_VALIDATION_BUDGET');
       const id = randomUUID();
       // No refunds, including on cancellation, errors, process death or timeout.
       const table = tool ? 'tool_calls' : operation ? 'memory_model_calls' : 'model_calls';

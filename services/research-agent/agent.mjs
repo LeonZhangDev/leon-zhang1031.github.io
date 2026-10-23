@@ -150,8 +150,8 @@ export class AgentRunner {
       const reason = signal.aborted || error.name === 'AbortError' ? 'CANCELLED' : error.message;
       finalStatus = reason === 'CANCELLED' ? 'cancelled' : ['TASK_BUDGET', 'MODEL_BUDGET', 'VALIDATION_BUDGET', 'WEB_VALIDATION_BUDGET', 'MODEL_CONTEXT_LIMIT', 'DEADLINE', 'SEARCH_LIMIT', 'PAGE_LIMIT'].includes(reason) ? 'limited' : 'failed';
       const messages = { CANCELLED: '任务已取消。', MODEL_BUDGET: '已达到首次验证累计预算或单任务预留上限，停止调用。', MODEL_CONTEXT_LIMIT: '上下文达到保守输入上限，停止调用。', QWEN_USAGE_OUTSIDE_BOUND: '实际 usage 超出预留边界，已锁定后续模型调用，请核对账单。', QWEN_USAGE_MISSING: '响应缺少 usage，保留全额预留，不自动重试。', QWEN_REQUEST_FAILED: '模型请求失败；保留全额预留，不自动重试。', QWEN_REQUEST_STOPPED: '模型请求超时或中断；保留全额预留，不自动重试。', TASK_BUDGET: '已达到本次模拟流程预算。', DEADLINE: '已达到任务时长上限。', SEARCH_LIMIT: '已达到搜索次数上限。', PAGE_LIMIT: '已达到网页读取次数上限。', INVALID_ACTION: '模型返回了不允许或无效的动作，已拦截。', INVALID_SOURCE: '模型尝试读取未授权来源，已拦截。' };
-      messages.VALIDATION_BUDGET = '已达到本轮新增验证预留上限（最多 0.5 元），停止调用。';
-      messages.WEB_VALIDATION_BUDGET = '已达到 Tavily 首次验证累计预留上限（最多 0.3 元，包含模型、记忆与网页工具），停止调用。';
+      messages.VALIDATION_BUDGET = `已达到共享验证累计预留上限（${this.config.validationBudgetUnits / 10_000} 元），停止调用。`;
+      messages.WEB_VALIDATION_BUDGET = `已达到 Tavily 验证累计预留上限（${this.config.webValidationBudgetUnits / 10_000} 元，包含模型、记忆与网页工具），停止调用。`;
       messages.TAVILY_USAGE_MISSING = 'Tavily 响应缺少 credits；保留预留，停止调用，不自动重试。';
       messages.TAVILY_USAGE_OUTSIDE_BOUND = 'Tavily credits 超出预留边界，已锁定后续付费调用。';
       messages.TAVILY_REQUEST_FAILED = 'Tavily 请求失败；保留全额预留，不重试、不替换成模拟资料。';

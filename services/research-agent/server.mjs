@@ -105,7 +105,7 @@ export function createApplication(config = loadConfig(), options = {}) {
       }
       if (req.method === 'GET' && route === 'api/status') return respond(res, 200, { mode: config.mode, traceMode: config.traceMode,
         memoryMode: config.memoryMode, actualCostYuan: config.mode === 'mock' && config.memoryMode !== 'qwen' ? 0 : null, toolsSimulated: config.toolsMode !== 'tavily', toolsMode: config.toolsMode,
-        limits: { searches: config.maxSearches, pages: config.maxPages, taskBudgetYuan: config.toolsMode === 'tavily' ? config.webValidationBudgetUnits / 10_000 : 2 },
+        limits: { searches: config.maxSearches, pages: config.maxPages, taskBudgetYuan: config.toolsMode === 'tavily' ? Math.min(config.webValidationBudgetUnits, 3000) / 10_000 : 2 },
         scenarios: config.mode === 'mock' ? SCENARIOS : ['standard'], budget: store.budget(config), trialBudget: store.trialBudget(config) });
       if (req.method === 'GET' && route === 'api/tasks') return respond(res, 200, { tasks: store.listTasks() });
       if (req.method === 'GET' && route === 'api/memories') return respond(res, 200, {
@@ -126,7 +126,7 @@ export function createApplication(config = loadConfig(), options = {}) {
           else if (['update', 'forget', 'toggle'].includes(body.action) && /^[0-9a-f-]{36}$/.test(body.id || '')) await runner.memory.change(body.id, body.action, body.text, options);
           else throw new Error('MEMORY_ACTION_INVALID');
         } catch (error) {
-          if (['MODEL_BUDGET', 'VALIDATION_BUDGET', 'WEB_VALIDATION_BUDGET'].includes(error.message)) throw new HttpError(429, '已达到累计 5 元、本轮新增最多 0.5 元或 Tavily 首次验证最多 0.3 元的保守预留上限。');
+          if (['MODEL_BUDGET', 'VALIDATION_BUDGET', 'WEB_VALIDATION_BUDGET'].includes(error.message)) throw new HttpError(429, '已达到累计预算或阶段验证预算的保守预留上限。');
           if (error.message === 'MEMORY_EXTRACTION_NOT_AUTHORIZED') throw new HttpError(403, '当前为离线记忆模式，未授权模型抽取。');
           const known = ['MEMORY_TEXT_INVALID', 'MEMORY_SCOPE_INVALID', 'MEMORY_CAPACITY', 'MEMORY_DISABLED', 'MEMORY_NOT_FOUND', 'MEMORY_ACTION_INVALID'];
           if (!known.includes(error.message)) throw error;

@@ -1,5 +1,16 @@
 # HTTPS deployment
 
+## 2026-10-23 structured report release
+
+Active source: `/opt/research-agent/releases/structured-report-v5-20261023`; 56 source hashes checked. Archive SHA-256: `d4172ad16f140b31113b588846e2e709d29374b5c7679ce6f4445a435d850309`. Runtime code was verified before activation. Windows 177/177, Linux 174/174, offline 20/20; five report rechecks, negative control and live full flow passed. Current source documentation is updated after activation; runtime code is unchanged.
+
+Successful task `7a9d175a-7269-48f6-895c-e127b1af185a`: 1 Search, 1 Extract, 2 cached reads, 1 save, then stop; 11 cloud spans read back with exact ID/parent/summary checks. Seven scored roots, 44 feedback values verified at shortlived retention. Failed tasks and their fees/traces remain intact. Production Chrome verified history switching, latest-report restore, Markdown/download/mobile/logout with no new paid call.
+
+Budget: 219 entries, CNY2.6335/5; shared CNY2.3427/3.50, web CNY1.7149/2.50; one unknown retained, seed floor 26335. Stage increases follow the prior authorization to adjust phases within CNY5; no budget identity reset. This turn spent/reserved CNY0.9974 under its final CNY1.10 cap. Defaults in templates remain conservative; explicit production caps differ. Only the production ledger authorizes paid work; the original local configuration remains unchanged and its lower caps can block local paid execution after the append-only ledger sync.
+
+Activation backup: `/var/backups/research-agent/structured-activation-v5-20261023/`; original validation backup: `/var/backups/research-agent/structured-report-v1-20261023/`. 752 original production rows and 371 local rows preserved; integrity/FK checks pass. Keep current paid ledger during rollback; roll back source/config only. Existing secrets, password, Mem0 data, public site, Caddy and Artalk unchanged. Private evidence: `.tmp/structured-agent-release-20261023/`. Human semantic calibration and vendor cash billing remain outside automated acceptance; confidence B. Following entries are historical.
+
+
 ## 2026-10-23 full-flow release
 
 Final source directory: `/opt/research-agent/releases/tavily-full-flow-20261023`. Fresh task `fcf94986-bc22-4f21-bfc3-3230c639492b` completed on `tavily-cb1f1dde7a90`: real Qwen, one search, one extract, original-text recovery, one save and no later decision. All 18 cloud runs were accepted/read back with matching IDs/parents and summary-only fields. Final source adds the separately tested Markdown Chinese-punctuation autolink fix without repeating paid requests. Windows 139/139, Ubuntu 136/136, Chrome correction 3/3, offline evaluation 20/20 and merged-site 211-page build passed.

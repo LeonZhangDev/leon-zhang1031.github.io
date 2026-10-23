@@ -2,10 +2,12 @@
 export function createPaidClient(store, config, authority, { fetchImplementation = (...args) => globalThis.fetch(...args) } = {}) {
   if ((authority === 'agent' && (config.mode !== 'qwen' || config.allowModelCalls !== true))
     || (authority === 'memory' && (config.memoryMode !== 'qwen' || config.allowMemoryCalls !== true))
-    || !['agent', 'memory'].includes(authority)) throw new Error('QWEN_NOT_AUTHORIZED');
+    || (authority === 'evaluation' && (config.mode !== 'qwen' || config.allowEvaluationCalls !== true))
+    || !['agent', 'memory', 'evaluation'].includes(authority)) throw new Error('QWEN_NOT_AUTHORIZED');
 
   return async function request(settings, endpoint, requestBody, context, purpose) {
-    if (!context || (authority === 'memory' && !context.operationId)) throw new Error('MODEL_OPERATION_REQUIRED');
+    if (!context || (authority === 'memory' && !context.operationId)
+      || (authority === 'evaluation' && (!context.taskId || !purpose?.startsWith('quality-')))) throw new Error('MODEL_OPERATION_REQUIRED');
     if (context.error) throw context.error;
     if (context.signal?.aborted) throw new Error('CANCELLED');
     const body = JSON.stringify(requestBody);

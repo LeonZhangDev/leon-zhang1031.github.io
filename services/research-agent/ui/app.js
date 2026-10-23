@@ -3,7 +3,7 @@ import { renderMarkdown as renderReport } from './markdown.mjs';
 const base = new URL('.', location.href).pathname;
 const $ = (id) => document.getElementById(id);
 const yuan = (units = 0) => `¥${(units / 10000).toFixed(4)}`;
-const statusText = { queued: '排队中', running: '调研中', completed: '已完成', cancelled: '已取消', limited: '达到限制', failed: '失败', interrupted: '重启中断' };
+const statusText = { queued: '排队中', running: '调研中', completed: '已完成', cancelled: '已取消', limited: '达到限制', failed: '失败', interrupted: '重启中断', 'evaluation-failed': '评测失败' };
 const traceText = { pending: '准备中', 'sdk-offline-verified': 'SDK · 本地已记录', 'failed-local-retained': '失败 · 本地已保留', 'cloud-api-accepted': '云端 API 已接收', 'cloud-limit-local-retained': '云端试验上限 · 本地保留' };
 let currentId = null, currentTask = null, pollTimer = null, historyTasks = [];
 let memoryBusy = false;
@@ -53,9 +53,15 @@ async function updateHistory() {
   const data = await api('tasks'); historyTasks = data.tasks;
   $('history-count').textContent = String(historyTasks.length); $('history').replaceChildren();
   for (const task of historyTasks) {
-    const button = node('button', `${task.goal.slice(0, 25)} · ${statusText[task.status]}`);
-    button.type = 'button'; button.addEventListener('click', () => selectTask(task.id)); $('history').append(button);
+    const button = node('button', `${task.goal.slice(0, 25)} · ${statusText[task.status] || task.status}`);
+    button.type = 'button'; button.dataset.taskId = task.id;
+    button.title = `${task.goal} · ${new Date(task.createdAt).toLocaleString('zh-CN')}`;
+    button.setAttribute('aria-pressed', String(task.id === currentId));
+    button.setAttribute('aria-controls', 'report');
+    button.addEventListener('click', async () => { await selectTask(task.id); $('task-status').scrollIntoView({ block: 'center' }); });
+    $('history').append(button);
   }
+  if (!historyTasks.length) $('history').append(node('p', '暂无任务记录', 'small-copy'));
   const select = $('compare-task'); const previous = select.value;
   select.replaceChildren(node('option', '选择一条历史任务进行对比'));
   select.firstElementChild.value = '';
@@ -97,6 +103,9 @@ function displayTask(task, events) {
   }
   if (atBottom) activity.scrollTop = activity.scrollHeight;
   $('report-empty').hidden = !!task.report; $('report').hidden = !task.report;
+  $('report-empty').textContent = active ? '任务正在执行，报告保存后会显示在这里。'
+    : task.evaluationVersion ? '这条评测任务没有保存研究报告。评分请在 LangSmith 中查看。'
+      : '这条任务未保存完整报告，请查看行动记录中的停止原因。';
   if (task.report && $('report-source').value !== task.report) {
     renderReport(task.report, $('report')); $('report-source').value = task.report;
   }
@@ -172,7 +181,9 @@ async function workspacePage() {
     catch (error) { $('feedback-status').textContent = error.message; }
   });
   await updateHistory(); await updateBudget(); await refreshMemories();
-  const active = historyTasks.find(task => ['running', 'queued'].includes(task.status)); if (active) await selectTask(active.id);
+  const initial = historyTasks.find(task => ['running', 'queued'].includes(task.status))
+    || historyTasks.find(task => task.report) || historyTasks[0];
+  if (initial) await selectTask(initial.id);
 }
 
 async function memoryAction(body) {

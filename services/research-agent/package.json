@@ -10,7 +10,8 @@
     "start": "node server.mjs",
     "start:offline": "node server.mjs --offline",
     "test": "node --test tests/*.test.mjs",
-    "evaluate": "node evaluate.mjs"
+    "evaluate": "node evaluate.mjs",
+    "test:quality": "node --test tests/quality-*.test.mjs tests/report-validation.test.mjs"
   },
   "dependencies": {
     "dompurify": "3.4.17",

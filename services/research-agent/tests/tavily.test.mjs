@@ -25,7 +25,7 @@ const response = (payload, status = 200) => new Response(JSON.stringify(payload)
 const searchPayload = () => ({ results: urls.map((url, i) => ({ url, title: `Official ${i}`, content: 'Candidate snippet, not read evidence.' })), usage: { credits: 1 }, request_id: 'fixture-search' });
 const pagePayload = (url = urls[0], content = 'Official source text: limit 10 requests per second.') => ({ results: [{ url, raw_content: content }], failed_results: [], usage: { credits: 0 }, request_id: 'fixture-extract' });
 const completion = (name, args) => ({ usage: { prompt_tokens: 100, completion_tokens: 20 },
-  choices: [{ finish_reason: 'tool_calls', message: { tool_calls: [{ type: 'function', function: { name, arguments: JSON.stringify(args) } }] } }] });
+  choices: [{ finish_reason: 'tool_calls', message: { tool_calls: [{ type: 'function', function: { name, arguments: JSON.stringify(name === 'save_report' ? { recommendations: [], ...args } : args) } }] } }] });
 const input = { goal: 'private-goal-marker 比较技术方案', constraints: '', scenario: 'standard', budgetUnits: 3000 };
 function fixture(t, extraEnv = {}) {
   const config = { ...loadConfig({ ...envFor(), ...extraEnv }, approvals), stepDelayMs: 0, dataDir: mkdtempSync(join(tmpdir(), 'tavily-offline-')) };
@@ -289,7 +289,7 @@ test('a web page cannot authorize a memory write and an unread URL cannot be cit
   assert.equal(result.status, 'failed'); assert.equal(decisions, 3); assert.equal(result.stats.evidenceCount, 1);
   assert.ok(!f.store.events(result.id).some(event => event.tool === 'memory_remember' && event.type === 'tool-result'));
   const provider = createQwenProviders(f.store, f.config);
-  await assert.rejects(provider.tool({ tool: 'save_report', args: { markdown: `[Unread](${urls[1]})` } }, { evidence: [{ url: urls[0] }] }), /INVALID_SOURCE/);
+  await assert.rejects(provider.tool({ tool: 'save_report', args: { markdown: `[Unread](${urls[1]})`, recommendations: [] } }, { evidence: [{ url: urls[0] }] }), /INVALID_SOURCE/);
 });
 
 test('an unobserved URL after real evidence gets one final report decision, without transport or repeated Skills', async t => {
@@ -315,12 +315,12 @@ test('report citations allow adjacent Chinese punctuation while rejecting fabric
   const f = fixture(t), provider = createQwenProviders(f.store, f.config);
   const state = { evidence: [{ url: urls[0] }] };
   for (const markdown of [`来源：${urls[0]}（官方文档）`, `来源：${urls[0]}。`, `[来源](${urls[0]})`]) {
-    const result = await provider.tool({ tool:'save_report', args:{ markdown } }, state);
+    const result = await provider.tool({ tool:'save_report', args:{ markdown, recommendations: [] } }, state);
     assert.ok(result.markdown.includes(markdown));
   }
   for (const markdown of [`${urls[0]}/invented（未经读取）`, `https://evil.invalid/path（伪造）`,
     `[合法](${urls[0]}) 另见 https://evil.invalid/path`, `${urls[0]}?unobserved=1`]) {
-    await assert.rejects(provider.tool({ tool:'save_report', args:{ markdown } }, state), /INVALID_SOURCE/);
+    await assert.rejects(provider.tool({ tool:'save_report', args:{ markdown, recommendations: [] } }, state), /INVALID_SOURCE/);
   }
   assert.equal(f.store.trialBudget(f.config).calls,0);
 });
@@ -334,4 +334,35 @@ test('final-only recovery rejects another tool and never permits an extra web re
   const result = await f.runner.start(f.task);
   assert.equal(result.status, 'failed'); assert.equal(decisions, 4); assert.equal(web, 2);
   assert.equal(f.store.traces(result.id).filter(run => run.name === 'tool.save_report').length, 0);
+});
+
+test('saving a missing-citation report appends read evidence and ends without another model decision', async t => {
+  const f = fixture(t); let decisions = 0, web = 0;
+  const actions = [['search', { query: 'pricing docs' }], ['read_page', { url: urls[0] }],
+    ['save_report', { markdown: '计价单位已知，实际账单仍需核实。' }]];
+  f.runner = new AgentRunner(f.store, f.config, { fetchImplementation: async () => response(completion(...actions[decisions++])),
+    webFetchImplementation: async url => { web++; return response(url.endsWith('/search') ? searchPayload() : pagePayload()); } });
+  const result = await f.runner.start(f.task);
+  assert.equal(result.status, 'completed'); assert.equal(decisions, 3); assert.equal(web, 2);
+  assert.ok(result.report.includes(`[来源 1](${urls[0]})`));
+  const saved = f.store.events(result.id).find(event => event.type === 'tool-result' && event.tool === 'save_report');
+  assert.equal(saved.output.validation.corrections[0].code, 'CITATION_APPENDED');
+  assert.equal(f.store.traces(result.id).filter(run => run.name === 'tool.save_report').length, 1);
+});
+
+test('unsupported report advice fails visibly, preserves collected evidence and never pays for automatic repair', async t => {
+  for (const advice of ['Extract 尽量成批提交。取整规则未知。',
+    'Extract 利用失败不扣费机制，无需重试付费。',
+    'Extract 不能保证免费重试，但可以零成本重试。']) {
+  const f = fixture(t); let decisions = 0, web = 0;
+  const actions = [['search', { query: 'pricing docs' }], ['read_page', { url: urls[0] }],
+    ['save_report', { markdown: `${advice}\n${urls[0]}` }]];
+  f.runner = new AgentRunner(f.store, f.config, { fetchImplementation: async () => response(completion(...actions[decisions++])),
+    webFetchImplementation: async url => { web++; return response(url.endsWith('/search') ? searchPayload() : pagePayload()); } });
+  const result = await f.runner.start(f.task);
+  assert.equal(result.status, 'failed'); assert.equal(decisions, 3); assert.equal(web, 2);
+  assert.equal(result.stats.evidenceCount, 1); assert.ok(!result.report.includes(advice));
+  const stopped = f.store.events(result.id).find(event => event.type === 'stopped');
+  assert.equal(stopped.reason, 'REPORT_UNSUPPORTED_ADVICE'); assert.match(stopped.message, /已拦截保存/);
+  }
 });

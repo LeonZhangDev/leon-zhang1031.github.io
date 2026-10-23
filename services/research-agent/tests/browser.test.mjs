@@ -23,7 +23,7 @@ test('offline Chromium: Tavily mode displays real-tool state, bounded budget, ci
     fetchImplementation: async () => {
       const [name, args] = actions[decisions++];
       return new Response(JSON.stringify({ usage: { prompt_tokens: 100, completion_tokens: 20 }, choices: [{ finish_reason: 'tool_calls',
-        message: { tool_calls: [{ type: 'function', function: { name, arguments: JSON.stringify(args) } }] } }] }));
+        message: { tool_calls: [{ type: 'function', function: { name, arguments: JSON.stringify(name === 'save_report' ? { recommendations: [], ...args } : args) } }] } }] }));
     },
     webFetchImplementation: async (url, init) => {
       tools++;
@@ -110,7 +110,7 @@ test('offline Chromium: authenticated memory workflow, GFM, source/copy/download
   await expect(page.locator('#report')).toContainText('（官方资料）');
   assert.equal(await page.locator('#report a').filter({ hasText: '不安全' }).getAttribute('href'), null);
   await expect(page.locator('#memory-used')).toContainText('长期维护成本');
-  await expect(page.locator('#skills-used')).toContainText('cost-estimation v1.0.0');
+    await expect(page.locator('#skills-used')).toContainText('cost-estimation v1.0.1');
   await expect(page.locator('#context-status')).toContainText('未调用压缩模型');
   await page.locator('#report .copy-code').click();
   assert.equal((await page.evaluate(() => navigator.clipboard.readText())).replaceAll('\r\n', '\n'), 'const value = "<script>literal</script>";\n');

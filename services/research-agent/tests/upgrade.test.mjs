@@ -142,7 +142,7 @@ test('context keeps errors and recent actions; Skills have pinned versions and l
   const input = state([]); input.observations = [{ tool: 'read_page', args: {}, output: { error: '读取失败，价格未知' } }];
   assert.equal(new ContextManager().prepare(input).observations[0].output.error, '读取失败，价格未知');
   const skills = loadSkills(); assert.equal(skills.length, 3);
-  assert.ok(skills.every(skill => skill.version === '1.0.0' && skill.hash.length === 12));
+    assert.ok(skills.every(skill => skill.version === (skill.id === 'cost-estimation' ? '1.0.1' : '1.0.0') && skill.hash.length === 12));
   assert.equal(selectSkills(skills, { goal: '比较架构', constraints: '' }).length, 2);
   assert.equal(selectSkills(skills, { goal: '估算费用', constraints: '' }).length, 3);
 });

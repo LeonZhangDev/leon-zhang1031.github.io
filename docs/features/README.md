@@ -2,7 +2,7 @@
 
 - [site-performance-first-batch](site-performance-first-batch.md) — deferred loading and before/after performance evidence
 
-- [private-research-agent](private-research-agent.md) — deployed Tavily/Qwen workspace, verified summary traces and preserved trial budgets
+- [private-research-agent](private-research-agent.md) — full live Tavily/Qwen flow, Markdown citation fixes, verified traces and preserved cumulative budget
 
 - [game-loading-optimization](game-loading-optimization.md) — small icon, exact engine cache contracts and critical-resource preloads
 

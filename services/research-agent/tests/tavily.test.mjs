@@ -311,6 +311,20 @@ test('an unobserved URL after real evidence gets one final report decision, with
   assert.equal(f.store.traces(result.id).filter(run => run.name === 'tool.save_report').length, 1);
 });
 
+test('report citations allow adjacent Chinese punctuation while rejecting fabricated addresses', async t => {
+  const f = fixture(t), provider = createQwenProviders(f.store, f.config);
+  const state = { evidence: [{ url: urls[0] }] };
+  for (const markdown of [`来源：${urls[0]}（官方文档）`, `来源：${urls[0]}。`, `[来源](${urls[0]})`]) {
+    const result = await provider.tool({ tool:'save_report', args:{ markdown } }, state);
+    assert.ok(result.markdown.includes(markdown));
+  }
+  for (const markdown of [`${urls[0]}/invented（未经读取）`, `https://evil.invalid/path（伪造）`,
+    `[合法](${urls[0]}) 另见 https://evil.invalid/path`, `${urls[0]}?unobserved=1`]) {
+    await assert.rejects(provider.tool({ tool:'save_report', args:{ markdown } }, state), /INVALID_SOURCE/);
+  }
+  assert.equal(f.store.trialBudget(f.config).calls,0);
+});
+
 test('final-only recovery rejects another tool and never permits an extra web request', async t => {
   const f = fixture(t); let decisions = 0, web = 0;
   const actions = [['search', { query: 'docs' }], ['read_page', { url: urls[0] }],

@@ -39,7 +39,7 @@ export function createQwenProviders(store, config, { fetchImplementation = (...a
   const availableTools = realTools ? QWEN_TOOLS.map(tool => descriptions[tool.function.name]
     ? { ...tool, function: { ...tool.function, description: descriptions[tool.function.name] } } : tool) : QWEN_TOOLS;
   const instructions = realTools ? INSTRUCTIONS.replace('当前搜索和网页都是合成测试工具，不代表真实资料，必须在报告中写明。',
-    '搜索和网页读取使用 Tavily Basic。最多搜索一次、读取两页。搜索摘要不是已读取证据；优先选择官方技术来源。正文摘录可能截断，关键数字与限定条件须用 read_evidence 回读原文。提取失败不是成功读取。') : INSTRUCTIONS;
+    '搜索和网页读取使用 Tavily Basic。最多搜索一次、读取两页。搜索摘要不是已读取证据；优先选择官方技术来源。正文摘录可能截断，关键数字与限定条件须用 read_evidence 回读原文。提取失败不是成功读取。计价单位不能证明请求取整规则，也不能据此建议凑满批次以省费；没有直接证据的结算规则必须保持未知。') : INSTRUCTIONS;
   return {
     async decide(state, { signal } = {}) {
       if (signal?.aborted) throw new Error('CANCELLED');
@@ -82,7 +82,7 @@ export function createQwenProviders(store, config, { fetchImplementation = (...a
       const markdown = action.args.markdown;
       if (typeof markdown !== 'string' || !markdown.trim() || markdown.length > 12_000) throw new Error('INVALID_REPORT');
       // Scan all URLs, including plain links, to block fabricated source citations.
-      for (const match of markdown.matchAll(/https?:\/\/[^\s)\]>"']+/g)) if (!state.evidence.some(doc => doc.url === match[0])) throw new Error('INVALID_SOURCE');
+      for (const match of markdown.matchAll(/https?:\/\/[^\s)\]>"'，。；、！？（）【】《》]+/g)) if (!state.evidence.some(doc => doc.url === match[0])) throw new Error('INVALID_SOURCE');
       return { markdown: `> Qwen 模型生成；${realTools ? '搜索与网页读取使用 Tavily Basic，引用仅来自成功读取的来源。' : '搜索与网页为合成资料，未联网调研。'}费用为保守预留与用量估算，非供应商账单。\n\n${redact(markdown)}`, simulated: !realTools, modelGenerated: true };
     },
   };

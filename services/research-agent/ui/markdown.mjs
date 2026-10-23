@@ -2,7 +2,16 @@ import { Marked } from './vendor/marked.js';
 import DOMPurify from './vendor/purify.js';
 
 const escape = text => text.replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;');
-const parser = new Marked({ gfm: true, breaks: false, renderer: {
+const parser = new Marked({ gfm: true, breaks: false, tokenizer: {
+  url(src) {
+    // GFM's default autolinker consumes adjacent Chinese punctuation as URL text.
+    // Keep that punctuation in prose; explicit Markdown links use the normal parser.
+    const match = /^https?:\/\/[^\s<>，。；、！？（）【】《》]+/.exec(src);
+    if (!match || !/^[，。；、！？（）【】《》]/.test(src.slice(match[0].length))) return false;
+    const raw = match[0];
+    return { type: 'link', raw, text: raw, href: raw, tokens: [{ type: 'text', raw, text: raw }] };
+  },
+}, renderer: {
   html({ text }) { return escape(text); },
   image({ text }) { return `<span>[图片未加载：${escape(text)}]</span>`; },
 } });

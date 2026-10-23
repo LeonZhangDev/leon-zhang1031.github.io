@@ -1,5 +1,17 @@
 # HTTPS deployment
 
+## 2026-10-23 full-flow release
+
+Final source directory: `/opt/research-agent/releases/tavily-full-flow-20261023`. Fresh task `fcf94986-bc22-4f21-bfc3-3230c639492b` completed on `tavily-cb1f1dde7a90`: real Qwen, one search, one extract, original-text recovery, one save and no later decision. All 18 cloud runs were accepted/read back with matching IDs/parents and summary-only fields. Final source adds the separately tested Markdown Chinese-punctuation autolink fix without repeating paid requests. Windows 139/139, Ubuntu 136/136, Chrome correction 3/3, offline evaluation 20/20 and merged-site 211-page build passed.
+
+Explicitly approved phase limits: **CNY1.50 shared**, **CNY1.20 web**, inside unchanged **CNY5 total**; each web task stays **CNY0.30**. IDs/history never reset. Defaults remain 0.50/0.30; raising caps requires authorization. Offline ledger inspect/import uses only `AGENT_TRIAL_BUDGET_YUAN=5`, `AGENT_VALIDATION_BUDGET_YUAN=1.5`, `AGENT_WEB_VALIDATION_BUDGET_YUAN=1.2`, ignoring transport/credential settings.
+
+Authoritative ledger: **122 fees, CNY1.1256/5**, shared **0.8348/1.50**, web **0.6974/1.20**, unknown **1** retained. Seed floor **11256** units. Successful task adds 0.2439; punctuation-failed task adds 0.2093 and remains with its 14 verified cloud runs. Local import preserved 258 original rows/config, passed integrity/FK checks, and made zero calls. These are reservations, not vendor cash-bill acceptance.
+
+Pre-call DB/env/unit snapshots and original-row hashes: `/var/backups/research-agent/20261023-fresh-flow-ac00d0289e4f/` and `/var/backups/research-agent/20261023-fresh-flow-2-cb1f1dde7a90/`. Final activation backup: `/var/backups/research-agent/20261023-full-flow-final/`. Never restore older DBs after paid calls. Rolling back to source with fixed old phase limits or missing tool accounting requires **all four paid modes off**, retaining the current ledger. Keep production upload-only key/local PAT separate. Existing proxy/Caddy/Artalk are preserved; remote site's performance commits are merged. Evidence: `.tmp/tavily-release-20261023/`, screenshots `output/playwright/`.
+
+Flow/termination/trace acceptance is complete for this scenario. Broader answer quality, manual cloud UI/quota and cash billing remain unverified; report batching advice warrants human review. Confidence B. The following sections are historical.
+
 ## 2026-10-23 Tavily release
 
 Active source: `/opt/research-agent/releases/tavily-28394ed3d986`, 44 verified source files. Archive SHA-256: `28394ed3d986b27c4ffe52917ed61559aa61efe6126a0ad68fecd8925df9f05f`. Exact locked Linux dependencies were reused; no Windows modules or credentials entered the source archive. Windows 136/136 and Ubuntu 133/133 tests passed. The isolated candidate completed a mock HTTP task; Chrome access to that candidate was unavailable because SSH forwarding is prohibited. No SSH policy was weakened. Actual production Chrome subsequently passed report/GFM/source/download/mobile/logout protection, without creating another paid task.

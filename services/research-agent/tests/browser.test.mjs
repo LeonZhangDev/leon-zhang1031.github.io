@@ -64,7 +64,7 @@ test('offline Chromium: Tavily mode displays real-tool state, bounded budget, ci
   assert.deepEqual(external, []); assert.deepEqual(errors, []);
 });
 
-const markdown = '# Markdown 验收\n\n**加粗** 和 *斜体*，~~删除~~，`inline()`\n\n1. 步骤一\n   - 嵌套项\n\n- [x] 已完成\n\n> 保留引用\n\n| 列一 | 列二 |\n| --- | --- |\n| A | B |\n\n```js\nconst value = "<script>literal</script>";\n```\n\n[官方链接](https://example.test/docs) [不安全](javascript:alert(1))\n\n![外部图片](https://tracker.example.test/pixel)\n\n<img src="https://tracker.example.test/raw" onerror="globalThis.markdownExecuted=true">\n<script>globalThis.markdownExecuted=true</script>\n';
+const markdown = '# Markdown 验收\n\n**加粗** 和 *斜体*，~~删除~~，`inline()`\n\n1. 步骤一\n   - 嵌套项\n\n- [x] 已完成\n\n> 保留引用\n\n| 列一 | 列二 |\n| --- | --- |\n| A | B |\n\n```js\nconst value = "<script>literal</script>";\n```\n\n[官方链接](https://example.test/docs) [不安全](javascript:alert(1))\n\nhttps://example.test/bare（官方资料）\n\n![外部图片](https://tracker.example.test/pixel)\n\n<img src="https://tracker.example.test/raw" onerror="globalThis.markdownExecuted=true">\n<script>globalThis.markdownExecuted=true</script>\n';
 
 test('offline Chromium: authenticated memory workflow, GFM, source/copy/download, mobile and XSS protection', { timeout: 60000 }, async t => {
   const config = { ...loadConfig({}), port: 0, stepDelayMs: 0, dataDir: mkdtempSync(join(tmpdir(), 'research-browser-')) };
@@ -106,6 +106,8 @@ test('offline Chromium: authenticated memory workflow, GFM, source/copy/download
   await expect(page.locator('#report pre code')).toHaveText('const value = "<script>literal</script>";\n');
   assert.equal(await page.locator('#report script, #report img, #report [onerror]').count(), 0);
   assert.equal(await page.evaluate(() => globalThis.markdownExecuted), undefined);
+  await expect(page.locator('#report a[href="https://example.test/bare"]')).toHaveText('https://example.test/bare');
+  await expect(page.locator('#report')).toContainText('（官方资料）');
   assert.equal(await page.locator('#report a').filter({ hasText: '不安全' }).getAttribute('href'), null);
   await expect(page.locator('#memory-used')).toContainText('长期维护成本');
   await expect(page.locator('#skills-used')).toContainText('cost-estimation v1.0.0');

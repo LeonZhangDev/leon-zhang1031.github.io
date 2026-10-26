@@ -2,6 +2,8 @@ param(
     [Parameter(Mandatory=$true)][ValidateSet('word','wps')][string]$Application,
     [Parameter(Mandatory=$true)][string]$CaseName,
     [string]$ExpectedClipboardSha256,
+    [string]$ExpectedPastedTextSha256,
+    [ValidateSet('default','source')][string]$PasteMode = 'default',
     [string]$OutputDirectory = 'output/office-paste'
 )
 # Run with Windows PowerShell -STA after a real browser Ctrl+C.
@@ -31,8 +33,16 @@ try {
     $initialDocuments = $app.Documents.Count
     $version = $app.Version
     $doc = $app.Documents.Add()
-    # Native default paste, with no HTML conversion or OOXML rewriting by the test.
-    $doc.Range(0, 0).Paste()
+    if ($ExpectedClipboardSha256 -and (Get-TextHash ([string][System.Windows.Forms.Clipboard]::GetDataObject().GetData('UnicodeText'))) -ne $ExpectedClipboardSha256) {
+        throw 'Clipboard changed while opening Office; refusing stale evidence.'
+    }
+    # Native paste; source mode is the application's Keep Source Formatting action.
+    # Neither mode changes the user's global paste preferences.
+    if ($PasteMode -eq 'source') { $doc.Range(0, 0).PasteAndFormat(16) }
+    else { $doc.Range(0, 0).Paste() }
+    if ($ExpectedPastedTextSha256 -and (Get-TextHash ([string]$doc.Content.Text)) -ne $ExpectedPastedTextSha256) {
+        throw 'Pasted body does not match expected text; refusing unrelated clipboard evidence.'
+    }
     $paragraphs = @()
     foreach ($paragraph in $doc.Paragraphs) {
         $text = [string]$paragraph.Range.Text
@@ -70,7 +80,7 @@ try {
     $pdfPath = $base + '.pdf'
     $doc.ExportAsFixedFormat($pdfPath, 17)
     $result = [PSCustomObject]@{
-        application=$Application; version=$version; case=$CaseName
+        application=$Application; version=$version; case=$CaseName; pasteMode=$PasteMode
         clipboardFormats=$formats; clipboardHtmlCharacters=$html.Length
         text=[string]$doc.Content.Text; paragraphs=$paragraphs; tables=$tables
         inlineShapes=$doc.InlineShapes.Count; floatingShapes=$doc.Shapes.Count

@@ -86,6 +86,14 @@ async function runV24BrowserTests(browserType, extensionPath, channel = 'chromiu
         await popup.waitForFunction(() => !document.getElementById('copy-mode').disabled);
         await select(page, '<div data-block-type="text">前段</div><div data-block-type="text"><br></div><div data-block-type="text">后段</div>'); await rich(page);
         check('intentional empty source paragraph is retained', await sink.locator('#rich p').count() === 3 && await sink.locator('#rich p').nth(1).textContent() === '');
+        await select(page, '<div data-block-type="heading2"><div class="heading-block"><div class="ace-line" style="font:700 28px Arial;color:rgb(180,25,45)">彩色标题</div></div></div><div data-block-type="text"><div class="text-editor"><div class="ace-line" style="font:18px Arial;color:rgb(25,85,160);line-height:32px;text-align:justify;margin-top:12px;margin-bottom:18px">彩色正文<span style="color:rgb(20,130,60)">局部绿色</span></div></div></div>');
+        await rich(page);
+        check('heading retains inner line font size and color after wrapper cleanup', await sink.locator('#rich h2').evaluate(n => getComputedStyle(n).fontSize === '28px' && getComputedStyle(n).color === 'rgb(180, 25, 45)'));
+        check('paragraph retains line height alignment and spacing from inner editor line', await sink.locator('#rich p').evaluate(n => {const s=getComputedStyle(n); return s.lineHeight === '32px' && s.textAlign === 'justify' && s.marginTop === '12px' && s.marginBottom === '18px';}));
+        check('unwrapped direct text retains color size and local overrides', await sink.locator('#rich p').evaluate(n => {const texts=[],walk=document.createTreeWalker(n,NodeFilter.SHOW_TEXT);while(walk.nextNode())texts.push(walk.currentNode);return texts.some(t=>t.textContent.includes('彩色正文') && getComputedStyle(t.parentElement).fontSize==='18px' && getComputedStyle(t.parentElement).color==='rgb(25, 85, 160)') && texts.some(t=>t.textContent.includes('局部绿色') && getComputedStyle(t.parentElement).color==='rgb(20, 130, 60)');}));
+        check('style preservation does not add blank paragraphs or layout divs', await sink.locator('#rich p').count() === 1 && await sink.locator('#rich div').count() === 0);
+        const typography = await cdp.send('Runtime.evaluate', {contextId:world.id, expression:`(()=>{const n=document.createElement('div');n.innerHTML=FeishuCopyFormats.selectionDocument(getSelection(),'feishu').html;const p=n.querySelector('p');return p.style.lineHeight==='24pt' && p.style.marginTop==='9pt' && p.style.marginBottom==='13.5pt' && [...n.querySelectorAll('span')].every(s=>!s.style.margin);})()`});
+        check('Office uses point units and inline text cannot override paragraph margins', typography.result.value);
         await select(page, '<ol start="3"><li style="padding:0;text-indent:0;color:rgb(160,20,40)">第三项</li><li>第四项<ul><li>嵌套项</li></ul></li><li value="8">跳号项</li></ol>');
         const listExport = await cdp.send('Runtime.evaluate', { contextId: world.id, expression: 'FeishuCopyFormats.selectionDocument(getSelection(), "feishu").html' });
         const listHtml = listExport.result.value;
@@ -129,7 +137,7 @@ async function runV24BrowserTests(browserType, extensionPath, channel = 'chromiu
         const generic = await context.newPage(); await generic.goto('https://copy-generic.example/article');
         check('ordinary sites stay untouched before activation', await generic.locator('#feishu-copy-style').count() === 0);
         await target(generic); await popup.locator('#toggle-page').click();
-        await popup.getByText('✓ 当前页面已连接 · v2.4.2', { exact: true }).waitFor();
+        await popup.getByText('✓ 当前页面已连接 · v2.4.3', { exact: true }).waitFor();
         check('page activation injects actual content scripts', await generic.locator('#feishu-copy-style').count() === 1);
         await select(generic, '<h2>原生格式</h2><p><strong>粗体</strong></p>'); await rich(generic);
         check('generic rich mode preserves native clipboard format', await sink.locator('#rich h2').textContent() === '原生格式' && await sink.locator('#rich strong,#rich b').count() > 0);

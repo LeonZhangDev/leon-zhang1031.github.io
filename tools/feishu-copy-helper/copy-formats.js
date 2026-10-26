@@ -13,6 +13,32 @@
     const ignoredTags = /^(SCRIPT|STYLE|LINK|META|IFRAME|OBJECT|EMBED|TEMPLATE|NOSCRIPT|BUTTON|INPUT|TEXTAREA|SELECT)$/;
     const allowedTags = /^(A|ABBR|B|BLOCKQUOTE|BR|CODE|COL|COLGROUP|DEL|DIV|EM|FIGCAPTION|FIGURE|H[1-6]|HR|I|IMG|LI|MARK|OL|P|PRE|S|SMALL|SPAN|STRONG|SUB|SUP|TABLE|TBODY|TD|TFOOT|TH|THEAD|TR|U|UL)$/;
     const blockTags = /^(BLOCKQUOTE|DIV|FIGURE|H[1-6]|LI|OL|P|PRE|TABLE|TD|TH|UL)$/;
+    const textProperties = ['font-family', 'font-size', 'font-weight', 'font-style', 'color',
+        'background-color', 'text-decoration-line', 'white-space', 'letter-spacing', 'word-spacing', 'direction'];
+
+    function preserveEditorLine(source, copy) {
+        if (!/^(P|H[1-6]|LI)$/.test(copy.tagName)) return;
+        const line = source.matches('.ace-line') ? source : source.querySelector('.ace-line');
+        if (!line) return;
+        const style = getComputedStyle(line);
+        for (const property of [...textProperties, 'line-height', 'text-align', 'text-indent']) {
+            const value = style.getPropertyValue(property);
+            if (property === 'background-color' && /^(transparent|rgba\(0, 0, 0, 0\))$/.test(value)) continue;
+            if (property === 'text-decoration-line' && value === 'none') continue;
+            copy.style.setProperty(property, value);
+        }
+        // 段间距常设置在内层编辑器；移除包装前移到实际段落，避免 Word 丢弃。
+        for (const side of ['top', 'bottom']) {
+            let margin = parseFloat(copy.style.getPropertyValue('margin-' + side)) || 0;
+            let padding = 0;
+            for (let node = line; node && node !== source; node = node.parentElement) {
+                const nested = getComputedStyle(node);
+                margin = Math.max(margin, parseFloat(nested.getPropertyValue('margin-' + side)) || 0);
+                padding += parseFloat(nested.getPropertyValue('padding-' + side)) || 0;
+            }
+            copy.style.setProperty('margin-' + side, margin + padding + 'px');
+        }
+    }
 
     function safeUrl(value, base, image = false) {
         if (!value) return '';
@@ -66,6 +92,7 @@
                 const value = style.getPropertyValue(property);
                 if (value) copy.style.setProperty(property, value);
             }
+            if (platform === 'feishu') preserveEditorLine(source, copy);
             for (const attribute of ['title', 'alt', 'start', 'value', 'colspan', 'rowspan']) {
                 if (source.hasAttribute(attribute)) copy.setAttribute(attribute, source.getAttribute(attribute));
             }
@@ -148,6 +175,15 @@
     }
 
     function normalizeOfficeLayout(root, doc) {
+        // Office 对 px 段间距、行距的换算不同；使用同等物理尺寸的 pt。
+        for (const node of root.querySelectorAll('*')) {
+            for (const property of ['font-size', 'line-height', 'margin-top', 'margin-bottom', 'text-indent', 'letter-spacing', 'word-spacing']) {
+                const value = node.style.getPropertyValue(property);
+                if (/^-?\d+(?:\.\d+)?px$/.test(value)) node.style.setProperty(property, parseFloat(value) * 0.75 + 'pt');
+            }
+            // Word 会把 span 上的 margin:0 当成段落设置，覆盖外层真实段间距。
+            if (/^(SPAN|A|B|STRONG|I|EM|U|S|DEL|MARK|SMALL|SUB|SUP|CODE|ABBR)$/.test(node.tagName)) node.style.removeProperty('margin');
+        }
         // WPS ignores max-width and ol[start]. Explicit dimensions and Office list
         // definitions keep native editable objects within a typical A4 text area.
         const pageWidth = 540;
@@ -227,7 +263,7 @@
 
     function normalizeParagraphs(container) {
         // 编辑器用多层 div 排版；Word 会把这些容器分别当成段落。
-        // 子元素已携带计算样式，去掉包装层不会丢失文字样式。
+        // 元素子节点已有计算样式；裸文本必须先包成行内元素，才能保住容器样式。
         const blockSelector = 'p,h1,h2,h3,h4,h5,h6,li,ol,ul,pre,blockquote,table';
         const lineBreaks = new WeakSet([...container.querySelectorAll('p div,li div,td div,th div')].filter(node =>
             node.nextElementSibling?.tagName === 'DIV' && !node.querySelector(blockSelector) &&
@@ -239,6 +275,12 @@
                 continue;
             }
             if (node.querySelector(blockSelector) || node.parentElement?.closest('p,h1,h2,h3,h4,h5,h6,li,pre,td,th')) {
+                for (const child of [...node.childNodes]) {
+                    if (child.nodeType !== Node.TEXT_NODE || !child.textContent.trim()) continue;
+                    const span = node.ownerDocument.createElement('span');
+                    for (const property of textProperties) span.style.setProperty(property, node.style.getPropertyValue(property));
+                    child.replaceWith(span); span.appendChild(child);
+                }
                 if (lineBreaks.has(node)) node.appendChild(node.ownerDocument.createElement('br'));
                 node.replaceWith(...node.childNodes);
             } else {

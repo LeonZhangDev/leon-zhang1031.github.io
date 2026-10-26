@@ -53,7 +53,7 @@ async function runCopyModesBrowserTests(browserType, extensionPath, channel = 'c
         }, context.pages().indexOf(page));
         await popup.getByRole('button', { name: '重新检测' }).click();
         await popup.waitForFunction(() => !document.getElementById('status').textContent.includes('正在检测'));
-        check('actual page connected version', await popup.locator('#status').textContent(), '✓ 当前页面已连接 · v2.4.2');
+        check('actual page connected version', await popup.locator('#status').textContent(), '✓ 当前页面已连接 · v2.4.3');
         check('default rich mode and live handshake', await popup.locator('#copy-mode').inputValue(), 'rich');
 
         const selectHtml = async value => {

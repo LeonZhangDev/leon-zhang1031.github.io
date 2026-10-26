@@ -3,7 +3,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 
 const title = '文档复制助手 · Leon Zhang';
 const description = 'Leon Zhang 维护的 Chrome / Edge 扩展，支持飞书和腾讯文字文档、三种复制模式、段落格式优化与按站点开启的网页增强。';
-const version = '2.4.2';
+const version = '2.4.3';
 const source = 'https://github.com/LeonZhangDev/leon-zhang1031.github.io/tree/main/tools/feishu-copy-helper';
 const modes = [
   { name: '保留格式', label: '默认模式', text: '复制文字与带样式的 HTML，保留标题、字体、颜色、高亮、链接、列表、引用、代码块和普通表格。' },
@@ -19,7 +19,7 @@ const modes = [
       <p class="eyebrow">BROWSER EXTENSION · v{version}</p>
       <h1>文档复制助手</h1>
       <p class="lead">选中内容，按下 Ctrl+C。格式、纯文本还是 Markdown，由你选择。</p>
-      <p class="intro">这是我维护的一款 Chrome / Edge 扩展，用来整理飞书和腾讯文字文档中需要复用的内容。v2.4.2 修复飞书全文选中后复制无响应和长文档内容不完整的问题，继续保留段落、列表及 Word / WPS 常用格式。打开弹窗，可以查看页面连接、全文和图片准备结果。</p>
+      <p class="intro">这是我维护的一款 Chrome / Edge 扩展，用来整理飞书和腾讯文字文档中需要复用的内容。v2.4.3 修复格式转换中丢失文字颜色、标题字号和段落间距的问题，改善 Word / WPS 导入；长文档全文复制、列表与图片准备继续保留。打开弹窗，可以查看页面连接、全文和图片准备结果。</p>
       <div class="actions">
         <a class="download" href={`/downloads/feishu-copy-helper-${version}.zip`} download>下载 v{version} 安装包 ↓</a>
         <a class="source" href={source} target="_blank" rel="noopener noreferrer">查看源码与说明 ↗</a>
@@ -39,6 +39,7 @@ const modes = [
         ))}
       </div>
       <p>模式按网站保存在本地，同一网站已打开的文档也会同步，刷新后保留。右键菜单可以临时使用另一种模式，不改变默认设置。macOS 使用 Cmd+C。</p>
+      <p>需要保留颜色、字号和段间距时，选择保留格式模式，粘贴到 Word / WPS 的 DOCX 文档，并在粘贴选项中选“保留源格式”。Markdown 用来保存标题、列表等结构，不保留这些视觉设置。</p>
       <p>飞书正文中连续按两次 Ctrl+A，再按 Ctrl+C，可以复制全文。长文档会先加载尚未显示的正文，准备完成后自动复制并恢复滚动位置。期间请保持当前页面和选区；遇到未加载的折叠内容，请先展开再全选。</p>
     </section>
 
@@ -68,7 +69,7 @@ const modes = [
 
     <section aria-labelledby="verification-title">
       <h2 id="verification-title">这一版验证了什么</h2>
-      <p>2026-10-26，v{version} 通过 18 项逻辑测试，以及 Edge 中的 17 项快捷键、33 项格式与模式、32 项 v2.4 和 16 项全文复制检查，共 116 项。真实飞书 Wiki 连续两次 Ctrl+A 后立即 Ctrl+C，275 个正文块全部复制，正文核对一致；Word / WPS 原生粘贴均保留 12 个可编辑列表项，没有新增正文空段落。</p>
+      <p>2026-10-26，v{version} 通过 18 项逻辑测试，以及 Edge 中的 17 项快捷键、33 项格式与模式、37 项 v2.4 和 16 项全文复制检查，共 121 项。彩色样例在 Word / WPS 中均保留 21pt 标题、13.5pt 正文、三种文字颜色，以及 9pt 段前距、13.5pt 段后距和 24pt 行距。真实飞书 Wiki 连续两次 Ctrl+A 后立即 Ctrl+C，275 个正文块全部复制，正文核对一致；Word / WPS 原生粘贴均保留 12 个可编辑列表项，没有新增正文空段落。</p>
       <p>v2.4.1 另用 Word 16、WPS 12 测试过真实飞书、腾讯文档及两组格式夹具，共 8 份原生粘贴文档并检查 PDF 页面。腾讯样本保留 16 个列表项、10 行 3 列表格及两张内嵌图片，宽度未超出测试文档的 A4 正文区域；正文文字核对一致。字体和分页仍取决于目标应用，特殊分栏可能需要另行调整；Notion 和浏览器原生授权提示尚未验收。</p>
       <p class="small">由 LeonZhangDev 在已有飞书复制插件基础上继续维护。来源与许可证说明见项目 README。</p>
     </section>

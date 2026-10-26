@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "文档复制助手",
-  "version": "2.4.2",
+  "version": "2.4.3",
   "description": "飞书与腾讯文字文档格式复制，支持纯文本、Markdown和按站点启用的网页增强",
   "permissions": [
     "activeTab",

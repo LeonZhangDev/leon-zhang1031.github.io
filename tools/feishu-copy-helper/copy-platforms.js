@@ -53,5 +53,51 @@
     function isProxyInput(node, platform) {
         return platform === 'feishu' && node.matches('textarea.docx-selection-hidden-textarea');
     }
-    globalThis.DocCopyPlatforms = Object.freeze({ detect, semantics, ignore, isProxyInput });
+    function editorFocused() {
+        const active = document.activeElement;
+        if (active?.matches('input,textarea') && !isProxyInput(active, 'feishu')) return false;
+        const anchor = window.getSelection()?.anchorNode;
+        return (!!active && isProxyInput(active, 'feishu')) || !!(anchor?.nodeType === 1 ? anchor : anchor?.parentElement)?.closest('.docx-page-block');
+    }
+    const documentRoot = () => document.querySelector('.docx-page-block .root-render-unit-container');
+    function fullSelectionRoot() {
+        if (!editorFocused() || !window.getSelection()?.isCollapsed) return null;
+        const root = documentRoot();
+        return root?.querySelector('.block.selected[data-block-id]') ? root : null;
+    }
+    async function loadFullDocument(root, current, progress) {
+        // 虚拟全选会保留已加载块；逐一滚动占位块，不能只跳到文档底部。
+        let scroller = root.parentElement;
+        while (scroller && !(scroller.scrollHeight > scroller.clientHeight + 1 && /auto|scroll/.test(getComputedStyle(scroller).overflowY))) scroller = scroller.parentElement;
+        scroller ||= document.scrollingElement;
+        const originalTop = scroller.scrollTop;
+        const originalBehavior = scroller.style.scrollBehavior;
+        const deadline = Date.now() + 30000;
+        let settled = 0;
+        try {
+            scroller.style.scrollBehavior = 'auto';
+            while (settled < 3) {
+                if (!current() || !root.isConnected) throw new Error('全文准备已取消');
+                if (Date.now() > deadline) throw new Error('全文仍有未加载内容，请稍后重新按两次 Ctrl+A');
+                const placeholder = root.querySelector('.bear-virtual-renderUnit-placeholder');
+                progress(root.querySelectorAll('.block[data-block-id]').length);
+                if (placeholder) {
+                    if (!placeholder.getClientRects().length) throw new Error('文档有折叠的未加载内容，请展开后重新全选');
+                    scroller.scrollTop += placeholder.getBoundingClientRect().top - scroller.getBoundingClientRect().top - scroller.clientHeight / 3;
+                    settled = 0;
+                } else {
+                    const height = scroller.scrollHeight;
+                    scroller.scrollTop = height;
+                    await new Promise(resolve => setTimeout(resolve, 100));
+                    settled = !root.querySelector('.bear-virtual-renderUnit-placeholder') && scroller.scrollHeight === height ? settled + 1 : 0;
+                    continue;
+                }
+                await new Promise(resolve => setTimeout(resolve, 120));
+            }
+        } finally {
+            if (root.isConnected) scroller.scrollTop = originalTop;
+            scroller.style.scrollBehavior = originalBehavior;
+        }
+    }
+    globalThis.DocCopyPlatforms = Object.freeze({ detect, semantics, ignore, isProxyInput, editorFocused, documentRoot, fullSelectionRoot, loadFullDocument });
 })();

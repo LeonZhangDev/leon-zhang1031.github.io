@@ -13,6 +13,7 @@
     let settingsReady = false, settingsError = false, settingsRevision = 0;
     let pendingCopyPayload = null, lastCopyFallback = false, closeCopyMenu = null;
     let lastCopy = null, prepared = null, preparing = false, preparation = null, prepareRevision = 0;
+    let fullDocument = null, fullRevision = 0, fullObserver = null, pendingCopyHandled = false, selectAllCount = 0;
     const validMode = mode => ['rich', 'plain', 'markdown'].includes(mode);
 
     function configure(value = {}) {
@@ -21,6 +22,7 @@
         if (validMode(value.mode)) config.mode = copyMode = value.mode;
         applyStyle();
         if (!config.enabled) {
+            cancelFullDocument();
             closeCopyMenu?.();
             prepared = preparation = null;
             preparing = false; prepareRevision++;
@@ -35,6 +37,7 @@
             platform: platform.id, platformName: platform.name, settingsError, lastCopyFallback,
             selectedCharacters: selected?.text.length || 0, selectionAvailable: !!selected,
             lastCopy, preparation, preparing,
+            fullDocument: fullDocument ? { state: fullDocument.state, blocks: fullDocument.blocks, error: fullDocument.error } : null,
         };
     }
     globalThis.DocCopyController = { configure, getStatus };
@@ -82,9 +85,9 @@
     function createCopyPayload(selected, mode) {
         const payload = { text: selected.text, html: '', warnings: [] };
         lastCopyFallback = false;
-        if (!selected.selection || mode === 'plain') return payload;
+        if ((!selected.selection && !selected.html) || mode === 'plain') return payload;
         try {
-            const result = globalThis.FeishuCopyFormats.selectionDocument
+            const result = selected.html ? { html: selected.html, warnings: selected.warnings || [] } : globalThis.FeishuCopyFormats.selectionDocument
                 ? globalThis.FeishuCopyFormats.selectionDocument(selected.selection, platform.id)
                 : { html: globalThis.FeishuCopyFormats.selectionHtml(selected.selection), warnings: [] };
             let html = result.html;
@@ -107,7 +110,7 @@
         preparing = true;
         preparation = { state: 'preparing' };
         try {
-            const sourceHtml = globalThis.FeishuCopyFormats.selectionHtml(selected.selection);
+            const sourceHtml = selected.html || globalThis.FeishuCopyFormats.selectionHtml(selected.selection);
             const result = await globalThis.FeishuCopyFormats.prepareImages(sourceHtml);
             if (revision !== prepareRevision) return;
             prepared = { sourceHtml, ...result };
@@ -118,21 +121,97 @@
     }
 
     function getCopySelection() {
+        if (fullDocument && (fullDocument.url !== globalThis.location?.href || !fullDocument.root.isConnected)) cancelFullDocument();
         const active = document.activeElement;
         if (active && (active.tagName === 'INPUT' || active.tagName === 'TEXTAREA') && !globalThis.DocCopyPlatforms?.isProxyInput(active, platform.id)) {
             if (typeof active.selectionStart !== 'number' || active.selectionStart === active.selectionEnd) return null;
             return { text: active.value.slice(active.selectionStart, active.selectionEnd), selection: null };
         }
         const selection = window.getSelection();
-        if (!selection || selection.rangeCount === 0 || selection.isCollapsed) return null;
+        if (!selection || selection.rangeCount === 0 || selection.isCollapsed) {
+            if (fullDocument?.state === 'ready' && fullDocument.root.isConnected && fullDocument.url === globalThis.location?.href) return fullDocument.selected;
+            return null;
+        }
         return { text: selection.toString(), selection };
     }
+    function cancelFullDocument() {
+        fullRevision++;
+        selectAllCount = 0;
+        fullObserver?.disconnect(); fullObserver = null;
+        fullDocument = null;
+    }
+    async function prepareFullDocument(root, queuedMode = null) {
+        cancelFullDocument();
+        const revision = fullRevision;
+        const request = fullDocument = { state: 'preparing', root, url: globalThis.location?.href, blocks: 0, queuedMode };
+        const current = () => fullRevision === revision && config.enabled && request.url === globalThis.location?.href;
+        showCopyNotification('正在准备全文，请稍候…');
+        try {
+            await globalThis.DocCopyPlatforms.loadFullDocument(root, current, count => { request.blocks = count; });
+            if (!current()) return;
+            if (root.querySelector('.bear-virtual-renderUnit-placeholder')) throw new Error('全文仍有未加载内容，请重新全选');
+            const range = document.createRange(); range.selectNodeContents(root);
+            const selection = { rangeCount: 1, isCollapsed: range.collapsed, getRangeAt: () => range, toString: () => range.toString() };
+            const result = globalThis.FeishuCopyFormats.selectionDocument(selection, platform.id);
+            request.selected = { text: range.toString(), selection, html: result.html, warnings: result.warnings };
+            if (!request.selected.text && !result.html) throw new Error('未读取到正文，请刷新文档重试');
+            request.state = 'ready';
+            fullObserver = new MutationObserver(records => {
+                const changed = records.some(record => !record.target.parentElement?.closest('.selected-mask,.docx-block-tools') &&
+                    (record.type === 'characterData' || [...record.addedNodes, ...record.removedNodes].some(n => n.nodeType !== 1 || !n.matches('.selected-mask,.docx-block-tools'))));
+                if (changed) cancelFullDocument();
+            });
+            fullObserver.observe(root, { childList: true, subtree: true, characterData: true });
+            if (request.queuedMode) await writeCopyPayload(createCopyPayload(request.selected, request.queuedMode));
+            else showCopyNotification('全文已准备，按 Ctrl+C 复制');
+        } catch (error) {
+            if (!current()) return;
+            request.state = 'failed'; request.error = error.message;
+            showCopyNotification(request.error);
+        }
+    }
+    function deferFullCopy(e) {
+        if (!fullDocument || fullDocument.state === 'ready') return false;
+        if (fullDocument.url !== globalThis.location?.href || !fullDocument.root.isConnected) { cancelFullDocument(); return false; }
+        e.preventDefault(); e.stopImmediatePropagation();
+        if (fullDocument.state === 'preparing') {
+            fullDocument.queuedMode = copyMode;
+            showCopyNotification('正在准备全文，完成后将复制');
+        } else showCopyNotification(fullDocument.error);
+        return true;
+    }
     window.addEventListener('keydown', function (e) {
+        const key = e.key.toLowerCase();
+        const shortcut = (e.ctrlKey || e.metaKey) && !e.altKey && !e.isComposing;
+        if (config.enabled && e.isTrusted && platform.id === 'feishu' && shortcut && key === 'a' && globalThis.DocCopyPlatforms?.editorFocused()) {
+            const count = selectAllCount + 1;
+            cancelFullDocument();
+            selectAllCount = count;
+            const revision = fullRevision;
+            const body = globalThis.DocCopyPlatforms.documentRoot();
+            const pending = count >= 2 && body ? fullDocument = { state: 'preparing', root: body, url: globalThis.location?.href, blocks: 0, queuedMode: null } : null;
+            // 飞书在按键结束后更新虚拟选区；提前接住紧随第二次全选的复制。
+            setTimeout(async () => {
+                for (let attempt = 0; attempt < 10; attempt++) {
+                    if (revision !== fullRevision || !config.enabled) return;
+                    const root = globalThis.DocCopyPlatforms.fullSelectionRoot();
+                    if (root) { void prepareFullDocument(root, pending?.queuedMode); return; }
+                    await new Promise(resolve => setTimeout(resolve, 40));
+                }
+                if (revision === fullRevision && pending) {
+                    pending.state = 'failed'; pending.error = '未检测到全文选区，请点击正文后重新按两次 Ctrl+A';
+                    showCopyNotification(pending.error);
+                }
+            }, 0);
+        } else if (config.enabled && e.isTrusted && shortcut && key === 'c' && deferFullCopy(e)) return;
+        else if (!['control', 'meta', 'shift', 'alt'].includes(key) && !(shortcut && key === 'c')) cancelFullDocument();
         if (config.enabled && (e.ctrlKey || e.metaKey) && !e.altKey && !e.isComposing &&
             e.key.toLowerCase() === 'c' && getCopySelection()) e.stopImmediatePropagation();
     }, true);
+    window.addEventListener('pointerdown', () => cancelFullDocument(), true);
     window.addEventListener('copy', function (e) {
         if (!config.enabled || !e.isTrusted || !e.clipboardData) return;
+        if (!pendingCopyPayload && deferFullCopy(e)) return;
         const selected = pendingCopyPayload ? null : getCopySelection();
         if (!pendingCopyPayload && !selected) return;
         // 普通网页的保留格式模式保留浏览器原生 HTML 生成，只隔离网页的复制拦截。
@@ -149,6 +228,7 @@
             catch { lastCopyFallback = true; }
         }
         lastCopy = { method: 'copy-event', html: !!payload.html && !lastCopyFallback, warnings: payload.warnings || [] };
+        if (pendingCopyPayload) pendingCopyHandled = true;
         e.preventDefault();
         e.stopImmediatePropagation();
     }, true);
@@ -277,7 +357,8 @@
         if (!config.enabled) return;
         let successful = false;
         pendingCopyPayload = payload;
-        try { successful = document.execCommand('copy'); }
+        pendingCopyHandled = false;
+        try { successful = document.execCommand('copy') && pendingCopyHandled; }
         catch (error) { console.warn('飞书复制助手：主动复制失败', error); }
         finally { pendingCopyPayload = null; }
         if (successful) {

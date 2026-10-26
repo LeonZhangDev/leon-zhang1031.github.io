@@ -76,12 +76,14 @@ async function runV24BrowserTests(browserType, extensionPath, channel = 'chromiu
         check('Feishu rich paste has no manufactured blank paragraphs', await sink.locator('#rich').evaluate(n => ![...n.querySelectorAll('p')].some(p => !p.textContent.trim()) && !/\n{3,}/.test(n.innerText)));
         check('paragraph normalization keeps soft line breaks and inline bold', await sink.locator('#rich').evaluate(n => n.querySelectorAll('br').length === 1 && [...n.querySelectorAll('*')].some(e => Number(getComputedStyle(e).fontWeight) >= 600) && n.innerText.includes('第二段\n软换行')));
         await target(page); await popup.locator('#copy-mode').selectOption('markdown');
+        await popup.waitForFunction(() => !document.getElementById('copy-mode').disabled);
         await page.bringToFront(); await page.keyboard.press('Control+c'); await sink.locator('#plain').fill(''); await sink.locator('#plain').click(); await sink.keyboard.press('Control+v');
         check('Feishu Markdown uses one blank line between paragraphs', await sink.locator('#plain').inputValue() === '第一段**粗体**\n\n第二段  \n软换行\n\n第三段');
         await select(page, '<div><p>代码之前</p>\n<pre>first\n\n\n\nlast</pre>\n<p>代码之后</p></div>');
         await page.keyboard.press('Control+c'); await sink.locator('#plain').fill(''); await sink.locator('#plain').click(); await sink.keyboard.press('Control+v');
         check('Markdown boundary cleanup preserves blank lines inside code', (await sink.locator('#plain').inputValue()) === '代码之前\n\n```\nfirst\n\n\n\nlast\n```\n\n代码之后');
         await target(page); await popup.locator('#copy-mode').selectOption('rich');
+        await popup.waitForFunction(() => !document.getElementById('copy-mode').disabled);
         await select(page, '<div data-block-type="text">前段</div><div data-block-type="text"><br></div><div data-block-type="text">后段</div>'); await rich(page);
         check('intentional empty source paragraph is retained', await sink.locator('#rich p').count() === 3 && await sink.locator('#rich p').nth(1).textContent() === '');
         await select(page, '<ol start="3"><li style="padding:0;text-indent:0;color:rgb(160,20,40)">第三项</li><li>第四项<ul><li>嵌套项</li></ul></li><li value="8">跳号项</li></ol>');
@@ -99,10 +101,12 @@ async function runV24BrowserTests(browserType, extensionPath, channel = 'chromiu
         await rich(page);
         check('merged cells retained as HTML', await sink.locator('#rich td[colspan="2"]').count() === 1);
         await target(page); await popup.locator('#copy-mode').selectOption('markdown');
+        await popup.waitForFunction(() => !document.getElementById('copy-mode').disabled);
         await popup.getByText('已保存，当前页面已生效；本站其他已打开的文档也会同步。', { exact: true }).waitFor();
         await page.bringToFront(); await page.keyboard.press('Control+c'); await sink.locator('#plain').click(); await sink.keyboard.press('Control+v');
         check('merged Markdown tables explicitly use HTML fallback', (await sink.locator('#plain').inputValue()).includes('colspan="2"'));
         await target(page); await popup.locator('#copy-mode').selectOption('rich');
+        await popup.waitForFunction(() => !document.getElementById('copy-mode').disabled);
         await select(page, '<p>图片测试<img src="/good.png"><img src="/denied.png"></p>');
         await target(page); await popup.locator('#prepare-images').click();
         await popup.waitForFunction(() => document.getElementById('selection-status').textContent.includes('图片准备完成'));
@@ -125,7 +129,7 @@ async function runV24BrowserTests(browserType, extensionPath, channel = 'chromiu
         const generic = await context.newPage(); await generic.goto('https://copy-generic.example/article');
         check('ordinary sites stay untouched before activation', await generic.locator('#feishu-copy-style').count() === 0);
         await target(generic); await popup.locator('#toggle-page').click();
-        await popup.getByText('✓ 当前页面已连接 · v2.4.1', { exact: true }).waitFor();
+        await popup.getByText('✓ 当前页面已连接 · v2.4.2', { exact: true }).waitFor();
         check('page activation injects actual content scripts', await generic.locator('#feishu-copy-style').count() === 1);
         await select(generic, '<h2>原生格式</h2><p><strong>粗体</strong></p>'); await rich(generic);
         check('generic rich mode preserves native clipboard format', await sink.locator('#rich h2').textContent() === '原生格式' && await sink.locator('#rich strong,#rich b').count() > 0);

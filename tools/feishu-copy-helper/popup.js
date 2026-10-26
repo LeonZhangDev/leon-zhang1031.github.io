@@ -28,6 +28,9 @@ document.addEventListener('DOMContentLoaded', async function () {
         const lines = [];
         if (state?.selectionAvailable) lines.push('当前选区：' + state.selectedCharacters + ' 个文字字符');
         else lines.push('先在正文中选择需要复制的内容。');
+        if (state?.fullDocument?.state === 'preparing') lines.push('正在加载全文：已读取 ' + state.fullDocument.blocks + ' 个正文块…');
+        if (state?.fullDocument?.state === 'ready') lines.push('全文已准备，按 Ctrl+C 复制。');
+        if (state?.fullDocument?.state === 'failed') lines.push(state.fullDocument.error);
         if (state?.lastCopyFallback) lines.push('上次复制已回退为纯文本。');
         if (state?.lastCopy?.warnings?.length) lines.push(...state.lastCopy.warnings);
         const result = state?.preparation;
@@ -36,7 +39,7 @@ document.addEventListener('DOMContentLoaded', async function () {
         if (result?.state === 'failed') lines.push('图片准备失败，文字复制仍可使用。');
         $('selection-status').textContent = lines.join('\n');
         prepare.disabled = !state?.enabled || !state?.selectionAvailable || !!state?.preparing;
-        if (state?.preparing) poll = setTimeout(checkStatus, 700);
+        if (state?.preparing || state?.fullDocument?.state === 'preparing') poll = setTimeout(checkStatus, 700);
     }
     function controls(enabled) {
         mode.disabled = !enabled; paste.disabled = !enabled;
